@@ -1,0 +1,30 @@
+// middlewares/validateRequest.js
+const { validationResult } = require("express-validator");
+const validateRequest = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const formattedErrors = errors.array().map((error) => ({
+      field: error.path || error.param,
+      location: error.location || "body",
+      message: error.msg,
+      value: error.value,
+    }));
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("❌ Validation failed:", {
+        path: req.path,
+        method: req.method,
+        errors: formattedErrors,
+      });
+    }
+    return res.status(400).json({
+      success: false,
+      message: "Validation failed. Please check your input.",
+      errorCount: errors.array().length,
+      errors: formattedErrors,
+      timestamp: new Date().toISOString(),
+    });
+  }
+  next();
+};
+
+module.exports = validateRequest;

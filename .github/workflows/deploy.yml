@@ -1,0 +1,129 @@
+name: Deploy to Production VPS
+
+on:
+  push:
+    branches: [ production ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Hostinger VPS
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            mega-gamers-frontend/package-lock.json
+            mega-gamers-backend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: ./mega-gamers-frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./mega-gamers-frontend
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
+
+      - name: Install backend dependencies
+        working-directory: ./mega-gamers-backend
+        run: npm ci --production
+
+      - name: Copy files to server via SCP
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || '22' }}
+          source: "mega-gamers-frontend/dist/,mega-gamers-frontend/package.json,mega-gamers-frontend/package-lock.json,mega-gamers-backend/"
+          target: "/var/www/megagamers/"
+          strip_components: 0
+          rm: false
+
+      - name: Execute deployment commands on VPS
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || '22' }}
+          script: |
+            # Set up PATH for NVM
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            export PATH="$PATH:/root/.nvm/versions/node/v22.22.0/bin"
+            
+            # Navigate to project
+            cd /var/www/megagamers || exit 1
+            
+            # Debug: list files
+            echo "=== Files after SCP ==="
+            ls -la
+            echo "=== Frontend dist contents ==="
+            ls -la mega-gamers-frontend/dist/ || echo "dist not found"
+            
+            # Backend setup
+            if [ -d "mega-gamers-backend" ]; then
+              echo "=== Setting up backend ==="
+              cd mega-gamers-backend
+              
+              # Check if .env exists, if not copy from .env.production
+              if [ ! -f .env ] && [ -f .env.production ]; then
+                cp .env.production .env
+                echo "⚠️  Please update .env with production values!"
+              fi
+              
+              npm install --production
+              pm2 restart ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production
+              cd ..
+            else
+              echo "❌ mega-gamers-backend directory not found!"
+              exit 1
+            fi
+            
+            # Frontend setup - USING PRE-BUILT DIST FROM CI
+            if [ -d "mega-gamers-frontend" ]; then
+              echo "=== Setting up frontend ==="
+              cd mega-gamers-frontend
+              
+              # Create or update .env file for any runtime environment variables
+              if [ ! -f .env ]; then
+                echo "VITE_API_BASE_URL=https://api.megagamers254.com/api/v1/" > .env
+                echo "VITE_WS_URL=wss://api.megagamers254.com" >> .env
+                echo "✅ Created new .env with API and WebSocket URLs"
+              else
+                echo "✅ Existing .env preserved"
+              fi
+              
+              # Ensure dist directory exists from CI build
+              if [ ! -d "dist" ]; then
+                echo "❌ dist directory not found! CI build failed to copy."
+                exit 1
+              fi
+              
+              echo "✅ Frontend dist is ready (built during CI)"
+              cd ..
+            else
+              echo "❌ mega-gamers-frontend directory not found!"
+              exit 1
+            fi
+            
+            # Reload nginx
+            echo "=== Reloading nginx ==="
+            sudo nginx -t && sudo systemctl reload nginx
+            
+            # Verify services
+            echo "=== PM2 Status ==="
+            pm2 status
+            
+            echo "✅ Deployment completed successfully!"

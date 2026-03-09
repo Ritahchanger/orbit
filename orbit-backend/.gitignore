@@ -1,0 +1,37 @@
+# Backend specific ignores
+.env
+.env.*
+!.env.example
+
+# Uploads (handled in root .gitignore)
+# uploads/
+
+# Node modules (handled in root .gitignore)
+
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# Service account keys
+gcp-key.json
+*.key.json
+
+# SSL certificates
+ssl/
+*.pem
+*.crt
+*.key
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# PM2
+.pm2/
+ecosystem.config.js.local
+
+# Temporary files
+tmp/
+temp/z

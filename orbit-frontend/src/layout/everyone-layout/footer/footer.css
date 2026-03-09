@@ -1,0 +1,17 @@
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (max-width: 768px) {
+  .footer button,
+  .footer a {
+    min-height: 44px;
+  }
+  .accordion-content {
+    transition: max-height 0.3s ease-out;
+  }
+}

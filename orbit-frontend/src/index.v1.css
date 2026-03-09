@@ -1,0 +1,200 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+/* 2. Tailwind import - MUST COME FIRST */
+@import "tailwindcss";
+
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* REMOVED global background color */
+  }
+
+  /* Add this to your index.css file - Thin Scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--color-primary), var(--color-accent));
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, var(--color-primary), #00D4FF);
+  }
+
+  /* For Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) transparent;
+  }
+
+  /* Optional: Add to gaming-theme for specific styling */
+  .gaming-theme::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--color-primary), var(--color-accent));
+  }
+
+  .gaming-theme::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, var(--color-primary), #00D4FF);
+  }
+
+  body {
+    font-family: 'Facebook Business', 'Orbitron', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* REMOVED global background color */
+    /* REMOVED global text color */
+    overflow-x: hidden;
+  }
+}
+
+/* Font faces remain the same... */
+@font-face {
+  font-family: 'Facebook Business';
+  src: url('./fonts/facebook-fonts/downloaded_font.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Facebook Business';
+  src: url('./fonts/facebook-fonts/downloaded_font.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Facebook Business';
+  src: url('./fonts/facebook-fonts/downloaded_font.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Facebook Business';
+  src: url('./fonts/facebook-fonts/downloaded_font.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Your theme variables remain */
+  --font-facebook: "Facebook Business", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: "Orbitron", var(--font-facebook), sans-serif;
+  --font-body: var(--font-facebook);
+  --font-accent: "Orbitron", var(--font-facebook), sans-serif;
+
+  /* Gaming colors */
+  --color-primary: #0066FF;
+  --color-secondary: #FF6B00;
+  --color-accent: #00FF88;
+  --color-dark: #121212;
+  --color-dark-light: #1E1E1E;
+  --color-text: #F0F0F0;
+  --color-text-light: #B0B0B0;
+
+  /* Shadows */
+  --shadow-glow-blue: 0 0 15px rgba(0, 102, 255, 0.5);
+  --shadow-glow-orange: 0 0 15px rgba(255, 107, 0, 0.5);
+  --shadow-glow-cyan: 0 0 15px rgba(0, 212, 255, 0.5);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+
+  /* Font sizes - REDUCED */
+  --text-xs: 0.6rem;
+  --text-sm: 0.7rem;
+  --text-base: 0.8rem;
+  --text-lg: 0.9rem;
+  --text-xl: 0.95rem;
+  --text-2xl: 1.1rem;
+  --text-3xl: 1.3rem;
+  --text-4xl: 1.6rem;
+  --text-5xl: 2rem;
+  --text-6xl: 2.4rem;
+  --text-7xl: 2.8rem;
+
+  /* Breakpoints */
+  --breakpoint-3xl: 1920px;
+  --breakpoint-4xl: 2560px;
+}
+
+/* Gaming-specific styles - NOT global */
+
+.container {
+  max-width: 1500px;
+  width: 100%;
+}
+
+.gaming-theme {
+  background-color: var(--color-dark);
+  color: var(--color-text);
+}
+
+.gaming-theme h1,
+.gaming-theme h2,
+.gaming-theme h3,
+.gaming-theme h4,
+.gaming-theme h5,
+.gaming-theme h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.gaming-theme p,
+.gaming-theme span,
+.gaming-theme li,
+.gaming-theme div,
+.gaming-theme a {
+  font-family: var(--font-body);
+}
+
+.gaming-theme p {
+  font-size: var(--text-base);
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+  color: var(--color-text-light);
+}
+
+.gaming-theme button,
+.gaming-theme .btn {
+  font-family: var(--font-accent);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all 300ms ease;
+}
+
+/* Gaming utility classes */
+.glow-blue {
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.card-gaming {
+  background-color: var(--color-dark-light);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-card);
+  transition: all 300ms ease;
+}
+
+.card-gaming:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow-blue);
+}

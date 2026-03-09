@@ -1,0 +1,90 @@
+{
+  "name": "mega-gamers-admin",
+  "version": "1.0.0",
+  "description": "Mega Gamers Admin Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "cross-env ELECTRON_START_URL=http://localhost:5173/admin/dashboard electron .",
+    "dev:vite": "concurrently \"cd ../mega-gamers-frontend && npm run dev\" \"npm run dev\"",
+    "build": "electron-builder",
+    "build-react": "cd ../mega-gamers-frontend && npm run build",
+    "copy-build": "xcopy /E /I /Y \"../mega-gamers-frontend/dist\" \"./build\"",
+    "package": "npm run build-react && npm run copy-build && npm run build",
+    "package-win": "npm run package -- --win",
+    "package-mac": "npm run package -- --mac",
+    "package-linux": "npm run package -- --linux",
+    "package-all": "npm run package -- --win --mac --linux"
+  },
+  "keywords": [
+    "admin",
+    "gaming",
+    "store",
+    "management"
+  ],
+  "author": "ORBIT",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^24.13.3",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "wait-on": "^7.0.1"
+  },
+  "build": {
+    "appId": "com.megagamers.admin",
+    "productName": "Mega Gamers Admin",
+    "copyright": "Copyright © 2024 Mega Gamers Ltd.",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      {
+        "from": "build",
+        "to": "build",
+        "filter": [
+          "**/*"
+        ]
+      },
+      "!node_modules"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/favicon.ico",
+      "legalTrademarks": "Mega Gamers"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Mega Gamers Admin"
+    },
+    "portable": {
+      "artifactName": "MegaGamersAdmin-Portable.exe"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.business",
+      "icon": "build/icon.icns"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "icon": "build/icon.png"
+    },
+    "publish": {
+      "provider": "generic",
+      "url": "https://updates.megagamers.co.ke/admin"
+    }
+  }
+}

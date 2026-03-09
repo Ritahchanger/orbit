@@ -1,0 +1,464 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@import "./styles/_variables.scss";
+@import "./styles/_keyframe-animations.scss";
+
+/* 2. Tailwind import - MUST COME FIRST */
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-dark);
+    /* Added back for full app */
+    color: var(--color-text);
+    /* Added back for full app */
+  }
+
+  body {
+    /* Use Facebook font for entire body */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-dark);
+    color: var(--color-text);
+    overflow-x: hidden;
+  }
+
+  /* Apply Facebook font to all text elements */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    /* font-family: var(--font-facebook) !important; */
+    font-family: "Outfit", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+  }
+
+  p,
+  span,
+  li,
+  div,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  label {
+    /* font-family: var(--font-facebook) !important; */
+    font-family: "Outfit", sans-serif;
+  }
+
+  p {
+    font-size: var(--text-base);
+    line-height: 1.4;
+    margin-bottom: 0.6rem;
+    color: var(--color-text-light);
+  }
+
+  button,
+  .btn {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: all 300ms ease;
+  }
+
+  /* Thin Scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  /* 
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--color-primary), var(--color-accent));
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, var(--color-primary), #00D4FF);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) transparent;
+  } */
+}
+
+/* Font faces - Ensure proper font files exist */
+@font-face {
+  font-family: "Facebook Business";
+  src:
+    local("Facebook Business"),
+    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
+    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
+    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Facebook Business";
+  src:
+    local("Facebook Business"),
+    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
+    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
+    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Facebook Business";
+  src:
+    local("Facebook Business"),
+    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
+    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
+    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Facebook Business";
+  src:
+    local("Facebook Business"),
+    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
+    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
+    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Facebook Business";
+  src:
+    local("Facebook Business"),
+    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
+    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
+    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Facebook Business";
+  src:
+    local("Facebook Business"),
+    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
+    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
+    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Use ONLY Facebook Business font for everything */
+  --font-facebook:
+    "Facebook Business", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: var(--font-facebook);
+  /* Use same font for headings */
+  --font-body: var(--font-facebook);
+  /* Use same font for body */
+  --font-accent: var(--font-facebook);
+  /* Use same font for accents */
+
+  /* Remove other font declarations to ensure consistency */
+
+  /* Gaming colors */
+  --color-primary: #0066ff;
+  --color-secondary: #ff6b00;
+  --color-accent: #00ff88;
+  --color-dark: #121212;
+  --color-dark-light: #1e1e1e;
+  --color-text: #f0f0f0;
+  --color-text-light: #b0b0b0;
+
+  /* Shadows */
+  --shadow-glow-blue: 0 0 15px rgba(0, 102, 255, 0.5);
+  --shadow-glow-orange: 0 0 15px rgba(255, 107, 0, 0.5);
+  --shadow-glow-cyan: 0 0 15px rgba(0, 212, 255, 0.5);
+  --shadow-card:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+
+  /* Font sizes */
+  --text-xs: 0.6rem;
+  --text-sm: 0.7rem;
+  --text-base: 0.8rem;
+  --text-lg: 0.9rem;
+  --text-xl: 0.95rem;
+  --text-2xl: 1.1rem;
+  --text-3xl: 1.3rem;
+  --text-4xl: 1.6rem;
+  --text-5xl: 2rem;
+  --text-6xl: 2.4rem;
+  --text-7xl: 2.8rem;
+
+  --radius-sm: 3px;
+  --radius: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+
+  /* Breakpoints */
+  --breakpoint-3xl: 1920px;
+  --breakpoint-4xl: 2560px;
+}
+
+/* Add to your global CSS */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
+}
+
+/* Container styling */
+.container {
+  max-width: 1900px;
+  width: 100%;
+}
+
+/* Gaming utility classes */
+.glow-blue {
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.card-gaming {
+  background-color: var(--color-dark-light);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-card);
+  transition: all 300ms ease;
+}
+
+.card-gaming:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow-blue);
+}
+
+/* Special styles for gaming theme sections (optional) */
+.gaming-theme {
+  background-color: var(--color-dark);
+  color: var(--color-text);
+}
+
+/* Font weight utility classes (since we're using one font) */
+.font-thin {
+  font-weight: 100;
+}
+
+.font-extralight {
+  font-weight: 200;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
+
+.font-black {
+  font-weight: 900;
+}
+
+/* In your global CSS or Tailwind extensions */
+@keyframes spin3d {
+  0% {
+    transform: rotateY(0deg) rotateX(0deg);
+  }
+
+  25% {
+    transform: rotateY(90deg) rotateX(0deg);
+  }
+
+  50% {
+    transform: rotateY(180deg) rotateX(90deg);
+  }
+
+  75% {
+    transform: rotateY(270deg) rotateX(180deg);
+  }
+
+  100% {
+    transform: rotateY(360deg) rotateX(360deg);
+  }
+}
+
+.animate-spin3d {
+  animation: spin3d 4s linear infinite;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Transform utility classes if not in Tailwind */
+.translateZ-50px {
+  transform: translateZ(50px);
+}
+
+.translateZ--50px {
+  transform: translateZ(-50px);
+}
+
+.rotateY-90 {
+  transform: rotateY(90deg);
+}
+
+.rotateY--90 {
+  transform: rotateY(-90deg);
+}
+
+.rotateY-180 {
+  transform: rotateY(180deg);
+}
+
+.rotateX-90 {
+  transform: rotateX(90deg);
+}
+
+.rotateX--90 {
+  transform: rotateX(-90deg);
+}
+
+/* Add to your global styles */
+.highlight-first-row {
+  animation: highlightPulse 3s ease-in-out;
+  background: linear-gradient(
+    90deg,
+    rgba(59, 130, 246, 0.1) 0%,
+    rgba(59, 130, 246, 0.05) 100%
+  );
+  border-left: 3px solid #3b82f6;
+}
+
+@keyframes highlightPulse {
+  0% {
+    background: linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 0.3) 0%,
+      rgba(59, 130, 246, 0.15) 100%
+    );
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+  }
+
+  50% {
+    background: linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 0.2) 0%,
+      rgba(59, 130, 246, 0.1) 100%
+    );
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.1);
+  }
+
+  100% {
+    background: linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 0.1) 0%,
+      rgba(59, 130, 246, 0.05) 100%
+    );
+    box-shadow: none;
+  }
+}
+
+/* Add this to your global CSS or component styles */
+@keyframes highlight {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0.5);
+  }
+}
+
+.highlight-newsletter {
+  animation: highlight 1s ease-in-out 3;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.highlight-newsletter form {
+  background: rgba(59, 130, 246, 0.1);
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.highlight-newsletter h3 {
+  color: #3b82f6 !important;
+  font-weight: bold !important;
+}
+
+.tooltip {
+  z-index: 99;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
+}

@@ -1,0 +1,40 @@
+/* Remove the first .products-hero-section definition completely */
+/* Keep only this one: */
+.products-hero-section {
+  height: 35vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none !important; /* Force remove any background */
+}
+
+/* Make sure the background images display properly */
+.products-hero-section .absolute.inset-0 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.products-hero-section .bg-cover {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Optional: Add a subtle overlay pattern */
+.products-hero-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+  z-index: 5;
+}
