@@ -6,6 +6,8 @@ import SignUp from "./pages/authentication/signup/SignUp";
 
 import RegistrationSuccess from "./pages/authentication/registration-success/RegistrationSuccess";
 
+import Contact from "./pages/others/contact/pages/Contact";
+
 const App = () => {
   return (
     <Routes>
@@ -13,6 +15,7 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/registration-success" element={<RegistrationSuccess />} />
+      <Route path="/contact" element={<Contact />} />
       {/* Add more routes as you build them */}
     </Routes>
   );

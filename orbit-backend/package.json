@@ -45,6 +45,7 @@
     "pm2:workers:scale": "pm2 scale email-worker 4",
     "create-superadmin": "node ./src/seeders/admin.seed.js",
     "superadmin:info": "node ./src/seeders/admin.seed.js --info",
+    "seed:business": "node ./src/seeders/business.seed.js --info",
     "superadmin:force": "node ./src/seeders/admin.seed.js --force",
     "superadmin:custom": "node ./src/seeders/admin.seed.js --email admin@myapp.com --password mysecurepass",
     "seed:consultation": "node ./src/booking/seed-consultation.js",

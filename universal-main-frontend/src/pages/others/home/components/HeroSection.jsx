@@ -24,12 +24,12 @@ const HeroSection = ({ isVisible, stats }) => {
             }`}
           >
             {/* Trust badge */}
-            <div className="inline-flex items-center bg-white/20 backdrop-blur-md rounded-full px-5 py-2.5 mb-6 border border-white/30 shadow-lg">
+            {/* <div className="inline-flex items-center bg-white/20 backdrop-blur-md rounded-full px-5 py-2.5 mb-6 border border-white/30 shadow-lg">
               <Zap className="w-5 h-5 mr-2 text-yellow-300" />
               <span className="text-sm font-bold text-white tracking-wide">
                 TRUSTED BY 500+ BUSINESSES IN AFRICA
               </span>
-            </div>
+            </div> */}
 
             {/* Main heading */}
             <h1 className="text-4xl lg:text-6xl font-extrabold mb-6 leading-tight">

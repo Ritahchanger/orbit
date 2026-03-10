@@ -1,20 +1,32 @@
+// models/business/business.model.js
 const mongoose = require("mongoose");
+
 const businessSchema = new mongoose.Schema(
   {
-    name: {
+    businessName: {
       type: String,
       required: [true, "Business name is required"],
       trim: true,
-      maxlength: [200, "Business name cannot exceed 200 characters"],
+      maxlength: [100, "Business name cannot exceed 100 characters"],
     },
-    slug: {
+    businessType: {
       type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
+      required: [true, "Business type is required"],
       trim: true,
     },
-    email: {
+    registrationNumber: {
+      type: String,
+      required: [true, "Registration number is required"],
+      unique: true,
+      trim: true,
+      uppercase: true,
+    },
+    taxId: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    businessEmail: {
       type: String,
       required: [true, "Business email is required"],
       unique: true,
@@ -25,83 +37,157 @@ const businessSchema = new mongoose.Schema(
         "Please enter a valid email",
       ],
     },
-    phone: {
+    businessPhone: {
       type: String,
+      required: [true, "Business phone is required"],
+      trim: true,
+      match: [/^\+?[\d\s\-()]+$/, "Please enter a valid phone number"],
+    },
+
+    // Location
+    businessAddress: {
+      type: String,
+      required: [true, "Business address is required"],
       trim: true,
     },
-    address: {
-      street: { type: String, trim: true },
-      city: { type: String, trim: true },
-      state: { type: String, trim: true },
-      country: { type: String, trim: true },
-      zipCode: { type: String, trim: true },
+    city: {
+      type: String,
+      required: [true, "City is required"],
+      trim: true,
     },
+    country: {
+      type: String,
+      required: [true, "Country is required"],
+      trim: true,
+      default: "Kenya",
+    },
+    postalCode: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    // Optional
     website: {
       type: String,
       trim: true,
+      default: "",
     },
-    logoUrl: {
+    employeeCount: {
       type: String,
+      enum: ["1-10", "11-50", "51-200", "201-500", "500+", ""],
+      default: "",
+    },
+    yearEstablished: {
+      type: Number,
+      min: [1900, "Year cannot be before 1900"],
+      max: [new Date().getFullYear(), "Year cannot be in the future"],
+      default: null,
+    },
+    businessDescription: {
+      type: String,
+      required: [true, "Business description is required"],
       trim: true,
+      maxlength: [1000, "Description cannot exceed 1000 characters"],
     },
-    settings: {
-      currency: { type: String, default: "KES" },
-      timezone: { type: String, default: "Africa/Nairobi" },
-      taxPercentage: { type: Number, default: 0 },
-      enablePOS: { type: Boolean, default: true },
-      enableEcommerce: { type: Boolean, default: true },
-      allowMultipleUsers: { type: Boolean, default: true },
+    numberOfStores: {
+      type: Number,
+      required: [true, "Number of stores is required"],
+      min: [1, "Must have at least 1 store"],
+      default: 1,
     },
-    ownerId: {
+    businessLogo: {
+      type: String,
+      default: "",
+    },
+
+    // Owner — the superadmin user who registered this business
+    owner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // the main admin/owner
-      required: true,
+      ref: "User",
+      default: null,
     },
-    users: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // employees, managers, cashiers
-      },
-    ],
+
+    // Subscription
+    subscription: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subscription",
+      default: null,
+    },
+    subscriptionPlan: {
+      type: String,
+      enum: ["starter", "professional", "enterprise"],
+      default: "professional",
+    },
+    paymentMethod: {
+      type: String,
+      enum: ["monthly", "annual"],
+      default: "monthly",
+    },
+
+    // Status
     status: {
       type: String,
-      enum: ["active", "inactive", "suspended"],
-      default: "active",
+      enum: ["pending", "active", "suspended", "cancelled"],
+      default: "pending",
+      index: true,
     },
-    plan: {
-      type: String,
-      enum: ["free", "basic", "pro", "enterprise"],
-      default: "free",
+    isVerified: {
+      type: Boolean,
+      default: false,
+      index: true,
     },
-    createdAt: {
+    verifiedAt: {
       type: Date,
-      default: Date.now,
+      default: null,
     },
-    updatedAt: { type: Date, default: Date.now },
+
+    // Suspension
+    isSuspended: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    suspendedAt: {
+      type: Date,
+      default: null,
+    },
+    suspensionReason: {
+      type: String,
+      trim: true,
+      default: "",
+    },
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
   },
 );
-// Indexes
-businessSchema.index({ slug: 1 });
-businessSchema.index({ email: 1 });
-businessSchema.index({ ownerId: 1 });
-businessSchema.index({ status: 1 });
-// Virtual for total users
-businessSchema.virtual("totalUsers").get(function () {
-  return this.users ? this.users.length : 0;
+
+// ── Indexes ───────────────────────────────────────────────────────────────────
+
+businessSchema.index({ businessEmail: 1 });
+businessSchema.index({ registrationNumber: 1 });
+businessSchema.index({ status: 1, isVerified: 1 });
+businessSchema.index({ owner: 1 });
+businessSchema.index({ createdAt: -1 });
+
+// ── Virtuals ──────────────────────────────────────────────────────────────────
+
+businessSchema.virtual("isActive").get(function () {
+  return this.status === "active" && this.isVerified && !this.isSuspended;
 });
-// Pre-save middleware to generate slug
-businessSchema.pre("save", function (next) {
-  if (!this.slug) {
-    this.slug = this.name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
-  }
-  this.updatedAt = new Date();
-  next();
-});
-const Business = mongoose.model("Business", businessSchema);
-module.exports = Business;
+
+// ── Statics ───────────────────────────────────────────────────────────────────
+
+businessSchema.statics.findActive = function () {
+  return this.find({ status: "active", isVerified: true, isSuspended: false });
+};
+
+businessSchema.statics.findByOwner = function (userId) {
+  return this.find({ owner: userId });
+};
+
+module.exports = mongoose.model("Business", businessSchema);

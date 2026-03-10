@@ -55,6 +55,7 @@ app.use(
       "https://31.97.197.116",
       "http://www.megagamers254.com",
       "http://localhost:5173",
+      "http://localhost:5174",
       "http://localhost:3000",
     ],
     credentials: true,
@@ -146,6 +147,10 @@ app.use("/api/v1/mpesa", require("./sales/mpesa-routes"));
 app.use("/api/v1/ai", require("./ai/ai.routes"));
 
 app.use("/api/v1/refunds", require("./refund/refund.routes"));
+
+app.use("/api/v1/business", require("./business/routes/routes"));
+
+app.use("/api/v1/subscription", require("./subscription/routes/subscription.routes"));
 
 app.use("/api/v1/logs", require("./custom-logs/routes/logs.routes"));
 

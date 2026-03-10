@@ -22,11 +22,12 @@ import {
 import { useState, useEffect } from "react";
 import HeroSection from "../components/HeroSection";
 import Features from "../components/Features";
+import PricingTiers from "../components/PricingTears";
+import Integration from "../components/Integration";
 
 const Home = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isVisible, setIsVisible] = useState({});
-
 
   const stats = [
     { value: "500+", label: "Businesses", icon: Briefcase, suffix: "trusted" },
@@ -209,17 +210,6 @@ const Home = () => {
       cta: "Contact Sales",
       popular: false,
     },
-  ];
-
-  const integrations = [
-    "M-Pesa",
-    "Stripe",
-    "PayPal",
-    "QuickBooks",
-    "SAP",
-    "Oracle",
-    "Shopify",
-    "WooCommerce",
   ];
 
   useEffect(() => {
@@ -422,20 +412,7 @@ const Home = () => {
       </section>
 
       {/* Integrations Section */}
-      <section className="py-16 bg-white border-y border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-gray-600 mb-8">
-            Trusted integrations with leading platforms
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 opacity-50">
-            {integrations.map((integration, index) => (
-              <span key={index} className="text-lg font-semibold text-gray-400">
-                {integration}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Integration />
 
       {/* Pricing Section */}
       <section className="py-24 bg-gray-50">
@@ -453,57 +430,8 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {pricingTiers.map((tier, index) => (
-              <div
-                key={index}
-                className={`bg-white rounded-2xl p-8 ${
-                  tier.popular
-                    ? "ring-2 ring-blue-600 shadow-2xl scale-105 relative"
-                    : "shadow-lg"
-                }`}
-              >
-                {tier.popular && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <div className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                      Most Popular
-                    </div>
-                  </div>
-                )}
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  {tier.name}
-                </h3>
-                <p className="text-gray-600 mb-4">{tier.description}</p>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">
-                    {tier.price}
-                  </span>
-                  <span className="text-gray-600">{tier.period}</span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {tier.features.map((feature, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-center gap-2 text-gray-600"
-                    >
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  to={tier.popular ? "/signup" : "/contact"}
-                  className={`block text-center py-3 px-6 rounded-xl font-semibold transition-all duration-300 ${
-                    tier.popular
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
-                      : "bg-gray-100 text-gray-900 hover:bg-gray-200"
-                  }`}
-                >
-                  {tier.cta}
-                </Link>
-              </div>
-            ))}
-          </div>
+          {/* pricing */}
+          <PricingTiers />
         </div>
       </section>
 
