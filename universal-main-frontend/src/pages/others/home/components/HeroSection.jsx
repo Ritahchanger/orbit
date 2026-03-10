@@ -124,7 +124,7 @@ const HeroSection = ({ isVisible, stats }) => {
       </div>
 
       {/* Wave Divider */}
-      {/* <div className="absolute bottom-0 left-0 right-0">
+      <div className="absolute  left-0 right-0">
         <svg
           className="fill-white w-full"
           viewBox="0 0 1440 120"
@@ -132,7 +132,7 @@ const HeroSection = ({ isVisible, stats }) => {
         >
           <path d="M0,120 L1440,120 L1440,0 C1380,40 1320,60 1260,60 C1140,60 1080,20 960,20 C840,20 780,60 660,60 C540,60 480,20 360,20 C240,20 180,60 60,60 C0,60 0,40 0,40 Z"></path>
         </svg>
-      </div> */}
+      </div>
     </section>
   );
 };
