@@ -43,7 +43,12 @@ const businessSchema = new mongoose.Schema(
       trim: true,
       match: [/^\+?[\d\s\-()]+$/, "Please enter a valid phone number"],
     },
-
+    businessId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      required: true,
+      index: true,
+    },
     // Location
     businessAddress: {
       type: String,

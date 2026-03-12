@@ -1,16 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CashPaymentModal from "./CashpaymentModal";
-import {
-  X,
-  ShoppingCart,
-  Search,
-  Scan,
-  Package,
-  Building,
-  Plus,
-  Users,
-} from "lucide-react";
+import { X, ShoppingCart, Building, Plus, Users } from "lucide-react";
 
 import { toast } from "react-hot-toast";
 
@@ -40,12 +31,17 @@ import {
 } from "../slice/pos-slice";
 
 import { useStoreInventory } from "../../hooks/store-inventory.queries";
+
 import { useStoreContext } from "../../../context/store/StoreContext";
 
 import CartItems from "./CartItems";
+
 import { useRecordMultipleSale } from "../../hooks/sales.hooks";
+
 import { useAuth } from "../../../context/authentication/AuthenticationContext";
+
 import MPesaPaymentModal from "./mpesa/MpesaPaymentModal";
+
 import ClearCartModal from "./ClearCartItems";
 
 import POSSessionManager from "../POSsessionManager";

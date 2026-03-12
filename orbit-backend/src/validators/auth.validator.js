@@ -73,7 +73,8 @@ const userSignupValidator = Joi.object({
     .optional()
     .default("normal-user")
     .messages({
-      "any.only": "Role must be one of: admin, superadmin, manager, cashier, staff",
+      "any.only":
+        "Role must be one of: admin, superadmin, manager, cashier, staff",
     })
     .label("Role"),
 
@@ -121,7 +122,7 @@ const userSignupValidator = Joi.object({
         canEdit: Joi.boolean().default(false).label("Can Edit"),
         canSell: Joi.boolean().default(false).label("Can Sell"),
         canManage: Joi.boolean().default(false).label("Can Manage"),
-      })
+      }),
     )
     .optional()
     .default([])
@@ -143,10 +144,11 @@ const userSignupValidator = Joi.object({
           .valid("manager", "cashier", "staff", "viewer")
           .required()
           .messages({
-            "any.only": "Store role must be one of: manager, cashier, staff, viewer",
+            "any.only":
+              "Store role must be one of: manager, cashier, staff, viewer",
           })
           .label("Store Role"),
-      })
+      }),
     )
     .optional()
     .default([])
@@ -171,6 +173,27 @@ const userLoginValidator = Joi.object({
       "string.empty": "Password is required",
     })
     .label("Password"),
+
+  // Add businessId field
+  businessId: Joi.string()
+    .required()
+    .messages({
+      "string.empty": "Business ID is required",
+    })
+    .label("Business ID"),
+
+  // Add optional fields for OTP login
+  otp: Joi.string()
+    .length(6)
+    .pattern(/^[0-9]+$/)
+    .optional()
+    .messages({
+      "string.length": "OTP must be 6 digits",
+      "string.pattern.base": "OTP must contain only numbers",
+    })
+    .label("OTP"),
+
+  businessName: Joi.string().optional().label("Business Name"),
 });
 
 const userUpdateValidator = Joi.object({
@@ -209,7 +232,7 @@ const userUpdateValidator = Joi.object({
         canEdit: Joi.boolean().default(false).label("Can Edit"),
         canSell: Joi.boolean().default(false).label("Can Sell"),
         canManage: Joi.boolean().default(false).label("Can Manage"),
-      })
+      }),
     )
     .optional()
     .label("Store Permissions"),
@@ -222,7 +245,7 @@ const userUpdateValidator = Joi.object({
           .valid("manager", "cashier", "staff", "viewer")
           .required()
           .label("Store Role"),
-      })
+      }),
     )
     .optional()
     .label("Store Roles"),

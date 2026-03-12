@@ -211,15 +211,130 @@ export const inventoryApi = {
    * Remove product from inventory
    * @param {string} inventoryId - Inventory item ID
    */
+  // =================== DELETION OPERATIONS ===================
+
+  /**
+   * Remove a single item from inventory (by inventoryId only)
+   * DELETE /inventory/:inventoryId
+   */
+  // =================== DELETION OPERATIONS ===================
+
+  /**
+   * Delete inventory items - handles both single and bulk operations
+   *
+   * For single delete (by inventoryId in URL):
+   *   DELETE /:storeId/inventory/:inventoryId
+   *   Usage: deleteInventory(storeId, null, inventoryId)
+   *
+   * For bulk delete (by IDs in body):
+   *   DELETE /:storeId/inventory
+   *   Usage: deleteInventory(storeId, ['id1', 'id2', 'id3'])
+   *
+   * @param {string} storeId - Store ID
+   * @param {Array} inventoryIds - Array of inventory IDs for bulk delete
+   * @param {string} inventoryId - Single inventory ID for URL param delete
+   * @param {Object} options - Additional options
+   * @param {boolean} options.force - Force delete even with stock
+   */
   removeFromInventory: async (inventoryId) => {
     try {
-      const response = await api.delete(`/stores-inventory/${inventoryId}`);
+      const response = await api.delete(`/inventory/${inventoryId}`);
       return response.data;
     } catch (error) {
-      throw error;
+      throw new Error(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          `Failed to remove item ${inventoryId}`,
+      );
     }
   },
 
+  bulkDeleteInventory: async (storeId, inventoryIds, options = {}) => {
+    try {
+      if (!Array.isArray(inventoryIds) || inventoryIds.length === 0) {
+        throw new Error("No items selected for deletion");
+      }
+
+      const response = await api.delete(`/${storeId}/inventory`, {
+        data: {
+          inventoryIds,
+          force: options.force || false,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Bulk deletion failed",
+      );
+    }
+  },
+
+  /**
+   * Unified delete method - automatically chooses the right endpoint
+   *
+   * @param {string} storeId - Store ID (required for bulk, optional for single)
+   * @param {Array|string} ids - Single ID or array of IDs
+   * @param {Object} options - Additional options
+   * @returns {Promise}
+   */
+  deleteInventory: async (storeId, ids, options = {}) => {
+    // If ids is a string or we have a single ID, use single delete endpoint
+    if (typeof ids === "string" || (Array.isArray(ids) && ids.length === 1)) {
+      const inventoryId = typeof ids === "string" ? ids : ids[0];
+      return inventoryApi.removeFromInventory(inventoryId);
+    }
+
+    // Otherwise use bulk delete
+    return inventoryApi.bulkDeleteInventory(storeId, ids, options);
+  },
+
+  /**
+   * Legacy method - kept for backward compatibility
+   * @deprecated Use deleteInventory(storeId, null, inventoryId) instead
+   */
+  removeFromStoreInventory: async (storeId, inventoryId) => {
+    console.warn(
+      "Deprecated: Use deleteInventory(storeId, null, inventoryId) instead",
+    );
+    return inventoryApi.deleteInventory(storeId, null, inventoryId);
+  },
+
+  /**
+   * Legacy method - kept for backward compatibility
+   * @deprecated Use deleteInventory(storeId, inventoryIds) instead
+   */
+  bulkDeleteInventory: async (storeId, inventoryIds) => {
+    console.warn(
+      "Deprecated: Use deleteInventory(storeId, inventoryIds) instead",
+    );
+    return inventoryApi.deleteInventory(storeId, inventoryIds);
+  },
+
+  /**
+   * Clear ALL inventory for a store (destructive — use with caution)
+   * POST /:storeId/inventory/clear
+   *
+   * @param {string} storeId - Store ID
+   * @param {string} confirmation - Confirmation string "CLEAR-STORE-{storeId}"
+   * @param {boolean} force - Force clear even with stock
+   */
+  clearStoreInventory: async (storeId, confirmation = "", force = false) => {
+    try {
+      const response = await api.post(`/${storeId}/inventory/clear`, {
+        confirmation,
+        force,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.error ||
+          error.response?.data?.message ||
+          "Failed to clear store inventory",
+      );
+    }
+  },
   /**
    * Restock product
    * @param {string} inventoryId - Inventory item ID

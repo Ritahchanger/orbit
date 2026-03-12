@@ -1,354 +1,9 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import {
-  Printer,
-  Download,
-  X,
-  Loader2,
-  CheckCircle2,
-  Receipt,
-} from "lucide-react";
+import { Printer, Download, X, Loader2, CheckCircle2 } from "lucide-react";
 import { format } from "date-fns";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { buildReceiptPDF } from "./util";
 
-// ─── PDF Colour Palette ───────────────────────────────────────────────
-const INK = [15, 23, 42];
-const ACCENT = [37, 99, 235];
-const ACCENT_LIGHT = [219, 234, 254];
-const MUTED = [100, 116, 139];
-const RULE = [226, 232, 240];
-const WHITE = [255, 255, 255];
-const GREEN_INK = [22, 163, 74];
-
-const formatAddressStr = (address) => {
-  if (!address) return "";
-  if (typeof address === "string") return address;
-  return (
-    [
-      address.street,
-      address.building,
-      address.floor && `Floor ${address.floor}`,
-      address.city,
-      address.county,
-    ]
-      .filter(Boolean)
-      .join(", ") || "Address not available"
-  );
-};
-
-// ─── PDF Builder ──────────────────────────────────────────────────────
-const buildReceiptPDF = (
-  transaction,
-  items,
-  storeDetails,
-  formatCurrency,
-  options = { paperSize: "80mm" },
-) => {
-  const is80 = options.paperSize === "80mm";
-  const doc = new jsPDF({
-    orientation: "portrait",
-    unit: "mm",
-    format: is80 ? [80, 297] : "a4",
-  });
-
-  const pw = doc.internal.pageSize.getWidth();
-  const mg = is80 ? 5 : 20;
-  const cw = pw - mg * 2;
-  let y = 0;
-
-  const storeName = storeDetails?.name || "Store";
-  const storeWebsite = storeDetails?.website || storeDetails?.websiteUrl || "";
-  const receiptNo =
-    transaction?.transactionId || `TRX-${format(new Date(), "yyyyMMddHHmmss")}`;
-  const dateStr = format(
-    new Date(transaction?.timestamp || new Date()),
-    "dd/MM/yyyy HH:mm:ss",
-  );
-  const cashier =
-    transaction?.soldBy?.name || transaction?.soldBy?.username || "Cashier";
-
-  // ── Full-width header band ──────────────────────────────────────
-  const headerH = is80 ? 22 : 30;
-  doc.setFillColor(...ACCENT);
-  doc.rect(0, 0, pw, headerH, "F");
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(is80 ? 13 : 20);
-  doc.setTextColor(...WHITE);
-  doc.text(storeName.toUpperCase(), pw / 2, is80 ? 10 : 14, {
-    align: "center",
-  });
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(is80 ? 6 : 8);
-  doc.setTextColor(219, 234, 254);
-  const subParts = [
-    storeDetails?.address ? formatAddressStr(storeDetails.address) : null,
-    storeDetails?.phone ? `Tel: ${storeDetails.phone}` : null,
-  ]
-    .filter(Boolean)
-    .join("  •  ");
-  if (subParts) doc.text(subParts, pw / 2, is80 ? 16 : 22, { align: "center" });
-
-  y = headerH + (is80 ? 5 : 8);
-
-  // ── SALES RECEIPT label ─────────────────────────────────────────
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(is80 ? 9 : 12);
-  doc.setTextColor(...MUTED);
-  doc.text("SALES RECEIPT", pw / 2, y, { align: "center" });
-  const labelW = doc.getTextWidth("SALES RECEIPT");
-  const ruleY = y - 1.5;
-  doc.setDrawColor(...RULE);
-  doc.setLineWidth(0.3);
-  doc.line(mg, ruleY, pw / 2 - labelW / 2 - 2, ruleY);
-  doc.line(pw / 2 + labelW / 2 + 2, ruleY, pw - mg, ruleY);
-  y += is80 ? 6 : 9;
-
-  // ── Meta info box ───────────────────────────────────────────────
-  const boxH = is80
-    ? transaction?.customerName
-      ? 26
-      : 21
-    : transaction?.customerName
-      ? 32
-      : 26;
-  doc.setFillColor(248, 250, 252);
-  doc.setDrawColor(...RULE);
-  doc.setLineWidth(0.3);
-  doc.roundedRect(mg, y, cw, boxH, 1.5, 1.5, "FD");
-
-  const col2x = mg + cw / 2 + 2;
-  let my = y + (is80 ? 5 : 7);
-  const lineH = is80 ? 4.5 : 5.5;
-
-  const metaRow = (label, value, x, bold = false) => {
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(is80 ? 6.5 : 8.5);
-    doc.setTextColor(...MUTED);
-    doc.text(label, x, my);
-    doc.setFont("helvetica", bold ? "bold" : "normal");
-    doc.setTextColor(...INK);
-    doc.text(String(value || ""), x + (is80 ? 14 : 18), my);
-  };
-
-  metaRow("Receipt #", receiptNo.slice(-12), mg + 3, true);
-  metaRow("Cashier", cashier, col2x);
-  my += lineH;
-  metaRow("Date", dateStr, mg + 3);
-  if (transaction?.customerName) {
-    metaRow("Customer", transaction.customerName, col2x);
-    my += lineH;
-    if (transaction?.customerPhone)
-      metaRow("Phone", transaction.customerPhone, mg + 3);
-  }
-
-  y += boxH + (is80 ? 5 : 7);
-
-  // ── Items Table ─────────────────────────────────────────────────
-  const tableRows = items.map((item) => [
-    item.product?.name?.substring(0, is80 ? 18 : 32) || "Item",
-    item.quantity.toString(),
-    formatCurrency(item.unitPrice || item.product?.price || 0).replace(
-      "KSh ",
-      "",
-    ),
-    formatCurrency(
-      (item.unitPrice || item.product?.price || 0) * item.quantity,
-    ).replace("KSh ", ""),
-  ]);
-
-  const subtotal = items.reduce(
-    (s, i) => s + (i.unitPrice || i.product?.price || 0) * i.quantity,
-    0,
-  );
-  const discount = transaction?.discount || 0;
-  const total = subtotal - discount;
-
-  autoTable(doc, {
-    head: [["ITEM", "QTY", "PRICE", "TOTAL"]],
-    body: tableRows,
-    startY: y,
-    theme: "plain",
-    styles: {
-      fontSize: is80 ? 7 : 9,
-      font: "helvetica",
-      cellPadding: {
-        top: is80 ? 2.5 : 3.5,
-        bottom: is80 ? 2.5 : 3.5,
-        left: 2,
-        right: 2,
-      },
-      textColor: INK,
-    },
-    headStyles: {
-      fillColor: ACCENT,
-      textColor: WHITE,
-      fontStyle: "bold",
-      fontSize: is80 ? 6.5 : 8,
-      cellPadding: {
-        top: is80 ? 3 : 4,
-        bottom: is80 ? 3 : 4,
-        left: 2,
-        right: 2,
-      },
-    },
-    alternateRowStyles: { fillColor: [248, 250, 252] },
-    columnStyles: {
-      0: { cellWidth: is80 ? 32 : 65, halign: "left" },
-      1: { cellWidth: is80 ? 10 : 18, halign: "center" },
-      2: { cellWidth: is80 ? 17 : 30, halign: "right" },
-      3: { cellWidth: is80 ? 17 : 30, halign: "right", fontStyle: "bold" },
-    },
-    margin: { left: mg, right: mg },
-  });
-
-  y = doc.lastAutoTable.finalY + (is80 ? 3 : 5);
-
-  // ── Totals ──────────────────────────────────────────────────────
-  const totalsX = is80 ? mg + 30 : pw - mg - 70;
-  const totalsW = is80 ? cw - 30 : 70;
-
-  [
-    [`Subtotal`, formatCurrency(subtotal)],
-    ...(discount > 0 ? [[`Discount`, `- ${formatCurrency(discount)}`]] : []),
-  ].forEach(([label, value]) => {
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(is80 ? 7 : 9);
-    doc.setTextColor(...MUTED);
-    doc.text(label, totalsX, y);
-    doc.setTextColor(...INK);
-    doc.text(value, totalsX + totalsW, y, { align: "right" });
-    y += is80 ? 4.5 : 6;
-  });
-
-  // Total highlight bar
-  const totalBarH = is80 ? 7 : 9;
-  doc.setFillColor(...ACCENT);
-  doc.roundedRect(
-    totalsX - 2,
-    y - (is80 ? 5 : 6.5),
-    totalsW + 4,
-    totalBarH,
-    1,
-    1,
-    "F",
-  );
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(is80 ? 8.5 : 11);
-  doc.setTextColor(...WHITE);
-  doc.text("TOTAL", totalsX + 1, y - (is80 ? 0.5 : 0));
-  doc.text(
-    formatCurrency(total).replace("KSh ", "KES "),
-    totalsX + totalsW,
-    y - (is80 ? 0.5 : 0),
-    { align: "right" },
-  );
-  y += is80 ? 5 : 8;
-
-  // ── Payment ─────────────────────────────────────────────────────
-  doc.setDrawColor(...RULE);
-  doc.setLineWidth(0.3);
-  doc.line(mg, y, pw - mg, y);
-  y += is80 ? 4 : 6;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(is80 ? 7 : 9);
-  doc.setTextColor(...ACCENT);
-  doc.text("PAYMENT", mg, y);
-  y += is80 ? 4 : 5.5;
-
-  const pmLabel = (transaction?.paymentMethod || "").toUpperCase();
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(is80 ? 7.5 : 10);
-  const pmW = doc.getTextWidth(pmLabel) + (is80 ? 6 : 8);
-  doc.setFillColor(...ACCENT_LIGHT);
-  doc.roundedRect(mg, y - (is80 ? 3.5 : 4.5), pmW, is80 ? 5 : 6.5, 1, 1, "F");
-  doc.setTextColor(...ACCENT);
-  doc.text(pmLabel, mg + (is80 ? 3 : 4), y);
-  y += is80 ? 5 : 7;
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(is80 ? 7 : 9);
-
-  if (transaction?.paymentMethod === "cash" && transaction?.cashPayment) {
-    doc.setTextColor(...INK);
-    doc.text(
-      `Amount Given: ${formatCurrency(transaction.cashPayment.amountGiven)}`,
-      mg,
-      y,
-    );
-    y += is80 ? 4 : 5.5;
-    doc.setTextColor(...GREEN_INK);
-    doc.text(
-      `Change Given: ${formatCurrency(transaction.cashPayment.change)}`,
-      mg,
-      y,
-    );
-    y += is80 ? 5 : 7;
-  }
-
-  if (transaction?.paymentMethod === "mpesa" && transaction?.mpesaPayment) {
-    doc.setTextColor(...INK);
-    doc.text(
-      `M-Pesa Ref: ${transaction.mpesaPayment.transactionCode || "N/A"}`,
-      mg,
-      y,
-    );
-    y += is80 ? 4 : 5.5;
-    doc.text(
-      `Phone: ${transaction.mpesaPayment.phoneNumber || transaction.customerPhone || "N/A"}`,
-      mg,
-      y,
-    );
-    y += is80 ? 5 : 7;
-  }
-
-  // ── Footer ───────────────────────────────────────────────────────
-  doc.setDrawColor(...RULE);
-  doc.line(mg, y, pw - mg, y);
-  y += is80 ? 4 : 6;
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(is80 ? 7 : 9);
-  doc.setTextColor(...ACCENT);
-  doc.text("Thank you for your purchase!", pw / 2, y, { align: "center" });
-  y += is80 ? 4 : 5.5;
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(is80 ? 5.5 : 7.5);
-  doc.setTextColor(...MUTED);
-
-  if (!is80) {
-    doc.text(
-      "Goods sold are not returnable. Warranty applies as per store policy.",
-      pw / 2,
-      y,
-      { align: "center" },
-    );
-    y += 5;
-  }
-
-  doc.text(`Printed: ${format(new Date(), "dd/MM/yyyy HH:mm:ss")}`, pw / 2, y, {
-    align: "center",
-  });
-
-  if (storeWebsite) {
-    y += is80 ? 3.5 : 5;
-    doc.setTextColor(...ACCENT);
-    doc.text(storeWebsite, pw / 2, y, { align: "center" });
-  }
-
-  // Bottom accent strip
-  const ph = doc.internal.pageSize.getHeight();
-  doc.setFillColor(...ACCENT);
-  doc.rect(0, ph - (is80 ? 2.5 : 3.5), pw, is80 ? 2.5 : 3.5, "F");
-
-  return doc;
-};
-
-// ─── Modal Component ───────────────────────────────────────────────────
 const ReceiptPDF = ({
   isOpen,
   onClose,
@@ -372,7 +27,7 @@ const ReceiptPDF = ({
         address.county,
       ]
         .filter(Boolean)
-        .join(", ") || "Address not available"
+        .join(", ") || ""
     );
   };
 
@@ -384,6 +39,11 @@ const ReceiptPDF = ({
   );
   const discount = transaction?.discount || 0;
   const total = subtotal - discount;
+
+  const parsedDate = transaction?.timestamp
+    ? new Date(transaction.timestamp)
+    : new Date();
+  const safeDate = isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 
   const handleDownload = () => {
     setIsGenerating(true);
@@ -436,219 +96,335 @@ const ReceiptPDF = ({
     }
   };
 
+  // Thermal dashes helper
+  const Divider = ({ char = "-", count = 32 }) => (
+    <div className="font-mono text-[11px] text-gray-400 tracking-tighter select-none">
+      {char.repeat(count)}
+    </div>
+  );
+
+  const Row = ({ label, value, bold = false, accent = false }) => (
+    <div
+      className={`flex justify-between font-mono text-[11px] leading-5 ${
+        accent
+          ? "text-gray-900 font-bold text-[13px]"
+          : bold
+            ? "text-gray-800 font-semibold"
+            : "text-gray-600"
+      }`}
+    >
+      <span>{label}</span>
+      <span>{value}</span>
+    </div>
+  );
+
   return createPortal(
-    <div className="fixed inset-0 z-[200] flex items-center justify-center px-4 overflow-y-auto">
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={onClose}
-      />
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        .thermal-font { font-family: 'Share Tech Mono', 'Courier New', monospace; }
+        .receipt-paper {
+          background: #fafaf8;
+          background-image:
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 23px,
+              rgba(0,0,0,0.015) 23px,
+              rgba(0,0,0,0.015) 24px
+            );
+        }
+        .torn-top {
+          background: #fafaf8;
+          clip-path: polygon(
+            0% 8px, 1.5% 0%, 3% 8px, 4.5% 0%, 6% 8px, 7.5% 0%, 9% 8px,
+            10.5% 0%, 12% 8px, 13.5% 0%, 15% 8px, 16.5% 0%, 18% 8px,
+            19.5% 0%, 21% 8px, 22.5% 0%, 24% 8px, 25.5% 0%, 27% 8px,
+            28.5% 0%, 30% 8px, 31.5% 0%, 33% 8px, 34.5% 0%, 36% 8px,
+            37.5% 0%, 39% 8px, 40.5% 0%, 42% 8px, 43.5% 0%, 45% 8px,
+            46.5% 0%, 48% 8px, 49.5% 0%, 51% 8px, 52.5% 0%, 54% 8px,
+            55.5% 0%, 57% 8px, 58.5% 0%, 60% 8px, 61.5% 0%, 63% 8px,
+            64.5% 0%, 66% 8px, 67.5% 0%, 69% 8px, 70.5% 0%, 72% 8px,
+            73.5% 0%, 75% 8px, 76.5% 0%, 78% 8px, 79.5% 0%, 81% 8px,
+            82.5% 0%, 84% 8px, 85.5% 0%, 87% 8px, 88.5% 0%, 90% 8px,
+            91.5% 0%, 93% 8px, 94.5% 0%, 96% 8px, 97.5% 0%, 99% 8px,
+            100% 0%, 100% 100%, 0% 100%
+          );
+        }
+        .torn-bottom {
+          background: #fafaf8;
+          clip-path: polygon(
+            0% 0%, 100% 0%, 100% calc(100% - 8px),
+            99% 100%, 97.5% calc(100% - 8px), 96% 100%, 94.5% calc(100% - 8px),
+            93% 100%, 91.5% calc(100% - 8px), 90% 100%, 88.5% calc(100% - 8px),
+            87% 100%, 85.5% calc(100% - 8px), 84% 100%, 82.5% calc(100% - 8px),
+            81% 100%, 79.5% calc(100% - 8px), 78% 100%, 76.5% calc(100% - 8px),
+            75% 100%, 73.5% calc(100% - 8px), 72% 100%, 70.5% calc(100% - 8px),
+            69% 100%, 67.5% calc(100% - 8px), 66% 100%, 64.5% calc(100% - 8px),
+            63% 100%, 61.5% calc(100% - 8px), 60% 100%, 58.5% calc(100% - 8px),
+            57% 100%, 55.5% calc(100% - 8px), 54% 100%, 52.5% calc(100% - 8px),
+            51% 100%, 49.5% calc(100% - 8px), 48% 100%, 46.5% calc(100% - 8px),
+            45% 100%, 43.5% calc(100% - 8px), 42% 100%, 40.5% calc(100% - 8px),
+            39% 100%, 37.5% calc(100% - 8px), 36% 100%, 34.5% calc(100% - 8px),
+            33% 100%, 31.5% calc(100% - 8px), 30% 100%, 28.5% calc(100% - 8px),
+            27% 100%, 25.5% calc(100% - 8px), 24% 100%, 22.5% calc(100% - 8px),
+            21% 100%, 19.5% calc(100% - 8px), 18% 100%, 16.5% calc(100% - 8px),
+            15% 100%, 13.5% calc(100% - 8px), 12% 100%, 10.5% calc(100% - 8px),
+            9% 100%, 7.5% calc(100% - 8px), 6% 100%, 4.5% calc(100% - 8px),
+            3% 100%, 1.5% calc(100% - 8px), 0% 100%
+          );
+        }
+      `}</style>
 
-      {/* Card */}
-      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-sm shadow-2xl overflow-hidden flex flex-col my-4">
-        {/* Header */}
-        <div className="bg-blue-600 px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-white/20 rounded-xl p-2">
-              <Receipt className="h-5 w-5 text-white" />
+      <div className="fixed inset-0 z-[200] flex items-center justify-center px-4 overflow-y-auto">
+        {/* Backdrop */}
+        <div
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+          onClick={onClose}
+        />
+
+        {/* Modal shell */}
+        <div className="relative w-full max-w-md flex flex-col my-6 z-10">
+          {/* ── Modal header (outside the receipt) ── */}
+          <div className="bg-gray-900 rounded-t-xl px-5 py-3.5 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+              <span className="text-white font-semibold text-sm tracking-wide">
+                Payment Complete
+              </span>
+              <span className="text-gray-400 text-xs font-mono">
+                #{transaction.transactionId?.slice(-8) || "N/A"}
+              </span>
             </div>
-            <div>
-              <p className="text-blue-200 text-[10px] font-semibold tracking-widest uppercase">
-                Transaction Complete
-              </p>
-              <h3 className="text-white font-bold text-base">
-                Receipt #{transaction.transactionId?.slice(-8) || "N/A"}
-              </h3>
-            </div>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-white transition-colors p-1 rounded"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="text-blue-200 hover:text-white transition-colors rounded-sm p-1.5 hover:bg-white/10"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
 
-        {/* Success banner */}
-        <div className="bg-emerald-50 dark:bg-emerald-900/20 border-b border-emerald-100 dark:border-emerald-800 px-5 py-2.5 flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-          <p className="text-emerald-700 dark:text-emerald-300 text-xs font-medium">
-            Payment of {formatCurrency(total)} received via{" "}
-            <span className="uppercase font-bold">
-              {transaction.paymentMethod || "—"}
-            </span>
-          </p>
-        </div>
+          {/* ── Scrollable receipt area ── */}
+          <div className="overflow-y-auto max-h-[70vh] bg-gray-800 px-6 py-2">
+            {/* Torn top edge */}
+            <div className="torn-top h-3 w-full shadow-md" />
 
-        <div className="p-5 space-y-4 overflow-y-auto max-h-[75vh]">
-          {/* Receipt Preview */}
-          <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden text-[11px]">
-            {/* Store header */}
-            <div className="bg-blue-600 px-4 py-3 text-center">
-              <p className="text-white font-bold tracking-wide">
-                {storeDetails?.name || "Store"}
-              </p>
-              {storeDetails?.address && (
-                <p className="text-blue-200 text-[10px] mt-0.5">
-                  {formatAddress(storeDetails.address)}
-                </p>
-              )}
-              {storeDetails?.phone && (
-                <p className="text-blue-200 text-[10px]">
-                  Tel: {storeDetails.phone}
-                </p>
-              )}
-            </div>
-
-            {/* Meta */}
-            <div className="bg-slate-50 dark:bg-slate-800/60 px-4 py-2.5 grid grid-cols-2 gap-x-4 gap-y-1 border-b border-slate-200 dark:border-slate-700">
-              {[
-                ["Receipt #", transaction.transactionId?.slice(-10)],
-                ["Cashier", transaction.soldBy?.name || "N/A"],
-                [
-                  "Date",
-                  format(
-                    new Date(transaction.timestamp || new Date()),
-                    "dd/MM/yyyy HH:mm",
-                  ),
-                ],
-                ...(transaction.customerName
-                  ? [["Customer", transaction.customerName]]
-                  : []),
-              ].map(([label, value]) => (
-                <div key={label}>
-                  <span className="text-slate-400 dark:text-slate-500">
-                    {label}:{" "}
-                  </span>
-                  <span className="text-slate-700 dark:text-slate-100 font-semibold">
-                    {value}
-                  </span>
+            {/* Receipt body */}
+            <div className="receipt-paper thermal-font px-5 py-4 shadow-xl">
+              {/* Store name */}
+              <div className="text-center mb-1">
+                <div className="font-mono font-bold text-[15px] text-gray-900 tracking-widest uppercase">
+                  {storeDetails?.name || "STORE"}
                 </div>
-              ))}
-            </div>
-
-            {/* Items */}
-            <div className="px-4 py-2">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-700">
-                    <th className="text-left py-1.5 text-slate-400 dark:text-slate-500 font-semibold">
-                      Item
-                    </th>
-                    <th className="text-center text-slate-400 dark:text-slate-500 font-semibold w-8">
-                      Qty
-                    </th>
-                    <th className="text-right text-slate-400 dark:text-slate-500 font-semibold">
-                      Price
-                    </th>
-                    <th className="text-right text-slate-400 dark:text-slate-500 font-semibold">
-                      Total
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {items.map((item, i) => (
-                    <tr key={i}>
-                      <td className="py-1.5 text-slate-700 dark:text-slate-200 max-w-[130px] truncate">
-                        {item.product?.name || "Item"}
-                      </td>
-                      <td className="text-center text-slate-500 dark:text-slate-400">
-                        {item.quantity}
-                      </td>
-                      <td className="text-right text-slate-500 dark:text-slate-400">
-                        {formatCurrency(
-                          item.unitPrice || item.product?.price || 0,
-                        )}
-                      </td>
-                      <td className="text-right font-semibold text-slate-800 dark:text-slate-100">
-                        {formatCurrency(
-                          (item.unitPrice || item.product?.price || 0) *
-                            item.quantity,
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Totals */}
-            <div className="bg-slate-50 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-700 px-4 py-2.5 space-y-1">
-              <div className="flex justify-between text-slate-500 dark:text-slate-400">
-                <span>Subtotal</span>
-                <span>{formatCurrency(subtotal)}</span>
-              </div>
-              {discount > 0 && (
-                <div className="flex justify-between text-red-500">
-                  <span>Discount</span>
-                  <span>− {formatCurrency(discount)}</span>
-                </div>
-              )}
-              <div className="flex justify-between font-bold text-sm border-t border-slate-200 dark:border-slate-700 pt-1.5 text-blue-600 dark:text-blue-400">
-                <span>TOTAL</span>
-                <span>{formatCurrency(total)}</span>
-              </div>
-            </div>
-
-            {/* Cash details */}
-            {transaction.paymentMethod === "cash" &&
-              transaction.cashPayment && (
-                <div className="px-4 py-2 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 space-y-0.5">
-                  <div className="flex justify-between text-slate-500 dark:text-slate-400">
-                    <span>Amount Given</span>
-                    <span>
-                      {formatCurrency(transaction.cashPayment.amountGiven)}
-                    </span>
+                {storeDetails?.address && (
+                  <div className="font-mono text-[10px] text-gray-500 mt-0.5 leading-4">
+                    {formatAddress(storeDetails.address)}
                   </div>
-                  <div className="flex justify-between font-semibold text-emerald-600 dark:text-emerald-400">
-                    <span>Change</span>
-                    <span>
-                      {formatCurrency(transaction.cashPayment.change)}
-                    </span>
+                )}
+                {storeDetails?.phone && (
+                  <div className="font-mono text-[10px] text-gray-500">
+                    Tel: {storeDetails.phone}
                   </div>
-                </div>
-              )}
+                )}
+                {storeDetails?.website && (
+                  <div className="font-mono text-[10px] text-gray-500">
+                    {storeDetails.website}
+                  </div>
+                )}
+              </div>
 
-            {/* M-Pesa details */}
-            {transaction.paymentMethod === "mpesa" && (
-              <div className="px-4 py-2 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 space-y-0.5 text-slate-600 dark:text-slate-300">
-                <div className="flex justify-between">
-                  <span>M-Pesa Ref</span>
-                  <span className="font-semibold">
-                    {transaction.mpesaPayment?.transactionCode || "N/A"}
+              <Divider char="=" count={32} />
+
+              {/* Receipt label */}
+              <div className="text-center font-mono text-[11px] text-gray-700 font-bold tracking-[0.2em] my-1">
+                ** SALES RECEIPT **
+              </div>
+
+              <Divider count={32} />
+
+              {/* Meta */}
+              <div className="space-y-0.5 my-1.5">
+                <div className="flex justify-between font-mono text-[10.5px] text-gray-600">
+                  <span>Date</span>
+                  <span>{format(safeDate, "dd/MM/yyyy HH:mm")}</span>
+                </div>
+                <div className="flex justify-between font-mono text-[10.5px] text-gray-600">
+                  <span>Receipt#</span>
+                  <span className="font-bold text-gray-800">
+                    {transaction.transactionId?.slice(-10) || "N/A"}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Phone</span>
+                <div className="flex justify-between font-mono text-[10.5px] text-gray-600">
+                  <span>Cashier</span>
                   <span>
-                    {transaction.mpesaPayment?.phoneNumber ||
-                      transaction.customerPhone ||
+                    {transaction.soldBy?.name ||
+                      transaction.soldBy?.username ||
                       "N/A"}
                   </span>
                 </div>
+                {transaction.customerName && (
+                  <div className="flex justify-between font-mono text-[10.5px] text-gray-600">
+                    <span>Customer</span>
+                    <span className="max-w-[160px] truncate text-right">
+                      {transaction.customerName}
+                    </span>
+                  </div>
+                )}
+                {transaction.customerPhone && (
+                  <div className="flex justify-between font-mono text-[10.5px] text-gray-600">
+                    <span>Phone</span>
+                    <span>{transaction.customerPhone}</span>
+                  </div>
+                )}
               </div>
-            )}
 
-            {/* Footer */}
-            <div className="bg-blue-600 py-2 text-center">
-              <p className="text-blue-100 text-[10px] font-medium tracking-wide">
-                Thank you for shopping with us!
-              </p>
+              <Divider count={32} />
+
+              {/* Column headers */}
+              <div className="flex font-mono text-[10px] text-gray-500 font-bold tracking-wide my-1">
+                <span className="flex-1">ITEM</span>
+                <span className="w-8 text-center">QTY</span>
+                <span className="w-16 text-right">PRICE</span>
+                <span className="w-20 text-right">AMOUNT</span>
+              </div>
+
+              <Divider count={32} />
+
+              {/* Items */}
+              <div className="space-y-1.5 my-1.5">
+                {items.map((item, i) => {
+                  const price = item.unitPrice || item.product?.price || 0;
+                  const lineTotal = price * item.quantity;
+                  const name = item.product?.name || "Item";
+                  return (
+                    <div key={i}>
+                      {/* Name row — truncate if too long */}
+                      <div className="font-mono text-[10.5px] text-gray-800 font-semibold truncate">
+                        {name.length > 22 ? name.substring(0, 22) + "…" : name}
+                      </div>
+                      {/* Price row */}
+                      <div className="flex font-mono text-[10.5px] text-gray-600">
+                        <span className="flex-1 text-gray-400 text-[10px] pl-1">
+                          @ {formatCurrency(price)}
+                        </span>
+                        <span className="w-8 text-center">{item.quantity}</span>
+                        <span className="w-20 text-right font-semibold text-gray-800">
+                          {formatCurrency(lineTotal)}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <Divider count={32} />
+
+              {/* Totals */}
+              <div className="space-y-0.5 my-1.5">
+                <Row label="Subtotal" value={formatCurrency(subtotal)} />
+                {discount > 0 && (
+                  <Row
+                    label="Discount"
+                    value={`- ${formatCurrency(discount)}`}
+                    bold
+                  />
+                )}
+              </div>
+
+              <Divider char="=" count={32} />
+
+              {/* Grand total */}
+              <div className="flex justify-between font-mono text-[14px] font-bold text-gray-900 my-1.5 tracking-wide">
+                <span>TOTAL</span>
+                <span>{formatCurrency(total)}</span>
+              </div>
+
+              <Divider char="=" count={32} />
+
+              {/* Payment method */}
+              <div className="my-1.5 space-y-0.5">
+                <div className="flex justify-between font-mono text-[10.5px] text-gray-600">
+                  <span>Payment</span>
+                  <span className="font-bold text-gray-900 uppercase tracking-widest">
+                    {transaction.paymentMethod || "—"}
+                  </span>
+                </div>
+
+                {transaction.paymentMethod === "cash" &&
+                  transaction.cashPayment && (
+                    <>
+                      <div className="flex justify-between font-mono text-[10.5px] text-gray-600">
+                        <span>Cash Given</span>
+                        <span>
+                          {formatCurrency(transaction.cashPayment.amountGiven)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between font-mono text-[10.5px] font-bold text-gray-900">
+                        <span>Change</span>
+                        <span>
+                          {formatCurrency(transaction.cashPayment.change)}
+                        </span>
+                      </div>
+                    </>
+                  )}
+
+                {transaction.paymentMethod === "mpesa" && (
+                  <>
+                    <div className="flex justify-between font-mono text-[10.5px] text-gray-600">
+                      <span>M-Pesa Ref</span>
+                      <span className="font-bold text-gray-900">
+                        {transaction.mpesaPayment?.transactionCode || "N/A"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between font-mono text-[10.5px] text-gray-600">
+                      <span>Phone</span>
+                      <span>
+                        {transaction.mpesaPayment?.phoneNumber ||
+                          transaction.customerPhone ||
+                          "N/A"}
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <Divider count={32} />
+
+              {/* Footer */}
+              <div className="text-center mt-2 mb-1 space-y-0.5">
+                <div className="font-mono text-[11px] font-bold text-gray-800 tracking-wide">
+                  * THANK YOU FOR YOUR PURCHASE *
+                </div>
+                <div className="font-mono text-[10px] text-gray-400">
+                  Goods sold are not returnable.
+                </div>
+                <div className="font-mono text-[10px] text-gray-400">
+                  Printed: {format(new Date(), "dd/MM/yyyy HH:mm:ss")}
+                </div>
+                {storeDetails?.website && (
+                  <div className="font-mono text-[10px] text-gray-500 mt-1">
+                    {storeDetails.website}
+                  </div>
+                )}
+              </div>
             </div>
+
+            {/* Torn bottom edge */}
+            <div className="torn-bottom h-3 w-full shadow-md" />
           </div>
 
-          {/* Controls */}
-          <div className="flex items-center justify-between gap-3 pt-1">
+          {/* ── Controls footer ── */}
+          <div className="bg-gray-900 rounded-b-xl px-5 py-3.5 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-500 dark:text-slate-400 font-medium whitespace-nowrap">
-                Paper size:
+              <label className="text-xs text-gray-400 font-medium whitespace-nowrap">
+                Size:
               </label>
               <select
                 value={paperSize}
                 onChange={(e) => setPaperSize(e.target.value)}
-                className="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-sm px-2.5 py-1.5 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="text-xs bg-gray-800 border border-gray-700 rounded px-2.5 py-1.5 text-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
               >
-                <option value="80mm">80mm Receipt</option>
+                <option value="80mm">80mm Thermal</option>
                 <option value="a4">A4 Full Page</option>
               </select>
             </div>
@@ -657,7 +433,7 @@ const ReceiptPDF = ({
               <button
                 onClick={handlePrint}
                 disabled={isGenerating}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-sm border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
+                className="flex items-center gap-1.5 px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs font-semibold transition-colors disabled:opacity-40"
               >
                 <Printer className="h-3.5 w-3.5" />
                 Print
@@ -665,7 +441,7 @@ const ReceiptPDF = ({
               <button
                 onClick={handleDownload}
                 disabled={isGenerating}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-sm bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors disabled:opacity-50 shadow-sm"
+                className="flex items-center gap-1.5 px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors disabled:opacity-40 shadow"
               >
                 {isGenerating ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -678,7 +454,7 @@ const ReceiptPDF = ({
           </div>
         </div>
       </div>
-    </div>,
+    </>,
     document.body,
   );
 };

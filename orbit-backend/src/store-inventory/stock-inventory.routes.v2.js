@@ -1,7 +1,10 @@
 const express = require("express");
 const asyncHandler = require("../middlewares/asyncMiddleware");
 const tokenValidator = require("../middlewares/tokenValidator");
-const { storeAccess, canManageStore } = require("../middlewares/store-access.middleware");
+const {
+  storeAccess,
+  canManageStore,
+} = require("../middlewares/store-access.middleware");
 const StockInventoryController = require("./stock-inventory.controller");
 
 const router = express.Router();
@@ -17,9 +20,9 @@ router.use(tokenValidator);
  * @access  Private (store access required)
  */
 router.get(
-    "/:storeId/inventory",
-    storeAccess("id"),
-    asyncHandler(StockInventoryController.getStoreInventory)
+  "/:storeId/inventory",
+  storeAccess("id"),
+  asyncHandler(StockInventoryController.getStoreInventory),
 );
 
 /**
@@ -28,9 +31,9 @@ router.get(
  * @access  Private (store access required)
  */
 router.get(
-    "/:storeId/inventory/stats",
-    storeAccess("id"),
-    asyncHandler(StockInventoryController.getInventoryStats)
+  "/:storeId/inventory/stats",
+  storeAccess("id"),
+  asyncHandler(StockInventoryController.getInventoryStats),
 );
 
 /**
@@ -39,9 +42,9 @@ router.get(
  * @access  Private (store access required)
  */
 router.get(
-    "/:storeId/inventory/alerts",
-    storeAccess("id"),
-    asyncHandler(StockInventoryController.getLowStockAlerts)
+  "/:storeId/inventory/alerts",
+  storeAccess("id"),
+  asyncHandler(StockInventoryController.getLowStockAlerts),
 );
 
 /**
@@ -50,9 +53,9 @@ router.get(
  * @access  Private (store access required)
  */
 router.get(
-    "/:storeId/inventory/available",
-    storeAccess("id"),
-    asyncHandler(StockInventoryController.getAvailableProducts)
+  "/:storeId/inventory/available",
+  storeAccess("id"),
+  asyncHandler(StockInventoryController.getAvailableProducts),
 );
 
 /**
@@ -61,9 +64,9 @@ router.get(
  * @access  Private (store management required)
  */
 router.post(
-    "/:storeId/inventory/manage",
-    canManageStore("id"),
-    asyncHandler(StockInventoryController.addOrUpdateInventory)
+  "/:storeId/inventory/manage",
+  canManageStore("id"),
+  asyncHandler(StockInventoryController.addOrUpdateInventory),
 );
 
 /**
@@ -72,9 +75,9 @@ router.post(
  * @access  Private (store management required)
  */
 router.post(
-    "/:storeId/inventory/quick-add",
-    canManageStore("id"),
-    asyncHandler(StockInventoryController.quickAddBySku)
+  "/:storeId/inventory/quick-add",
+  canManageStore("id"),
+  asyncHandler(StockInventoryController.quickAddBySku),
 );
 
 /**
@@ -83,9 +86,9 @@ router.post(
  * @access  Private (store management required)
  */
 router.put(
-    "/inventory/:inventoryId",  // Fixed: Added "inventory/" prefix
-    canManageStore("id"),
-    asyncHandler(StockInventoryController.updateInventoryItem)
+  "/inventory/:inventoryId", // Fixed: Added "inventory/" prefix
+  canManageStore("id"),
+  asyncHandler(StockInventoryController.updateInventoryItem),
 );
 
 /**
@@ -94,9 +97,9 @@ router.put(
  * @access  Private (store management required)
  */
 router.delete(
-    "/inventory/:inventoryId",  // Fixed: Added "inventory/" prefix
-    canManageStore("id"),
-    asyncHandler(StockInventoryController.removeFromInventory)
+  "/inventory/:inventoryId", // Fixed: Added "inventory/" prefix
+  canManageStore("id"),
+  asyncHandler(StockInventoryController.removeFromInventory),
 );
 
 /**
@@ -105,8 +108,8 @@ router.delete(
  * @access  Private (store management required)
  */
 router.post(
-    "/inventory/:inventoryId/restock",  // Fixed: Added "inventory/" prefix
-    asyncHandler(StockInventoryController.restockProduct)
+  "/inventory/:inventoryId/restock", // Fixed: Added "inventory/" prefix
+  asyncHandler(StockInventoryController.restockProduct),
 );
 
 /**
@@ -114,10 +117,26 @@ router.post(
  * @desc    Record sale from inventory (reduce stock)
  * @access  Private (store management required)
  */
+
+
+// Bulk delete inventory items
+router.delete(
+  "/:storeId/inventory",
+  canManageStore("id"),
+  asyncHandler(StockInventoryController.deleteInventory),
+);
+
+// Clear entire store inventory (danger zone)
 router.post(
-    "/inventory/:inventoryId/sale",  // Fixed: Added "inventory/" prefix
-    canManageStore("id"),
-    asyncHandler(StockInventoryController.recordSale)
+  "/:storeId/inventory/clear",
+  canManageStore("id"),
+  asyncHandler(StockInventoryController.clearStoreInventory),
+);
+
+router.post(
+  "/inventory/:inventoryId/sale", // Fixed: Added "inventory/" prefix
+  canManageStore("id"),
+  asyncHandler(StockInventoryController.recordSale),
 );
 
 /**
@@ -126,9 +145,9 @@ router.post(
  * @access  Private (store management required)
  */
 router.post(
-    "/inventory/:inventoryId/adjust",  // Fixed: Added "inventory/" prefix
-    canManageStore("id"),
-    asyncHandler(StockInventoryController.adjustStock)
+  "/inventory/:inventoryId/adjust", // Fixed: Added "inventory/" prefix
+  canManageStore("id"),
+  asyncHandler(StockInventoryController.adjustStock),
 );
 
 /**
@@ -137,9 +156,9 @@ router.post(
  * @access  Private (store access required)
  */
 router.get(
-    "/:storeId/inventory/report",
-    storeAccess("id"),
-    asyncHandler(StockInventoryController.generateInventoryReport)
+  "/:storeId/inventory/report",
+  storeAccess("id"),
+  asyncHandler(StockInventoryController.generateInventoryReport),
 );
 
 module.exports = router;

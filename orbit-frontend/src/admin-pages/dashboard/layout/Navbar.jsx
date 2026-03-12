@@ -38,6 +38,7 @@ import Logo from "./Logo";
 import CustomerAvatar from "../../customers/CustomerAvatar";
 
 import ThemeButton from "./ThemeButton";
+import { openPosModal } from "../../pos/slice/pos-slice";
 
 const AdminNavbar = () => {
   const location = useLocation();
@@ -265,16 +266,16 @@ const AdminNavbar = () => {
 
               {/* Reports Link - Only for superadmin and admin */}
               {(userRole === "superadmin" || userRole === "admin") && (
-                <Link
-                  to="/admin/ecommerce"
+                <button
+                  onClick={() => {
+                    dispatch(openPosModal());
+                  }}
                   className="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-sm bg-linear-to-r from-emerald-600 to-teal-600 text-white hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-200"
                   title="Switch to POS"
                 >
                   <ShoppingBag size={16} />
-                  <span className="font-semibold text-sm hidden xl:inline">
-                    Ecommerce
-                  </span>
-                </Link>
+                  <span className="font-semibold text-sm hidden xl:inline">POS</span>
+                </button>
               )}
               {(userRole === "superadmin" || userRole === "admin") && (
                 <Link

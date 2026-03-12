@@ -37,14 +37,14 @@ exports.getStoreInventory = async (req, res) => {
       ],
     }).select("_id");
 
-    query.product = { $in: productIds.map(p => p._id) };
+    query.product = { $in: productIds.map((p) => p._id) };
   }
 
   // Category filter
   if (category) {
     const productIds = await Product.find({ category }).select("_id");
     query.product = query.product || {};
-    query.product.$in = productIds.map(p => p._id);
+    query.product.$in = productIds.map((p) => p._id);
   }
 
   // Stock status filters
@@ -65,14 +65,16 @@ exports.getStoreInventory = async (req, res) => {
     .lean();
 
   // Add virtual fields
-  const enrichedItems = inventoryItems.map(item => {
+  const enrichedItems = inventoryItems.map((item) => {
     const productValue = item.product ? item.product.price * item.stock : 0;
     return {
       ...item,
       totalValue: productValue,
       needsRestock: item.stock <= item.minStock,
       outOfStock: item.stock === 0,
-      profitPerUnit: item.product ? item.product.price - (item.product.costPrice || 0) : 0,
+      profitPerUnit: item.product
+        ? item.product.price - (item.product.costPrice || 0)
+        : 0,
     };
   });
 
@@ -169,17 +171,234 @@ exports.getLowStockAlerts = async (req, res) => {
   });
 };
 
+// Delete inventory item(s)
+exports.deleteInventory = async (req, res) => {
+  const { storeId } = req.params;
+  const { inventoryIds, force = false } = req.body;
+
+  try {
+    // Validate store exists
+    const store = await Store.findById(storeId);
+    if (!store) {
+      return res.status(404).json({
+        success: false,
+        error: "Store not found",
+      });
+    }
+
+    // Handle single delete from params
+    if (req.params.inventoryId) {
+      const inventoryId = req.params.inventoryId;
+
+      const inventoryItem = await StoreInventory.findOne({
+        _id: inventoryId,
+        store: storeId,
+      });
+
+      if (!inventoryItem) {
+        return res.status(404).json({
+          success: false,
+          error: "Inventory item not found",
+        });
+      }
+
+      // Check if item has stock before deleting
+      if (inventoryItem.stock > 0 && !force) {
+        return res.status(400).json({
+          success: false,
+          error:
+            "Cannot delete item with existing stock. Use force=true to override, or adjust stock to 0 first.",
+          currentStock: inventoryItem.stock,
+          productName: inventoryItem.product?.name || "Unknown",
+        });
+      }
+
+      await inventoryItem.deleteOne();
+
+      return res.json({
+        success: true,
+        message: "Inventory item deleted successfully",
+        data: {
+          deletedId: inventoryId,
+          productName: inventoryItem.product?.name,
+        },
+      });
+    }
+
+    // Handle bulk delete
+    if (
+      !inventoryIds ||
+      !Array.isArray(inventoryIds) ||
+      inventoryIds.length === 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        error: "inventoryIds array is required",
+      });
+    }
+
+    const results = [];
+    const errors = [];
+    let deletedCount = 0;
+
+    for (const inventoryId of inventoryIds) {
+      try {
+        const inventoryItem = await StoreInventory.findOne({
+          _id: inventoryId,
+          store: storeId,
+        }).populate("product", "name sku");
+
+        if (!inventoryItem) {
+          errors.push({
+            inventoryId,
+            error: "Inventory item not found",
+          });
+          continue;
+        }
+
+        // Check stock if not force delete
+        if (inventoryItem.stock > 0 && !force) {
+          errors.push({
+            inventoryId,
+            error: "Item has existing stock",
+            currentStock: inventoryItem.stock,
+            productName: inventoryItem.product?.name,
+          });
+          continue;
+        }
+
+        await inventoryItem.deleteOne();
+        deletedCount++;
+
+        results.push({
+          inventoryId,
+          success: true,
+          productName: inventoryItem.product?.name,
+          sku: inventoryItem.product?.sku,
+        });
+      } catch (itemError) {
+        errors.push({
+          inventoryId,
+          error: itemError.message,
+        });
+      }
+    }
+
+    res.json({
+      success: true,
+      message: `Deleted ${deletedCount} inventory items, ${errors.length} failed`,
+      summary: {
+        total: inventoryIds.length,
+        deleted: deletedCount,
+        failed: errors.length,
+      },
+      data: {
+        results,
+        errors: errors.length > 0 ? errors : undefined,
+      },
+    });
+  } catch (error) {
+    console.error("Delete inventory error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to delete inventory items",
+      details: error.message,
+    });
+  }
+};
+
+// Delete all inventory from store (danger zone)
+exports.clearStoreInventory = async (req, res) => {
+  const { storeId } = req.params;
+  const { confirmation, force = false } = req.body;
+
+  try {
+    // Validate store
+    const store = await Store.findById(storeId);
+    if (!store) {
+      return res.status(404).json({
+        success: false,
+        error: "Store not found",
+      });
+    }
+
+    // Require confirmation for safety
+    if (confirmation !== `CLEAR-STORE-${storeId}` && !force) {
+      return res.status(400).json({
+        success: false,
+        error:
+          "Confirmation required. Send confirmation: `CLEAR-STORE-${storeId}`",
+        hint: "This will delete ALL inventory items from this store",
+      });
+    }
+
+    // Count items to delete
+    const itemCount = await StoreInventory.countDocuments({ store: storeId });
+
+    if (itemCount === 0) {
+      return res.json({
+        success: true,
+        message: "Store inventory is already empty",
+        data: { deletedCount: 0 },
+      });
+    }
+
+    // Check for items with stock
+    const itemsWithStock = await StoreInventory.find({
+      store: storeId,
+      stock: { $gt: 0 },
+    }).populate("product", "name");
+
+    if (itemsWithStock.length > 0 && !force) {
+      return res.status(400).json({
+        success: false,
+        error: "Cannot clear inventory: Some items still have stock",
+        itemsWithStock: itemsWithStock.map((item) => ({
+          productName: item.product?.name,
+          currentStock: item.stock,
+        })),
+        hint: "Use force=true to override or adjust stock to 0 first",
+      });
+    }
+
+    // Perform deletion
+    const result = await StoreInventory.deleteMany({ store: storeId });
+
+    res.json({
+      success: true,
+      message: `Successfully cleared ${result.deletedCount} inventory items from store`,
+      data: {
+        deletedCount: result.deletedCount,
+        storeId,
+        storeName: store.name,
+      },
+    });
+  } catch (error) {
+    console.error("Clear inventory error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to clear store inventory",
+      details: error.message,
+    });
+  }
+};
+
 // Get products available to add (not in inventory)
 exports.getAvailableProducts = async (req, res) => {
   const { storeId } = req.params;
   const { search, category, page = 1, limit = 20 } = req.query;
 
   // Get products already in inventory
-  const existingItems = await StoreInventory.find({ store: storeId }).select("product");
-  const existingProductIds = existingItems.map(item => item.product);
+  const existingItems = await StoreInventory.find({ store: storeId }).select(
+    "product",
+  );
+  const existingProductIds = existingItems.map((item) => item.product);
 
   // Build query for available products
-  let query = { _id: { $nin: existingProductIds }, status: { $ne: "inactive" } };
+  let query = {
+    _id: { $nin: existingProductIds },
+    status: { $ne: "inactive" },
+  };
 
   if (search) {
     query.$or = [
@@ -232,9 +451,14 @@ exports.addToInventory = async (req, res) => {
   }
 
   // Check if already in inventory
-  const existing = await StoreInventory.findOne({ store: storeId, product: productId });
+  const existing = await StoreInventory.findOne({
+    store: storeId,
+    product: productId,
+  });
   if (existing) {
-    return res.status(400).json({ error: "Product already exists in inventory" });
+    return res
+      .status(400)
+      .json({ error: "Product already exists in inventory" });
   }
 
   // Create inventory item
@@ -243,11 +467,19 @@ exports.addToInventory = async (req, res) => {
     product: productId,
     stock,
     minStock,
-    status: stock > 0 ? (stock <= minStock ? "Low Stock" : "In Stock") : "Out of Stock",
+    status:
+      stock > 0
+        ? stock <= minStock
+          ? "Low Stock"
+          : "In Stock"
+        : "Out of Stock",
   });
 
   await inventoryItem.save();
-  await inventoryItem.populate("product", "name sku price brand category images");
+  await inventoryItem.populate(
+    "product",
+    "name sku price brand category images",
+  );
 
   res.status(201).json({
     success: true,
@@ -293,11 +525,17 @@ exports.quickAddToInventory = async (req, res) => {
     await inventoryItem.save();
   }
 
-  await inventoryItem.populate("product", "name sku price brand category images");
+  await inventoryItem.populate(
+    "product",
+    "name sku price brand category images",
+  );
 
   res.json({
     success: true,
-    message: inventoryItem.stock > 0 ? "Product added to inventory" : "Product added (out of stock)",
+    message:
+      inventoryItem.stock > 0
+        ? "Product added to inventory"
+        : "Product added (out of stock)",
     data: inventoryItem,
   });
 };
@@ -392,14 +630,17 @@ exports.updateInventoryItem = async (req, res) => {
   }
 
   // Update fields
-  Object.keys(updateData).forEach(key => {
+  Object.keys(updateData).forEach((key) => {
     if (key !== "_id" && key !== "store" && key !== "product") {
       inventoryItem[key] = updateData[key];
     }
   });
 
   await inventoryItem.save();
-  await inventoryItem.populate("product", "name sku price brand category images");
+  await inventoryItem.populate(
+    "product",
+    "name sku price brand category images",
+  );
 
   res.json({
     success: true,
@@ -434,16 +675,18 @@ exports.restockProduct = async (req, res) => {
 
   try {
     // First, find the inventory item to get the store ID
-    const inventoryItem = await StoreInventory.findById(inventoryId)
-      .populate("product", "name sku price stock minStock");
-    
+    const inventoryItem = await StoreInventory.findById(inventoryId).populate(
+      "product",
+      "name sku price stock minStock",
+    );
+
     if (!inventoryItem) {
       return res.status(404).json({ error: "Inventory item not found" });
     }
 
     // Get store ID from the inventory item
     const storeId = inventoryItem.store;
-    
+
     // ⭐⭐⭐ CRITICAL: Manually check permissions since middleware failed ⭐⭐⭐
     // Check if user has access to this store
     const user = req.user;
@@ -453,12 +696,13 @@ exports.restockProduct = async (req, res) => {
 
     // Simple permission check - you might need to adjust this
     // Check if user is superadmin or store manager
-    const canManage = user.role === 'superadmin' || 
-                      (user.managedStores && user.managedStores.includes(storeId));
-    
+    const canManage =
+      user.role === "superadmin" ||
+      (user.managedStores && user.managedStores.includes(storeId));
+
     if (!canManage) {
-      return res.status(403).json({ 
-        error: "You don't have permission to manage this store's inventory" 
+      return res.status(403).json({
+        error: "You don't have permission to manage this store's inventory",
       });
     }
 
@@ -471,7 +715,7 @@ exports.restockProduct = async (req, res) => {
     if (inventoryItem.product.stock < quantity) {
       return res.status(400).json({
         error: `Insufficient global stock. Available: ${inventoryItem.product.stock}`,
-        available: inventoryItem.product.stock
+        available: inventoryItem.product.stock,
       });
     }
 
@@ -479,20 +723,20 @@ exports.restockProduct = async (req, res) => {
     const product = await Product.findById(inventoryItem.product._id);
     product.stock -= parseInt(quantity);
     product.lastRestock = new Date();
-    
+
     if (product.stock === 0) {
       product.status = "Out of Stock";
     } else if (product.stock <= product.minStock) {
       product.status = "Low Stock";
     }
-    
+
     await product.save();
 
     // Update StoreInventory stock (add)
     inventoryItem.stock += parseInt(quantity);
     inventoryItem.lastRestock = new Date();
     await inventoryItem.save();
-    
+
     await inventoryItem.populate("product", "name sku price");
 
     res.json({
@@ -503,15 +747,14 @@ exports.restockProduct = async (req, res) => {
         product: inventoryItem.product.name,
         sku: inventoryItem.product.sku,
         globalStockRemaining: product.stock,
-        globalStatus: product.status
+        globalStatus: product.status,
       },
     });
-
   } catch (error) {
     console.error("Restock error:", error);
     res.status(500).json({
       error: "Failed to restock product",
-      details: error.message
+      details: error.message,
     });
   }
 };
@@ -524,8 +767,8 @@ exports.recordSale = async (req, res) => {
     return res.status(400).json({ error: "Valid quantity is required" });
   }
 
-  const inventoryItem = await StoreInventory.findById(inventoryId)
-    .populate("product");
+  const inventoryItem =
+    await StoreInventory.findById(inventoryId).populate("product");
 
   if (!inventoryItem) {
     return res.status(404).json({ error: "Inventory item not found" });
@@ -576,8 +819,8 @@ exports.adjustStock = async (req, res) => {
     return res.status(400).json({ error: "Quantity is required" });
   }
 
-  const inventoryItem = await StoreInventory.findById(inventoryId)
-    .populate("product");
+  const inventoryItem =
+    await StoreInventory.findById(inventoryId).populate("product");
 
   if (!inventoryItem) {
     return res.status(404).json({ error: "Inventory item not found" });
@@ -596,7 +839,7 @@ exports.adjustStock = async (req, res) => {
 
   res.json({
     success: true,
-    message: `Stock adjusted by ${quantity > 0 ? '+' : ''}${quantity}`,
+    message: `Stock adjusted by ${quantity > 0 ? "+" : ""}${quantity}`,
     data: {
       product: inventoryItem.product.name,
       adjustment: quantity,
@@ -616,8 +859,8 @@ exports.transferStock = async (req, res) => {
   }
 
   // Validate stores
-  const fromStore = await StoreInventory.findById(inventoryId)
-    .populate("product");
+  const fromStore =
+    await StoreInventory.findById(inventoryId).populate("product");
   const toStore = await Store.findById(toStoreId);
 
   if (!fromStore) {
@@ -711,7 +954,7 @@ exports.generateInventoryReport = async (req, res) => {
     .lean();
 
   // Format data
-  const reportData = inventoryItems.map(item => ({
+  const reportData = inventoryItems.map((item) => ({
     product: item.product?.name || "N/A",
     sku: item.product?.sku || "N/A",
     category: item.product?.category || "N/A",
@@ -730,17 +973,19 @@ exports.generateInventoryReport = async (req, res) => {
   if (format === "csv") {
     // Generate CSV
     const headers = Object.keys(reportData[0] || {}).join(",");
-    const rows = reportData.map(item =>
-      Object.values(item).map(val =>
-        typeof val === 'string' ? `"${val.replace(/"/g, '""')}"` : val
-      ).join(",")
+    const rows = reportData.map((item) =>
+      Object.values(item)
+        .map((val) =>
+          typeof val === "string" ? `"${val.replace(/"/g, '""')}"` : val,
+        )
+        .join(","),
     );
     const csv = [headers, ...rows].join("\n");
 
     res.setHeader("Content-Type", "text/csv");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename="inventory-report-${storeId}-${new Date().toISOString().split("T")[0]}.csv"`
+      `attachment; filename="inventory-report-${storeId}-${new Date().toISOString().split("T")[0]}.csv"`,
     );
     return res.send(csv);
   }
@@ -776,7 +1021,9 @@ exports.batchUpdate = async (req, res) => {
       });
 
       if (!inventoryItem) {
-        throw new Error("Inventory item not found or doesn't belong to this store");
+        throw new Error(
+          "Inventory item not found or doesn't belong to this store",
+        );
       }
 
       if (stock !== undefined) inventoryItem.stock = stock;
@@ -849,14 +1096,14 @@ const handleSingleInventory = async (storeId, itemData, operation, res) => {
   if (!product) {
     return res.status(404).json({
       error: "Product not found",
-      provided: productId ? `ID: ${productId}` : `SKU: ${sku}`
+      provided: productId ? `ID: ${productId}` : `SKU: ${sku}`,
     });
   }
 
   // Find existing inventory item
   let inventoryItem = await StoreInventory.findOne({
     store: storeId,
-    product: product._id
+    product: product._id,
   });
 
   if (inventoryItem) {
@@ -879,7 +1126,7 @@ const handleSingleInventory = async (storeId, itemData, operation, res) => {
       stock: parseInt(quantity),
       minStock,
       storePrice: price || product.price,
-      status: quantity > 0 ? "In Stock" : "Out of Stock"
+      status: quantity > 0 ? "In Stock" : "Out of Stock",
     });
   }
 
@@ -893,14 +1140,17 @@ const handleSingleInventory = async (storeId, itemData, operation, res) => {
   }
 
   await inventoryItem.save();
-  await inventoryItem.populate("product", "name sku price brand category images");
+  await inventoryItem.populate(
+    "product",
+    "name sku price brand category images",
+  );
 
   res.json({
     success: true,
-    message: `Product ${inventoryItem.product.name} ${operation === 'add' ? 'added to' : 'updated in'} inventory`,
+    message: `Product ${inventoryItem.product.name} ${operation === "add" ? "added to" : "updated in"} inventory`,
     data: inventoryItem,
     operation: operation,
-    isBulk: false
+    isBulk: false,
   });
 };
 
@@ -924,7 +1174,7 @@ const handleBulkInventory = async (storeId, items, operation, res) => {
         product = await Product.findById(productId).session(session);
       } else if (sku) {
         product = await Product.findOne({
-          sku: sku.trim().toUpperCase()
+          sku: sku.trim().toUpperCase(),
         }).session(session);
       }
 
@@ -932,7 +1182,7 @@ const handleBulkInventory = async (storeId, items, operation, res) => {
         errors.push({
           index,
           item,
-          error: `Product not found: ${productId ? `ID: ${productId}` : `SKU: ${sku}`}`
+          error: `Product not found: ${productId ? `ID: ${productId}` : `SKU: ${sku}`}`,
         });
         continue;
       }
@@ -940,7 +1190,7 @@ const handleBulkInventory = async (storeId, items, operation, res) => {
       // Find existing inventory item
       let inventoryItem = await StoreInventory.findOne({
         store: storeId,
-        product: product._id
+        product: product._id,
       }).session(session);
 
       if (inventoryItem) {
@@ -964,7 +1214,7 @@ const handleBulkInventory = async (storeId, items, operation, res) => {
           stock: parseInt(quantity),
           minStock,
           storePrice: price || product.price,
-          status: quantity > 0 ? "In Stock" : "Out of Stock"
+          status: quantity > 0 ? "In Stock" : "Out of Stock",
         });
         totalAdded++;
       }
@@ -987,15 +1237,15 @@ const handleBulkInventory = async (storeId, items, operation, res) => {
         productId: product._id,
         sku: product.sku,
         productName: product.name,
-        operation: inventoryItem.isNew ? 'created' : 'updated',
+        operation: inventoryItem.isNew ? "created" : "updated",
         stock: inventoryItem.stock,
-        status: inventoryItem.status
+        status: inventoryItem.status,
       });
     } catch (itemError) {
       errors.push({
         index,
         item,
-        error: itemError.message
+        error: itemError.message,
       });
     }
   }
@@ -1011,17 +1261,16 @@ const handleBulkInventory = async (storeId, items, operation, res) => {
       successful: results.length,
       failed: errors.length,
       added: totalAdded,
-      updated: totalUpdated
+      updated: totalUpdated,
     },
     results,
     errors: errors.length > 0 ? errors : undefined,
     operation,
-    isBulk: true
+    isBulk: true,
   });
 };
 
 // Quick add by SKU
-
 
 // Quick add by SKU
 exports.quickAddBySku = async (req, res) => {
@@ -1035,7 +1284,9 @@ exports.quickAddBySku = async (req, res) => {
   // Find product by SKU
   const product = await Product.findOne({ sku: sku.trim().toUpperCase() });
   if (!product) {
-    return res.status(404).json({ error: `Product with SKU "${sku}" not found` });
+    return res
+      .status(404)
+      .json({ error: `Product with SKU "${sku}" not found` });
   }
 
   // Check if there's enough stock in products model
@@ -1043,14 +1294,14 @@ exports.quickAddBySku = async (req, res) => {
     return res.status(400).json({
       error: `Insufficient stock. Only ${product.stock} units available`,
       available: product.stock,
-      requested: quantity
+      requested: quantity,
     });
   }
 
   // Find or create inventory item
   let inventoryItem = await StoreInventory.findOne({
     store: storeId,
-    product: product._id
+    product: product._id,
   });
 
   if (inventoryItem) {
@@ -1062,7 +1313,7 @@ exports.quickAddBySku = async (req, res) => {
       product: product._id,
       stock: parseInt(quantity),
       status: quantity > 0 ? "In Stock" : "Out of Stock",
-      minStock: product.minStock || 5 // Copy minStock from product
+      minStock: product.minStock || 5, // Copy minStock from product
     });
   }
 
@@ -1092,7 +1343,10 @@ exports.quickAddBySku = async (req, res) => {
   await inventoryItem.save();
   await product.save(); // Save the updated product with reduced stock
 
-  await inventoryItem.populate("product", "name sku price brand category images");
+  await inventoryItem.populate(
+    "product",
+    "name sku price brand category images",
+  );
 
   res.json({
     success: true,
@@ -1100,7 +1354,7 @@ exports.quickAddBySku = async (req, res) => {
     data: {
       inventoryItem,
       globalStockRemaining: product.stock,
-      globalStatus: product.status
-    }
+      globalStatus: product.status,
+    },
   });
 };

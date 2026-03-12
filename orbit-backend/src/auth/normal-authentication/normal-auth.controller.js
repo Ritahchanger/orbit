@@ -89,19 +89,19 @@ const signUp = async (req, res) => {
   });
 };
 
-const signIn = async (req, res) => {
+const signIn = async (req, res, next) => {
   // Validate request body
   const { error } = userLoginValidator.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-  const { email, password } = req.body;
+  const { email, password, businessId } = req.body;
 
   try {
     // Attempt to login
     const { user, token, refreshToken } =
-      await normalUserAuthService.loginAdmin(email, password);
+      await normalUserAuthService.loginAdmin(email, password, businessId);
 
     // Set access token cookie (1 hour)
     res.cookie("token", token, {
@@ -158,17 +158,7 @@ const signIn = async (req, res) => {
 
     res.status(200).json(responseData);
   } catch (error) {
-    if (error.message === "Invalid email or password") {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password",
-      });
-    }
-    console.error("Login error:", error);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred during login. Please try again.",
-    });
+    next(error);
   }
 };
 

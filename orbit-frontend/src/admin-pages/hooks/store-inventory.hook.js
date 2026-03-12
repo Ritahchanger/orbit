@@ -1,12 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { toast } from "react-hot-toast";
-
 import { inventoryApi } from "../services/inventory-api";
-
 import { inventoryKeys } from "./store-inventory.queries.js";
 
 // =================== CORE MUTATION HOOKS ===================
+
 /**
  * SMART: Add or update inventory items (handles both single & bulk)
  */
@@ -28,7 +26,6 @@ export const useManageInventory = (options = {}) => {
         });
       }
 
-      // Return context for rollback
       return { storeId, items, operation, isBulk };
     },
 
@@ -110,7 +107,6 @@ export const useQuickAddToInventory = (options = {}) => {
     onMutate: async (variables) => {
       const { storeId } = variables;
 
-      // Cancel available products query
       await queryClient.cancelQueries({
         queryKey: inventoryKeys.available(storeId),
       });
@@ -123,7 +119,6 @@ export const useQuickAddToInventory = (options = {}) => {
 
       toast.success(data.message || "Product added successfully");
 
-      // Invalidate queries
       const promises = [
         queryClient.invalidateQueries({
           queryKey: inventoryKeys.list(storeId),
@@ -169,12 +164,10 @@ export const useUpdateInventoryItem = (options = {}) => {
     onMutate: async (variables) => {
       const { inventoryId } = variables;
 
-      // Cancel the specific item query
       await queryClient.cancelQueries({
         queryKey: inventoryKeys.detail(inventoryId),
       });
 
-      // Get previous value for optimistic update
       const previousItem = queryClient.getQueryData(
         inventoryKeys.detail(inventoryId),
       );
@@ -206,11 +199,8 @@ export const useUpdateInventoryItem = (options = {}) => {
 
       toast.success(data.message || "Inventory item updated successfully");
 
-      // Invalidate the item query to get fresh data
       queryClient
-        .invalidateQueries({
-          queryKey: inventoryKeys.detail(inventoryId),
-        })
+        .invalidateQueries({ queryKey: inventoryKeys.detail(inventoryId) })
         .catch(console.error);
 
       options.onSuccess?.(data, variables, context);
@@ -240,80 +230,135 @@ export const useUpdateInventoryItem = (options = {}) => {
   });
 };
 
+// =================== DELETION MUTATION HOOKS ===================
+
 /**
- * Remove product from inventory
+ * Unified deletion hook - uses the correct backend endpoints
+ *
+ * For single delete: uses inventoryApi.removeFromInventory (DELETE /inventory/:inventoryId)
+ * For bulk delete: uses inventoryApi.bulkDeleteInventory (DELETE /:storeId/inventory)
  */
-export const useRemoveFromInventory = (options = {}) => {
+export const useDeleteInventory = (options = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (inventoryId) => inventoryApi.removeFromInventory(inventoryId),
-
-    onMutate: async (inventoryId) => {
-      // Get the item to be removed
-      const previousItem = queryClient.getQueryData(
-        inventoryKeys.detail(inventoryId),
-      );
-
-      // Get storeId from the item for cache invalidation
-      let storeId = null;
-      if (previousItem?.data?.store) {
-        storeId = previousItem.data.store._id || previousItem.data.store;
+    mutationFn: ({
+      storeId,
+      inventoryIds = [],
+      inventoryId = null,
+      options: deleteOptions = {},
+    }) => {
+      // Case 1: Single delete
+      if (inventoryId) {
+        return inventoryApi.removeFromInventory(inventoryId);
       }
 
-      // Remove the item from cache
-      queryClient.removeQueries({
-        queryKey: inventoryKeys.detail(inventoryId),
+      // Case 2: Bulk delete
+      if (!Array.isArray(inventoryIds) || inventoryIds.length === 0) {
+        throw new Error("No items selected for deletion");
+      }
+
+      return inventoryApi.bulkDeleteInventory(
+        storeId,
+        inventoryIds,
+        deleteOptions,
+      );
+    },
+
+    onMutate: async ({ storeId, inventoryIds = [], inventoryId = null }) => {
+      const idsToDelete = inventoryId ? [inventoryId] : inventoryIds;
+
+      // Cancel relevant queries
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: inventoryKeys.list(storeId) }),
+        ...idsToDelete.map((id) =>
+          queryClient.cancelQueries({ queryKey: inventoryKeys.detail(id) }),
+        ),
+      ]);
+
+      // Snapshot previous state
+      const previousList = queryClient.getQueryData(
+        inventoryKeys.list(storeId),
+      );
+      const previousItems = {};
+
+      for (const id of idsToDelete) {
+        previousItems[id] = queryClient.getQueryData(inventoryKeys.detail(id));
+      }
+
+      // Optimistically remove from list cache
+      queryClient.setQueryData(inventoryKeys.list(storeId), (old) => {
+        if (!old?.data) return old;
+        const idSet = new Set(idsToDelete);
+        return {
+          ...old,
+          data: old.data.filter((item) => !idSet.has(item._id)),
+        };
       });
 
-      return { previousItem, inventoryId, storeId };
+      // Remove individual item caches
+      idsToDelete.forEach((id) => {
+        queryClient.removeQueries({ queryKey: inventoryKeys.detail(id) });
+      });
+
+      return { previousList, previousItems, storeId, idsToDelete };
     },
 
-    onSuccess: (data, inventoryId, context) => {
-      const { storeId } = context || {};
+    onSuccess: (data, variables, context) => {
+      const { storeId } = variables;
+      const message = data.message || "Item(s) removed successfully";
 
-      toast.success(data.message || "Product removed from inventory");
+      toast.success(message);
 
-      // Invalidate list queries if we have storeId
-      if (storeId) {
-        const promises = [
-          queryClient.invalidateQueries({
-            queryKey: inventoryKeys.list(storeId),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: inventoryKeys.stats(storeId),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: inventoryKeys.alerts(storeId),
-          }),
-          queryClient.invalidateQueries({
-            queryKey: inventoryKeys.available(storeId),
-          }),
-        ];
+      // Invalidate all store-related queries
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: inventoryKeys.list(storeId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: inventoryKeys.stats(storeId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: inventoryKeys.alerts(storeId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: inventoryKeys.available(storeId),
+        }),
+      ]).catch(console.error);
 
-        Promise.all(promises).catch(console.error);
+      options.onSuccess?.(data, variables, context);
+    },
+
+    onError: (error, variables, context) => {
+      const {
+        storeId,
+        previousList,
+        previousItems,
+        idsToDelete = [],
+      } = context || {};
+
+      const errorMsg =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message ||
+        "Deletion failed";
+
+      // Rollback list cache
+      if (previousList) {
+        queryClient.setQueryData(inventoryKeys.list(storeId), previousList);
       }
 
-      options.onSuccess?.(data, inventoryId, context);
-    },
-
-    onError: (error, inventoryId, context) => {
-      const errorMsg =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to remove product";
-
-      // Restore the item to cache
-      if (context?.previousItem) {
-        queryClient.setQueryData(
-          inventoryKeys.detail(inventoryId),
-          context.previousItem,
-        );
+      // Rollback individual item caches
+      if (previousItems) {
+        Object.entries(previousItems).forEach(([id, item]) => {
+          if (item) {
+            queryClient.setQueryData(inventoryKeys.detail(id), item);
+          }
+        });
       }
 
       toast.error(errorMsg);
-      options.onError?.(error, inventoryId, context);
+      options.onError?.(error, variables, context);
     },
 
     ...options,
@@ -321,8 +366,69 @@ export const useRemoveFromInventory = (options = {}) => {
 };
 
 /**
- * Restock inventory item
+ * @deprecated Use useDeleteInventory instead
  */
+export const useRemoveFromInventory = (options = {}) => {
+  console.warn(
+    "Deprecated: This hook doesn't have store context. Use useDeleteInventory instead.",
+  );
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (inventoryId) => inventoryApi.removeFromInventory(inventoryId),
+
+    onSuccess: (data, inventoryId) => {
+      toast.success(data.message || "Item removed");
+      queryClient
+        .invalidateQueries({ queryKey: ["inventory"] })
+        .catch(console.error);
+      options.onSuccess?.(data, inventoryId);
+    },
+
+    onError: (error, inventoryId) => {
+      toast.error(error.message || "Failed to remove");
+      options.onError?.(error, inventoryId);
+    },
+
+    ...options,
+  });
+};
+
+/**
+ * @deprecated Use useDeleteInventory with inventoryIds instead
+ */
+export const useBulkDeleteInventory = (options = {}) => {
+  console.warn("Deprecated: Use useDeleteInventory with inventoryIds instead");
+
+  const deleteInventory = useDeleteInventory(options);
+
+  return {
+    ...deleteInventory,
+    mutate: ({ storeId, inventoryIds }) =>
+      deleteInventory.mutate({ storeId, inventoryIds }),
+    mutateAsync: ({ storeId, inventoryIds }) =>
+      deleteInventory.mutateAsync({ storeId, inventoryIds }),
+  };
+};
+
+/**
+ * @deprecated Use useDeleteInventory instead
+ */
+export const useRemoveFromStoreInventory = (options = {}) => {
+  console.warn("Deprecated: Use useDeleteInventory instead");
+
+  const deleteInventory = useDeleteInventory(options);
+
+  return {
+    ...deleteInventory,
+    mutate: ({ storeId, inventoryId }) =>
+      deleteInventory.mutate({ storeId, inventoryId }),
+    mutateAsync: ({ storeId, inventoryId }) =>
+      deleteInventory.mutateAsync({ storeId, inventoryId }),
+  };
+};
+
 /**
  * Restock inventory item
  */
@@ -336,21 +442,17 @@ export const useRestockProduct = (options = {}) => {
     onMutate: async (variables) => {
       const { inventoryId, quantity } = variables;
 
-      // Cancel both inventory and product queries
       await Promise.all([
         queryClient.cancelQueries({
           queryKey: inventoryKeys.detail(inventoryId),
         }),
-        queryClient.cancelQueries({
-          queryKey: ["products"], // Global products query key
-        }),
+        queryClient.cancelQueries({ queryKey: ["products"] }),
       ]);
 
       const previousItem = queryClient.getQueryData(
         inventoryKeys.detail(inventoryId),
       );
 
-      // Get the product ID from the inventory item for product cache invalidation
       let productId = null;
       if (previousItem?.data?.product) {
         productId = previousItem.data.product._id || previousItem.data.product;
@@ -372,28 +474,6 @@ export const useRestockProduct = (options = {}) => {
                   : "In Stock",
           },
         }));
-
-        // Also update the product cache if we have productId
-        if (productId) {
-          // Update the product cache to reflect new stock
-          const productQueryKey = ["products", "detail", productId];
-          const previousProduct = queryClient.getQueryData(productQueryKey);
-
-          if (previousProduct?.data) {
-            queryClient.setQueryData(productQueryKey, (old) => ({
-              ...old,
-              data: {
-                ...old.data,
-                stock: old.data.stock + quantity,
-                ...(old.data.stock + quantity === 0
-                  ? { status: "Out of Stock" }
-                  : old.data.stock + quantity <= (old.data.minStock || 5)
-                    ? { status: "Low Stock" }
-                    : { status: "In Stock" }),
-              },
-            }));
-          }
-        }
       }
 
       return { previousItem, inventoryId, productId };
@@ -404,14 +484,12 @@ export const useRestockProduct = (options = {}) => {
 
       toast.success(data.message || "Product restocked successfully");
 
-      // Invalidate inventory queries
       const promises = [
         queryClient.invalidateQueries({
           queryKey: inventoryKeys.detail(inventoryId),
         }),
       ];
 
-      // Invalidate store inventory list if we have store info
       if (data.data?.store) {
         const storeId = data.data.store._id || data.data.store;
         promises.push(
@@ -421,23 +499,16 @@ export const useRestockProduct = (options = {}) => {
         );
       }
 
-      // ✅ CRITICAL: Invalidate global product queries
-      // This ensures the products list shows updated stock
       if (productId) {
         promises.push(
           queryClient.invalidateQueries({
             queryKey: ["products", "detail", productId],
           }),
-          queryClient.invalidateQueries({
-            queryKey: ["products", "list"], // Products list query
-          }),
+          queryClient.invalidateQueries({ queryKey: ["products", "list"] }),
         );
       } else {
-        // If we don't have productId, invalidate all product queries
         promises.push(
-          queryClient.invalidateQueries({
-            queryKey: ["products"],
-          }),
+          queryClient.invalidateQueries({ queryKey: ["products"] }),
         );
       }
 
@@ -454,23 +525,11 @@ export const useRestockProduct = (options = {}) => {
         error.message ||
         "Failed to restock product";
 
-      // Rollback optimistic update for inventory
       if (context?.previousItem) {
         queryClient.setQueryData(
           inventoryKeys.detail(inventoryId),
           context.previousItem,
         );
-      }
-
-      // Rollback optimistic update for product if we have productId
-      if (context?.productId) {
-        const productQueryKey = ["products", "detail", context.productId];
-        // We don't have previousProduct stored, so just invalidate
-        queryClient
-          .invalidateQueries({
-            queryKey: productQueryKey,
-          })
-          .catch(console.error);
       }
 
       toast.error(errorMsg);
@@ -532,11 +591,8 @@ export const useRecordSale = (options = {}) => {
 
       toast.success(data.message || "Sale recorded successfully");
 
-      // Invalidate to get fresh data
       queryClient
-        .invalidateQueries({
-          queryKey: inventoryKeys.detail(inventoryId),
-        })
+        .invalidateQueries({ queryKey: inventoryKeys.detail(inventoryId) })
         .catch(console.error);
 
       options.onSuccess?.(data, variables, context);
@@ -550,7 +606,6 @@ export const useRecordSale = (options = {}) => {
         error.message ||
         "Failed to record sale";
 
-      // Rollback optimistic update
       if (context?.previousItem) {
         queryClient.setQueryData(
           inventoryKeys.detail(inventoryId),
@@ -614,11 +669,8 @@ export const useAdjustStock = (options = {}) => {
 
       toast.success(data.message || "Stock adjusted successfully");
 
-      // Invalidate to get fresh data
       queryClient
-        .invalidateQueries({
-          queryKey: inventoryKeys.detail(inventoryId),
-        })
+        .invalidateQueries({ queryKey: inventoryKeys.detail(inventoryId) })
         .catch(console.error);
 
       options.onSuccess?.(data, variables, context);
@@ -632,7 +684,6 @@ export const useAdjustStock = (options = {}) => {
         error.message ||
         "Failed to adjust stock";
 
-      // Rollback optimistic update
       if (context?.previousItem) {
         queryClient.setQueryData(
           inventoryKeys.detail(inventoryId),
@@ -704,13 +755,13 @@ export const useInventoryOperations = () => {
   const addMutation = useAddToInventory();
   const quickAddMutation = useQuickAddToInventory();
   const updateMutation = useUpdateInventoryItem();
-  const removeMutation = useRemoveFromInventory();
+  const deleteMutation = useDeleteInventory(); // ✅ Use the new unified hook
   const restockMutation = useRestockProduct();
   const saleMutation = useRecordSale();
   const adjustMutation = useAdjustStock();
 
   return {
-    // Single operations
+    // Add
     addToInventory: addMutation.mutate,
     addToInventoryAsync: addMutation.mutateAsync,
     isAdding: addMutation.isPending,
@@ -725,10 +776,23 @@ export const useInventoryOperations = () => {
     updateInventoryItemAsync: updateMutation.mutateAsync,
     isUpdating: updateMutation.isPending,
 
-    // Remove
-    removeFromInventory: removeMutation.mutate,
-    removeFromInventoryAsync: removeMutation.mutateAsync,
-    isRemoving: removeMutation.isPending,
+    // ✅ NEW: Unified delete (preferred)
+    deleteInventory: deleteMutation.mutate,
+    deleteInventoryAsync: deleteMutation.mutateAsync,
+    isDeleting: deleteMutation.isPending,
+
+    // ⚠️ Legacy - kept for backward compatibility but will show warnings
+    removeFromInventory: (inventoryId) => {
+      console.warn("Deprecated: Use deleteInventory with inventoryId instead");
+      return deleteMutation.mutate({ inventoryId });
+    },
+    removeFromInventoryAsync: async (inventoryId) => {
+      console.warn(
+        "Deprecated: Use deleteInventoryAsync with inventoryId instead",
+      );
+      return deleteMutation.mutateAsync({ inventoryId });
+    },
+    isRemoving: deleteMutation.isPending,
 
     // Restock
     restockProduct: restockMutation.mutate,
@@ -750,25 +814,22 @@ export const useInventoryOperations = () => {
       addMutation.isPending ||
       quickAddMutation.isPending ||
       updateMutation.isPending ||
-      removeMutation.isPending ||
+      deleteMutation.isPending ||
       restockMutation.isPending ||
       saleMutation.isPending ||
       adjustMutation.isPending,
 
-    // Individual mutation states for fine-grained control
     mutations: {
       add: addMutation,
       quickAdd: quickAddMutation,
       update: updateMutation,
-      remove: removeMutation,
+      delete: deleteMutation, // ✅ New
       restock: restockMutation,
       sale: saleMutation,
       adjust: adjustMutation,
     },
   };
 };
-
-// =================== BATCH OPERATIONS HOOK ===================
 
 /**
  * Execute multiple inventory operations in batch
@@ -793,10 +854,8 @@ export const useBatchInventoryOperations = () => {
           case "update":
             result = await operations.updateInventoryItemAsync(operation.data);
             break;
-          case "remove":
-            result = await operations.removeFromInventoryAsync(
-              operation.data.inventoryId,
-            );
+          case "delete":
+            result = await operations.deleteInventoryAsync(operation.data);
             break;
           case "restock":
             result = await operations.restockProductAsync(operation.data);
@@ -853,11 +912,8 @@ export const useInventoryMonitor = (storeId, pollInterval = 30000) => {
   const queryClient = useQueryClient();
 
   return () => {
-    // Set up polling for inventory data
     const interval = setInterval(() => {
-      queryClient.invalidateQueries({
-        queryKey: inventoryKeys.list(storeId),
-      });
+      queryClient.invalidateQueries({ queryKey: inventoryKeys.list(storeId) });
       queryClient.invalidateQueries({
         queryKey: inventoryKeys.alerts(storeId),
       });

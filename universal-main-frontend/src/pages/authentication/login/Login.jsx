@@ -17,15 +17,8 @@ import { toast } from "react-hot-toast";
 import { useSearchBusinesses } from "../../../globals/hooks/useBusinessQueries";
 import businessApi from "../../../globals/services/business-api";
 
-// ── Debounce hook ─────────────────────────────────────────────────────────────
-const useDebounce = (value, delay = 400) => {
-  const [debounced, setDebounced] = useState(value);
-  React.useEffect(() => {
-    const t = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(t);
-  }, [value, delay]);
-  return debounced;
-};
+import { useDebounce } from "../../../../../orbit-frontend/src/globals/hooks/useDebounce";
+
 
 const Login = () => {
   const navigate = useNavigate();

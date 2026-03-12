@@ -245,12 +245,10 @@ const AdminStoresLoading = ({
     <div className="border-t border-gray-200 dark:border-gray-800 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 sticky top-0 z-40">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-14">
-          {/* Left: Current Store */}
-          <div
-            className={`flex items-center gap-3 ${isSingleStoreUser ? "min-w-[420px]" : "min-w-[300px]"}`}
-          >
+          {/* Left: Current Store — fixed width, never shifts */}
+          <div className="flex items-center gap-3 w-[230px]  shrink-0">
             <div
-              className={`flex items-center gap-2 px-4 py-2 rounded-sm border shadow-sm ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-sm border shadow-sm w-[220px] shrink-0 overflow-hidden ${
                 isCurrentStoreAccessible
                   ? "border-blue-200 dark:border-blue-500/30 bg-linear-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
                   : "border-yellow-200 dark:border-yellow-500/30 bg-linear-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20"
@@ -258,31 +256,27 @@ const AdminStoresLoading = ({
             >
               <Store
                 size={16}
-                className={
+                className={`shrink-0 ${
                   isCurrentStoreAccessible
                     ? "text-blue-600 dark:text-blue-400"
                     : "text-yellow-600 dark:text-yellow-400"
-                }
+                }`}
               />
-              <div className="flex items-center gap-1">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <div className="flex items-center gap-1 min-w-0 flex-1">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 shrink-0">
                   {isSingleStoreUser ? "Your Store:" : "Current:"}
                 </span>
-                <span className="relative group">
+                <span className="relative group min-w-0 flex-1">
                   <span
-                    className={`text-sm font-semibold ${
+                    className={`text-sm font-semibold block truncate ${
                       isCurrentStoreAccessible
                         ? "text-blue-700 dark:text-blue-400"
                         : "text-yellow-700 dark:text-yellow-400"
                     }`}
                   >
-                    {currentStore?.name
-                      ? currentStore.name.length > 20
-                        ? `${currentStore.name.substring(0, 18)}...`
-                        : currentStore.name
-                      : "No store selected"}
+                    {currentStore?.name || "No store selected"}
                   </span>
-                  {currentStore?.name && currentStore.name.length > 20 && (
+                  {currentStore?.name && (
                     <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block z-50">
                       <div className="bg-gray-900 text-white text-xs rounded-sm py-1.5 px-2.5 whitespace-nowrap shadow-lg">
                         {currentStore.name}
@@ -292,13 +286,13 @@ const AdminStoresLoading = ({
                   )}
                 </span>
               </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 px-1.5 py-0.5 rounded">
+              <span className="text-xs text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 px-1.5 py-0.5 rounded shrink-0">
                 {currentStore?.code || "N/A"}
               </span>
               {!isCurrentStoreAccessible && currentStore && (
                 <AlertCircle
                   size={14}
-                  className="text-yellow-600 dark:text-yellow-400 animate-pulse"
+                  className="text-yellow-600 dark:text-yellow-400 animate-pulse shrink-0"
                   title="Auto-switching to accessible store..."
                 />
               )}
@@ -320,7 +314,7 @@ const AdminStoresLoading = ({
 
           {/* Center: Store Scrollable Strip (only show for superadmins/admins or users with multiple stores) */}
           {hasMultipleAccessibleStores && (
-            <div className="hidden lg:flex flex-1 mx-6 relative">
+            <div className="hidden lg:flex flex-1 mx-6 ml-0 relative">
               <div className="flex items-center gap-2 overflow-x-auto py-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
                 {accessibleStores.map((store) => {
                   const isCurrent = currentStore?._id === store._id;
@@ -387,18 +381,18 @@ const AdminStoresLoading = ({
           )}
 
           {/* Product Categories Button */}
-          {/* Product Categories Button */}
           <button
             className="px-4 py-2 rounded-sm text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 
             bg-linear-to-r from-purple-600 to-pink-600 text-white shadow-sm
             hover:from-purple-700 hover:to-pink-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 mr-[2rem]"
             onClick={() => {
-              dispatch(openCategoriesModal()); // This dispatches the action
+              dispatch(openCategoriesModal());
             }}
           >
             <span>📦</span>
             PRODUCT CATEGORIES
           </button>
+
           {/* Right: Store Controls (only show for superadmins/admins or users with multiple stores) */}
           {hasMultipleAccessibleStores && (
             <StoresControls

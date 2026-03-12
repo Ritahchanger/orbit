@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdminNavbar from "./Navbar";
 import { useStoreSelectionModal } from "../../hooks/useStoreSelectionModal";
 import { useAuth } from "../../../context/authentication/AuthenticationContext";
+import { useStoreContext } from "../../../context/store/StoreContext";
 import StoreSelectionModal from "../../modals/StoreSelectionModal";
 import CalculatorModal from "../../modals/CalculatorModal";
 import AdminGlobalButtons from "./AdminGlobalButtons";
 import ShortcutsOverlay from "./ShortcutsOverlay";
-
 import SystemHelperModal from "./SystemHelperModal";
 
 const AdminLayout = ({ children }) => {
@@ -15,66 +15,53 @@ const AdminLayout = ({ children }) => {
   const navigate = useNavigate();
   const { openModal, isOpen: modalIsOpen } = useStoreSelectionModal();
   const { isAuthenticated, user, userRole } = useAuth();
-  const [shouldCheckStore, setShouldCheckStore] = useState(true);
+
+  // Pull currentStore and isLoading from StoreContext so we wait for it to hydrate
+  const { currentStore, isLoading: storeLoading } = useStoreContext();
+
   const [showCalculator, setShowCalculator] = useState(false);
   const [historyState, setHistoryState] = useState({
     canGoBack: false,
     canGoForward: false,
   });
 
+  const hasCheckedRef = useRef(false);
+
   useEffect(() => {
-    let timer; // Declare timer variable outside the condition
+    // Wait until auth is ready
+    if (!isAuthenticated || !user) return;
+    if (userRole !== "superadmin" && userRole !== "admin") return;
 
-    if (isAuthenticated && user) {
-      const isAdminPage =
-        location.pathname.startsWith("/admin") &&
-        location.pathname !== "/admin/login";
+    const isAdminPage =
+      location.pathname.startsWith("/admin") &&
+      location.pathname !== "/admin/login";
 
-      if (isAdminPage) {
-        if (
-          (userRole === "superadmin" || userRole === "admin") &&
-          shouldCheckStore
-        ) {
-          const selectedStoreId = sessionStorage.getItem("current_store_id");
-          const hasStoreSelected =
-            !!selectedStoreId &&
-            selectedStoreId !== "null" &&
-            selectedStoreId !== "undefined";
+    if (!isAdminPage) return;
 
-          console.log("Store selection check for admin:", {
-            userRole,
-            selectedStoreId,
-            hasStoreSelected,
-            modalIsOpen,
-            pathname: location.pathname,
-          });
+    // Don't open modal if it's already open or we already handled it
+    if (modalIsOpen || hasCheckedRef.current) return;
 
-          if (!hasStoreSelected && !modalIsOpen) {
-            timer = setTimeout(() => {
-              // Assign to outer timer variable
-              console.log("Opening store selection modal for admin");
-              openModal(user);
-              setShouldCheckStore(false);
-            }, 1000);
-          } else {
-            setShouldCheckStore(false);
-          }
-        } else {
-          setShouldCheckStore(false);
-        }
-      } else {
-        setShouldCheckStore(false);
-      }
-    } else {
-      setShouldCheckStore(false);
+    // Wait for the store context to finish loading/hydrating from sessionStorage.
+    // This prevents a false "no store" reading on first render after refresh.
+    if (storeLoading) return;
+
+    // At this point StoreContext has finished initializing.
+    // If currentStore is set, sessionStorage was restored successfully — do nothing.
+    if (currentStore) {
+      hasCheckedRef.current = true;
+      return;
     }
 
-    // Cleanup function - only clear if timer exists
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
+    // No store found even after context hydration — open the modal
+    const timer = setTimeout(() => {
+      console.log(
+        "Opening store selection modal — no store found after hydration",
+      );
+      openModal(user);
+      hasCheckedRef.current = true;
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, [
     isAuthenticated,
     user,
@@ -82,10 +69,18 @@ const AdminLayout = ({ children }) => {
     location.pathname,
     modalIsOpen,
     openModal,
-    shouldCheckStore,
+    storeLoading,
+    currentStore,
   ]);
 
-  // Update history state whenever location changes
+  // Reset check ref on logout
+  useEffect(() => {
+    if (!isAuthenticated) {
+      hasCheckedRef.current = false;
+    }
+  }, [isAuthenticated]);
+
+  // Update history state on navigation
   useEffect(() => {
     setHistoryState({
       canGoBack: window.history.length > 1 && window.history.state?.idx > 0,
@@ -95,20 +90,11 @@ const AdminLayout = ({ children }) => {
     });
   }, [location]);
 
-  const handleCalculatorOpen = () => {
-    setShowCalculator(true);
-    console.log(showCalculator);
-  };
+  const handleCalculatorOpen = () => setShowCalculator(true);
+  const handleCalculatorClose = () => setShowCalculator(false);
+  const handleBack = () => navigate(-1);
+  const handleForward = () => navigate(1);
 
-  const handleCalculatorClose = () => {
-    setShowCalculator(false);
-  };
-  const handleBack = () => {
-    navigate(-1);
-  };
-  const handleForward = () => {
-    navigate(1);
-  };
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
       <AdminGlobalButtons
@@ -121,7 +107,7 @@ const AdminLayout = ({ children }) => {
       <SystemHelperModal />
       <AdminNavbar />
       <div className="mx-auto">
-        <main className="pt-[110px] pb-4 container mx-auto">{children}</main>
+        <main className="pt-27.5 pb-4 container mx-auto">{children}</main>
       </div>
       <StoreSelectionModal />
       {showCalculator && <CalculatorModal onClose={handleCalculatorClose} />}

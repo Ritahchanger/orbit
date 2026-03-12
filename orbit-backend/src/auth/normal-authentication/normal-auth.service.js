@@ -9,6 +9,8 @@ const {
 
 const passwordGeneration = require("../../utils/generateStrongPassword");
 
+const Business = require("../../business/models/business.model");
+
 const RefreshToken = require("../../auth/models/refreshTokenSchema");
 
 const {
@@ -209,51 +211,43 @@ const registerUser = async (userData) => {
   return userWithoutPassword;
 };
 
-const loginAdmin = async (email, password) => {
+const loginAdmin = async (email, password, businessId) => {
   try {
-    console.log("1. Login attempt for email:", email);
-
     if (!email || !password) {
-      console.log("2. Missing credentials");
       throw new Error("Email and password are required");
     }
 
-    console.log("3. Looking up user...");
-    const user = await User.findOne({ email }).populate(
-      "assignedStore",
-      "name code",
-    );
-    console.log("4. User found:", user ? "Yes" : "No");
-
-    if (!user) {
-      console.log("5. User not found");
-      throw new Error("Invalid email or password");
+    if (!businessId) {
+      throw new Error("Business selection is required");
     }
 
-    console.log("6. Resolving permissions...");
+    const user = await User.findOne({
+      email,
+      businessId: businessId, // Critical: Ensure user belongs to this business
+    }).populate("assignedStore", "name code");
+
+    if (!user) {
+      throw new Error("Invalid credentials for this business");
+    }
+
     const permissions = await resolveUserPermissions(user._id);
-    console.log("7. Permissions resolved:", permissions?.length || 0);
 
     if (user.isSuspended) {
-      console.log("8. User is suspended");
       throw new Error(
         "Your account has been suspended. Contact the administrator.",
       );
     }
 
-    console.log("9. Comparing password...");
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("10. Password match:", isMatch);
 
     if (!isMatch) {
-      console.log("11. Password mismatch");
-      throw new Error("Invalid email or password");
+      throw new Error("Invalid credentials for this business");
     }
 
-    console.log("12. Generating token...");
     const accessToken = generateToken({
       user,
       permissions: permissions.map((p) => p.key),
+      businessId: user.businessId, // Include businessId in token payload
     });
 
     const refreshToken = generateRefreshToken(user._id);
@@ -262,17 +256,12 @@ const loginAdmin = async (email, password) => {
     await RefreshToken.create({
       token: refreshToken,
       userId: user._id,
+      businessId: user.businessId, // Also store businessId with refresh token
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     });
 
-    console.log("13. Token generated successfully");
-
     return { user, token: accessToken, refreshToken };
   } catch (error) {
-    console.error("❌ Login service error:", error);
-    console.error("Error name:", error.name);
-    console.error("Error message:", error.message);
-    console.error("Error stack:", error.stack);
     throw error;
   }
 };

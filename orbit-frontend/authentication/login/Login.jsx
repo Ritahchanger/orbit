@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
-
 import { useAuth } from "../../src/context/authentication/AuthenticationContext";
 import otpApi from "../../src/admin-pages/services/otp-api";
+
+import { useSearchBusinesses } from "../../../universal-main-frontend/src/globals/hooks/useBusinessQueries";
+
 import ResetPassword from "../reset-password/ResetPassword";
 import LoginForm from "./LoginForm";
 import ThemeButton from "../../src/admin-pages/dashboard/layout/ThemeButton";
+
+import { useDebounce } from "../../src/globals/hooks/useDebounce";
+
 const AdminLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,15 +21,34 @@ const AdminLogin = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [otpMode, setOtpMode] = useState(false); // Toggle between password and OTP login
+  const [otpMode, setOtpMode] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [otpResendCooldown, setOtpResendCooldown] = useState(0);
+
+  // State for business search
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBusiness, setSelectedBusiness] = useState(null);
+
+  // Use the custom debounce hook
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+  // Use the custom search businesses hook
+  const {
+    data: searchResults,
+    isLoading: isSearching,
+    refetch: searchBusinesses,
+  } = useSearchBusinesses(debouncedSearchQuery, {
+    enabled: debouncedSearchQuery.length >= 2,
+  });
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     otp: "",
     rememberMe: false,
+    businessId: "",
   });
+
   const [errors, setErrors] = useState({});
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [showResetPassword, setShowResetPassword] = useState(false);
@@ -36,8 +60,6 @@ const AdminLogin = () => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("theme");
       if (savedTheme) return savedTheme;
-
-      // Check system preference
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
         return "dark";
       }
@@ -45,7 +67,7 @@ const AdminLogin = () => {
     return "light";
   });
 
-  // Apply theme class to html element
+  // Apply theme class
   useEffect(() => {
     const html = document.documentElement;
     if (theme === "dark") {
@@ -56,45 +78,46 @@ const AdminLogin = () => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Toggle theme function
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
   // Redirect if already authenticated
   useEffect(() => {
-    console.log("AdminLogin useEffect - Debug:", {
-      isAuthenticated,
-      authLoading,
-      locationState: location.state,
-      path: location.pathname,
-    });
-
     if (isAuthenticated && !authLoading) {
-      console.log(
-        "✅ AdminLogin: User is authenticated, proceeding to redirect...",
-      );
       const from = location.state?.from?.pathname || "/admin/dashboard";
-
-      console.log("📍 Redirecting to:", from);
-      setTimeout(() => {
-        navigate(from, {
-          replace: true,
-          state: { ...location.state, showStoreSelection: undefined },
-        });
-      }, 0);
+      navigate(from, {
+        replace: true,
+        state: { ...location.state, showStoreSelection: undefined },
+      });
     }
   }, [isAuthenticated, authLoading, navigate, location]);
 
-  // Check for remembered email on mount
+  // Check for remembered email and business on mount
   useEffect(() => {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
+    const rememberedBusiness = localStorage.getItem("rememberedBusiness");
+
     if (rememberedEmail) {
       setFormData((prev) => ({
         ...prev,
         email: rememberedEmail,
         rememberMe: true,
       }));
+    }
+
+    if (rememberedBusiness) {
+      try {
+        const business = JSON.parse(rememberedBusiness);
+        setSelectedBusiness(business);
+        setFormData((prev) => ({
+          ...prev,
+          businessId: business._id,
+        }));
+        setSearchQuery(business.businessName);
+      } catch (error) {
+        console.error("Failed to parse remembered business:", error);
+      }
     }
   }, []);
 
@@ -109,9 +132,16 @@ const AdminLogin = () => {
     return () => clearInterval(interval);
   }, [otpResendCooldown]);
 
+  // ❌ REMOVED: The useEffect that was trying to use setBusinesses
+
   // Form validation
   const validateForm = () => {
     const newErrors = {};
+
+    // Validate business selection
+    if (!selectedBusiness) {
+      newErrors.business = "Please select your business";
+    }
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -120,14 +150,12 @@ const AdminLogin = () => {
     }
 
     if (!otpMode) {
-      // Password validation for normal login
       if (!formData.password) {
         newErrors.password = "Password is required";
       } else if (formData.password.length < 6) {
         newErrors.password = "Password must be at least 6 characters";
       }
     } else {
-      // OTP validation for OTP login
       if (!formData.otp) {
         newErrors.otp = "OTP is required";
       } else if (!/^\d{6}$/.test(formData.otp)) {
@@ -142,7 +170,6 @@ const AdminLogin = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    // Auto format OTP - allow only digits and limit to 6
     let processedValue = value;
     if (name === "otp") {
       processedValue = value.replace(/\D/g, "").slice(0, 6);
@@ -158,8 +185,28 @@ const AdminLogin = () => {
     }
   };
 
+  // Handle business selection
+  const handleBusinessSelect = (business) => {
+    setSelectedBusiness(business);
+    setFormData((prev) => ({
+      ...prev,
+      businessId: business._id,
+    }));
+    setSearchQuery(business.businessName);
+    // ❌ REMOVED: setBusinesses([]) - not needed
+
+    if (errors.business) {
+      setErrors((prev) => ({ ...prev, business: "" }));
+    }
+  };
+
   // Send login OTP
   const handleSendOTP = async () => {
+    if (!selectedBusiness) {
+      toast.error("Please select your business first");
+      return;
+    }
+
     if (!formData.email.trim()) {
       toast.error("Please enter your email address");
       return;
@@ -172,10 +219,15 @@ const AdminLogin = () => {
 
     setLoading(true);
     try {
-      await otpApi.sendLoginOTP({ email: formData.email.trim() });
+      await otpApi.sendLoginOTP({
+        email: formData.email.trim(),
+        businessId: selectedBusiness._id,
+      });
       setOtpSent(true);
-      setOtpResendCooldown(60); // 60 seconds cooldown
-      toast.success("OTP sent to your email!");
+      setOtpResendCooldown(60);
+      toast.success(
+        `OTP sent to ${formData.email} for ${selectedBusiness.businessName}!`,
+      );
     } catch (error) {
       toast.error(error.message || "Failed to send OTP. Please try again.");
     } finally {
@@ -194,6 +246,7 @@ const AdminLogin = () => {
     try {
       await otpApi.resendOTP({
         email: formData.email.trim(),
+        businessId: selectedBusiness._id,
         purpose: "login",
       });
       setOtpResendCooldown(60);
@@ -205,7 +258,7 @@ const AdminLogin = () => {
     }
   };
 
-  // Toggle between password and OTP login
+  // Toggle login mode
   const toggleLoginMode = () => {
     setOtpMode(!otpMode);
     setOtpSent(false);
@@ -225,72 +278,71 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
+      // Include business context in login
+      const loginPayload = {
+        email: formData.email.trim(),
+        businessId: selectedBusiness._id,
+        businessName: selectedBusiness.businessName,
+        ...(otpMode ? { otp: formData.otp } : { password: formData.password }),
+      };
+
       if (otpMode) {
         // OTP-based login
-        const loginData = {
-          email: formData.email.trim(),
-          otp: formData.otp,
-        };
-
-        // Verify OTP
-        const otpResponse = await otpApi.verifyLoginOTP(loginData);
-
+        const otpResponse = await otpApi.verifyLoginOTP(loginPayload);
         if (otpResponse.success) {
-          // Use the token from OTP response to login
-          await login({ email: formData.email.trim() }, otpResponse.token);
-
-          toast.success("Login successful with OTP!");
+          await login(loginPayload, otpResponse.token);
+          toast.success(`Welcome to ${selectedBusiness.businessName}!`);
         } else {
           throw new Error(otpResponse.message || "OTP verification failed");
         }
       } else {
         // Password-based login
-        const credentials = {
-          email: formData.email.trim(),
-          password: formData.password,
-        };
-        await login(credentials);
-        toast.success("Login successful!");
+        await login(loginPayload);
+        toast.success(`Welcome to ${selectedBusiness.businessName}!`);
       }
 
       // Handle remember me
       if (formData.rememberMe) {
         localStorage.setItem("rememberedEmail", formData.email);
+        localStorage.setItem(
+          "rememberedBusiness",
+          JSON.stringify(selectedBusiness),
+        );
       } else {
         localStorage.removeItem("rememberedEmail");
+        localStorage.removeItem("rememberedBusiness");
       }
 
-      // Reset login attempts on success
       setLoginAttempts(0);
     } catch (error) {
-      // Handle failed login attempts
       const newAttempts = loginAttempts + 1;
       setLoginAttempts(newAttempts);
 
-      if (newAttempts >= 3) {
-        // Suggest OTP login after multiple failures
-        if (!otpMode) {
-          toast.error("Multiple failed attempts. Try OTP login for security.");
-          setOtpMode(true);
-        } else {
-          setShowResetPassword(true);
-          toast.error(
-            "Multiple failed attempts. Consider resetting your password.",
-          );
-        }
+      if (newAttempts >= 3 && !otpMode) {
+        toast.error("Multiple failed attempts. Try OTP login for security.");
+        setOtpMode(true);
+      } else if (newAttempts >= 5) {
+        setShowResetPassword(true);
+        toast.error("Too many failed attempts. Please reset your password.");
       }
+
       toast.error(
         error.message ||
           authError ||
-          "Login failed. Please check your credentials.",
+          `Login failed for ${selectedBusiness?.businessName}. Please check your credentials.`,
       );
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle forgot password with OTP
+  // Handle forgot password
   const handleForgotPassword = async () => {
+    if (!selectedBusiness) {
+      toast.error("Please select your business first");
+      return;
+    }
+
     if (!resetEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(resetEmail)) {
       toast.error("Please enter a valid email address");
       return;
@@ -298,10 +350,14 @@ const AdminLogin = () => {
 
     setLoading(true);
     try {
-      // Use OTP API to send password reset
-      await otpApi.sendPasswordResetOTP(resetEmail);
+      await otpApi.sendPasswordResetOTP({
+        email: resetEmail,
+        businessId: selectedBusiness._id,
+      });
       setResetSent(true);
-      toast.success("Password reset OTP sent to your email!");
+      toast.success(
+        `Password reset OTP sent to ${resetEmail} for ${selectedBusiness.businessName}!`,
+      );
     } catch (error) {
       toast.error(
         error.message || "Failed to send reset OTP. Please try again.",
@@ -346,6 +402,7 @@ const AdminLogin = () => {
               loading={loading}
               authLoading={authLoading}
               handleForgotPassword={handleForgotPassword}
+              selectedBusiness={selectedBusiness}
             />
           ) : (
             /* Main Login Form */
@@ -366,6 +423,14 @@ const AdminLogin = () => {
               toggleLoginMode={toggleLoginMode}
               handleSendOTP={handleSendOTP}
               handleResendOTP={handleResendOTP}
+              // Business Search Props
+              businesses={searchResults?.data || []} // Use searchResults from hook
+              searchBusinesses={searchBusinesses} // This will trigger refetch
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedBusiness={selectedBusiness}
+              setSelectedBusiness={handleBusinessSelect}
+              isSearching={isSearching} // Use loading state from hook
             />
           )}
         </div>
