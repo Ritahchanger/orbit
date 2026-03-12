@@ -23,29 +23,40 @@ const register = async (req, res) => {
   });
 };
 
-// controllers/business.controller.js — add this
 const searchPublic = async (req, res) => {
-  const { search = "" } = req.query;
+  try {
+    const { search = "" } = req.query;
 
-  const query = {
-    status: "active",
-    isVerified: true,
-  };
+    const query = {
+      status: "active",
+      isVerified: true,
+    };
 
-  if (search) {
-    query.$or = [
-      { businessName: { $regex: search, $options: "i" } },
-      { businessType: { $regex: search, $options: "i" } },
-      { city: { $regex: search, $options: "i" } },
-    ];
+    if (search) {
+      query.$or = [
+        { businessName: { $regex: search, $options: "i" } },
+        { businessType: { $regex: search, $options: "i" } },
+        { city: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const businesses = await Business.find(query)
+      .select("_id businessName businessType city businessLogo")
+      .limit(20)
+      .sort({ businessName: 1 });
+
+    res.status(200).json({
+      success: true,
+      data: businesses,
+      count: businesses.length,
+    });
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error searching businesses",
+    });
   }
-
-  const businesses = await Business.find(query)
-    .select("_id businessName businessType city businessLogo")
-    .limit(20)
-    .sort({ businessName: 1 });
-
-  res.status(200).json({ success: true, data: businesses });
 };
 
 // ── Get all businesses ────────────────────────────────────────────────────────

@@ -6,7 +6,7 @@ import Products from "../everyone-pages/products/pages/Products";
 import ProductDetails from "../everyone-pages/products/pages/ProductDetails";
 import Community from "../everyone-pages/community/pages/Community";
 import SetUpConsultation from "../everyone-pages/consultation/pages/SetUpConsultation";
-import AdminLogin from "../../authentication/login/Login";
+import AdminLogin from "../authentication/login/Login";
 import PageNotFound from "../components/common/PageNotFound";
 // Admin Components
 import AdminDashboard from "../admin-pages/dashboard/pages/AdminDashboard";
@@ -32,6 +32,7 @@ import AdminStockTransfers from "../admin-pages/admin-stock-transfers/pages/Admi
 import AdminTrash from "../admin-pages/admin-trash/pages/AdminTrash";
 import AdminLogs from "../admin-pages/admin-logs/pages/AdminLogs";
 import AdminEcommerceDashboard from "../admin-ecommerce/admin-ecommerce-dashboard/AdminEcommerceDashboard";
+import AdminSignup from "../authentication/signup/SignUp";
 
 // import AdminCategoriesPage from "../admin-pages/admin-categories/pages/AdminCategories";
 
@@ -57,6 +58,7 @@ export const publicRoutes = [
   { path: "/category/:category", element: <Products /> },
   { path: "/brand/:brand", element: <Products /> },
   { path: "/admin/login", element: <AdminLogin /> },
+  { path: "/admin/signup", element: <AdminSignup /> },
   { path: "*", element: <PageNotFound /> },
 ];
 

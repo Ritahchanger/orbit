@@ -14,10 +14,15 @@ router.get("/search", asyncWrapper(businessCtrl.searchPublic));
 router.use(tokenValidator);
 
 router.get("/", asyncWrapper(businessCtrl.getAll));
+
 router.get("/my-business", asyncWrapper(businessCtrl.getMyBusiness));
+
 router.get("/:id", asyncWrapper(businessCtrl.getById));
+
 router.patch("/:id", asyncWrapper(businessCtrl.update));
+
 router.patch("/:id/status", asyncWrapper(businessCtrl.updateStatus));
+
 router.delete("/:id", asyncWrapper(businessCtrl.deleteBusiness));
 
 module.exports = router;

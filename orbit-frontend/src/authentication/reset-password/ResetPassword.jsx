@@ -10,7 +10,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import otpApi from "../../src/admin-pages/services/otp-api";
+import otpApi from "../../admin-pages/services/otp-api";
 
 const ResetPassword = ({
   resetSent,

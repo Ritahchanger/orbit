@@ -1,16 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../../src/context/authentication/AuthenticationContext";
-import otpApi from "../../src/admin-pages/services/otp-api";
+import { useAuth } from "../../context/authentication/AuthenticationContext";
+import otpApi from "../../admin-pages/services/otp-api";
 
-import { useSearchBusinesses } from "../../../universal-main-frontend/src/globals/hooks/useBusinessQueries";
+import { useSearchBusinesses } from "../../../../universal-main-frontend/src/globals/hooks/useBusinessQueries";
 
 import ResetPassword from "../reset-password/ResetPassword";
-import LoginForm from "./LoginForm";
-import ThemeButton from "../../src/admin-pages/dashboard/layout/ThemeButton";
 
-import { useDebounce } from "../../src/globals/hooks/useDebounce";
+import LoginForm from "./LoginForm";
+
+import ThemeButton from "../../admin-pages/dashboard/layout/ThemeButton";
+
+import { Link } from "react-router-dom";
+
+import { useDebounce } from "../../globals/hooks/useDebounce";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -185,15 +189,13 @@ const AdminLogin = () => {
     }
   };
 
-  // Handle business selection
   const handleBusinessSelect = (business) => {
     setSelectedBusiness(business);
     setFormData((prev) => ({
       ...prev,
-      businessId: business._id,
+      businessId: business?._id || "",
     }));
-    setSearchQuery(business.businessName);
-    // ❌ REMOVED: setBusinesses([]) - not needed
+    setSearchQuery(business?.businessName || "");
 
     if (errors.business) {
       setErrors((prev) => ({ ...prev, business: "" }));
@@ -433,6 +435,17 @@ const AdminLogin = () => {
               isSearching={isSearching} // Use loading state from hook
             />
           )}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Don't have a business account?{" "}
+              <Link
+                to="/admin/signup"
+                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors hover:underline"
+              >
+                Register your business
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </>

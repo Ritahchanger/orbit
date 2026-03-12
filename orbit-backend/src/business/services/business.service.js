@@ -11,11 +11,76 @@ const mongoose = require("mongoose");
 class BusinessService {
   // ── Register new business + superadmin + subscription ──────────────────────
   async register(data) {
-    const session = await mongoose.startSession();
-    session.startTransaction();
+    const {
+      businessName,
+      businessType,
+      registrationNumber,
+      taxId,
+      businessEmail,
+      businessPhone,
+      businessAddress,
+      city,
+      country,
+      postalCode,
+      website,
+      employeeCount,
+      yearEstablished,
+      businessDescription,
+      numberOfStores,
+      subscriptionPlan,
+      paymentMethod,
+      adminFirstName,
+      adminLastName,
+      adminEmail,
+      adminPhone,
+      adminUsername,
+      adminPassword,
+    } = data;
+
+    // Check duplicates
+    const [existingEmail, existingRegNo, existingAdminEmail, existingUsername] =
+      await Promise.all([
+        Business.findOne({ businessEmail }),
+        Business.findOne({
+          registrationNumber: registrationNumber.toUpperCase(),
+        }),
+        User.findOne({ email: adminEmail }),
+        User.findOne({ username: adminUsername }),
+      ]);
+
+    if (existingEmail)
+      throw new Error("A business with this email already exists");
+    if (existingRegNo)
+      throw new Error(
+        "A business with this registration number already exists",
+      );
+    if (existingAdminEmail)
+      throw new Error("An account with this admin email already exists");
+    if (existingUsername) throw new Error("This username is already taken");
+
+    // Find plan first — fail early before creating anything
+    const plan = await PlanTemplate.findOne({
+      slug: subscriptionPlan || "professional",
+    });
+    if (!plan) throw new Error("Invalid subscription plan selected");
+
+    let user, business, subscription;
 
     try {
-      const {
+      // 1. Hash + create user
+      const hashedPassword = await bcrypt.hash(adminPassword, 12);
+      user = await User.create({
+        firstName: adminFirstName,
+        lastName: adminLastName,
+        email: adminEmail.toLowerCase(),
+        phoneNo: adminPhone,
+        password: hashedPassword,
+        role: "superadmin",
+        canAccessAllStores: true,
+      });
+
+      // 2. Create business
+      business = await Business.create({
         businessName,
         businessType,
         registrationNumber,
@@ -31,138 +96,46 @@ class BusinessService {
         yearEstablished,
         businessDescription,
         numberOfStores,
-        subscriptionPlan,
-        paymentMethod,
-        adminFirstName,
-        adminLastName,
-        adminEmail,
-        adminPhone,
-        adminUsername,
-        adminPassword,
-      } = data;
+        subscriptionPlan: subscriptionPlan || "professional",
+        paymentMethod: paymentMethod || "monthly",
+        owner: user._id,
+      });
 
-      // Check duplicates before creating anything
-      const [
-        existingEmail,
-        existingRegNo,
-        existingAdminEmail,
-        existingUsername,
-      ] = await Promise.all([
-        Business.findOne({ businessEmail }),
-        Business.findOne({
-          registrationNumber: registrationNumber.toUpperCase(),
-        }),
-        User.findOne({ email: adminEmail }),
-        User.findOne({ username: adminUsername }),
-      ]);
-
-      if (existingEmail)
-        throw new Error("A business with this email already exists");
-      if (existingRegNo)
-        throw new Error(
-          "A business with this registration number already exists",
-        );
-      if (existingAdminEmail)
-        throw new Error("An account with this admin email already exists");
-      if (existingUsername) throw new Error("This username is already taken");
-
-      // 1. Hash password
-      const hashedPassword = await bcrypt.hash(adminPassword, 12);
-
-      // 2. Create superadmin user
-      const [user] = await User.create(
-        [
-          {
-            firstName: adminFirstName,
-            lastName: adminLastName,
-            email: adminEmail.toLowerCase(),
-            phoneNo: adminPhone,
-            password: hashedPassword,
-            role: "superadmin",
-            canAccessAllStores: true,
-          },
-        ],
-        { session },
-      );
-
-      // 3. Create business
-      const [business] = await Business.create(
-        [
-          {
-            businessName,
-            businessType,
-            registrationNumber,
-            taxId,
-            businessEmail,
-            businessPhone,
-            businessAddress,
-            city,
-            country,
-            postalCode,
-            website,
-            employeeCount,
-            yearEstablished,
-            businessDescription,
-            numberOfStores,
-            subscriptionPlan: subscriptionPlan || "professional",
-            paymentMethod: paymentMethod || "monthly",
-            owner: user._id,
-          },
-        ],
-        { session },
-      );
-
-      // 4. Find plan template
-      const plan = await PlanTemplate.findOne({
-        slug: subscriptionPlan || "professional",
-      }).session(session);
-
-      if (!plan) throw new Error("Invalid subscription plan selected");
-
-      // 5. Calculate billing period
+      // 3. Calculate billing period
       const periodEnd =
         paymentMethod === "annual"
           ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
           : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-      // 6. Create subscription
-      const [subscription] = await Subscription.create(
-        [
-          {
-            business: business._id,
-            plan: plan._id,
-            planSlug: plan.slug,
-            billingCycle: paymentMethod || "monthly",
-            pricePaid:
-              paymentMethod === "annual" ? plan.annualPrice : plan.monthlyPrice,
-            currentPeriodStart: new Date(),
-            currentPeriodEnd: periodEnd,
-            nextBillingDate: periodEnd,
-            limits: {
-              maxStores: plan.maxStores,
-              maxUsers: plan.maxUsers,
-              maxBusinesses: plan.maxBusinesses,
-            },
-          },
-        ],
-        { session },
-      );
+      // 4. Create subscription
+      subscription = await Subscription.create({
+        business: business._id,
+        plan: plan._id,
+        planSlug: plan.slug,
+        billingCycle: paymentMethod || "monthly",
+        pricePaid:
+          paymentMethod === "annual" ? plan.annualPrice : plan.monthlyPrice,
+        currentPeriodStart: new Date(),
+        currentPeriodEnd: periodEnd,
+        nextBillingDate: periodEnd,
+        limits: {
+          maxStores: plan.maxStores,
+          maxUsers: plan.maxUsers,
+          maxBusinesses: plan.maxBusinesses,
+        },
+      });
 
-      // 7. Link subscription to business
+      // 5. Link subscription to business
       business.subscription = subscription._id;
-      await business.save({ session });
+      await business.save();
 
-      await session.commitTransaction();
-      session.endSession();
-
-      return {
-        business,
-        user,
-        subscription,
-      };
+      return { business, user, subscription };
     } catch (error) {
-      await session.abortTransaction();
-      session.endSession();
+      // Manual cleanup — delete in reverse order
+      if (subscription?._id)
+        await Subscription.deleteOne({ _id: subscription._id });
+      if (business?._id) await Business.deleteOne({ _id: business._id });
+      if (user?._id) await User.deleteOne({ _id: user._id });
       throw error;
     }
   }

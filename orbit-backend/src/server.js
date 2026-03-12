@@ -114,7 +114,9 @@ app.use("/api/v1/blogs", require("./blogs/blogs.routes"));
 
 app.use("/api/v1/auth", require("./auth/auth.route"));
 
+
 app.use("/api/v1/users", require("./user/users.route"));
+
 
 app.use("/api/v1/sales", require("./sales/sales.routes"));
 
