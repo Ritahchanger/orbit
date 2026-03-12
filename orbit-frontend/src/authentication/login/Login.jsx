@@ -317,16 +317,16 @@ const AdminLogin = () => {
 
       setLoginAttempts(0);
     } catch (error) {
-      const newAttempts = loginAttempts + 1;
-      setLoginAttempts(newAttempts);
+      // const newAttempts = loginAttempts + 1;
+      // setLoginAttempts(newAttempts);
 
-      if (newAttempts >= 3 && !otpMode) {
-        toast.error("Multiple failed attempts. Try OTP login for security.");
-        setOtpMode(true);
-      } else if (newAttempts >= 5) {
-        setShowResetPassword(true);
-        toast.error("Too many failed attempts. Please reset your password.");
-      }
+      // if (newAttempts >= 3 && !otpMode) {
+      //   toast.error("Multiple failed attempts. Try OTP login for security.");
+      //   setOtpMode(true);
+      // } else if (newAttempts >= 5) {
+      //   setShowResetPassword(true);
+      //   toast.error("Too many failed attempts. Please reset your password.");
+      // }
 
       toast.error(
         error.message ||

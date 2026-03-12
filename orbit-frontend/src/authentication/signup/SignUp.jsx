@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
+
 import {
   Rocket,
   Building2,
   Mail,
-  Lock,
-  User,
   Phone,
   MapPin,
   Globe,
@@ -13,97 +13,23 @@ import {
   FileText,
   CheckCircle,
   AlertCircle,
-  Eye,
-  EyeOff,
   ArrowRight,
   Briefcase,
   Calendar,
   Hash,
-  Upload,
-  Store,
+  User,
 } from "lucide-react";
+
+import Step3 from "./components/Step3";
+
 import { businessTypes, countries, subscriptionPlans } from "./data";
 
 import { useRegisterBusiness } from "../../admin-pages/hooks/business.mutations";
 
-// ─── Helpers defined OUTSIDE component to prevent remount on each keystroke ───
+import Step2 from "./components/Step2";
 
-const labelClass =
-  "block text-xs font-semibold text-blue-200 mb-1.5 uppercase tracking-wide";
-
-const getInputClass = (field, errors) =>
-  `w-full pl-10 pr-4 py-2.5 bg-white/10 border ${
-    errors[field] ? "border-red-400" : "border-white/20"
-  } rounded-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm`;
-
-const IconInput = ({
-  icon: Icon,
-  field,
-  label,
-  required,
-  errors,
-  formData,
-  onChange,
-  ...props
-}) => (
-  <div>
-    <label className={labelClass}>
-      {label}
-      {required && <span className="text-red-300 ml-1">*</span>}
-    </label>
-    <div className="relative">
-      <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
-      <input
-        name={field}
-        value={formData[field]}
-        onChange={onChange}
-        className={getInputClass(field, errors)}
-        {...props}
-      />
-    </div>
-    {errors[field] && (
-      <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-        <AlertCircle className="w-3 h-3" />
-        {errors[field]}
-      </p>
-    )}
-  </div>
-);
-
-const SelectInput = ({
-  icon: Icon,
-  field,
-  label,
-  required,
-  errors,
-  formData,
-  onChange,
-  children,
-}) => (
-  <div>
-    <label className={labelClass}>
-      {label}
-      {required && <span className="text-red-300 ml-1">*</span>}
-    </label>
-    <div className="relative">
-      <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300 z-10" />
-      <select
-        name={field}
-        value={formData[field]}
-        onChange={onChange}
-        className={`${getInputClass(field, errors)} appearance-none`}
-      >
-        {children}
-      </select>
-    </div>
-    {errors[field] && (
-      <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-        <AlertCircle className="w-3 h-3" />
-        {errors[field]}
-      </p>
-    )}
-  </div>
-);
+import { IconInput, SelectInput, labelClass } from "./components/Components";
+import Step4 from "./components/Step4";
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -564,322 +490,42 @@ const AdminSignup = () => {
 
               {/* ── Step 2: Admin Account ── */}
               {currentStep === 2 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <IconInput
-                    icon={User}
-                    field="adminFirstName"
-                    label="First Name"
-                    placeholder="John"
-                    required
-                    {...fieldProps}
-                  />
-                  <IconInput
-                    icon={User}
-                    field="adminLastName"
-                    label="Last Name"
-                    placeholder="Doe"
-                    required
-                    {...fieldProps}
-                  />
-                  <IconInput
-                    icon={Mail}
-                    field="adminEmail"
-                    label="Email Address"
-                    type="email"
-                    placeholder="john@example.com"
-                    required
-                    {...fieldProps}
-                  />
-                  <IconInput
-                    icon={Phone}
-                    field="adminPhone"
-                    label="Phone Number"
-                    type="tel"
-                    placeholder="+254 700 000 000"
-                    required
-                    {...fieldProps}
-                  />
-                  <div className="md:col-span-2">
-                    <IconInput
-                      icon={User}
-                      field="adminUsername"
-                      label="Username"
-                      placeholder="johndoe"
-                      required
-                      {...fieldProps}
-                    />
-                  </div>
-
-                  {/* Password */}
-                  <div>
-                    <label className={labelClass}>
-                      Password <span className="text-red-300">*</span>
-                    </label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        name="adminPassword"
-                        value={formData.adminPassword}
-                        onChange={handleInputChange}
-                        placeholder="••••••••"
-                        className={`w-full pl-10 pr-10 py-2.5 bg-white/10 border ${errors.adminPassword ? "border-red-400" : "border-white/20"} rounded-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm`}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white"
-                      >
-                        {showPassword ? (
-                          <EyeOff className="w-4 h-4" />
-                        ) : (
-                          <Eye className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
-                    {errors.adminPassword && (
-                      <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" />
-                        {errors.adminPassword}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Confirm Password */}
-                  <div>
-                    <label className={labelClass}>
-                      Confirm Password <span className="text-red-300">*</span>
-                    </label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
-                      <input
-                        type={showConfirmPassword ? "text" : "password"}
-                        name="adminConfirmPassword"
-                        value={formData.adminConfirmPassword}
-                        onChange={handleInputChange}
-                        placeholder="••••••••"
-                        className={`w-full pl-10 pr-10 py-2.5 bg-white/10 border ${errors.adminConfirmPassword ? "border-red-400" : "border-white/20"} rounded-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm`}
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white"
-                      >
-                        {showConfirmPassword ? (
-                          <EyeOff className="w-4 h-4" />
-                        ) : (
-                          <Eye className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
-                    {errors.adminConfirmPassword && (
-                      <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" />
-                        {errors.adminConfirmPassword}
-                      </p>
-                    )}
-                  </div>
-                </div>
+                <Step2
+                  fieldProps={fieldProps}
+                  User={User}
+                  Mail={Mail}
+                  Phone={Phone}
+                  showPassword={showPassword}
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                  errors={errors}
+                  setShowPassword={setShowPassword}
+                  showConfirmPassword={showConfirmPassword}
+                  setShowConfirmPassword={setShowConfirmPassword}
+                />
               )}
 
               {/* ── Step 3: Business Details ── */}
               {currentStep === 3 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <label className={labelClass}>Business Logo</label>
-                    <div className="flex items-center gap-4 p-4 bg-white/5 border border-white/15 rounded-sm">
-                      <div className="w-16 h-16 bg-white/10 rounded-sm border-2 border-dashed border-white/30 flex items-center justify-center overflow-hidden flex-shrink-0">
-                        {logoPreview ? (
-                          <img
-                            src={logoPreview}
-                            alt="Logo"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <Upload className="w-6 h-6 text-blue-300" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <input
-                          type="file"
-                          name="businessLogo"
-                          onChange={handleInputChange}
-                          accept="image/*"
-                          className="w-full text-xs text-blue-200 file:mr-3 file:py-2 file:px-3 file:rounded-sm file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-                        />
-                        <p className="text-xs text-blue-300 mt-1">
-                          Square image, min 200×200px
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className={labelClass}>
-                      Business Description{" "}
-                      <span className="text-red-300">*</span>
-                    </label>
-                    <textarea
-                      name="businessDescription"
-                      value={formData.businessDescription}
-                      onChange={handleInputChange}
-                      rows="4"
-                      placeholder="Tell us about your business, products, services..."
-                      className={`w-full px-4 py-2.5 bg-white/10 border ${errors.businessDescription ? "border-red-400" : "border-white/20"} rounded-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none text-sm`}
-                    />
-                    {errors.businessDescription && (
-                      <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" />
-                        {errors.businessDescription}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>
-                      Number of Stores <span className="text-red-300">*</span>
-                    </label>
-                    <div className="relative">
-                      <Store className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
-                      <input
-                        type="number"
-                        name="numberOfStores"
-                        value={formData.numberOfStores}
-                        onChange={handleInputChange}
-                        min="1"
-                        className={`w-full pl-10 pr-4 py-2.5 bg-white/10 border ${errors.numberOfStores ? "border-red-400" : "border-white/20"} rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm`}
-                      />
-                    </div>
-                    {errors.numberOfStores && (
-                      <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" />
-                        {errors.numberOfStores}
-                      </p>
-                    )}
-                  </div>
-                </div>
+                <Step3
+                  logoPreview={logoPreview}
+                  handleInputChange={handleInputChange}
+                  formData={formData}
+                  errors={errors}
+                />
               )}
 
               {/* ── Step 4: Choose Plan ── */}
-              {currentStep === 4 && (
-                <div className="space-y-5">
-                  <div className="grid md:grid-cols-3 gap-4">
-                    {subscriptionPlans.map((plan) => (
-                      <div
-                        key={plan.id}
-                        onClick={() =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            subscriptionPlan: plan.id,
-                          }))
-                        }
-                        className={`relative p-5 rounded-sm border-2 cursor-pointer transition-all ${formData.subscriptionPlan === plan.id ? "border-blue-500 bg-blue-600/20" : "border-white/20 bg-white/5 hover:bg-white/10"}`}
-                      >
-                        {plan.popular && (
-                          <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                            <span className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full">
-                              Popular
-                            </span>
-                          </div>
-                        )}
-                        <h3 className="text-base font-bold text-white mb-1">
-                          {plan.name}
-                        </h3>
-                        <p className="text-xl font-bold text-white mb-3">
-                          {plan.price}
-                        </p>
-                        <ul className="space-y-1.5">
-                          {plan.features.map((f, i) => (
-                            <li
-                              key={i}
-                              className="text-xs text-blue-200 flex items-center gap-1.5"
-                            >
-                              <CheckCircle className="w-3 h-3 text-green-400 flex-shrink-0" />
-                              {f}
-                            </li>
-                          ))}
-                        </ul>
-                        <div
-                          className={`w-4 h-4 rounded-full border-2 mx-auto mt-4 ${formData.subscriptionPlan === plan.id ? "border-blue-500 bg-blue-500" : "border-white/30"}`}
-                        />
-                      </div>
-                    ))}
-                  </div>
 
-                  <div>
-                    <label className={labelClass}>Billing Cycle</label>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      {[
-                        {
-                          val: "monthly",
-                          title: "Monthly Billing",
-                          desc: "Pay month to month",
-                        },
-                        {
-                          val: "annual",
-                          title: "Annual Billing",
-                          desc: "Save 20%",
-                        },
-                      ].map((opt) => (
-                        <label
-                          key={opt.val}
-                          className={`flex items-center gap-3 p-4 rounded-sm border-2 cursor-pointer transition-all ${formData.paymentMethod === opt.val ? "border-blue-500 bg-blue-600/20" : "border-white/20 bg-white/5"}`}
-                        >
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value={opt.val}
-                            checked={formData.paymentMethod === opt.val}
-                            onChange={handleInputChange}
-                            className="w-4 h-4 text-blue-600"
-                          />
-                          <div>
-                            <p className="font-semibold text-white text-sm">
-                              {opt.title}
-                            </p>
-                            <p className="text-xs text-blue-200">{opt.desc}</p>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="flex items-start gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={acceptTerms}
-                        onChange={(e) => setAcceptTerms(e.target.checked)}
-                        className="w-4 h-4 mt-0.5 rounded border-white/20 bg-white/10 text-blue-600 flex-shrink-0"
-                      />
-                      <span className="text-sm text-blue-200">
-                        I agree to the{" "}
-                        <Link
-                          to="/terms"
-                          className="text-white hover:underline font-medium"
-                        >
-                          Terms of Service
-                        </Link>{" "}
-                        and{" "}
-                        <Link
-                          to="/privacy"
-                          className="text-white hover:underline font-medium"
-                        >
-                          Privacy Policy
-                        </Link>
-                      </span>
-                    </label>
-                    {errors.terms && (
-                      <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" />
-                        {errors.terms}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
+              <Step4
+                currentStep={currentStep}
+                subscriptionPlans={subscriptionPlans}
+                formData={formData}
+                acceptTerms={acceptTerms}
+                setAcceptTerms={setAcceptTerms}
+                errors={errors}
+                handleInputChange={handleInputChange}
+              />
             </div>
 
             {/* ── Footer Nav ── */}
