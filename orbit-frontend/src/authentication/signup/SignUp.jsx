@@ -12,12 +12,12 @@ import {
   Users,
   FileText,
   CheckCircle,
-  AlertCircle,
   ArrowRight,
   Briefcase,
   Calendar,
   Hash,
   User,
+  ArrowLeft,
 } from "lucide-react";
 
 import Step3 from "./components/Step3";
@@ -29,10 +29,9 @@ import { useRegisterBusiness } from "../../admin-pages/hooks/business.mutations"
 import Step2 from "./components/Step2";
 
 import { IconInput, SelectInput, labelClass } from "./components/Components";
+
 import Step4 from "./components/Step4";
-
 // ─────────────────────────────────────────────────────────────────────────────
-
 const AdminSignup = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
@@ -530,6 +529,13 @@ const AdminSignup = () => {
 
             {/* ── Footer Nav ── */}
             <div className="flex-shrink-0 flex items-center justify-between px-6 lg:px-10 py-4 border-t border-white/10 bg-white/5 backdrop-blur-sm">
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-sm font-semibold hover:bg-blue-700 transition-all flex items-center gap-2 text-sm"
+              >
+                Back <ArrowLeft className="w-4 h-4" />
+              </button>
               <div>
                 {currentStep > 1 && (
                   <button
