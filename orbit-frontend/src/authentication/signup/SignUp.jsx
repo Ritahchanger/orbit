@@ -12,6 +12,7 @@ import {
   Users,
   FileText,
   CheckCircle,
+  AlertCircle,
   ArrowRight,
   Briefcase,
   Calendar,
@@ -29,9 +30,10 @@ import { useRegisterBusiness } from "../../admin-pages/hooks/business.mutations"
 import Step2 from "./components/Step2";
 
 import { IconInput, SelectInput, labelClass } from "./components/Components";
-
 import Step4 from "./components/Step4";
+
 // ─────────────────────────────────────────────────────────────────────────────
+
 const AdminSignup = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
@@ -210,17 +212,46 @@ const AdminSignup = () => {
   const fieldProps = { errors, formData, onChange: handleInputChange };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 overflow-hidden grid grid-rows-[auto_1fr] relative">
+    <div
+      className="h-screen overflow-hidden grid grid-rows-[auto_1fr] relative"
+      style={{
+        background:
+          "linear-gradient(135deg, #1e1040 0%, #2d1b69 40%, #1a0533 100%)",
+      }}
+    >
       {/* Background blobs */}
-      <div className="fixed inset-0 opacity-10 pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white rounded-full blur-3xl" />
+      <div className="fixed inset-0 opacity-15 pointer-events-none">
+        <div
+          className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl"
+          style={{ background: "#a855f7" }}
+        />
+        <div
+          className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full blur-3xl"
+          style={{ background: "#ec4899" }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-20"
+          style={{ background: "#7c3aed" }}
+        />
       </div>
 
       {/* Top Bar */}
-      <div className="relative z-10 flex items-center justify-between px-8 py-4 border-b border-white/10">
+      <div
+        className="relative z-10 flex items-center justify-between px-8 py-4 border-b"
+        style={{
+          borderColor: "rgba(168,85,247,0.2)",
+          background: "rgba(255,255,255,0.03)",
+          backdropFilter: "blur(12px)",
+        }}
+      >
         <Link to="/" className="inline-flex items-center gap-2.5 group">
-          <div className="p-2 bg-white/10 backdrop-blur-sm rounded-sm border border-white/20 group-hover:bg-white/20 transition-colors">
+          <div
+            className="p-2 rounded-sm border transition-colors"
+            style={{
+              background: "rgba(168,85,247,0.15)",
+              borderColor: "rgba(168,85,247,0.3)",
+            }}
+          >
             <Rocket className="w-5 h-5 text-white" />
           </div>
           <span className="text-xl font-bold text-white">Orbit</span>
@@ -232,7 +263,20 @@ const AdminSignup = () => {
             <div key={step.num} className="flex items-center gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex items-center justify-center w-7 h-7 rounded-full border-2 text-xs font-bold transition-all ${currentStep >= step.num ? "bg-blue-500 border-blue-500 text-white" : "border-white/30 text-blue-300"}`}
+                  className={`flex items-center justify-center w-7 h-7 rounded-full border-2 text-xs font-bold transition-all`}
+                  style={
+                    currentStep >= step.num
+                      ? {
+                          background:
+                            "linear-gradient(135deg, #a855f7, #ec4899)",
+                          borderColor: "#a855f7",
+                          color: "white",
+                        }
+                      : {
+                          borderColor: "rgba(168,85,247,0.35)",
+                          color: "#c084fc",
+                        }
+                  }
                 >
                   {currentStep > step.num ? (
                     <CheckCircle className="w-4 h-4" />
@@ -241,25 +285,35 @@ const AdminSignup = () => {
                   )}
                 </div>
                 <span
-                  className={`text-xs font-medium hidden sm:block ${currentStep >= step.num ? "text-white" : "text-blue-400"}`}
+                  className="text-xs font-medium hidden sm:block"
+                  style={{
+                    color: currentStep >= step.num ? "white" : "#c084fc",
+                  }}
                 >
                   {step.label}
                 </span>
               </div>
               {i < steps.length - 1 && (
                 <div
-                  className={`w-8 h-0.5 mx-1 ${currentStep > step.num ? "bg-blue-500" : "bg-white/20"}`}
+                  className="w-8 h-0.5 mx-1"
+                  style={{
+                    background:
+                      currentStep > step.num
+                        ? "linear-gradient(90deg, #a855f7, #ec4899)"
+                        : "rgba(168,85,247,0.2)",
+                  }}
                 />
               )}
             </div>
           ))}
         </div>
 
-        <p className="text-blue-200 text-sm hidden md:block">
+        <p className="text-sm hidden md:block" style={{ color: "#c084fc" }}>
           Have an account?{" "}
           <Link
             to="/admin/login"
-            className="text-white font-semibold hover:underline"
+            className="font-semibold hover:underline"
+            style={{ color: "#e879f9" }}
           >
             Sign in
           </Link>
@@ -269,9 +323,15 @@ const AdminSignup = () => {
       {/* Main Content */}
       <div className="relative z-10 overflow-hidden grid grid-cols-1 lg:grid-cols-[1fr_2fr] h-full">
         {/* Left Panel */}
-        <div className="hidden lg:flex flex-col justify-center px-10 py-8 border-r border-white/10">
+        <div
+          className="hidden lg:flex flex-col justify-center px-10 py-8 border-r"
+          style={{ borderColor: "rgba(168,85,247,0.15)" }}
+        >
           <div className="mb-8">
-            <div className="text-xs font-bold uppercase tracking-widest text-blue-300 mb-3">
+            <div
+              className="text-xs font-bold uppercase tracking-widest mb-3"
+              style={{ color: "#c084fc" }}
+            >
               Step {currentStep} of 4
             </div>
             <h2 className="text-3xl font-extrabold text-white mb-3 leading-tight">
@@ -304,7 +364,7 @@ const AdminSignup = () => {
                 </>
               )}
             </h2>
-            <p className="text-blue-200 text-sm leading-relaxed">
+            <p className="text-sm leading-relaxed" style={{ color: "#c084fc" }}>
               {currentStep === 1 &&
                 "Tell us about your business. This helps us set up your account correctly."}
               {currentStep === 2 &&
@@ -320,10 +380,31 @@ const AdminSignup = () => {
             {steps.map((step) => (
               <div
                 key={step.num}
-                className={`flex items-center gap-3 p-3 rounded-sm transition-all ${currentStep === step.num ? "bg-white/15 border border-white/20" : "opacity-50"}`}
+                className="flex items-center gap-3 p-3 rounded-sm transition-all"
+                style={
+                  currentStep === step.num
+                    ? {
+                        background: "rgba(168,85,247,0.15)",
+                        border: "1px solid rgba(168,85,247,0.35)",
+                      }
+                    : { opacity: 0.45 }
+                }
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${currentStep > step.num ? "bg-green-500" : currentStep === step.num ? "bg-blue-500" : "bg-white/10"}`}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                  style={
+                    currentStep > step.num
+                      ? {
+                          background:
+                            "linear-gradient(135deg, #a855f7, #ec4899)",
+                        }
+                      : currentStep === step.num
+                        ? {
+                            background:
+                              "linear-gradient(135deg, #7c3aed, #a855f7)",
+                          }
+                        : { background: "rgba(255,255,255,0.08)" }
+                  }
                 >
                   {currentStep > step.num ? (
                     <CheckCircle className="w-4 h-4 text-white" />
@@ -442,20 +523,33 @@ const AdminSignup = () => {
                       value={formData.postalCode}
                       onChange={handleInputChange}
                       placeholder="00100"
-                      className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                      className="w-full px-4 py-2.5 rounded-sm text-white text-sm focus:outline-none focus:ring-2"
+                      style={{
+                        background: "rgba(168,85,247,0.08)",
+                        border: "1px solid rgba(168,85,247,0.25)",
+                        "--tw-ring-color": "#a855f7",
+                        "::placeholder": { color: "#c084fc" },
+                      }}
                     />
                   </div>
                   <div>
                     <label className={labelClass}>Website</label>
                     <div className="relative">
-                      <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
+                      <Globe
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
+                        style={{ color: "#c084fc" }}
+                      />
                       <input
                         name="website"
                         value={formData.website}
                         onChange={handleInputChange}
                         type="url"
                         placeholder="https://yourbusiness.com"
-                        className="w-full pl-10 pr-4 py-2.5 bg-white/10 border border-white/20 rounded-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-sm text-white text-sm focus:outline-none focus:ring-2"
+                        style={{
+                          background: "rgba(168,85,247,0.08)",
+                          border: "1px solid rgba(168,85,247,0.25)",
+                        }}
                       />
                     </div>
                   </div>
@@ -515,7 +609,6 @@ const AdminSignup = () => {
               )}
 
               {/* ── Step 4: Choose Plan ── */}
-
               <Step4
                 currentStep={currentStep}
                 subscriptionPlans={subscriptionPlans}
@@ -528,34 +621,56 @@ const AdminSignup = () => {
             </div>
 
             {/* ── Footer Nav ── */}
-            <div className="flex-shrink-0 flex items-center justify-between px-6 lg:px-10 py-4 border-t border-white/10 bg-white/5 backdrop-blur-sm">
-              <button
+            <div
+              className="flex-shrink-0 flex items-center justify-between px-6 lg:px-10 py-4 border-t"
+              style={{
+                borderColor: "rgba(168,85,247,0.2)",
+                background: "rgba(168,85,247,0.05)",
+                backdropFilter: "blur(12px)",
+              }}
+            >
+              {/* <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-sm font-semibold hover:bg-blue-700 transition-all flex items-center gap-2 text-sm"
+                className="px-6 py-2.5 text-white rounded-sm font-semibold transition-all flex items-center gap-2 text-sm"
+                style={{
+                  background: "rgba(168,85,247,0.2)",
+                  border: "1px solid rgba(168,85,247,0.3)",
+                }}
               >
-                Back <ArrowLeft className="w-4 h-4" />
-              </button>
+                Sign In <ArrowLeft className="w-4 h-4" />
+              </button> */}
               <div>
                 {currentStep > 1 && (
                   <button
                     type="button"
                     onClick={handlePrevious}
-                    className="px-5 py-2.5 bg-white/10 text-white rounded-sm font-semibold hover:bg-white/20 transition-all text-sm"
+                    className="px-5 py-2.5 text-white rounded-sm font-semibold transition-all text-sm"
+                    style={{
+                      background: "rgba(255,255,255,0.08)",
+                      border: "1px solid rgba(168,85,247,0.25)",
+                    }}
                   >
                     ← Previous
                   </button>
                 )}
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-blue-300 text-xs hidden sm:block">
+                <span
+                  className="text-xs hidden sm:block"
+                  style={{ color: "#c084fc" }}
+                >
                   Step {currentStep} of 4
                 </span>
                 {currentStep < 4 ? (
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="px-6 py-2.5 bg-blue-600 text-white rounded-sm font-semibold hover:bg-blue-700 transition-all flex items-center gap-2 text-sm"
+                    className="px-6 py-2.5 text-white rounded-sm font-semibold transition-all flex items-center gap-2 text-sm"
+                    style={{
+                      background: "linear-gradient(135deg, #a855f7, #ec4899)",
+                      boxShadow: "0 4px 15px rgba(168,85,247,0.3)",
+                    }}
                   >
                     Next Step <ArrowRight className="w-4 h-4" />
                   </button>
@@ -563,7 +678,16 @@ const AdminSignup = () => {
                   <button
                     type="submit"
                     disabled={isPending || !acceptTerms}
-                    className="px-6 py-2.5 bg-green-600 text-white rounded-sm font-semibold hover:bg-green-700 transition-all flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-2.5 text-white rounded-sm font-semibold transition-all flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={
+                      isPending || !acceptTerms
+                        ? { background: "rgba(255,255,255,0.1)" }
+                        : {
+                            background:
+                              "linear-gradient(135deg, #7c3aed, #a855f7, #ec4899)",
+                            boxShadow: "0 4px 15px rgba(168,85,247,0.4)",
+                          }
+                    }
                   >
                     {isPending ? (
                       <>

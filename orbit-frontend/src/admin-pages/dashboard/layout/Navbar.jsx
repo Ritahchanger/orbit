@@ -38,6 +38,7 @@ import Logo from "./Logo";
 import CustomerAvatar from "../../customers/CustomerAvatar";
 
 import ThemeButton from "./ThemeButton";
+
 import { openPosModal } from "../../pos/slice/pos-slice";
 
 const AdminNavbar = () => {
@@ -274,7 +275,9 @@ const AdminNavbar = () => {
                   title="Switch to POS"
                 >
                   <ShoppingBag size={16} />
-                  <span className="font-semibold text-sm hidden xl:inline">POS</span>
+                  <span className="font-semibold text-sm hidden xl:inline">
+                    POS
+                  </span>
                 </button>
               )}
               {(userRole === "superadmin" || userRole === "admin") && (

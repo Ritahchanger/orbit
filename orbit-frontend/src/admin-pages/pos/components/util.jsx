@@ -1,4 +1,5 @@
 import jsPDF from "jspdf";
+import { format } from 'date-fns';
 import autoTable from "jspdf-autotable";
 // ─── PDF Colour Palette ───────────────────────────────────────────────
 const INK = [15, 23, 42];

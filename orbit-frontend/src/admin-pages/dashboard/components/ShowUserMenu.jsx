@@ -1,5 +1,12 @@
 // Role badge component
-import { User, Settings, LogOut, Home, HelpCircle, BookOpen } from "lucide-react";
+import {
+  User,
+  Settings,
+  LogOut,
+  Home,
+  HelpCircle,
+  BookOpen,
+} from "lucide-react";
 
 import { useAuth } from "../../../context/authentication/AuthenticationContext";
 
@@ -109,12 +116,12 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
         </Link>
 
         <Link
-          to="/admin/settings/permissions"
+          to="/admin/subscriptions"
           className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           onClick={() => setShowUserMenu(false)}
         >
           <Settings className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
-          Settings
+          Subscriptions
         </Link>
 
         {/* Help Button - Updated with icon and keyboard shortcut */}
@@ -128,6 +135,15 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
             Ctrl + ?
           </span>
         </button>
+
+        <Link
+          to="/admin/settings/permissions"
+          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          onClick={() => setShowUserMenu(false)}
+        >
+          <Settings className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
+          Settings
+        </Link>
 
         {/* Divider */}
         <div className="border-t border-gray-300 dark:border-gray-700 my-1" />

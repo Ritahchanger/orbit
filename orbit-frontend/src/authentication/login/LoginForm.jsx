@@ -48,7 +48,7 @@ const LoginForm = ({
         <div className="mb-6">
           <label
             htmlFor="businessSearch"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            className="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2"
           >
             Select Your Business
           </label>
@@ -74,7 +74,7 @@ const LoginForm = ({
                     setSelectedBusiness(null);
                     setSearchQuery("");
                   }}
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                  className="text-lg text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
                 >
                   Change
                 </button>
@@ -156,7 +156,7 @@ const LoginForm = ({
           )}
 
           {errors.business && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center">
+            <p className="mt-1 text-lg text-red-600 dark:text-red-400 flex items-center">
               <AlertCircle className="h-4 w-4 mr-1" />
               {errors.business}
             </p>
@@ -167,7 +167,7 @@ const LoginForm = ({
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            className="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2"
           >
             Email Address
           </label>
@@ -189,7 +189,7 @@ const LoginForm = ({
             />
           </div>
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center">
+            <p className="mt-1 text-lg text-red-600 dark:text-red-400 flex items-center">
               <AlertCircle className="h-4 w-4 mr-1" />
               {errors.email}
             </p>
@@ -217,7 +217,7 @@ const LoginForm = ({
                 <div>
                   <label
                     htmlFor="otp"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    className="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     6-Digit Verification Code
                   </label>
@@ -240,7 +240,7 @@ const LoginForm = ({
                     />
                   </div>
                   {errors.otp && (
-                    <p className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center">
+                    <p className="mt-1 text-lg text-red-600 dark:text-red-400 flex items-center">
                       <AlertCircle className="h-4 w-4 mr-1" />
                       {errors.otp}
                     </p>
@@ -248,14 +248,14 @@ const LoginForm = ({
 
                   {/* Resend OTP Section */}
                   <div className="mt-3 flex items-center justify-between">
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-lg text-gray-600 dark:text-gray-400">
                       Code sent to {formData.email}
                     </div>
                     <button
                       type="button"
                       onClick={handleResendOTP}
                       disabled={otpResendCooldown > 0 || loading || authLoading}
-                      className={`text-sm flex items-center ${otpResendCooldown > 0 ? "text-gray-500 dark:text-gray-500" : "text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300"} transition-colors`}
+                      className={`text-lg flex items-center ${otpResendCooldown > 0 ? "text-gray-500 dark:text-gray-500" : "text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300"} transition-colors`}
                     >
                       <RefreshCw
                         className={`h-4 w-4 mr-1 ${otpResendCooldown === 0 && "animate-pulse"}`}
@@ -287,14 +287,14 @@ const LoginForm = ({
               <div className="flex items-center justify-between mb-2">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  className="block text-lg font-medium text-gray-700 dark:text-gray-300"
                 >
                   Password
                 </label>
                 <button
                   type="button"
                   onClick={() => setShowResetPassword(true)}
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                  className="text-lg text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
                   disabled={loading || authLoading}
                 >
                   Forgot password?
@@ -330,7 +330,7 @@ const LoginForm = ({
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center">
+                <p className="mt-1 text-lg text-red-600 dark:text-red-400 flex items-center">
                   <AlertCircle className="h-4 w-4 mr-1" />
                   {errors.password}
                 </p>
@@ -350,7 +350,7 @@ const LoginForm = ({
               />
               <label
                 htmlFor="rememberMe"
-                className="ml-2 block text-sm text-gray-700 dark:text-gray-300"
+                className="ml-2 block text-lg text-gray-700 dark:text-gray-300"
               >
                 Remember me on this device
               </label>

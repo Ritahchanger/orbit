@@ -34,6 +34,8 @@ import AdminLogs from "../admin-pages/admin-logs/pages/AdminLogs";
 import AdminEcommerceDashboard from "../admin-ecommerce/admin-ecommerce-dashboard/AdminEcommerceDashboard";
 import AdminSignup from "../authentication/signup/SignUp";
 
+import AdminSubscriptions from "../admin-pages/admin-subscriptions/pages/AdminSubscriptions";
+
 // import AdminCategoriesPage from "../admin-pages/admin-categories/pages/AdminCategories";
 
 // Hook to use role-based route protection
@@ -91,6 +93,12 @@ export const protectedRoutes = [
   {
     path: "/admin/stores",
     element: <AdminManageStores />,
+    roles: ["admin", "superadmin"],
+  },
+
+  {
+    path: "/admin/subscriptions",
+    element: <AdminSubscriptions />,
     roles: ["admin", "superadmin"],
   },
 
