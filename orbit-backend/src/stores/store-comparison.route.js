@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const storeController = require("./store-comparison.controller");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 const asyncWrapper = require("../middlewares/asyncMiddleware");
 
 

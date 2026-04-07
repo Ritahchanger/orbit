@@ -5,7 +5,7 @@ const asyncWrapper = require('../middlewares/asyncMiddleware');
 const availabilityController = require('./availability.contoller');
 const bookingController = require('./booking.controller');
 const consultationController = require('./consultation.controller');
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 
 
 

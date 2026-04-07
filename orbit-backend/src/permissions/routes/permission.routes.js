@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const permissionController = require("../controllers/permission.controller");
 const asyncHandler = require("../../middlewares/asyncMiddleware");
-const tokenValidator = require("../../middlewares/tokenValidator");
+const tokenValidator = require("../../middlewares/refreshTokenValidator");
 // ==================== PERMISSIONS ROUTES ====================
 // Get all available permissions
 router.get(

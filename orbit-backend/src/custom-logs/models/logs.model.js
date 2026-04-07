@@ -45,6 +45,13 @@ const logSchema = new mongoose.Schema(
       role: String,
     },
 
+    businessId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      required: true,
+      index: true,
+    },
+
     // Error Information
     error: {
       name: String,

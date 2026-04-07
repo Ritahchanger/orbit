@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const asyncWrapper = require("../../middlewares/asyncMiddleware");
 const businessCtrl = require("../controllers/business.controller");
-const tokenValidator = require("../../middlewares/tokenValidator");
+const tokenValidator = require("../../middlewares/refreshTokenValidator");
 
 // ✅ register is PUBLIC — no tokenValidator
 router.post("/register", asyncWrapper(businessCtrl.register));

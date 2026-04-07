@@ -1,7 +1,7 @@
 // routes/subscription.routes.js
 const express = require("express");
 const asyncWrapper = require("../../middlewares/asyncMiddleware");
-const tokenValidator = require("../../middlewares/tokenValidator");
+const tokenValidator = require("../../middlewares/refreshTokenValidator");
 
 const subCtrl = require("../controllers/subscription.contoller"); // ← fixed typo: "contoller"
 

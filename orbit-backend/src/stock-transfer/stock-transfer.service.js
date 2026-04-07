@@ -11,52 +11,56 @@ class StockTransferService {
    */
   // services/stockTransfer.service.js - FIXED transferStock method
 
-  async transferStock({
-    sourceStoreId,
-    destinationStoreId,
-    productId,
-    quantity,
-    userId,
-    reason = "store_transfer",
-    notes = "",
-  }) {
+  async transferStock(data) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
-      // 1. Validate quantity
+      const {
+        sourceStoreId,
+        destinationStoreId,
+        productId,
+        quantity,
+        userId,
+        businessId,
+        reason = "store_transfer",
+        notes = "",
+      } = data;
+
       if (!quantity || quantity <= 0) {
         throw new Error("Valid quantity is required");
       }
 
-      // 2. Check if source and destination are different
       if (sourceStoreId.toString() === destinationStoreId.toString()) {
         throw new Error("Source and destination stores cannot be the same");
       }
 
-      // 3. Get source inventory
+      // 🔥 SOURCE INVENTORY
       const sourceInventory = await StoreInventory.findOne({
         store: sourceStoreId,
         product: productId,
-      });
+        businessId,
+      }).session(session);
 
       if (!sourceInventory) {
         throw new Error("Product not found in source store");
       }
 
-      // 4. Check if source has enough stock
       if (sourceInventory.stock < quantity) {
         throw new Error(
-          `Insufficient stock in source store. Available: ${sourceInventory.stock}`,
+          `Insufficient stock. Available: ${sourceInventory.stock}`,
         );
       }
 
-      // 5. Get or create destination inventory
+      // 🔥 DEST INVENTORY
       let destInventory = await StoreInventory.findOne({
         store: destinationStoreId,
         product: productId,
-      });
+        businessId,
+      }).session(session);
 
       if (!destInventory) {
-        // Create new inventory record for destination store
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId).session(session);
 
         if (!product) {
           throw new Error("Product not found");
@@ -67,23 +71,21 @@ class StockTransferService {
           product: productId,
           stock: 0,
           minStock: product.minStock || 5,
-          // Don't set status here - let the pre-save middleware handle it
+          businessId, // 🔥 MUST INCLUDE
         });
       }
 
-      // 6. Perform the transfer
+      // 🔥 STOCK MOVEMENT
       sourceInventory.stock -= quantity;
       destInventory.stock += quantity;
 
-      // 7. Update lastTransfer timestamps
       sourceInventory.lastTransfer = new Date();
       destInventory.lastTransfer = new Date();
 
-      // 8. Save both inventories - pre-save middleware will auto-update status
-      await sourceInventory.save();
-      await destInventory.save();
+      await sourceInventory.save({ session });
+      await destInventory.save({ session });
 
-      // 9. Create transfer record
+      // 🔥 TRANSFER RECORD
       const transfer = new StockTransfer({
         transferNumber: await this.generateTransferNumber(),
         sourceStore: sourceStoreId,
@@ -91,6 +93,7 @@ class StockTransferService {
         product: productId,
         quantity,
         transferredBy: userId,
+        businessId, // 🔥 ADD THIS
         status: "completed",
         reason,
         notes,
@@ -101,32 +104,19 @@ class StockTransferService {
         transferredAt: new Date(),
       });
 
-      await transfer.save();
+      await transfer.save({ session });
 
-      // 10. Populate and return result
-      await transfer.populate([
-        { path: "sourceStore", select: "name code" },
-        { path: "destinationStore", select: "name code" },
-        { path: "product", select: "name sku" },
-        { path: "transferredBy", select: "name email" },
-      ]);
+      await session.commitTransaction();
+      session.endSession();
 
       return {
         success: true,
-        message: `Successfully transferred ${quantity} units`,
+        message: `Transferred ${quantity} units successfully`,
         transfer,
-        sourceInventory: {
-          store: sourceInventory.store,
-          newStock: sourceInventory.stock,
-          status: sourceInventory.status, // Now this will be correct
-        },
-        destinationInventory: {
-          store: destInventory.store,
-          newStock: destInventory.stock,
-          status: destInventory.status, // Now this will be correct
-        },
       };
     } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
       throw error;
     }
   }

@@ -162,6 +162,12 @@ const productSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    businessId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      required: true,
+      index: true,
+    },
   },
   {
     timestamps: true,

@@ -1,7 +1,7 @@
 const Router = require("express").Router();
 const userController = require("./user.controller");
 const asyncWrapper = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 const adminValidator = require("../middlewares/adminValidator");
 
 // ============ PUBLIC ROUTES ============

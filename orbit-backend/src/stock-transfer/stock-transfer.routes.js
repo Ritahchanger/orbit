@@ -1,8 +1,9 @@
 // routes/stock-transfer.routes.js
 const express = require("express");
 const asyncHandler = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 const StockTransferControllers = require("./stock-transfer.controller");
+const { attachBusiness } = require("../middlewares/attachBusiness");
 const router = express.Router();
 // All routes require authentication
 router.use(tokenValidator);
@@ -13,6 +14,8 @@ router.use(tokenValidator);
  */
 router.post(
   "/transfer",
+
+  attachBusiness,
 
   asyncHandler(StockTransferControllers.transferStock),
 );

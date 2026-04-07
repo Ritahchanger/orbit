@@ -26,8 +26,14 @@ const NewsletterSchema = new mongoose.Schema(
       of: Boolean,
       default: {},
     },
+    businessId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      required: true,
+      index: true,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Newsletter", NewsletterSchema);

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const mpesaController = require("./mpesa-controller");
 const asyncHandler = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 
 const {
   initiatePaymentValidation,

@@ -2,6 +2,8 @@ const User = require("../../user/user.model");
 
 const bcrypt = require("bcryptjs");
 
+const RefreshToken = require("../models/refreshTokenSchema");
+
 const {
   generateToken,
   generateRefreshToken,
@@ -10,8 +12,6 @@ const {
 const passwordGeneration = require("../../utils/generateStrongPassword");
 
 const Business = require("../../business/models/business.model");
-
-const RefreshToken = require("../../auth/models/refreshTokenSchema");
 
 const {
   resolveUserPermissions,
@@ -95,6 +95,8 @@ const registerUser = async (userData) => {
 
     return [];
   };
+
+  // normal-auth.service.js
 
   // Process storePermissions based on storeRoles
   const processStorePermissions = () => {
@@ -247,7 +249,7 @@ const loginAdmin = async (email, password, businessId) => {
     const accessToken = generateToken({
       user,
       permissions: permissions.map((p) => p.key),
-      businessId: user.businessId, // Include businessId in token payload
+      businessId: user.businessId,
     });
 
     const refreshToken = generateRefreshToken(user._id);
@@ -356,9 +358,41 @@ const changeAdminPassword = async (adminId, currentPassword, newPassword) => {
   return { message: "Password updated successfully" };
 };
 
+const rotateRefreshToken = async (user, oldTokenDoc, businessId) => {
+  // 1. Revoke the old refresh token immediately
+  await RefreshToken.findByIdAndUpdate(oldTokenDoc._id, {
+    revoked: true,
+    revokedAt: new Date(),
+  });
+
+  // 2. Resolve fresh permissions (role/permissions may have changed)
+  const permissions = await resolveUserPermissions(user._id);
+
+  // 3. Issue a new access token
+  const accessToken = generateToken({
+    user,
+    permissions: permissions.map((p) => p.key),
+    businessId,
+  });
+
+  // 4. Issue a new refresh token
+  const newRefreshToken = generateRefreshToken(user._id);
+
+  // 5. Persist the new refresh token
+  await RefreshToken.create({
+    token: newRefreshToken,
+    userId: user._id,
+    businessId,
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  });
+
+  return { accessToken, newRefreshToken };
+};
+
 module.exports = {
   registerUser,
   loginAdmin,
   changeAdminPassword,
+  rotateRefreshToken,
   getCurrentAdmin,
 };

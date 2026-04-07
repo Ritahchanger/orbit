@@ -11,7 +11,9 @@ exports.transferStock = async (req, res) => {
       reason,
       notes,
     } = req.body;
+
     const userId = req.user._id;
+    const businessId = req.businessId; // 🔥 from middleware
 
     const result = await StockTransferService.transferStock({
       sourceStoreId,
@@ -19,6 +21,7 @@ exports.transferStock = async (req, res) => {
       productId,
       quantity,
       userId,
+      businessId, // 🔥 PASS IT
       reason,
       notes,
     });

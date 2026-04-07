@@ -8,7 +8,9 @@ const passport = require("passport");
 
 const asyncWrapper = require("../middlewares/asyncMiddleware");
 
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
+
+const refreshTokenValidator = require("../middlewares/refreshTokenValidator");
 
 /**
  * @swagger
@@ -75,6 +77,14 @@ Router.post("/register", asyncWrapper(NormalUserAuthController.signUp));
  */
 Router.post("/signin", asyncWrapper(NormalUserAuthController.signIn));
 
+// auth.router.js
+
+Router.post(
+  "/refresh-token",
+  refreshTokenValidator, // validates cookie, attaches req.user + req.refreshTokenDoc
+  asyncWrapper(NormalUserAuthController.refreshToken),
+);
+
 /**
  * @swagger
  * /api/v1/auth/me:
@@ -120,7 +130,7 @@ Router.get("/me", tokenValidator, asyncWrapper(NormalUserAuthController.getMe));
 Router.put(
   "/change-password",
   tokenValidator,
-  asyncWrapper(NormalUserAuthController.changePasswordController)
+  asyncWrapper(NormalUserAuthController.changePasswordController),
 );
 
 /**
@@ -232,8 +242,7 @@ Router.get(
   passport.authenticate("google", {
     failureRedirect: "/login/failed",
   }),
-  GoogleAuthController.googleCallback
+  GoogleAuthController.googleCallback,
 );
-
 
 module.exports = Router;

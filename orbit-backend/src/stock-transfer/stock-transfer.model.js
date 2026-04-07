@@ -38,6 +38,12 @@ const stockTransferSchema = new mongoose.Schema(
       enum: ["pending", "completed", "cancelled", "failed"],
       default: "completed",
     },
+       businessId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Business",
+          required: true,
+          index: true,
+        },
     reason: {
       type: String,
       enum: [

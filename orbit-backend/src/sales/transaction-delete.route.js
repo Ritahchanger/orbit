@@ -3,7 +3,7 @@ const router = express.Router();
 
 const transactionDeleteController = require("./transaction-delete.controller");
 const asyncWrapper = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 const authorize = require("../middlewares/authorizeMiddleware");
 const recordAdminLog = require("../custom-logs/middleware/record-admin.middleware");
 

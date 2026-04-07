@@ -6,6 +6,7 @@ const asyncHandler = require("../middlewares/asyncMiddleware");
 
 const upload = require("../utils/multer");
 
+
 const tokenValidator = require("../middlewares/tokenValidator");
 
 const {
@@ -18,85 +19,112 @@ const router = express.Router();
 // ============ PUBLIC GLOBAL PRODUCT ROUTES ============
 
 // Global search
-router.get("/search", asyncHandler(productController.searchProducts));
+router.get(
+  "/search",
+  tokenValidator,
+  asyncHandler(productController.searchProducts),
+);
 
 // Get featured products
-router.get("/featured", asyncHandler(productController.getFeaturedProducts));
+router.get(
+  "/featured",
+  tokenValidator,
+  asyncHandler(productController.getFeaturedProducts),
+);
 
 // Get products by category
 router.get(
   "/category/:category",
+  tokenValidator,
   asyncHandler(productController.getProductsByCategory),
 );
 
 // Get product statistics
-router.get("/stats", asyncHandler(productController.getProductStats));
+router.get(
+  "/stats",
+  tokenValidator,
+  asyncHandler(productController.getProductStats),
+);
 
-// ✅ ADD THIS: GLOBAL low stock route
+// ✅ GLOBAL low stock route
 router.get(
   "/low-stock",
+  tokenValidator,
   asyncHandler(productController.getGlobalLowStockProducts),
 );
 
 router.get(
   "/stores/:storeId/low-stock",
-
+  tokenValidator,
   storeAccess("params", "storeId"),
-
   asyncHandler(productController.getStoreLowStockProducts),
 );
 
-// Get single product by ID (must come LAST to avoid conflict with store routes)
-router.get("/:id", asyncHandler(productController.getProductById));
-
 // Get product by SKU
-router.get("/sku/:sku", asyncHandler(productController.getProductBySKU));
+router.get(
+  "/sku/:sku",
+  tokenValidator,
+  asyncHandler(productController.getProductBySKU),
+);
 
+// Get single product by ID (must come LAST to avoid conflict with store routes)
+router.get(
+  "/:id",
+  tokenValidator,
+  asyncHandler(productController.getProductById),
+);
+
+// Update stock
 router.patch(
   "/:productId/stock",
-  tokenValidator, // Require authentication
+  tokenValidator,
   asyncHandler(productController.updateProductStock),
 );
 
-// Restock product globally (add stock with buying price)
+// Restock product globally
 router.post(
   "/:productId/restock",
-  tokenValidator, // Require authentication
+  tokenValidator,
   asyncHandler(productController.restockProduct),
 );
 
 // Get all products with filtering
-router.get("/", asyncHandler(productController.getProducts));
+router.get("/", tokenValidator, asyncHandler(productController.getProducts));
 
 // ============ PUBLIC STORE-SPECIFIC ROUTES ============
 
 // Get all products for a specific store
 router.get(
   "/stores/:storeId/products",
+  tokenValidator,
   asyncHandler(productController.getProductsByStore),
 );
 
 // Get store-specific product statistics
 router.get(
   "/stores/:storeId/stats",
+  tokenValidator,
   asyncHandler(productController.getStoreProductStats),
 );
 
 // Get store-specific featured products
 router.get(
   "/stores/:storeId/featured",
+  tokenValidator,
   asyncHandler(productController.getStoreFeaturedProducts),
 );
 
 // Get store-specific products by category
 router.get(
   "/stores/:storeId/category/:category",
+  tokenValidator,
   asyncHandler(productController.getStoreProductsByCategory),
 );
 
 // Get specific product in a store (public view)
 router.get(
   "/stores/:storeId/products/:productId",
+  tokenValidator,
   asyncHandler(productController.getStoreProductById),
 );
 
@@ -123,31 +151,21 @@ router.put(
   asyncHandler(productController.updateStoreProduct),
 );
 
-router.put(
-  "/stores/:storeId/products/:productId",
-  storeAccess("params", "storeId"),
-  canManageStore("params", "storeId"),
-  upload.array("images", 5),
-  asyncHandler(productController.updateStoreProduct),
-);
-
+// Update stock for store product
 router.patch(
   "/stores/:storeId/products/:productId/stock",
+  storeAccess("params", "storeId"),
+  canManageStore("params", "storeId"),
   asyncHandler(productController.updateStoreProduct),
 );
 
-// Remove product from store inventory (doesn't delete the product)
+// Remove product from store inventory
 router.delete(
   "/stores/:storeId/products/:productId",
   storeAccess("params", "storeId"),
   canManageStore("params", "storeId"),
   asyncHandler(productController.deleteStoreProduct),
 );
-
-// Record sale for product in store - REMOVED (use sales endpoints)
-// router.post("/stores/:storeId/products/:productId/sale", ...); // Use sales endpoints
-
-// Get low stock products for store (protected)
 
 // Add existing product to store inventory
 router.post(
@@ -185,21 +203,23 @@ router.put(
 // Create global product (requires admin/super admin)
 router.post(
   "/",
+  tokenValidator,
   upload.array("images", 5),
   asyncHandler(productController.createProduct),
 );
 
-// In your product routes file (e.g., product.routes.js)
+// Update global product
 router.put(
   "/:id",
-  upload.array("images", 5), // Optional: for updating images
+  tokenValidator,
+  upload.array("images", 5),
   asyncHandler(productController.updateProduct),
 );
 
-// ✅ ADD THIS: DELETE global product route
+// Delete global product
 router.delete(
   "/:id",
-  tokenValidator, // Require authentication
+  tokenValidator,
   asyncHandler(productController.deleteProduct),
 );
 

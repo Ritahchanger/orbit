@@ -3,7 +3,7 @@ const router = express.Router();
 
 const salesController = require("./sales.controller");
 const asyncWrapper = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 const {
   storeAccess,
   canManageStore,

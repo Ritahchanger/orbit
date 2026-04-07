@@ -1,77 +1,45 @@
-// middlewares/refreshTokenValidator.js
+// middlewares/tokenValidator.js
 const jwt = require("jsonwebtoken");
 const User = require("../user/user.model");
-const RefreshToken = require("../auth/models/refreshTokenSchema"); // Create this model
 require("dotenv").config();
 
-const refreshTokenValidator = async (req, res, next) => {
-  // Get refresh token from cookie (sent only to /refresh endpoint)
-  const refreshToken = req.cookies?.refreshToken;
-
-  if (!refreshToken) {
-    return res.status(401).json({
-      success: false,
-      message: "No refresh token provided",
-      redirect: `${process.env.FRONTEND_URL}/admin/auth/login`,
-    });
-  }
-
+const tokenValidator = async (req, res, next) => {
   try {
-    // Verify refresh token
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET || process.env.JWT_SECRET,
-    );
-
-    // Check if token exists in database and not revoked
-    const tokenDoc = await RefreshToken.findOne({
-      token: refreshToken,
-      revoked: false,
-      userId: decoded.id,
-    });
-
-    if (!tokenDoc) {
-      return res.status(401).json({
-        success: false,
-        message: "Refresh token revoked or not found",
-        redirect: `${process.env.FRONTEND_URL}/admin/auth/login`,
-      });
+    // Support both Bearer token in header and cookie
+    const token =
+      req.cookies?.token || req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "No access token provided" });
     }
 
-    // Fetch user
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id)
       .select("-password")
       .populate("assignedStore", "name code address")
       .populate("storePermissions.store", "name code");
 
     if (!user || user.isSuspended) {
-      return res.status(401).json({
-        success: false,
-        message: "User not found or suspended",
-        redirect: `${process.env.FRONTEND_URL}/admin/auth/login`,
-      });
+      return res
+        .status(401)
+        .json({ success: false, message: "User not found or suspended" });
     }
 
-    // Attach to request
     req.user = user;
-    req.refreshTokenDoc = tokenDoc;
-    next();
-  } catch (error) {
-    // Handle specific JWT errors
-    if (error.name === "TokenExpiredError") {
-      return res.status(401).json({
-        success: false,
-        message: "Refresh token expired",
-        redirect: `${process.env.FRONTEND_URL}/admin/auth/login`,
-      });
-    }
+    req.businessId = user.businessId;
 
-    return res.status(401).json({
-      success: false,
-      message: "Invalid refresh token",
-      redirect: `${process.env.FRONTEND_URL}/admin/auth/login`,
-    });
+    next();
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ success: false, message: "Access token expired" });
+    }
+    return res
+      .status(401)
+      .json({ success: false, message: "Invalid access token" });
   }
 };
 
-module.exports = refreshTokenValidator;
+module.exports = tokenValidator;

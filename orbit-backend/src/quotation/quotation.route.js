@@ -4,7 +4,7 @@ const quoteRequestController = require("./quotation.controller");
 
 const asyncWrapper = require("../middlewares/asyncMiddleware");
 
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 
 Router.post("/", asyncWrapper(quoteRequestController.addQuoteRequest));
 

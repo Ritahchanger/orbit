@@ -3,7 +3,7 @@ const router = express.Router();
 
 const reportController = require("./reports.controller");
 const asyncHandler = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 
 // Apply auth middleware
 router.use(tokenValidator);

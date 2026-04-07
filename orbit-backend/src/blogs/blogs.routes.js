@@ -4,7 +4,7 @@ const router = express.Router();
 const blogController = require("./blogs.controller");
 const commentController = require("./comment.controller");
 const asyncWrapper = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 
 // Public blog routes
 router.get("/", asyncWrapper(blogController.getAllBlogs));

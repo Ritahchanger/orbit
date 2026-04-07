@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
 
 @import "./styles/_variables.scss";
 @import "./styles/_keyframe-animations.scss";
@@ -7,6 +7,57 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Font faces - Using your actual font files */
+@font-face {
+  font-family: "Euclid Circular A";
+  src: url("./assets/fonts/EuclidCircularA-Regular-WebXL.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Euclid Circular A";
+  src: url("./assets/fonts/EuclidCircularA-Medium-WebXL.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Euclid Circular A";
+  src: url("./assets/fonts/EuclidCircularA-Semibold-WebXL-fa7f7a6de763f3fc0ef6d7bce19a5b97.woff")
+    format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MongoDB Value Serif";
+  src: url("./assets/fonts/MongoDBValueSerif-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  src: url("./assets/fonts/SourceCodePro-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HI XiYs";
+  src: url("./assets/fonts/HI_XiYsKILxRpg3hIP6sJ7fM7Pqths7Ds-cv.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 @layer base {
   * {
@@ -18,13 +69,10 @@
   html {
     scroll-behavior: smooth;
     background-color: var(--color-dark);
-    /* Added back for full app */
     color: var(--color-text);
-    /* Added back for full app */
   }
 
   body {
-    /* Use Facebook font for entire body */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: var(--color-dark);
@@ -32,15 +80,14 @@
     overflow-x: hidden;
   }
 
-  /* Apply Facebook font to all text elements */
+  /* Primary font: Euclid Circular A */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    /* font-family: var(--font-facebook) !important; */
-    font-family: "Outfit", sans-serif;
+    font-family: "Euclid Circular A", "Outfit", sans-serif;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--color-text);
@@ -56,8 +103,32 @@
   textarea,
   select,
   label {
-    /* font-family: var(--font-facebook) !important; */
-    font-family: "Outfit", sans-serif;
+    font-family: "Euclid Circular A", "Outfit", sans-serif;
+  }
+
+  /* Table font definitions */
+  table,
+  thead,
+  tbody,
+  tfoot,
+  tr,
+  th,
+  td {
+    font-family: "Euclid Circular A", "Outfit", sans-serif;
+  }
+
+  th {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+  }
+
+  td {
+    font-weight: 400;
+    font-size: var(--text-sm);
+    color: var(--color-text);
   }
 
   p {
@@ -79,112 +150,19 @@
     width: 4px;
     height: 4px;
   }
-
-  /* 
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, var(--color-primary), var(--color-accent));
-    border-radius: 2px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, var(--color-primary), #00D4FF);
-  }
-
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-primary) transparent;
-  } */
-}
-
-/* Font faces - Ensure proper font files exist */
-@font-face {
-  font-family: "Facebook Business";
-  src:
-    local("Facebook Business"),
-    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
-    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
-    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Facebook Business";
-  src:
-    local("Facebook Business"),
-    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
-    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
-    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Facebook Business";
-  src:
-    local("Facebook Business"),
-    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
-    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
-    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Facebook Business";
-  src:
-    local("Facebook Business"),
-    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
-    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
-    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Facebook Business";
-  src:
-    local("Facebook Business"),
-    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
-    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
-    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Facebook Business";
-  src:
-    local("Facebook Business"),
-    url("./fonts/facebook-fonts/downloaded_font.woff2") format("woff2"),
-    url("./fonts/facebook-fonts/downloaded_font.woff") format("woff"),
-    url("./fonts/facebook-fonts/downloaded_font.ttf") format("truetype");
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
 }
 
 @theme {
-  /* Use ONLY Facebook Business font for everything */
-  --font-facebook:
-    "Facebook Business", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: var(--font-facebook);
-  /* Use same font for headings */
-  --font-body: var(--font-facebook);
-  /* Use same font for body */
-  --font-accent: var(--font-facebook);
-  /* Use same font for accents */
-
-  /* Remove other font declarations to ensure consistency */
+  /* Font families - Using your actual fonts */
+  --font-primary:
+    "Euclid Circular A", "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: "Euclid Circular A", "Outfit", sans-serif;
+  --font-body: "Euclid Circular A", "Outfit", sans-serif;
+  --font-mongodb: "MongoDB Value Serif", serif;
+  --font-code: "Source Code Pro", monospace;
+  --font-hi: "HI XiYs", sans-serif;
+  --font-table: "Euclid Circular A", "Outfit", sans-serif;
+  --font-table-header: "Euclid Circular A", "Outfit", sans-serif;
 
   /* Gaming colors */
   --color-primary: #0066ff;
@@ -229,17 +207,14 @@
   --breakpoint-4xl: 2560px;
 }
 
-/* Add to your global CSS */
+/* Scrollbar hide utility */
 .scrollbar-hide {
   -ms-overflow-style: none;
-  /* IE and Edge */
   scrollbar-width: none;
-  /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
-  /* Chrome, Safari, Opera */
 }
 
 /* Container styling */
@@ -267,13 +242,13 @@
   box-shadow: var(--shadow-glow-blue);
 }
 
-/* Special styles for gaming theme sections (optional) */
+/* Special styles for gaming theme sections */
 .gaming-theme {
   background-color: var(--color-dark);
   color: var(--color-text);
 }
 
-/* Font weight utility classes (since we're using one font) */
+/* Font weight utility classes */
 .font-thin {
   font-weight: 100;
 }
@@ -310,24 +285,82 @@
   font-weight: 900;
 }
 
-/* In your global CSS or Tailwind extensions */
+/* Special font classes */
+.font-mongodb {
+  font-family: var(--font-mongodb);
+}
+
+.font-code {
+  font-family: var(--font-code);
+}
+
+.font-hi {
+  font-family: var(--font-hi);
+}
+
+/* Table specific utility classes */
+.font-table {
+  font-family: var(--font-table);
+}
+
+.font-table-header {
+  font-family: var(--font-table-header);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Table styling classes */
+.table-gaming {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-gaming th {
+  font-family: var(--font-table-header);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1rem;
+  background-color: rgba(0, 102, 255, 0.1);
+  color: var(--color-primary);
+  border-bottom: 1px solid rgba(0, 102, 255, 0.3);
+  text-align: left;
+}
+
+.table-gaming td {
+  font-family: var(--font-table);
+  font-size: var(--text-sm);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+}
+
+.table-gaming tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+.table-gaming tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 3D animations */
 @keyframes spin3d {
   0% {
     transform: rotateY(0deg) rotateX(0deg);
   }
-
   25% {
     transform: rotateY(90deg) rotateX(0deg);
   }
-
   50% {
     transform: rotateY(180deg) rotateX(90deg);
   }
-
   75% {
     transform: rotateY(270deg) rotateX(180deg);
   }
-
   100% {
     transform: rotateY(360deg) rotateX(360deg);
   }
@@ -345,7 +378,7 @@
   transform-style: preserve-3d;
 }
 
-/* Transform utility classes if not in Tailwind */
+/* Transform utility classes */
 .translateZ-50px {
   transform: translateZ(50px);
 }
@@ -374,7 +407,7 @@
   transform: rotateX(-90deg);
 }
 
-/* Add to your global styles */
+/* Highlight animations */
 .highlight-first-row {
   animation: highlightPulse 3s ease-in-out;
   background: linear-gradient(
@@ -394,7 +427,6 @@
     );
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
   }
-
   50% {
     background: linear-gradient(
       90deg,
@@ -403,7 +435,6 @@
     );
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.1);
   }
-
   100% {
     background: linear-gradient(
       90deg,
@@ -414,13 +445,11 @@
   }
 }
 
-/* Add this to your global CSS or component styles */
 @keyframes highlight {
   0%,
   100% {
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
-
   50% {
     box-shadow: 0 0 0 10px rgba(59, 130, 246, 0.5);
   }

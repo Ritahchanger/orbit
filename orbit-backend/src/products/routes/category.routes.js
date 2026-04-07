@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const asyncHandler = require("../../middlewares/asyncMiddleware");
-const tokenValidator = require("../../middlewares/tokenValidator");
+const tokenValidator = require("../../middlewares/refreshTokenValidator");
 
 const CategoriesController = require("../controllers/categories.controller");
 

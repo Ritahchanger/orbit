@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const analysisController = require("./controllers/analysis.controller");
 const asyncWrapper = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 const { storeAccess, canManageStore } = require("../middlewares/store-access.middleware");
 
 // ============ GLOBAL PRODUCT ANALYSIS ROUTES (4 APIs) ============

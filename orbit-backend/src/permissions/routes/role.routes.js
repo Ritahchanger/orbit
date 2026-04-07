@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const roleController = require("../controllers/role.controller");
 const asyncHandler = require("../../middlewares/asyncMiddleware");
-const tokenValidator = require("../../middlewares/tokenValidator");
+const tokenValidator = require("../../middlewares/refreshTokenValidator");
 const permissionValidator = require("../../middlewares/permissionValidator");
 
 const recordAdminLog = require("../../custom-logs/middleware/record-admin.middleware");

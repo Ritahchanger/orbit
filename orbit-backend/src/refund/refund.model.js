@@ -196,6 +196,13 @@ const RefundSchema = new mongoose.Schema(
       sparse: true,
     },
 
+    businessId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      required: true,
+      index: true,
+    },
+
     attachments: [
       {
         filename: String,

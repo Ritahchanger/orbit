@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const SendEmailController = require("./sent-consultation-email.controller");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 const asyncHandler = require("../middlewares/asyncMiddleware");
 const router = express.Router();
 

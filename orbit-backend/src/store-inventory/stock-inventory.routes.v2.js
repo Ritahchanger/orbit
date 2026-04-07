@@ -1,6 +1,6 @@
 const express = require("express");
 const asyncHandler = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 const {
   storeAccess,
   canManageStore,

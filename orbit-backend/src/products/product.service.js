@@ -1,6 +1,6 @@
 const Product = require("./products.model");
 const Store = require("../stores/store.model");
-const StoreInventory = require("../store-inventory/store-inventory.model"); // Fixed import name
+const StoreInventory = require("../store-inventory/store-inventory.model");
 const { LocalStorage, UPLOADS_DIR } = require("../utils/localStorage");
 const path = require("path");
 const {
@@ -1005,12 +1005,16 @@ const productService = {
    * Get all products with pagination (global)
    */
 
-  getProducts: async (filters = {}, page = 1, limit = 20) => {
+  getProducts: async (filters = {}, page = 1, limit = 20, businessId) => {
     const skip = (page - 1) * limit;
 
     // Build query - Exclude discontinued products by default, but DON'T filter by stock
+
+    console.log("Business id", businessId);
+
     let query = {
       status: { $ne: "discontinued" },
+      businessId: businessId, // Ensure we only fetch products for the specified business
       // REMOVED: stock: { $gt: 0 }  - This was filtering out zero stock products
     };
 

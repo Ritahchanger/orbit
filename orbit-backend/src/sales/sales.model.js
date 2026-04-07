@@ -85,6 +85,12 @@ const SaleSchema = new mongoose.Schema(
       type: String,
       sparse: true,
     },
+    businessId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      required: true,
+      index: true,
+    },
   },
   {
     timestamps: true,

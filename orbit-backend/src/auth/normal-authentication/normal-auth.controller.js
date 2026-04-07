@@ -99,40 +99,33 @@ const signIn = async (req, res, next) => {
   const { email, password, businessId } = req.body;
 
   try {
-    // Attempt to login
     const { user, token, refreshToken } =
       await normalUserAuthService.loginAdmin(email, password, businessId);
-
-    // Set access token cookie (1 hour)
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
-      maxAge: 60 * 60 * 1000, // 1 hour
+      maxAge: 60 * 60 * 1000,
     });
 
-    // Set refresh token cookie (7 days) - HIDDEN from frontend
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
-      path: "/", // ✅ Sent to all paths
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    // Prepare response data - SAME as before! Frontend doesn't know about refresh token
     const responseData = {
       success: true,
       message: "Login successful",
-      token: token, // Same property name - UI unchanged
+      token: token,
       userId: user._id,
       role: user.role,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
     };
-
-    // Store info (unchanged)
     if (user.assignedStore) {
       let storeData;
       if (user.assignedStore._id) {
@@ -157,6 +150,45 @@ const signIn = async (req, res, next) => {
     }
 
     res.status(200).json(responseData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// normal-auth.controller.js
+const refreshToken = async (req, res, next) => {
+  try {
+    const { accessToken, newRefreshToken } =
+      await normalUserAuthService.rotateRefreshToken(
+        req.user,
+        req.refreshTokenDoc,
+        req.businessId,
+      );
+
+    // Overwrite the old httpOnly refresh token cookie
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    // Overwrite the old access token cookie
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Token refreshed successfully",
+      token: accessToken, // also send in body for clients that read it
+      userId: req.user._id,
+      role: req.user.role,
+    });
   } catch (error) {
     next(error);
   }
@@ -189,4 +221,10 @@ const changePasswordController = async (req, res) => {
   res.status(200).json({ success: true, result });
 };
 
-module.exports = { signIn, signUp, getMe, changePasswordController };
+module.exports = {
+  signIn,
+  signUp,
+  getMe,
+  changePasswordController,
+  refreshToken,
+};

@@ -31,12 +31,6 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       maxlength: [50, "Last name cannot exceed 50 characters"],
     },
-    businessId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Business",
-      required: false,
-      index: true,
-    },
     phoneNo: {
       type: String,
       trim: true,
@@ -126,6 +120,12 @@ const UserSchema = new mongoose.Schema(
     lastLoginAt: {
       type: Date,
       default: null,
+    },
+    businessId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      required: true,
+      index: true,
     },
   },
 

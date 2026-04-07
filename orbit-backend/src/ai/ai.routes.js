@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const aiController = require("./ai.controller");
 const asyncHandler = require("../middlewares/asyncMiddleware");
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 const validateAnalysisRequest = (req, res, next) => {
   if (!req.body.data) {
     return res.status(400).json({

@@ -7,7 +7,7 @@ const refundController = require("./refund.controller");
 
 const asyncWrapper = require("../middlewares/asyncMiddleware");
 
-const tokenValidator = require("../middlewares/tokenValidator");
+const tokenValidator = require("../middlewares/refreshTokenValidator");
 
 const recordAdminLog = require("../custom-logs/middleware/record-admin.middleware");
 
