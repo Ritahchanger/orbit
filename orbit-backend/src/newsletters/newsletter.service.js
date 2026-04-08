@@ -47,21 +47,23 @@ const updatePreferences = async ({ email, preferences }) => {
   return subscriber;
 };
 
-const getAllNewsletters = async ({ subscribed }) => {
+const getAllNewsletters = async ({ subscribed }, businessId) => {
   let filter = {};
 
   if (typeof subscribed === "boolean") {
     filter.subscribed = subscribed;
   }
 
-  const subscribers = await Newsletter.find(filter).sort({ createdAt: -1 });
+  const subscribers = await Newsletter.find({ ...filter, businessId }).sort({
+    createdAt: -1,
+  });
   return subscribers;
 };
 
 // Main function to send newsletter - now just queues the task
 const sendNewsLetter = async ({ subject, content, campaignId }) => {
   const subscribers = await Newsletter.find({ subscribed: true }).select(
-    "email preferences"
+    "email preferences",
   );
 
   // 🔍 ADD VALIDATION
@@ -69,7 +71,7 @@ const sendNewsLetter = async ({ subject, content, campaignId }) => {
     (sub) =>
       sub.email &&
       sub.email.trim() !== "" &&
-      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(sub.email)
+      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(sub.email),
   );
 
   console.log("🔍 DEBUG - Valid subscribers:", {
@@ -83,7 +85,7 @@ const sendNewsLetter = async ({ subject, content, campaignId }) => {
   }
 
   console.log(
-    `Queueing newsletter for ${validSubscribers.length} valid subscribers...`
+    `Queueing newsletter for ${validSubscribers.length} valid subscribers...`,
   );
 
   // 🔧 FIX: Use the already parsed BATCH_SIZE from line 4
@@ -104,7 +106,7 @@ const sendNewsLetter = async ({ subject, content, campaignId }) => {
       start: i,
       end: i + BATCH_SIZE, // Now BATCH_SIZE is a number, not a string!
       size: batch.length,
-      firstEmail: batch[0] ? batch[0].email : 'No email',
+      firstEmail: batch[0] ? batch[0].email : "No email",
     });
     batches.push(batch);
   }
@@ -116,7 +118,7 @@ const sendNewsLetter = async ({ subject, content, campaignId }) => {
       batchIndex: idx,
       size: batch.length,
       emails: batch.map((s) => s.email),
-    }))
+    })),
   );
 
   // If batches are still empty, use a fallback
@@ -159,13 +161,14 @@ const sendNewsLetter = async ({ subject, content, campaignId }) => {
       try {
         await queue.publishToQueue("newsletter_batches", batchData);
         console.log(
-          `✅ Batch ${batchIndex + 1} queued successfully with ${batchData.batch.length
-          } emails`
+          `✅ Batch ${batchIndex + 1} queued successfully with ${
+            batchData.batch.length
+          } emails`,
         );
       } catch (queueError) {
         console.error(
           `❌ Failed to queue batch ${batchIndex + 1}:`,
-          queueError
+          queueError,
         );
       }
     } else {
@@ -203,7 +206,7 @@ const processSingleEmail = async ({ email, subject, content, campaignId }) => {
       {
         $inc: { emailsSent: 1 },
         $set: { lastEmailSent: new Date() },
-      }
+      },
     );
 
     return { success: true, email };
@@ -227,8 +230,9 @@ const processEmailBatch = async ({
   totalBatches,
 }) => {
   console.log(
-    `Processing batch ${batchIndex + 1}/${totalBatches} with ${batch.length
-    } emails`
+    `Processing batch ${batchIndex + 1}/${totalBatches} with ${
+      batch.length
+    } emails`,
   );
 
   const emailPromises = batch.map((subscriber) =>
@@ -237,12 +241,12 @@ const processEmailBatch = async ({
       subject,
       content,
       campaignId,
-    })
+    }),
   );
 
   await Promise.all(emailPromises);
   console.log(
-    `Queued ${batch.length} individual emails from batch ${batchIndex + 1}`
+    `Queued ${batch.length} individual emails from batch ${batchIndex + 1}`,
   );
 };
 

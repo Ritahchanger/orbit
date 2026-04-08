@@ -52,13 +52,16 @@ exports.cancelBooking = async (req, res) => {
 };
 
 exports.getAllBookings = async (req, res) => {
+
     const { startDate, endDate, status } = req.query;
+
+    const businessId = req.businessId; // Assuming you have businessId in req (set by auth middleware)
 
     const data = await bookingService.getAllBookings({
         startDate,
         endDate,
         status
-    });
+    }, businessId); // Pass businessId to service
 
     res.json({
         success: true,

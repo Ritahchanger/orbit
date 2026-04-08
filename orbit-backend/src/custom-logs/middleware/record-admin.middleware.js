@@ -5,6 +5,7 @@ const recordAdminLog = (action = "generic") => {
   return (req, res, next) => {
     const startTime = Date.now();
 
+
     // Only record for admins
     const isAdmin =
       req.user?.role === "admin" || "superadmin" || "manager" || "cashier";

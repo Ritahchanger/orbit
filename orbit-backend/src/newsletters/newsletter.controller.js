@@ -6,8 +6,6 @@ const {
 
 const newsletterService = require("./newsletter.service");
 
-
-
 const subscribe = async (req, res) => {
   const { error } = subscribeNewsletterValidator.validate(req.body);
   if (error) {
@@ -61,13 +59,18 @@ const updatePreferences = async (req, res) => {
 const getAllNewsLettersController = async (req, res) => {
   const { subscribed } = req.query;
 
+  const businessId = req.businessId;
+
   let subscribedFilter;
   if (subscribed === "true") subscribedFilter = true;
   else if (subscribed === "false") subscribedFilter = false;
 
-  const subscribers = await newsletterService.getAllNewsletters({
-    subscribed: subscribedFilter,
-  });
+  const subscribers = await newsletterService.getAllNewsletters(
+    {
+      subscribed: subscribedFilter,
+    },
+    businessId,
+  );
 
   res.status(200).json({
     success: true,
@@ -77,7 +80,7 @@ const getAllNewsLettersController = async (req, res) => {
 };
 
 const sendNewsletterController = async (req, res) => {
-  const { subject,content, campaignId } = req.body;
+  const { subject, content, campaignId } = req.body;
 
   if (!subject || !content) {
     return res.status(400).json({

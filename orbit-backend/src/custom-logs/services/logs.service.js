@@ -11,16 +11,10 @@ const recordLog = async (data) => {
 /**
  * Get logs with filters + pagination
  */
-const getLogs = async ({
-  level,
-  userId,
-  path,
-  startDate,
-  endDate,
-  search,
-  page = 1,
-  limit = 50,
-}) => {
+const getLogs = async (
+  { level, userId, path, startDate, endDate, search, page = 1, limit = 50 },
+  businessId,
+) => {
   const query = {};
 
   // Existing filters
@@ -116,7 +110,7 @@ const getLogs = async ({
   };
 
   const [logs, total] = await Promise.all([
-    Log.find(query, projection)
+    Log.find({ ...query, businessId }, projection)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit))

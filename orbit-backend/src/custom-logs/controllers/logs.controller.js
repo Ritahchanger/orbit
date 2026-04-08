@@ -4,7 +4,8 @@ const logsService = require("../services/logs.service");
  * GET /api/v1/logs
  */
 const getLogs = async (req, res) => {
-  const result = await logsService.getLogs(req.query);
+  const businessId = req.businessId; // Assuming you have businessId in req (set by auth middleware)
+  const result = await logsService.getLogs(req.query, businessId);
   res.json(result);
 };
 

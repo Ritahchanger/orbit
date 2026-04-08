@@ -49,15 +49,20 @@ const getUsers = async (req, res) => {
     storeId,
   } = req.query;
 
-  const result = await userService.getAllUsers({
-    page: parseInt(page),
-    limit: parseInt(limit),
-    search,
-    role,
-    sortBy,
-    newsletter,
-    storeId,
-  });
+  const businessId = req.businessId;
+
+  const result = await userService.getAllUsers(
+    {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      search,
+      role,
+      sortBy,
+      newsletter,
+      storeId,
+    },
+    businessId,
+  );
 
   res.status(200).json(result);
 };

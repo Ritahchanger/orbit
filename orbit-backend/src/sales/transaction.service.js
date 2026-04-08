@@ -17,7 +17,7 @@ const populateTransaction = (query) => {
 };
 
 // 1. Get all transactions with pagination and filters - FIXED
-const getAllTransactions = async (filters = {}) => {
+const getAllTransactions = async (filters = {}, businessId) => {
   const {
     page = 1,
     limit = 20,
@@ -126,7 +126,7 @@ const getAllTransactions = async (filters = {}) => {
 
   // Execute query with pagination
   const [transactions, total] = await Promise.all([
-    Transaction.find(query)
+    Transaction.find({ ...query, businessId: businessId })
       .populate("storeId", "name location storeCode")
       .populate("soldBy", "name email employeeId")
       .populate({
@@ -346,7 +346,7 @@ const getStoreTransactions = async ({ storeId, ...filters }) => {
 };
 
 // 4. Get today's transactions summary - FIXED
-const getTodaySummary = async (storeId = null) => {
+const getTodaySummary = async (storeId = null, businessId) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -360,6 +360,7 @@ const getTodaySummary = async (storeId = null) => {
       $lt: tomorrow,
     },
     status: "completed",
+    businessId: businessId,
   };
 
   if (storeId) {

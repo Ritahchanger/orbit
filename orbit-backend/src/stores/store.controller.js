@@ -5,7 +5,8 @@ const storeService = require("./store.service");
 // @route   GET /api/v1/stores
 // @access  Private
 exports.getAllStores = async (req, res) => {
-  const result = await storeService.getAllStores(req.user, req.query);
+  const businessId = req.businessId;
+  const result = await storeService.getAllStores(req.user, req.query,businessId);
   res.json(result);
 };
 

@@ -165,12 +165,12 @@ class BookingService {
 
         return booking.toDisplayFormat();
     }
-    async getAllBookings({ startDate, endDate, status }) {
+    async getAllBookings({ startDate, endDate, status },businessId) {
         const query = {};
 
         if (startDate && endDate) {
+            $gte: new Date(startDate),
             query.date = {
-                $gte: new Date(startDate),
                 $lte: new Date(endDate)
             };
         }
@@ -179,7 +179,7 @@ class BookingService {
             query.status = status;
         }
 
-        const bookings = await Booking.find(query)
+        const bookings = await Booking.find({...query,businessId})
             .sort({ date: 1, timeSlot: 1 })
             .limit(100);
 

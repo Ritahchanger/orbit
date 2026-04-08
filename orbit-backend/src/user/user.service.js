@@ -415,9 +415,7 @@ const deleteAdminById = async (id) => {
     throw new Error("User not found");
   }
 
-  if (
-    user.email === "superadmin@example.com" 
-  ) {
+  if (user.email === "superadmin@example.com") {
     throw new Error("This user account cannot be deleted");
   }
 
@@ -468,7 +466,7 @@ const getUserAccessibleStores = async (userId) => {
 };
 // ============ EXISTING FUNCTIONS (slightly improved) ============
 
-const getAllUsers = async (options = {}) => {
+const getAllUsers = async (options = {}, businessId) => {
   const {
     page = 1,
     limit = 10,
@@ -518,7 +516,7 @@ const getAllUsers = async (options = {}) => {
     sort[sortBy] = 1;
   }
 
-  const users = await User.find(query)
+  const users = await User.find({ ...query, businessId })
     .select("-password")
     .populate("assignedStore", "name")
     .sort(sort)

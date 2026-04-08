@@ -67,6 +67,11 @@ const bookingSchema = new mongoose.Schema({
       default: "",
     },
   },
+  businessId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Business",
+    required: true,
+  },
   status: {
     type: String,
     enum: ["pending", "confirmed", "cancelled", "completed"],

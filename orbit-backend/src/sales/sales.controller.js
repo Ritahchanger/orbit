@@ -6,12 +6,17 @@ const posSalesService = require("./pos-service");
 
 // Record a new sale (global - storeId in body)
 const recordSale = async (req, res) => {
-  const result = await salesService.recordSale(req.body);
+  const businessId = req.businessId;
+  const result = await salesService.recordSale({ ...req.body, businessId });
   res.status(201).json(result);
 };
 
 const recordMultipleItemsSale = async (req, res) => {
-  const result = await posSalesService.recordMultipleItemsSale(req.body);
+  const businessId = req.businessId;
+  const result = await posSalesService.recordMultipleItemsSale({
+    ...req.body,
+    businessId,
+  });
   res.status(201).json(result);
 };
 // Record a sale for specific store
@@ -25,9 +30,12 @@ const recordStoreSale = async (req, res) => {
 const getDailySummary = async (req, res) => {
   const { date, storeId } = req.query;
 
+  const businessId = req.businessId;
+
   const result = await salesService.getDailySalesSummary(
     date ? new Date(date) : new Date(),
     storeId,
+    businessId,
   );
   res.json(result);
 };

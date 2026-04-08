@@ -1,5 +1,4 @@
 const transactionService = require("./transaction.service");
-
 // 1. Get all transactions with pagination and filters
 const getAllTransactions = async (req, res) => {
   try {
@@ -28,24 +27,29 @@ const getAllTransactions = async (req, res) => {
       hasChangeBool = hasChange === "true";
     }
 
-    const result = await transactionService.getAllTransactions({
-      page: parseInt(page),
-      limit: parseInt(limit),
-      storeId,
-      startDate,
-      endDate,
-      paymentMethod,
-      paymentStatus, // NEW
-      status,
-      customerName,
-      customerPhone, // NEW
-      minAmount: minAmount ? parseFloat(minAmount) : undefined, // NEW
-      maxAmount: maxAmount ? parseFloat(maxAmount) : undefined, // NEW
-      hasChange: hasChangeBool, // NEW
-      soldBy, // NEW
-      sortBy,
-      sortOrder: sortOrder === "desc" ? -1 : 1,
-    });
+    const businessId = req.businessId;
+
+    const result = await transactionService.getAllTransactions(
+      {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        storeId,
+        startDate,
+        endDate,
+        paymentMethod,
+        paymentStatus, // NEW
+        status,
+        customerName,
+        customerPhone, // NEW
+        minAmount: minAmount ? parseFloat(minAmount) : undefined, // NEW
+        maxAmount: maxAmount ? parseFloat(maxAmount) : undefined, // NEW
+        hasChange: hasChangeBool, // NEW
+        soldBy, // NEW
+        sortBy,
+        sortOrder: sortOrder === "desc" ? -1 : 1,
+      },
+      businessId,
+    );
 
     res.status(200).json({
       success: true,
@@ -117,9 +121,12 @@ const getStoreTransactions = async (req, res) => {
 
 // 4. Get today's transactions summary
 const getTodaySummary = async (req, res) => {
+
   const { storeId } = req.query;
 
-  const summary = await transactionService.getTodaySummary(storeId);
+  const businessId = req.businessId;
+
+  const summary = await transactionService.getTodaySummary(storeId, businessId);
 
   res.status(200).json({
     success: true,

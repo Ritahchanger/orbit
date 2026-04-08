@@ -65,6 +65,9 @@ const getConsultationEmails = async (req, res) => {
 
   const query = {};
 
+
+  const businessId = req.businessId; // Assuming you have businessId in req (set by auth middleware)
+
   // Filter by consultationId if provided
   if (consultationId) {
     query.consultationId = consultationId;

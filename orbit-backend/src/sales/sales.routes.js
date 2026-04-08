@@ -15,6 +15,7 @@ const recordAdminLog = require("../custom-logs/middleware/record-admin.middlewar
 // Record a new sale (requires storeId in body) → log
 router.post(
   "/transaction",
+  tokenValidator,
   recordAdminLog("RECORD_MULTIPLE_ITEMS_SALE"),
   asyncWrapper(salesController.recordMultipleItemsSale),
 );

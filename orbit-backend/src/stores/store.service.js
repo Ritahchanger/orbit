@@ -8,7 +8,7 @@ class StoreService {
   /**
    * Get all stores (with optional filtering)
    */
-  async getAllStores(user, filters = {}) {
+  async getAllStores(user, filters = {}, businessId) {
     let query = { ...filters };
 
     // Non-superadmins can only see their assigned stores
@@ -21,7 +21,7 @@ class StoreService {
       }
     }
 
-    const stores = await Store.find(query)
+    const stores = await Store.find({ ...query, businessId: businessId })
       .populate("manager", "firstName lastName email phoneNo")
       .sort({ name: 1 });
 

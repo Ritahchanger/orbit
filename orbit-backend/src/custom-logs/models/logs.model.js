@@ -113,6 +113,9 @@ logSchema.statics.debug = function (message, data = {}) {
 logSchema.statics.logHttp = function (req, res, responseTime, data = {}) {
   // Sanitize sensitive data
   const sanitizedBody = { ...req.body };
+
+  const businessId = req.businessId || (req.user ? req.user.businessId : null);
+
   const sensitiveFields = [
     "password",
     "token",
@@ -130,6 +133,7 @@ logSchema.statics.logHttp = function (req, res, responseTime, data = {}) {
   return this.create({
     level: res.statusCode >= 400 ? "error" : "info",
     message: `${req.method} ${req.url} - ${res.statusCode}`,
+    businessId,
     request: {
       method: req.method,
       url: req.url,

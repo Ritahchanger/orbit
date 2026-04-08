@@ -10,219 +10,217 @@ require("dotenv").config();
 const { formatPhoneNumber } = require("../utils/formatPhoneNumber");
 
 const recordMultipleItemsSale = async (transactionData) => {
-  try {
-    // Validate required fields
-    if (!transactionData.storeId) {
-      throw new Error("Store ID is required");
-    }
-    if (!transactionData.paymentMethod) {
-      throw new Error("Payment method is required");
-    }
-    if (
-      !transactionData.items ||
-      !Array.isArray(transactionData.items) ||
-      transactionData.items.length === 0
-    ) {
-      throw new Error("At least one item is required");
-    }
+  // ============ STEP 1: VALIDATE INPUTS ============
+  if (!transactionData.storeId) throw new Error("Store ID is required");
+  if (!transactionData.paymentMethod)
+    throw new Error("Payment method is required");
+  if (!transactionData.businessId) throw new Error("Business ID is required");
+  if (!transactionData.soldBy) throw new Error("Sold by (cashier) is required");
+  if (!transactionData.customerName?.trim())
+    throw new Error("Customer name is required");
+  if (!transactionData.items?.length)
+    throw new Error("At least one item is required");
 
-    // Validate cash payment details if payment method is cash
-    if (transactionData.paymentMethod === "cash") {
-      if (transactionData.cashPayment?.amountGiven === undefined) {
-        throw new Error("Amount given is required for cash payments");
-      }
-      if (transactionData.cashPayment?.amountGiven < 0) {
-        throw new Error("Amount given cannot be negative");
-      }
-    }
+  if (transactionData.paymentMethod === "cash") {
+    if (transactionData.cashPayment?.amountGiven === undefined)
+      throw new Error("Amount given is required for cash payments");
+    if (transactionData.cashPayment.amountGiven < 0)
+      throw new Error("Amount given cannot be negative");
+  }
 
-    const store = await Store.findById(transactionData.storeId);
-    if (!store) {
-      throw new Error("Store not found");
-    }
+  // ============ STEP 2: VERIFY STORE ============
+  const store = await Store.findById(transactionData.storeId);
+  if (!store) throw new Error("Store not found");
 
-    let subtotal = 0;
-    let totalProfit = 0;
-    const saleIds = [];
-    const sales = [];
+  // ============ STEP 3: VALIDATE ALL ITEMS & INVENTORY (no writes yet) ============
+  const resolvedItems = [];
 
-    // Generate ONE transaction ID for the entire transaction
-    const transactionId = `TXN-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+  for (const item of transactionData.items) {
+    if (!item.sku) throw new Error("SKU is required for all items");
+    if (!item.quantity || item.quantity < 1)
+      throw new Error(`Quantity must be at least 1 for SKU: ${item.sku}`);
 
-    // Process each item
-    for (const item of transactionData.items) {
-      if (!item.sku) {
-        throw new Error("SKU is required for all items");
-      }
-      if (!item.quantity || item.quantity < 1) {
-        throw new Error(`Quantity must be at least 1 for product: ${item.sku}`);
-      }
+    const product = await Product.findOne({
+      sku: item.sku.toUpperCase(),
+      businessId: transactionData.businessId,
+    });
+    if (!product) throw new Error(`Product not found with SKU: ${item.sku}`);
 
-      // Find the product by SKU
-      const product = await Product.findOne({ sku: item.sku.toUpperCase() });
-      if (!product) {
-        throw new Error(`Product not found with SKU: ${item.sku}`);
-      }
+    const storeInventory = await StoreInventory.findOne({
+      store: transactionData.storeId,
+      product: product._id,
+    });
+    if (!storeInventory)
+      throw new Error(
+        `Product "${product.name}" is not available in this store`,
+      );
+    if (storeInventory.stock < item.quantity)
+      throw new Error(
+        `Insufficient stock for "${product.name}". Available: ${storeInventory.stock}, Requested: ${item.quantity}`,
+      );
 
-      // Check store inventory
-      const storeInventory = await StoreInventory.findOne({
-        store: transactionData.storeId,
-        product: product._id,
-      });
+    const unitPrice = item.unitPrice || product.price;
+    const discount = item.discount || 0;
+    const itemSubtotal = unitPrice * item.quantity;
+    const itemTotal = itemSubtotal - discount;
+    const itemProfit =
+      item.profit !== undefined
+        ? item.profit
+        : (unitPrice - (product.costPrice || 0)) * item.quantity;
 
-      if (!storeInventory) {
-        throw new Error(`Product ${product.name} not available in this store`);
-      }
+    resolvedItems.push({
+      product,
+      storeInventory,
+      item,
+      unitPrice,
+      discount,
+      itemSubtotal,
+      itemTotal,
+      itemProfit,
+    });
+  }
 
-      if (storeInventory.stock < item.quantity) {
-        throw new Error(
-          `Insufficient stock for ${product.name}. Available: ${storeInventory.stock} units`,
-        );
-      }
+  // ============ STEP 4: CALCULATE TRANSACTION TOTALS ============
+  const subtotal = resolvedItems.reduce((sum, r) => sum + r.itemSubtotal, 0);
+  const discount = transactionData.discount || 0;
+  const tax = transactionData.tax || 0;
+  const total = subtotal - discount + tax;
+  const totalProfit = resolvedItems.reduce((sum, r) => sum + r.itemProfit, 0);
 
-      // Calculate item totals
-      const unitPrice = item.unitPrice || product.price;
-      const discount = item.discount || 0;
-      const itemSubtotal = unitPrice * item.quantity;
-      const itemTotal = itemSubtotal - discount;
-      const itemProfit =
-        item.profit || (unitPrice - (product.costPrice || 0)) * item.quantity;
+  // ============ STEP 5: VALIDATE CASH AMOUNT AGAINST TOTAL ============
+  let amountGiven = 0;
+  let change = 0;
 
-      subtotal += itemSubtotal;
-      totalProfit += itemProfit;
+  if (transactionData.paymentMethod === "cash") {
+    amountGiven = transactionData.cashPayment.amountGiven;
+    if (amountGiven < total)
+      throw new Error(
+        `Amount given (${amountGiven}) is less than total (${total})`,
+      );
+    change = amountGiven - total;
+  }
 
-      // Create individual sale record - use the SAME transactionId for all sales
-      const sale = new Sale({
-        productId: product._id,
-        storeId: transactionData.storeId,
-        productName: product.name,
-        sku: product.sku,
-        quantity: item.quantity,
-        unitPrice: unitPrice,
-        discount: discount,
-        subtotal: itemSubtotal,
-        total: itemTotal,
-        profit: itemProfit,
-        paymentMethod: transactionData.paymentMethod,
-        customerName: transactionData.customerName.trim(),
-        customerPhone: transactionData.customerPhone?.trim() || "",
-        notes: transactionData.notes || "",
-        status: "completed",
-        transactionId: transactionId, // Use the SAME transaction ID for all items
-      });
+  // ============ STEP 6: ALL VALIDATION PASSED — START DB WRITES ============
+  const transactionId = `TXN-${Date.now()}-${Math.random()
+    .toString(36)
+    .substr(2, 9)
+    .toUpperCase()}`;
 
-      const savedSale = await sale.save();
-      saleIds.push(savedSale._id);
-      sales.push(savedSale);
+  const saleIds = [];
+  const sales = [];
 
-      // Update inventory
-      const newStock = storeInventory.stock - item.quantity;
+  for (const resolved of resolvedItems) {
+    const {
+      product,
+      storeInventory,
+      item,
+      unitPrice,
+      discount: itemDiscount,
+      itemSubtotal,
+      itemTotal,
+      itemProfit,
+    } = resolved;
 
-      if (newStock <= 0) {
-        await StoreInventory.findByIdAndDelete(storeInventory._id);
-      } else {
-        let newStatus = "In Stock";
-        if (newStock <= storeInventory.minStock) {
-          newStatus = "Low Stock";
-        }
-        await StoreInventory.findByIdAndUpdate(storeInventory._id, {
-          $inc: {
-            stock: -item.quantity,
-            storeSold: item.quantity,
-            storeRevenue: itemTotal,
-          },
-          $set: {
-            status: newStatus,
-            lastSold: new Date(),
-          },
-        });
-      }
-
-      // Update global product
-      await Product.findByIdAndUpdate(product._id, {
-        $inc: {
-          totalSold: item.quantity,
-          totalRevenue: itemTotal,
-        },
-      });
-    }
-
-    // Calculate transaction totals
-    const discount = transactionData.discount || 0;
-    const tax = transactionData.tax || 0;
-    const total = subtotal - discount + tax;
-
-    // Calculate change for cash payments
-    let amountGiven = 0;
-    let change = 0;
-
-    if (
-      transactionData.paymentMethod === "cash" &&
-      transactionData.cashPayment
-    ) {
-      amountGiven = transactionData.cashPayment.amountGiven;
-
-      // Validate amount given for cash payments
-      if (amountGiven < total) {
-        throw new Error(
-          `Amount given (${amountGiven}) is less than total amount (${total})`,
-        );
-      }
-
-      change = amountGiven - total;
-    }
-
-    // Create transaction record
-    const transaction = new Transaction({
-      transactionId: transactionId, // Use the same ID generated above
+    const sale = new Sale({
+      productId: product._id,
       storeId: transactionData.storeId,
+      businessId: transactionData.businessId,
+      productName: product.name,
+      sku: product.sku,
+      quantity: item.quantity,
+      unitPrice,
+      discount: itemDiscount,
+      subtotal: itemSubtotal,
+      total: itemTotal,
+      profit: itemProfit,
+      paymentMethod: transactionData.paymentMethod,
       customerName: transactionData.customerName.trim(),
       customerPhone: transactionData.customerPhone?.trim() || "",
-      customerEmail: transactionData.customerEmail?.trim() || "",
-      saleIds: saleIds,
-      itemsCount: transactionData.items.length,
-      subtotal: subtotal,
-      discount: discount,
-      tax: tax,
-      total: total,
-      totalProfit: totalProfit,
-      paymentMethod: transactionData.paymentMethod,
-      // Add cash payment fields
-      amountGiven: amountGiven,
-      change: change,
-      paymentStatus: "paid",
-      status: "completed",
       notes: transactionData.notes || "",
-      soldBy: transactionData.soldBy,
+      status: "completed",
+      transactionId,
     });
 
-    const savedTransaction = await transaction.save();
+    const savedSale = await sale.save();
+    saleIds.push(savedSale._id);
+    sales.push(savedSale);
 
-    return {
-      success: true,
-      message: `Transaction completed with ${transactionData.items.length} items`,
-      data: {
-        transaction: savedTransaction,
-        sales: sales,
-        summary: {
-          itemsCount: transactionData.items.length,
-          subtotal: subtotal,
-          discount: discount,
-          tax: tax,
-          total: total,
-          totalProfit: totalProfit,
-          // Include cash payment summary if applicable
-          ...(transactionData.paymentMethod === "cash" && {
-            amountGiven: amountGiven,
-            change: change,
-          }),
+    // Update store inventory
+    const newStock = storeInventory.stock - item.quantity;
+
+    if (newStock <= 0) {
+      await StoreInventory.findByIdAndDelete(storeInventory._id);
+    } else {
+      await StoreInventory.findByIdAndUpdate(storeInventory._id, {
+        $inc: {
+          stock: -item.quantity,
+          storeSold: item.quantity,
+          storeRevenue: itemTotal,
         },
+        $set: {
+          status:
+            newStock <= storeInventory.minStock ? "Low Stock" : "In Stock",
+          lastSold: new Date(),
+        },
+      });
+    }
+
+    // Update global product stats
+    await Product.findByIdAndUpdate(product._id, {
+      $inc: {
+        totalSold: item.quantity,
+        totalRevenue: itemTotal,
       },
-    };
-  } catch (error) {
-    console.error("Transaction failed:", error);
-    throw error;
+    });
   }
+
+  // ============ STEP 7: CREATE TRANSACTION RECORD ============
+  const transaction = new Transaction({
+    transactionId,
+    storeId: transactionData.storeId,
+    businessId: transactionData.businessId,
+    customerName: transactionData.customerName.trim(),
+    customerPhone: transactionData.customerPhone?.trim() || "",
+    customerEmail: transactionData.customerEmail?.trim() || "",
+    saleIds,
+    itemsCount: transactionData.items.length,
+    subtotal,
+    discount,
+    tax,
+    total,
+    totalProfit,
+    paymentMethod: transactionData.paymentMethod,
+    amountGiven,
+    change,
+    paymentStatus: "paid",
+    status: "completed",
+    notes: transactionData.notes || "",
+    soldBy: transactionData.soldBy,
+  });
+
+  const savedTransaction = await transaction.save();
+
+  // ============ STEP 8: RETURN RESULT ============
+  return {
+    success: true,
+    message: `Transaction completed with ${transactionData.items.length} item(s)`,
+    data: {
+      transaction: savedTransaction,
+      sales,
+      summary: {
+        itemsCount: transactionData.items.length,
+        subtotal,
+        discount,
+        tax,
+        total,
+        totalProfit,
+        ...(transactionData.paymentMethod === "cash" && {
+          amountGiven,
+          change,
+        }),
+      },
+    },
+  };
 };
 const generateMpesaToken = async () => {
   const consumerKey = process.env.SAFARICOM_CONSUMER_KEY;

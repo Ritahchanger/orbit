@@ -2,8 +2,10 @@ const Category = require("../model/category.model");
 
 class CategoriesService {
   // Get all categories
-  async getAll() {
-    const categories = await Category.find().sort({ createdAt: -1 });
+  async getAll(businessId) {
+    const categories = await Category.find({ businessId: businessId }).sort({
+      createdAt: -1,
+    });
     return categories;
   }
 

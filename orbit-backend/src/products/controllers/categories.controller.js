@@ -3,7 +3,8 @@ const CategoryService = require("../services/categories.service");
 class CategoriesController {
   // GET /categories
   async getAll(req, res) {
-    const categories = await CategoryService.getAll();
+    const businessId = req.businessId;
+    const categories = await CategoryService.getAll(businessId);
     res.status(200).json({ success: true, data: categories });
   }
 
