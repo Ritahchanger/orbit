@@ -36,6 +36,8 @@ import AdminSignup from "../authentication/signup/SignUp";
 
 import AdminSubscriptions from "../admin-pages/admin-subscriptions/pages/AdminSubscriptions";
 
+import AdminBusinessProfile from "../admin-pages/admin-business-profile/pages/AdminBusinessProfile";
+
 // import AdminCategoriesPage from "../admin-pages/admin-categories/pages/AdminCategories";
 
 // Hook to use role-based route protection
@@ -99,6 +101,11 @@ export const protectedRoutes = [
   {
     path: "/admin/subscriptions",
     element: <AdminSubscriptions />,
+    roles: ["admin", "superadmin"],
+  },
+  {
+    path: "/admin/business-profile",
+    element: <AdminBusinessProfile />,
     roles: ["admin", "superadmin"],
   },
 

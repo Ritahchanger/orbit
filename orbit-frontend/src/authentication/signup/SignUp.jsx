@@ -12,13 +12,11 @@ import {
   Users,
   FileText,
   CheckCircle,
-  AlertCircle,
   ArrowRight,
   Briefcase,
   Calendar,
   Hash,
   User,
-  ArrowLeft,
 } from "lucide-react";
 
 import Step3 from "./components/Step3";
@@ -321,7 +319,7 @@ const AdminSignup = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 overflow-hidden grid grid-cols-1 lg:grid-cols-[1fr_2fr] h-full">
+      <div className="relative z-10 overflow-hidden grid grid-cols-1 lg:grid-cols-[1fr_2fr] h-full justify-center items-center">
         {/* Left Panel */}
         <div
           className="hidden lg:flex flex-col justify-center px-10 py-8 border-r"
@@ -532,7 +530,7 @@ const AdminSignup = () => {
                       }}
                     />
                   </div>
-                  <div>
+                  <div className="md:col-span-2">
                     <label className={labelClass}>Website</label>
                     <div className="relative">
                       <Globe
@@ -553,21 +551,26 @@ const AdminSignup = () => {
                       />
                     </div>
                   </div>
-                  <SelectInput
-                    icon={Users}
-                    field="employeeCount"
-                    label="Number of Employees"
-                    {...fieldProps}
-                  >
-                    <option value="" className="bg-gray-900">
-                      Select range
-                    </option>
-                    {["1-10", "11-50", "51-200", "201-500", "500+"].map((v) => (
-                      <option key={v} value={v} className="bg-gray-900">
-                        {v}
+                  <div className="md:col-span-2">
+                    <SelectInput
+                      icon={Users}
+                      field="employeeCount"
+                      label="Number of Employees"
+                      {...fieldProps}
+                    >
+                      <option value="" className="bg-gray-900">
+                        Select range
                       </option>
-                    ))}
-                  </SelectInput>
+                      {["1-10", "11-50", "51-200", "201-500", "500+"].map(
+                        (v) => (
+                          <option key={v} value={v} className="bg-gray-900">
+                            {v}
+                          </option>
+                        ),
+                      )}
+                    </SelectInput>
+                  </div>
+
                   <IconInput
                     icon={Calendar}
                     field="yearEstablished"

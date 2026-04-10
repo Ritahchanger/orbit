@@ -105,14 +105,13 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
           <Home className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
           Home
         </Link>
-
         <Link
-          to="/admin/logs"
+          to="/admin/business-profile"
           className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           onClick={() => setShowUserMenu(false)}
         >
           <BookOpen className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
-          Logs
+          Business Profile
         </Link>
 
         <Link
@@ -122,6 +121,15 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
         >
           <Settings className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
           Subscriptions
+        </Link>
+
+        <Link
+          to="/admin/logs"
+          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          onClick={() => setShowUserMenu(false)}
+        >
+          <BookOpen className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
+          Logs
         </Link>
 
         {/* Help Button - Updated with icon and keyboard shortcut */}

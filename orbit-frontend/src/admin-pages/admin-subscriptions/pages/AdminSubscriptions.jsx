@@ -5,7 +5,6 @@ import {
   Calendar,
   Building2,
   Users,
-  DollarSign,
   Clock,
   CheckCircle,
   XCircle,
