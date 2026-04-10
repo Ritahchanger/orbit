@@ -233,8 +233,8 @@ class BusinessService {
   }
 
   // ── Get business by owner (user ID) ────────────────────────────────────────
-  async getByOwner(userId) {
-    const business = await Business.findOne({ owner: userId })
+  async getByOwner(businessId) {
+    const business = await Business.findOne({ _id: businessId })
       .populate("owner", "firstName lastName email phoneNo")
       .populate(
         "subscription",

@@ -82,7 +82,10 @@ const getById = async (req, res) => {
 
 // ── Get business by owner ─────────────────────────────────────────────────────
 const getMyBusiness = async (req, res) => {
-  const business = await businessService.getByOwner(req.user._id);
+  
+  const businessId = req.businessId;
+
+  const business = await businessService.getByOwner(businessId);
 
   res.status(200).json({
     success: true,

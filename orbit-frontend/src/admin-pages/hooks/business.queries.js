@@ -1,7 +1,7 @@
 // hooks/useBusinessQueries.js
 import { useQuery } from "@tanstack/react-query";
 
-
+import businessApi from "../services/business-api";
 
 // ── Centralized query keys ────────────────────────────────────────────────────
 export const businessKeys = {
