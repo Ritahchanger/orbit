@@ -3,6 +3,7 @@ const Business = require("../models/business.model");
 const User = require("../../user/user.model");
 const {
   PlanTemplate,
+  Payment,
   Subscription,
 } = require("../../subscription/model/subscription.model");
 const bcrypt = require("bcryptjs");
@@ -236,15 +237,38 @@ class BusinessService {
   async getByOwner(businessId) {
     const business = await Business.findOne({ _id: businessId })
       .populate("owner", "firstName lastName email phoneNo")
-      .populate(
-        "subscription",
-        "status planSlug billingCycle currentPeriodEnd limits",
-      );
+      .populate({
+        path: "subscription",
+        populate: {
+          path: "plan",
+          model: "PlanTemplate",
+          select: "name monthlyPrice annualPrice features isPopular",
+        },
+      });
 
     if (!business) throw new Error("No business found for this user");
-    return business;
-  }
 
+    // Get all subscriptions for this business (in case of multiple or historical)
+    const subscriptions = await Subscription.find({ business: businessId })
+      .populate("plan", "name monthlyPrice annualPrice features")
+      .sort({ createdAt: -1 });
+
+    // Get payment history
+    const payments = await Payment.find({ business: businessId })
+      .populate("paidBy", "firstName lastName email")
+      .sort({ createdAt: -1 });
+
+    return {
+      business: business,
+      subscriptions: subscriptions,
+      paymentHistory: payments,
+      activeSubscription: subscriptions.find(
+        (sub) =>
+          ["active", "trialing"].includes(sub.status) &&
+          sub.currentPeriodEnd > new Date(),
+      ),
+    };
+  }
   // ── Update business ─────────────────────────────────────────────────────────
   async update(id, data) {
     const business = await Business.findById(id);
