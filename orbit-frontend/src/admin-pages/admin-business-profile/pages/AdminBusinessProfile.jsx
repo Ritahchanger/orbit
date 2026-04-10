@@ -1,5 +1,6 @@
 import AdminLayout from "../../dashboard/layout/Layout";
 import { useUpdateBusiness } from "../../hooks/business.mutations";
+import { useNavigate } from "react-router-dom";
 import { useGetMyBusiness } from "../../hooks/business.queries";
 import { useState } from "react";
 import {
@@ -14,7 +15,7 @@ import {
 
 // ── Info Card
 const InfoCard = ({ icon: Icon, label, value }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-4">
+  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm p-4">
     <div className="flex items-start gap-3">
       <div className="p-2 rounded-md bg-gray-100 dark:bg-gray-700">
         <Icon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
@@ -31,7 +32,7 @@ const InfoCard = ({ icon: Icon, label, value }) => (
 
 // ── Skeleton Loader
 const SkeletonCard = () => (
-  <div className="animate-pulse bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-4 space-y-3">
+  <div className="animate-pulse bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm p-4 space-y-3">
     <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/3"></div>
     <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-2/3"></div>
     <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
@@ -43,6 +44,9 @@ const AdminBusinessProfile = () => {
   const { mutate: updateBusiness, isPending } = useUpdateBusiness();
 
   const [editMode, setEditMode] = useState(false);
+
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({});
 
   const business = data?.data;
@@ -80,7 +84,7 @@ const AdminBusinessProfile = () => {
     <AdminLayout>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
         {/* HEADER */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-3">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Business Profile
@@ -91,12 +95,22 @@ const AdminBusinessProfile = () => {
           </div>
 
           {!editMode ? (
-            <button
-              onClick={handleEdit}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-            >
-              Edit Profile
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  navigate("/admin/subscriptions");
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-sm text-sm hover:bg-blue-700 transition"
+              >
+                Business Subscriptions
+              </button>
+              <button
+                onClick={handleEdit}
+                className="px-4 py-2 bg-blue-600 text-white rounded-sm text-sm hover:bg-blue-700 transition"
+              >
+                Edit Profile
+              </button>
+            </div>
           ) : (
             <button
               onClick={() => setEditMode(false)}
@@ -120,7 +134,7 @@ const AdminBusinessProfile = () => {
             {/* LEFT */}
             <div className="lg:col-span-2 space-y-4">
               {/* BUSINESS INFO */}
-              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg">
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                   <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                     <Building2 className="w-5 h-5" />
@@ -153,7 +167,7 @@ const AdminBusinessProfile = () => {
               </div>
 
               {/* LOCATION */}
-              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg">
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                   <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                     <MapPin className="w-5 h-5" />
@@ -185,7 +199,7 @@ const AdminBusinessProfile = () => {
             {/* RIGHT */}
             <div className="space-y-4">
               {/* OWNER */}
-              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-4">
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm p-4">
                 <h2 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                   <Users className="w-5 h-5" />
                   Owner
@@ -203,7 +217,7 @@ const AdminBusinessProfile = () => {
               </div>
 
               {/* SUBSCRIPTION */}
-              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-4">
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm p-4">
                 <h2 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                   <Package className="w-5 h-5" />
                   Subscription
@@ -252,7 +266,7 @@ const AdminBusinessProfile = () => {
           /* EDIT MODE */
           <form
             onSubmit={handleSubmit}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-6 grid md:grid-cols-2 gap-4"
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm p-6 grid md:grid-cols-2 gap-4"
           >
             {[
               "businessName",
