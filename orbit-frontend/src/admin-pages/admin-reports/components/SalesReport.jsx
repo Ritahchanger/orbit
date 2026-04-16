@@ -654,22 +654,22 @@ const SalesReport = () => {
                       key={`${sale._id}-${index}`}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700"
                     >
-                      <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-300  whitespace-nowrap text-sm">
                         {formatDate(sale.saleDate || sale.createdAt)}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-300  whitespace-nowrap text-sm">
                         {sale.productName || sale.productId?.name || "N/A"}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-300  whitespace-nowrap text-sm">
                         {sale.storeId?.name || "N/A"}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-green-600">
+                      <td className="px-4 py-3 font-medium  dark:text-gray-300  whitespace-nowrap text-sm text-green-600">
                         {formatCurrency(sale.total || sale.subtotal || 0)}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-300  whitespace-nowrap text-sm">
                         {formatCurrency(sale.profit || 0)}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-300  whitespace-nowrap text-sm">
                         {sale.quantity || 1}
                       </td>
                     </tr>

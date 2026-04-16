@@ -11,38 +11,24 @@ import {
   Globe,
   Users,
   Package,
-  CreditCard,
   Calendar,
-  Store,
 } from "lucide-react";
 
+
+import { InfoCard } from "../components/InfoCard";
+
+
+import { SkeletonCard } from "../components/SkeletonCard";
+
+
+import OwnerInformation from "../components/OwnerInformation";
+
+
+import SubscriptionDetails from "../components/SubscriptionDetails";
+
 // Types
-
 // Info Card Component
-const InfoCard = ({ icon: Icon, label, value }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm p-4">
-    <div className="flex items-start gap-3">
-      <div className="p-2 rounded-md bg-maroon-50 dark:bg-maroon-900/20">
-        <Icon className="w-5 h-5 text-maroon-600 dark:text-maroon-400" />
-      </div>
-      <div>
-        <p className="text-xs text-gray-500 dark:text-gray-400">{label}</p>
-        <p className="text-sm font-medium text-gray-900 dark:text-white">
-          {value || "—"}
-        </p>
-      </div>
-    </div>
-  </div>
-);
-
 // Skeleton Loader
-const SkeletonCard = () => (
-  <div className="animate-pulse bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm p-4 space-y-3">
-    <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/3"></div>
-    <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-2/3"></div>
-    <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
-  </div>
-);
 
 const AdminBusinessProfile = () => {
   const { data, isLoading } = useGetMyBusiness();
@@ -99,7 +85,7 @@ const AdminBusinessProfile = () => {
               <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-64 mb-2 animate-pulse"></div>
               <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-96 animate-pulse"></div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
               <div className="lg:col-span-2 space-y-6">
                 <SkeletonCard />
                 <SkeletonCard />
@@ -134,7 +120,7 @@ const AdminBusinessProfile = () => {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
         <div className="mx-auto">
           {/* HEADER */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-3">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Business Profile
@@ -145,7 +131,7 @@ const AdminBusinessProfile = () => {
             </div>
 
             {!editMode ? (
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <button
                   onClick={() => navigate("/admin/subscriptions")}
                   className="px-4 py-2 bg-maroon-600 text-white rounded-sm text-sm hover:bg-maroon-700 transition duration-200"
@@ -170,18 +156,18 @@ const AdminBusinessProfile = () => {
           </div>
 
           {!editMode ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
               {/* LEFT COLUMN - Business Info */}
-              <div className="lg:col-span-2 space-y-6">
+              <div className="lg:col-span-2 space-y-2">
                 {/* BUSINESS INFORMATION */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700  rounded-sm overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
                     <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                       <Building2 className="w-5 h-5 text-maroon-600" />
                       Business Information
                     </h2>
                   </div>
-                  <div className="p-6 grid md:grid-cols-2 gap-4">
+                  <div className="p-6 grid md:grid-cols-2 gap-2">
                     <InfoCard
                       icon={Building2}
                       label="Business Name"
@@ -226,14 +212,14 @@ const AdminBusinessProfile = () => {
                 </div>
 
                 {/* LOCATION */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
                     <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                       <MapPin className="w-5 h-5 text-maroon-600" />
                       Location
                     </h2>
                   </div>
-                  <div className="p-6 grid md:grid-cols-2 gap-4">
+                  <div className="p-6 grid md:grid-cols-2 gap-2">
                     <InfoCard
                       icon={MapPin}
                       label="Address"
@@ -264,7 +250,7 @@ const AdminBusinessProfile = () => {
 
                 {/* DESCRIPTION */}
                 {business.businessDescription && (
-                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm overflow-hidden">
+                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700  rounded-sm overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                       <h2 className="font-semibold text-gray-900 dark:text-white">
                         Description
@@ -280,137 +266,16 @@ const AdminBusinessProfile = () => {
               </div>
 
               {/* RIGHT COLUMN - Owner & Subscription */}
-              <div className="space-y-6">
+              <div className="space-y-2">
                 {/* OWNER INFORMATION */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
-                    <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                      <Users className="w-5 h-5 text-maroon-600" />
-                      Business Owner
-                    </h2>
-                  </div>
-                  <div className="p-6 space-y-3">
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Full Name
-                      </p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {business.owner?.fullName || "—"}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Email
-                      </p>
-                      <p className="text-sm text-gray-900 dark:text-white">
-                        {business.owner?.email || "—"}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Phone
-                      </p>
-                      <p className="text-sm text-gray-900 dark:text-white">
-                        {business.owner?.phoneNo || "—"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <OwnerInformation business={business} />
 
                 {/* SUBSCRIPTION DETAILS */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
-                    <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                      <CreditCard className="w-5 h-5 text-maroon-600" />
-                      Active Subscription
-                    </h2>
-                  </div>
-                  <div className="p-6 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        Plan
-                      </span>
-                      <span className="text-sm font-semibold text-maroon-600 capitalize">
-                        {activeSubscription?.planSlug ||
-                          business.subscriptionPlan}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        Status
-                      </span>
-                      <span
-                        className={`text-sm font-medium px-2 py-1 rounded-full ${
-                          activeSubscription?.status === "active"
-                            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                            : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
-                        }`}
-                      >
-                        {activeSubscription?.status || business.status}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        Billing Cycle
-                      </span>
-                      <span className="text-sm text-gray-900 dark:text-white capitalize">
-                        {activeSubscription?.billingCycle ||
-                          business.paymentMethod}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        Amount Paid
-                      </span>
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {activeSubscription?.currency || "KES"}{" "}
-                        {activeSubscription?.pricePaid?.toLocaleString() || "—"}
-                      </span>
-                    </div>
-                    <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-2">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          Stores Limit
-                        </span>
-                        <span className="text-sm text-gray-900 dark:text-white flex items-center gap-1">
-                          <Store className="w-3 h-3" />
-                          {activeSubscription?.limits?.maxStores ||
-                            business.numberOfStores ||
-                            "—"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          Users Limit
-                        </span>
-                        <span className="text-sm text-gray-900 dark:text-white">
-                          <Users className="w-3 h-3 inline mr-1" />
-                          {activeSubscription?.limits?.maxUsers || "—"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          Days Until Expiry
-                        </span>
-                        <span
-                          className={`text-sm font-medium ${
-                            activeSubscription?.daysUntilExpiry &&
-                            activeSubscription.daysUntilExpiry <= 7
-                              ? "text-red-600"
-                              : "text-green-600"
-                          }`}
-                        >
-                          {activeSubscription?.daysUntilExpiry || "—"} days
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
+                <SubscriptionDetails activeSubscription={activeSubscription} />
 
                 {/* BUSINESS CODE */}
-                <div className="bg-gradient-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20 rounded-sm p-4 text-center border border-maroon-200 dark:border-maroon-800">
+                <div className="bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20 rounded-sm p-4 text-center border border-gray-200 dark:border-gray-700">
                   <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
                     Business Code
                   </p>
@@ -424,9 +289,9 @@ const AdminBusinessProfile = () => {
             /* EDIT MODE FORM */
             <form
               onSubmit={handleSubmit}
-              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-sm p-6"
+              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700  rounded-sm p-6"
             >
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-2">
                 {[
                   {
                     name: "businessName",
@@ -448,7 +313,7 @@ const AdminBusinessProfile = () => {
                   { name: "country", label: "Country", type: "text" },
                   { name: "website", label: "Website", type: "url" },
                 ].map((field) => (
-                  <div key={field.name} className="flex flex-col gap-1">
+                  <div key={field.name} className="flex flex-col gap-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {field.label}
                     </label>
@@ -462,7 +327,7 @@ const AdminBusinessProfile = () => {
                   </div>
                 ))}
 
-                <div className="md:col-span-2 flex flex-col gap-1">
+                <div className="md:col-span-2 flex flex-col gap-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Business Description
                   </label>
@@ -476,11 +341,13 @@ const AdminBusinessProfile = () => {
                 </div>
               </div>
 
-              <div className="flex gap-3 mt-6">
+              <div className="flex gap-2 mt-6">
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="px-6 py-2 bg-gradient-to-r from-maroon-600 to-blue-600 text-white rounded-sm hover:from-maroon-700 hover:to-blue-700 transition duration-200 disabled:opacity-50"
+                  className="px-4 py-2 rounded-sm text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 
+                              bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-sm
+                              hover:from-blue-700 hover:to-indigo-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   {isPending ? "Saving..." : "Save Changes"}
                 </button>

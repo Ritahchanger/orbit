@@ -9,8 +9,7 @@ const CategoriesController = require("../controllers/categories.controller");
 // ============ CATEGORY ROUTES ============
 
 // Get all categories
-router.get("/", asyncHandler(CategoriesController.getAll));
-
+router.get("/", tokenValidator, asyncHandler(CategoriesController.getAll));
 
 // Get a single category by ID
 router.get("/:id", asyncHandler(CategoriesController.getById));
