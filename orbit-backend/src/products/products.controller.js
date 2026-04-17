@@ -189,8 +189,9 @@ const productController = {
   },
 
   getGlobalLowStockProducts: async (req, res) => {
-    const businessId = req.businessId;
 
+    const businessId = req.businessId;
+    
     const result = await productService.getGlobalLowStockProducts(
       {},
       businessId,

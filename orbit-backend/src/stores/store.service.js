@@ -59,7 +59,7 @@ class StoreService {
   /**
    * Create new store (superadmin only)
    */
-  async createStore(storeData, user) {
+  async createStore(storeData, user, businessId) {
     // Only superadmin can create stores
     if (user.role !== "superadmin") {
       throw new Error("Only superadmin can create stores");
@@ -71,7 +71,7 @@ class StoreService {
       throw new Error("Store code already exists");
     }
 
-    const store = await Store.create(storeData);
+    const store = await Store.create({ ...storeData, businessId });
 
     return {
       success: true,

@@ -759,7 +759,7 @@ const productService = {
   /**
    * Get global low stock products with detailed analysis
    */
-  getGlobalLowStockProducts: async (options = {}) => {
+  getGlobalLowStockProducts: async (options = {}, businessId) => {
     const {
       limit = 50,
       sortBy = "stock",
@@ -785,7 +785,10 @@ const productService = {
     }
 
     // Get low stock products
-    const lowStockProducts = await Product.find(query)
+    const lowStockProducts = await Product.find({
+      ...query,
+      businessId: businessId,
+    })
       .sort({ [sortBy]: sortOrder === "asc" ? 1 : -1 })
       .limit(limit)
       .select(

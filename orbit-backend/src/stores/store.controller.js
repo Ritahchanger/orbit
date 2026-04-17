@@ -22,7 +22,8 @@ exports.getStoreById = async (req, res) => {
 // @route   POST /api/v1/stores
 // @access  Private (Superadmin only)
 exports.createStore = async (req, res) => {
-  const result = await storeService.createStore(req.body, req.user);
+  const businessId = req.businessId;
+  const result = await storeService.createStore(req.body, req.user, businessId);
   res.status(201).json(result);
 };
 

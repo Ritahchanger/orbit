@@ -8,8 +8,8 @@ class ReportController {
      */
     async getDashboardStats(req, res) {
         const { storeId } = req.query;
-
-        const dashboardStats = await reportService.getDashboardStats(storeId || null);
+        const businessId = req.businessId; // Get businessId from request (set by auth middleware)
+        const dashboardStats = await reportService.getDashboardStats(storeId, businessId);
 
         res.status(200).json({
             success: true,

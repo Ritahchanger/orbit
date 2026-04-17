@@ -13,7 +13,7 @@ class ReportService {
     /**
      * Get overall system dashboard statistics
      */
-    async getDashboardStats(storeId = null) {
+    async getDashboardStats(storeId = null, businessId) {
         try {
             const date = new Date();
             const startOfDay = new Date(date.setHours(0, 0, 0, 0));

@@ -61,9 +61,8 @@ const getAllNewsLettersController = async (req, res) => {
 
   const businessId = req.businessId;
 
-  let subscribedFilter;
-  if (subscribed === "true") subscribedFilter = true;
-  else if (subscribed === "false") subscribedFilter = false;
+  const subscribedFilter =
+    subscribed === "true" ? true : subscribed === "false" ? false : undefined;
 
   const subscribers = await newsletterService.getAllNewsletters(
     {
