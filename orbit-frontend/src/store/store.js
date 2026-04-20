@@ -28,8 +28,12 @@ import aiResultsSlice from "../admin-pages/ai-results/ai-slice";
 
 import categoryModalSlice from "./features/categoryModalSlice";
 
+import supportChatSlice from "../admin-pages/admin-support-chat/slices/SupportChartSlice";
+
 export const store = configureStore({
+
   reducer: {
+
     searchModal: searchModalSlice.reducer,
 
     redirection: redirectionSlice.reducer,
@@ -57,5 +61,8 @@ export const store = configureStore({
     aiResults: aiResultsSlice.reducer,
 
     categoryModal: categoryModalSlice.reducer,
+
+    supportChat: supportChatSlice.reducer,
+
   },
 });

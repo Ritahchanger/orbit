@@ -8,6 +8,7 @@ import POSPaymentModal from "../../pos/modals/pos-modal";
 import AIResultsModal from "../../ai-results/ai-results.modal";
 import CategoryModal from "../CategoryModal";
 import { useSelector } from "react-redux";
+import SupportChatModal from "../../admin-support-chat/modals/SupportChatModal";
 
 const AdminModalRoot = () => {
   const categoriesModal = useSelector(
@@ -22,6 +23,7 @@ const AdminModalRoot = () => {
       <GlobalDeleteConfirmationModal />
       <UserDetailsModal />
       <AIResultsModal />
+      <SupportChatModal/>
       <POSPaymentModal />
       {categoriesModal && <CategoryModal />}
     </>

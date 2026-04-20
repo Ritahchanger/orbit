@@ -27,6 +27,9 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { format, formatDistanceToNow } from "date-fns";
+import SupportCard from "../components/SupportCard";
+
+import { useDispatch } from "react-redux";
 
 // Mock data - replace with actual API call to get logged-in business subscription
 const mockBusinessSubscription = {
@@ -233,16 +236,19 @@ const AdminSubscriptionProfile = () => {
     }, 1000);
   };
 
+  const dispatch = useDispatch();
+
+  const handleContactSupport = () => {
+    toast.success("Opening support chat...");
+    dispatch(openChat());
+  };
+
   const handleDownloadInvoice = (paymentId) => {
     toast.success(`Downloading invoice...`);
   };
 
   const handleUpdatePaymentMethod = () => {
     toast.success("Opening payment method update...");
-  };
-
-  const handleContactSupport = () => {
-    toast.success("Opening support chat...");
   };
 
   const handleCancelSubscription = () => {
@@ -647,21 +653,7 @@ const AdminSubscriptionProfile = () => {
             </div>
 
             {/* Support Card */}
-            <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-sm p-4">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                Need Help?
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Our support team is available 24/7 to assist you with any
-                questions.
-              </p>
-              <button
-                onClick={handleContactSupport}
-                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm transition-colors text-sm font-medium"
-              >
-                Contact Support
-              </button>
-            </div>
+            <SupportCard />
           </div>
         </div>
       </div>

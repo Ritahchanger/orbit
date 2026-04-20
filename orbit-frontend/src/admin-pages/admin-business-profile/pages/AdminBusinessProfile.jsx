@@ -14,15 +14,11 @@ import {
   Calendar,
 } from "lucide-react";
 
-
 import { InfoCard } from "../components/InfoCard";
-
 
 import { SkeletonCard } from "../components/SkeletonCard";
 
-
 import OwnerInformation from "../components/OwnerInformation";
-
 
 import SubscriptionDetails from "../components/SubscriptionDetails";
 
@@ -134,7 +130,7 @@ const AdminBusinessProfile = () => {
               <div className="flex gap-2">
                 <button
                   onClick={() => navigate("/admin/subscriptions")}
-                  className="px-4 py-2 bg-maroon-600 text-white rounded-sm text-sm hover:bg-maroon-700 transition duration-200"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-sm text-sm hover:bg-blue-700 transition duration-200"
                 >
                   View Subscriptions
                 </button>
