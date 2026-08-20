@@ -88,11 +88,16 @@ const sendNewsletterController = async (req, res) => {
     });
   }
 
-  const summary = await newsletterService.sendNewsLetter({
-    subject,
-    content,
-    campaignId,
-  });
+  const businessId = req.businessId;
+
+  const summary = await newsletterService.sendNewsLetter(
+    {
+      subject,
+      content,
+      campaignId,
+    },
+    businessId,
+  );
   return res.status(200).json({
     success: true,
     message: "Newsletter sending process completed.",

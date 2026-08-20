@@ -68,7 +68,8 @@ const getUsers = async (req, res) => {
 };
 
 const getUserStatistics = async (req, res) => {
-  const result = await userService.getUserStats();
+  const businessId = req.businessId;
+  const result = await userService.getUserStats(businessId);
   res.status(200).json(result);
 };
 
@@ -219,7 +220,7 @@ const updateUserRole = async (req, res) => {
 
 // Assign store to user
 const assignStoreToUser = async (req, res) => {
-  const userId = req.user?._id;
+  const { userId } = req.params;
   const { storeId, permissions } = req.body;
 
   // Only admin/superadmin can assign stores
@@ -245,9 +246,7 @@ const assignStoreToUser = async (req, res) => {
 
 // Remove store from user
 const removeStoreFromUser = async (req, res) => {
-  const { storeId } = req.params;
-
-  const userId = req.user?._id;
+  const { userId, storeId } = req.params;
 
   // Only admin/superadmin can remove stores
   if (req.user?.role !== "admin" && req.user?.role !== "superadmin") {
@@ -268,7 +267,9 @@ const removeStoreFromUser = async (req, res) => {
 
 // Set user's primary store
 const setPrimaryStore = async (req, res) => {
-  const userId = req.user?._id;
+  // Mounted on both /me/primary-store (self-service, no :userId param)
+  // and /:userId/primary-store (admin-only, gated by adminValidator)
+  const userId = req.params.userId || req.user?._id;
   const { storeId } = req.body;
 
   // Users can only set their own primary store, admins can set for anyone

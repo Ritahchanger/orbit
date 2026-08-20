@@ -343,13 +343,13 @@ const AdminStoresLoading = ({
                         )}
                         <div className="flex gap-0.5 ml-1">
                           {permissions.canManage && (
-                            <span className="w-2 h-2 rounded-sm bg-blue-500"></span>
+                            <span className="w-2 h-2 rounded-sm bg-blue-500" title="Can manage"></span>
                           )}
                           {permissions.canSell && (
-                            <span className="w-2 h-2 rounded-sm bg-green-500"></span>
+                            <span className="w-2 h-2 rounded-sm bg-green-500" title="Can sell"></span>
                           )}
                           {permissions.canEdit && (
-                            <span className="w-2 h-2 rounded-sm bg-yellow-500"></span>
+                            <span className="w-2 h-2 rounded-sm bg-yellow-500" title="Can edit"></span>
                           )}
                         </div>
                       </button>
@@ -382,9 +382,9 @@ const AdminStoresLoading = ({
 
           {/* Product Categories Button */}
           <button
-            className="px-4 py-2 rounded-sm text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 
-            bg-linear-to-r from-purple-600 to-pink-600 text-white shadow-sm
-            hover:from-purple-700 hover:to-pink-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 mr-[2rem]"
+            className="px-4 py-2 rounded-sm text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2
+            bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 shadow-sm
+            hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-[2rem]"
             onClick={() => {
               dispatch(openCategoriesModal());
             }}

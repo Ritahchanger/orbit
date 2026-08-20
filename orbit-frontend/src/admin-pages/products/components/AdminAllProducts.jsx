@@ -343,7 +343,7 @@ const AdminAllProducts = ({
               </tr>
             </thead>
             <tbody>
-              {filteredProducts.map((product, index) => {
+              {filteredProducts.map((product) => {
                 const CategoryIcon = getCategoryIcon(product.category);
                 const isSelected = isProductSelected(product);
                 const imageUrl = getPrimaryImageUrl(product);
@@ -355,7 +355,7 @@ const AdminAllProducts = ({
                       isSelected
                         ? "bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 dark:border-blue-400"
                         : ""
-                    } ${index === 0 && !isSelected ? "bg-blue-50 dark:bg-blue-900/10 border-l-4 border-blue-500 dark:border-blue-400" : ""}`}
+                    }`}
                   >
                     {/* Image Column */}
                     <td className="py-3 px-4 align-middle">
@@ -457,9 +457,12 @@ const AdminAllProducts = ({
                       {canViewCost ? (
                         <p className="text-xs text-green-600 dark:text-green-400">
                           Profit: KSh{" "}
-                          {(
-                            product.sellingPrice - product.buyingPrice
-                          )?.toLocaleString()}
+                          {typeof product.sellingPrice === "number" &&
+                          typeof product.buyingPrice === "number"
+                            ? (
+                                product.sellingPrice - product.buyingPrice
+                              ).toLocaleString()
+                            : "N/A"}
                         </p>
                       ) : (
                         <p className="text-xs text-gray-500 dark:text-gray-400">

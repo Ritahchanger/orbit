@@ -249,7 +249,6 @@ const AdminManageStores = () => {
                         value={stats.total}
                         icon={<Building2 className="h-5 w-5" />}
                         color="blue"
-                        trend={`+${Math.floor(Math.random() * 5)}%`}
                     />
 
                     <StoreStatsCard
@@ -273,7 +272,7 @@ const AdminManageStores = () => {
                         value={stats.withManager}
                         icon={<Users className="h-5 w-5" />}
                         color="purple"
-                        description={`${Math.round((stats.withManager / stats.total) * 100)}% managed`}
+                        description={stats.total > 0 ? `${Math.round((stats.withManager / stats.total) * 100)}% managed` : 'No stores yet'}
                     />
 
                     <StoreStatsCard

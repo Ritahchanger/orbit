@@ -26,10 +26,12 @@ const NewsletterSchema = new mongoose.Schema(
       of: Boolean,
       default: {},
     },
+    // Optional: the public subscribe endpoint has no way to attribute a
+    // subscriber to a specific business, so this is only ever set for
+    // subscribers created/attributed in a business-scoped context.
     businessId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Business",
-      required: true,
       index: true,
     },
   },

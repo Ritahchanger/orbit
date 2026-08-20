@@ -66,7 +66,7 @@ const AdminProductsHeader = ({
                     </div>
                     <h3 className="text-lg md:text-lg font-bold text-gray-900 dark:text-white mt-2 truncate">
                         {/* Use outOfStockCount from API if available, otherwise show totalSold */}
-                        {transformedStats.outOfStockCount || safeStats.topSelling}
+                        {transformedStats.outOfStockCount ?? safeStats.topSelling}
                     </h3>
                 </div>
             </div>

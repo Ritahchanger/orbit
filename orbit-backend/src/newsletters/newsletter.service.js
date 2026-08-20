@@ -48,23 +48,24 @@ const updatePreferences = async ({ email, preferences }) => {
 };
 
 const getAllNewsletters = async ({ subscribed }, businessId) => {
-  let filter = {};
+  let filter = { businessId };
 
   if (typeof subscribed === "boolean") {
     filter.subscribed = subscribed;
   }
 
-  const subscribers = await Newsletter.find({ ...filter, businessId }).sort({
+  const subscribers = await Newsletter.find(filter).sort({
     createdAt: -1,
   });
   return subscribers;
 };
 
 // Main function to send newsletter - now just queues the task
-const sendNewsLetter = async ({ subject, content, campaignId }) => {
-  const subscribers = await Newsletter.find({ subscribed: true }).select(
-    "email preferences",
-  );
+const sendNewsLetter = async ({ subject, content, campaignId }, businessId) => {
+  const subscribers = await Newsletter.find({
+    subscribed: true,
+    businessId,
+  }).select("email preferences");
 
   // 🔍 ADD VALIDATION
   const validSubscribers = subscribers.filter(

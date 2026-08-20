@@ -21,6 +21,12 @@ const ListView = ({
         getStorePermissions
     } = useRole();
 
+    const isStoreClosedToday = (openingHours) => {
+        const dayMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        const todayHours = openingHours?.[dayMap[new Date().getDay()]];
+        return !todayHours || todayHours.open === 'Closed' || todayHours.close === 'Closed';
+    };
+
     const handleViewProducts = (store) => {
         if (!canAccessStore(store._id)) {
             toast.error("You don't have access to this store's products");
@@ -129,7 +135,7 @@ const ListView = ({
                                 <td className="py-4 px-4">
                                     <div className="flex items-center gap-2 text-sm">
                                         <Clock size={14} className="text-gray-600 dark:text-gray-400" />
-                                        <span className={`${store.openingHours?.monday?.open === 'Closed' ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300'}`}>
+                                        <span className={`${isStoreClosedToday(store.openingHours) ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300'}`}>
                                             {formatOpeningHours(store.openingHours)}
                                         </span>
                                     </div>

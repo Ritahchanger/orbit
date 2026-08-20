@@ -283,7 +283,7 @@ const AdminNavbar = () => {
               {(userRole === "superadmin" || userRole === "admin") && (
                 <Link
                   to="/admin/reports"
-                  className="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-sm bg-linear-to-r from-emerald-600 to-teal-600 text-white hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-200"
+                  className="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-sm border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50 transition-all duration-200"
                 >
                   <FileText size={16} />
                   <span className="font-semibold text-sm">Reports</span>

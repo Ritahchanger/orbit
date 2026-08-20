@@ -30,6 +30,10 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
         getStorePermissions
     } = useRole();
 
+    const dayMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const todayHours = store.openingHours?.[dayMap[new Date().getDay()]];
+    const isOpenToday = !!todayHours && todayHours.open !== 'Closed' && todayHours.close !== 'Closed';
+
     const isCurrentStore = store._id === currentStoreId;
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -203,7 +207,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
 
                     <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                         <Clock size={14} className="text-gray-500 dark:text-gray-400" />
-                        <span>{store.openingHours?.monday?.open === 'Closed' ? 'Closed Today' : 'Open Today'}</span>
+                        <span>{isOpenToday ? 'Open Today' : 'Closed Today'}</span>
                     </div>
 
                     <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
