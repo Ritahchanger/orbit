@@ -63,6 +63,11 @@ const productAnalysisApi = {
         return response.data;
     },
 
+    getGlobalStoresInventory: async () => {
+        const response = await api.get("/products-analysis/global/stores-inventory");
+        return response.data;
+    },
+
     /**
      * ============ STORE-SPECIFIC ANALYSIS METHODS ============
      * (All require storeId as parameter)
@@ -117,7 +122,7 @@ const productAnalysisApi = {
      * @param {string} storeId - Store identifier
      */
     getStoreCategoryAnalysis: async (storeId) => {
-        const response = await api.get(`/products-analysis/stores/${storeId}/category-/products-analysis`);
+        const response = await api.get(`/products-analysis/stores/${storeId}/category-analysis`);
         return response.data;
     },
 

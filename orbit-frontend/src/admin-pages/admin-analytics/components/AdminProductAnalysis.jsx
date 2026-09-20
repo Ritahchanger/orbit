@@ -1,11 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import {
     useRefreshProductAnalysis,
-} from "../../hooks/product-analysis.hook";
-
-
-
-import {
     useRefreshStoreAnalysis,
     useSmartDashboardAnalytics,
     useSmartInventorySummary,
@@ -15,7 +10,7 @@ import {
     useSmartAlerts,
     useSmartProductRecommendations,
     useSmartDownloadCSVReport
-} from "../../hooks/store-product-analysis-hooks";
+} from "../../hooks/product-analysis.hook";
 
 import {
     Package,
@@ -631,7 +626,7 @@ const AdminProductAnalysis = ({ viewMode = 'store', currentStore = null }) => {
                             Low Stock Alerts
                         </h4>
                         <span className="text-xs text-red-400 bg-red-500/10 px-2 py-1 rounded">
-                            {lowStockData?.data?.summary?.totalProducts || lowStockData?.data?.totalProducts || 0} Products
+                            {lowStockData?.data?.summary?.totalAlerts || lowStockData?.data?.products?.length || 0} Products
                         </span>
                     </div>
                     <div className="overflow-x-auto">

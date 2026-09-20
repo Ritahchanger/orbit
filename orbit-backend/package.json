@@ -53,7 +53,9 @@
     "seed-categories": "node ./src/seeders/categories.seed.js",
     "seed:stores": "node ./src/seeders/stores.seed.js",
     "seed:product": "node ./src/seeders/products.seed.js",
-    "seed:roles": "node ./src/permissions/seeders/roles.seed.js"
+    "seed:roles": "node ./src/permissions/seeders/roles.seed.js",
+    "seed:orbit": "node ./src/seeders/orbit-test.seed.js",
+    "seed:orbit:force": "node ./src/seeders/orbit-test.seed.js --force"
   },
   "keywords": [],
   "author": "codewithmunyao",

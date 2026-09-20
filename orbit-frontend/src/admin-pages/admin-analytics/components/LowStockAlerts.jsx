@@ -15,56 +15,56 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                     <AlertTriangle size={18} className="text-red-600 dark:text-red-500" />
                     Low Stock Alerts
-                    {lowStockData?.data?.lowStockAlerts?.summary && (
+                    {lowStockData?.summary && (
                         <span className="text-sm text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-900/20 px-2 py-0.5 rounded-sm">
-                            {lowStockData.data.lowStockAlerts.summary.totalAlerts} Products
+                            {lowStockData.summary.totalAlerts} Products
                         </span>
                     )}
                 </h3>
-                {lowStockData?.data?.lowStockAlerts?.timestamp && (
+                {lowStockData?.timestamp && (
                     <span className="text-xs text-gray-600 dark:text-gray-400">
-                        Updated: {new Date(lowStockData.data.lowStockAlerts.timestamp).toLocaleTimeString()}
+                        Updated: {new Date(lowStockData.timestamp).toLocaleTimeString()}
                     </span>
                 )}
             </div>
 
             {/* Summary Stats */}
-            {lowStockData?.data?.lowStockAlerts?.summary && (
+            {lowStockData?.summary && (
                 <div className="mb-4">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                         <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Total Alerts</p>
                             <p className="text-xl font-bold text-gray-900 dark:text-white">
-                                {lowStockData.data.lowStockAlerts.summary.totalAlerts}
+                                {lowStockData.summary.totalAlerts}
                             </p>
                         </div>
                         <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Restock Value</p>
                             <p className="text-xl font-bold text-yellow-700 dark:text-yellow-400">
-                                {formatCurrency(lowStockData.data.lowStockAlerts.summary.estimatedRestockValue)}
+                                {formatCurrency(lowStockData.summary.estimatedRestockValue)}
                             </p>
                         </div>
                         <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Potential Loss</p>
                             <p className="text-xl font-bold text-red-700 dark:text-red-400">
-                                {formatCurrency(lowStockData.data.lowStockAlerts.summary.totalPotentialLoss)}
+                                {formatCurrency(lowStockData.summary.totalPotentialLoss)}
                             </p>
                         </div>
                         <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Critical Items</p>
                             <p className="text-xl font-bold text-red-700 dark:text-red-400">
-                                {lowStockData.data.lowStockAlerts.summary.critical}
+                                {lowStockData.summary.critical}
                             </p>
                         </div>
                     </div>
 
                     {/* Category Breakdown */}
-                    {lowStockData.data.lowStockAlerts.summary.byCategory &&
-                        Object.keys(lowStockData.data.lowStockAlerts.summary.byCategory)?.length > 0 && (
+                    {lowStockData.summary.byCategory &&
+                        Object.keys(lowStockData.summary.byCategory)?.length > 0 && (
                             <div className="bg-gray-50 dark:bg-gray-700/30 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
                                 <p className="text-sm text-gray-700 dark:text-gray-400 mb-2">Affected Categories:</p>
                                 <div className="flex flex-wrap gap-2">
-                                    {Object.entries(lowStockData.data.lowStockAlerts.summary.byCategory)?.map(([category, data]) => (
+                                    {Object.entries(lowStockData.summary.byCategory)?.map(([category, data]) => (
                                         <div key={category} className="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 px-3 py-1.5 rounded-sm border border-gray-300 dark:border-gray-600">
                                             <span className="text-gray-900 dark:text-white text-sm font-medium">
                                                 {category.replace('-', ' ').toUpperCase()}

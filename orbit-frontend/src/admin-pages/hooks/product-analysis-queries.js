@@ -20,6 +20,7 @@ export const productAnalysisKeys = {
         categoryPerformance: () => [...BASE_KEY, 'global', 'category-performance'],
         lowStockAlerts: () => [...BASE_KEY, 'global', 'low-stock-alerts'],
         brandPerformance: () => [...BASE_KEY, 'global', 'brand-performance'],
+        storesInventory: () => [...BASE_KEY, 'global', 'stores-inventory'],
     },
     store: {
         all: (storeId) => [...BASE_KEY, 'store', storeId],
@@ -96,6 +97,19 @@ export const useGlobalLowStockAlerts = (options = {}) => {
         queryFn: () => productAnalysisApi.getGlobalLowStockAlerts(),
         staleTime: 3 * 60 * 1000, // 3 minutes
         gcTime: 5 * 60 * 1000,
+        ...options,
+    });
+};
+
+/**
+ * Global Per-Store Inventory Breakdown
+ */
+export const useGlobalStoresInventory = (options = {}) => {
+    return useQuery({
+        queryKey: productAnalysisKeys.global.storesInventory(),
+        queryFn: () => productAnalysisApi.getGlobalStoresInventory(),
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
         ...options,
     });
 };

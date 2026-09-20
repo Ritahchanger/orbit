@@ -1,5 +1,5 @@
 const Sale = require("./sales.model");
-const Product = require("../products/products.model");
+const { findProductBySku, incrementProductFields } = require("../products");
 const Store = require("../stores/store.model");
 const StoreInventory = require("../store-inventory/store-inventory.model");
 const Transaction = require("./transaction.model");
@@ -40,8 +40,7 @@ const recordMultipleItemsSale = async (transactionData) => {
     if (!item.quantity || item.quantity < 1)
       throw new Error(`Quantity must be at least 1 for SKU: ${item.sku}`);
 
-    const product = await Product.findOne({
-      sku: item.sku.toUpperCase(),
+    const product = await findProductBySku(item.sku.toUpperCase(), {
       businessId: transactionData.businessId,
     });
     if (!product) throw new Error(`Product not found with SKU: ${item.sku}`);
@@ -145,32 +144,45 @@ const recordMultipleItemsSale = async (transactionData) => {
     saleIds.push(savedSale._id);
     sales.push(savedSale);
 
-    // Update store inventory
-    const newStock = storeInventory.stock - item.quantity;
-
-    if (newStock <= 0) {
-      await StoreInventory.findByIdAndDelete(storeInventory._id);
-    } else {
-      await StoreInventory.findByIdAndUpdate(storeInventory._id, {
+    // Update store inventory atomically — the $gte guard rejects the update
+    // if stock dropped below the requested quantity since it was read above
+    // (e.g. a concurrent checkout), preventing stock from going negative.
+    const updatedInventory = await StoreInventory.findOneAndUpdate(
+      { _id: storeInventory._id, stock: { $gte: item.quantity } },
+      {
         $inc: {
           stock: -item.quantity,
           storeSold: item.quantity,
           storeRevenue: itemTotal,
         },
+        $set: { lastSold: new Date() },
+      },
+      { new: true },
+    );
+
+    if (!updatedInventory) {
+      throw new Error(
+        `Insufficient stock for "${product.name}". Stock changed during checkout, please retry.`,
+      );
+    }
+
+    if (updatedInventory.stock <= 0) {
+      await StoreInventory.findByIdAndDelete(updatedInventory._id);
+    } else {
+      await StoreInventory.findByIdAndUpdate(updatedInventory._id, {
         $set: {
           status:
-            newStock <= storeInventory.minStock ? "Low Stock" : "In Stock",
-          lastSold: new Date(),
+            updatedInventory.stock <= updatedInventory.minStock
+              ? "Low Stock"
+              : "In Stock",
         },
       });
     }
 
     // Update global product stats
-    await Product.findByIdAndUpdate(product._id, {
-      $inc: {
-        totalSold: item.quantity,
-        totalRevenue: itemTotal,
-      },
+    await incrementProductFields(product._id, {
+      totalSold: item.quantity,
+      totalRevenue: itemTotal,
     });
   }
 
@@ -255,6 +267,9 @@ const recordMpesaPaidSales = async (saleData) => {
     if (!saleData.storeId) {
       throw new Error("Store ID is required");
     }
+    if (!saleData.businessId) {
+      throw new Error("Business ID is required");
+    }
     // if (!saleData.customerName?.trim()) {
     //   throw new Error("Customer name is required");
     // }
@@ -292,7 +307,9 @@ const recordMpesaPaidSales = async (saleData) => {
       }
 
       // Find the product by SKU
-      const product = await Product.findOne({ sku: item.sku.toUpperCase() });
+      const product = await findProductBySku(item.sku.toUpperCase(), {
+        businessId: saleData.businessId,
+      });
       if (!product) {
         throw new Error(`Product not found with SKU: ${item.sku}`);
       }
@@ -328,6 +345,7 @@ const recordMpesaPaidSales = async (saleData) => {
       const sale = new Sale({
         productId: product._id,
         storeId: saleData.storeId,
+        businessId: saleData.businessId,
         productName: product.name,
         sku: product.sku,
         quantity: item.quantity,
@@ -353,35 +371,44 @@ const recordMpesaPaidSales = async (saleData) => {
       saleIds.push(savedSale._id);
       sales.push(savedSale);
 
-      // Update inventory
-      const newStock = storeInventory.stock - item.quantity;
-
-      if (newStock <= 0) {
-        await StoreInventory.findByIdAndDelete(storeInventory._id);
-      } else {
-        let newStatus = "In Stock";
-        if (newStock <= storeInventory.minStock) {
-          newStatus = "Low Stock";
-        }
-        await StoreInventory.findByIdAndUpdate(storeInventory._id, {
+      // Update inventory atomically — the $gte guard rejects the update if
+      // stock dropped below the requested quantity since it was read above
+      // (e.g. a concurrent checkout), preventing stock from going negative.
+      const updatedInventory = await StoreInventory.findOneAndUpdate(
+        { _id: storeInventory._id, stock: { $gte: item.quantity } },
+        {
           $inc: {
             stock: -item.quantity,
             storeSold: item.quantity,
             storeRevenue: itemTotal,
           },
-          $set: {
-            status: newStatus,
-            lastSold: new Date(),
-          },
+          $set: { lastSold: new Date() },
+        },
+        { new: true },
+      );
+
+      if (!updatedInventory) {
+        throw new Error(
+          `Insufficient stock for ${product.name}. Stock changed during checkout, please retry.`,
+        );
+      }
+
+      if (updatedInventory.stock <= 0) {
+        await StoreInventory.findByIdAndDelete(updatedInventory._id);
+      } else {
+        const newStatus =
+          updatedInventory.stock <= updatedInventory.minStock
+            ? "Low Stock"
+            : "In Stock";
+        await StoreInventory.findByIdAndUpdate(updatedInventory._id, {
+          $set: { status: newStatus },
         });
       }
 
       // Update global product
-      await Product.findByIdAndUpdate(product._id, {
-        $inc: {
-          totalSold: item.quantity,
-          totalRevenue: itemTotal,
-        },
+      await incrementProductFields(product._id, {
+        totalSold: item.quantity,
+        totalRevenue: itemTotal,
       });
     }
 
@@ -419,6 +446,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
     customerName,
     customerEmail,
     storeId,
+    businessId,
     soldBy,
     saleIds = [],
     notes,
@@ -430,6 +458,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
   if (!phone) throw new Error("Phone number is required");
   if (!amount || amount <= 0) throw new Error("Valid amount is required");
   if (!storeId) throw new Error("Store ID is required");
+  if (!businessId) throw new Error("Business ID is required");
   if (!customerName) throw new Error("Customer name is required");
 
   try {
@@ -479,6 +508,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
     const pendingTransaction = new Transaction({
       // NO transactionId field - let it be null/undefined
       storeId: storeId,
+      businessId: businessId,
       customerName: customerName.trim(),
       customerPhone: phoneFormatted,
       customerEmail: customerEmail?.trim() || "",
@@ -667,6 +697,22 @@ const handleMpesaCallback = async (callbackData) => {
       };
     }
 
+    // Safaricom retries callbacks that don't get an immediate response.
+    // If we've already processed this checkout, don't re-append notes or
+    // re-broadcast the WebSocket event.
+    if (transaction.paymentStatus === "paid" || transaction.paymentStatus === "failed") {
+      console.log("↩️ Callback already processed for:", CheckoutRequestID);
+      return {
+        success: transaction.paymentStatus === "paid",
+        message: "Callback already processed",
+        data: {
+          transactionId: transaction._id,
+          mpesaReceipt: transaction.mpesaReceipt,
+          mpesaCheckoutId: transaction.mpesaCheckoutId,
+        },
+      };
+    }
+
     console.log("✅ Found transaction:", transaction._id.toString());
 
     const clientId = transaction.clientId;
@@ -802,6 +848,7 @@ const completeMpesaTransaction = async (transactionData) => {
       // Add these new fields
       items,
       storeId,
+      businessId,
       customerName,
       customerPhone,
       mpesaReceipt,
@@ -828,7 +875,18 @@ const completeMpesaTransaction = async (transactionData) => {
       );
     }
 
-    if (transaction.status === "completed") {
+    // Atomically claim this transaction for completion. Without this, two
+    // concurrent completion calls (e.g. a WebSocket "success" event racing the
+    // manual status-poll fallback) can both read status !== "completed" and
+    // both proceed to record sales, creating duplicate Sale docs and double
+    // stock deduction. Only the caller that flips status to "completed" here
+    // is allowed to record sales; everyone else gets the idempotent response.
+    const claimed = await Transaction.findOneAndUpdate(
+      { _id: transactionId, status: { $ne: "completed" } },
+      { $set: { status: "completed" } },
+    );
+
+    if (!claimed) {
       console.log("Transaction already completed");
       return {
         success: true,
@@ -836,6 +894,8 @@ const completeMpesaTransaction = async (transactionData) => {
         data: transaction,
       };
     }
+
+    transaction.status = "completed";
 
     let finalSaleIds = saleIds;
     let salesData = [];
@@ -850,6 +910,7 @@ const completeMpesaTransaction = async (transactionData) => {
 
       const saleResult = await recordMpesaPaidSales({
         storeId: storeId || transaction.storeId,
+        businessId: businessId || transaction.businessId,
         customerName: customerName || transaction.customerName,
         customerPhone: customerPhone || transaction.customerPhone,
         items,
@@ -887,7 +948,6 @@ const completeMpesaTransaction = async (transactionData) => {
         transactionSummary.totalProfit || transaction.totalProfit;
     }
 
-    transaction.status = "completed";
     await transaction.save(); // This triggers pre-save hook to generate transactionId
 
     console.log(

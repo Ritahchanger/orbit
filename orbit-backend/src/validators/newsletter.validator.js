@@ -23,7 +23,6 @@ const unsubscribeValidator = Joi.object({
     .email({ tlds: { allow: false } })
     .required()
     .label("Email"),
-  token: Joi.string().required().label("Unsubscribe Token"),
 });
 
 module.exports = {

@@ -2,6 +2,7 @@
 const StockInventory = require("../store-inventory.model");
 const Product = require("../../products/products.model");
 const Store = require("../../stores/store.model");
+const { findProductById } = require("../../products");
 
 class BaseInventoryService {
     constructor() {
@@ -17,7 +18,7 @@ class BaseInventoryService {
     }
 
     async validateProduct(productId) {
-        const product = await this.Product.findById(productId);
+        const product = await findProductById(productId);
         if (!product) throw new Error("Product not found");
         return product;
     }

@@ -1,96 +1,127 @@
 // controllers/storeInventoryController.js
 const StoreInventory = require("./store-inventory.model");
 const Store = require("../stores/store.model");
-const Product = require("../products/products.model");
+const {
+  findProductById,
+  findProductBySku,
+  findProducts,
+  countProducts,
+  incrementProductFields,
+  restockProductDirect,
+  decrementProductStockBySku,
+} = require("../products");
 const mongoose = require("mongoose");
 
 // Get store inventory with filtering
 exports.getStoreInventory = async (req, res) => {
-  const { storeId } = req.params;
-  const {
-    search,
-    category,
-    lowStock,
-    outOfStock,
-    page = 1,
-    limit = 20,
-    sortBy = "product.name",
-    sortOrder = "asc",
-  } = req.query;
+  try {
+    const { storeId } = req.params;
+    const businessId = req.businessId;
 
-  // Validate store exists
-  const store = await Store.findById(storeId);
-  if (!store) {
-    return res.status(404).json({ error: "Store not found" });
-  }
+    let {
+      search,
+      category,
+      lowStock,
+      outOfStock,
+      page = 1,
+      limit = 20,
+      sortBy = "product.name",
+      sortOrder = "asc",
+    } = req.query;
 
-  // Build query
-  let query = { store: storeId };
+    page = Number(page);
+    limit = Number(limit);
 
-  // Search in product fields
-  if (search) {
-    const productIds = await Product.find({
-      $or: [
+    // ✅ Validate store belongs to the requesting business
+    const store = await Store.findOne({ _id: storeId, businessId });
+    if (!store) {
+      return res.status(404).json({ error: "Store not found" });
+    }
+
+    let query = { store: storeId };
+
+    // 🔥 Combine product filters (search + category)
+    let productFilter = {};
+
+    if (search) {
+      productFilter.$or = [
         { name: { $regex: search, $options: "i" } },
         { sku: { $regex: search, $options: "i" } },
         { brand: { $regex: search, $options: "i" } },
-      ],
-    }).select("_id");
+      ];
+    }
 
-    query.product = { $in: productIds.map((p) => p._id) };
+    if (category) {
+      productFilter.category = category;
+    }
+
+    // Apply product filter
+    if (Object.keys(productFilter).length > 0) {
+      const products = await findProducts(productFilter, { select: "_id" });
+      query.product = { $in: products.map((p) => p._id) };
+    }
+
+    // 🔥 Stock filters (fixed)
+    if (lowStock === "true" && outOfStock === "true") {
+      query.stock = 0;
+    } else if (lowStock === "true") {
+      query.$expr = { $lte: ["$stock", "$minStock"] };
+    } else if (outOfStock === "true") {
+      query.stock = 0;
+    }
+
+    // Pagination
+    const skip = (page - 1) * limit;
+
+    let inventoryItems = await StoreInventory.find(query)
+      .populate("product", "name sku price brand category images costPrice")
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    // 🔥 Sort manually if using populated fields
+    if (sortBy === "product.name") {
+      inventoryItems.sort((a, b) => {
+        const aVal = a.product?.name || "";
+        const bVal = b.product?.name || "";
+
+        return sortOrder === "desc"
+          ? bVal.localeCompare(aVal)
+          : aVal.localeCompare(bVal);
+      });
+    }
+
+    // Enrich data
+    const enrichedItems = inventoryItems.map((item) => {
+      const productValue = item.product ? item.product.price * item.stock : 0;
+
+      return {
+        ...item,
+        totalValue: productValue,
+        needsRestock: item.stock <= item.minStock,
+        outOfStock: item.stock === 0,
+        profitPerUnit: item.product
+          ? item.product.price - (item.product.costPrice || 0)
+          : 0,
+      };
+    });
+
+    const total = await StoreInventory.countDocuments(query);
+
+    res.json({
+      success: true,
+      data: enrichedItems,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
-
-  // Category filter
-  if (category) {
-    const productIds = await Product.find({ category }).select("_id");
-    query.product = query.product || {};
-    query.product.$in = productIds.map((p) => p._id);
-  }
-
-  // Stock status filters
-  if (lowStock === "true") {
-    query.stock = { $lte: "$minStock" };
-  }
-  if (outOfStock === "true") {
-    query.stock = 0;
-  }
-
-  // Execute query with pagination
-  const skip = (page - 1) * limit;
-  const inventoryItems = await StoreInventory.find(query)
-    .populate("product", "name sku price brand category images")
-    .skip(skip)
-    .limit(parseInt(limit))
-    .sort({ [sortBy]: sortOrder === "desc" ? -1 : 1 })
-    .lean();
-
-  // Add virtual fields
-  const enrichedItems = inventoryItems.map((item) => {
-    const productValue = item.product ? item.product.price * item.stock : 0;
-    return {
-      ...item,
-      totalValue: productValue,
-      needsRestock: item.stock <= item.minStock,
-      outOfStock: item.stock === 0,
-      profitPerUnit: item.product
-        ? item.product.price - (item.product.costPrice || 0)
-        : 0,
-    };
-  });
-
-  // Get total count for pagination
-  const total = await StoreInventory.countDocuments(query);
-
-  res.json({
-    success: true,
-    data: enrichedItems,
-    pagination: {
-      page: parseInt(page),
-      limit: parseInt(limit),
-      total,
-      pages: Math.ceil(total / limit),
-    },
-  });
 };
 
 // Get inventory statistics
@@ -157,8 +188,9 @@ exports.getLowStockAlerts = async (req, res) => {
 
   const alerts = await StoreInventory.find({
     store: storeId,
-    stock: { $lte: "$minStock" },
-    stock: { $gt: 0 }, // Not out of stock
+    $expr: {
+      $and: [{ $lte: ["$stock", "$minStock"] }, { $gt: ["$stock", 0] }],
+    },
   })
     .populate("product", "name sku category brand price images")
     .limit(parseInt(limit))
@@ -413,13 +445,14 @@ exports.getAvailableProducts = async (req, res) => {
   }
 
   const skip = (page - 1) * limit;
-  const products = await Product.find(query)
-    .select("name sku price brand category stock costPrice images status")
-    .skip(skip)
-    .limit(parseInt(limit))
-    .sort({ name: 1 });
+  const products = await findProducts(query, {
+    select: "name sku price brand category stock costPrice images status",
+    skip,
+    limit: parseInt(limit),
+    sort: { name: 1 },
+  });
 
-  const total = await Product.countDocuments(query);
+  const total = await countProducts(query);
 
   res.json({
     success: true,
@@ -445,7 +478,7 @@ exports.addToInventory = async (req, res) => {
   }
 
   // Validate product
-  const product = await Product.findById(productId);
+  const product = await findProductById(productId);
   if (!product) {
     return res.status(404).json({ error: "Product not found" });
   }
@@ -498,7 +531,7 @@ exports.quickAddToInventory = async (req, res) => {
   }
 
   // Find product by SKU
-  const product = await Product.findOne({ sku: sku.trim().toUpperCase() });
+  const product = await findProductBySku(sku.trim().toUpperCase());
   if (!product) {
     return res.status(404).json({ error: `Product with SKU ${sku} not found` });
   }
@@ -684,29 +717,8 @@ exports.restockProduct = async (req, res) => {
       return res.status(404).json({ error: "Inventory item not found" });
     }
 
-    // Get store ID from the inventory item
-    const storeId = inventoryItem.store;
-
-    // ⭐⭐⭐ CRITICAL: Manually check permissions since middleware failed ⭐⭐⭐
-    // Check if user has access to this store
-    const user = req.user;
-    if (!user) {
-      return res.status(401).json({ error: "Authentication required" });
-    }
-
-    // Simple permission check - you might need to adjust this
-    // Check if user is superadmin or store manager
-    const canManage =
-      user.role === "superadmin" ||
-      (user.managedStores && user.managedStores.includes(storeId));
-
-    if (!canManage) {
-      return res.status(403).json({
-        error: "You don't have permission to manage this store's inventory",
-      });
-    }
-
-    // Rest of your restock logic...
+    // Authorization for this store's inventory is already enforced by the
+    // canManageInventoryItem route middleware.
     if (!inventoryItem.product) {
       return res.status(404).json({ error: "Product not found" });
     }
@@ -720,17 +732,10 @@ exports.restockProduct = async (req, res) => {
     }
 
     // Update Product model stock (reduce)
-    const product = await Product.findById(inventoryItem.product._id);
-    product.stock -= parseInt(quantity);
-    product.lastRestock = new Date();
-
-    if (product.stock === 0) {
-      product.status = "Out of Stock";
-    } else if (product.stock <= product.minStock) {
-      product.status = "Low Stock";
+    const product = await restockProductDirect(inventoryItem.product._id, quantity);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
     }
-
-    await product.save();
 
     // Update StoreInventory stock (add)
     inventoryItem.stock += parseInt(quantity);
@@ -790,12 +795,10 @@ exports.recordSale = async (req, res) => {
   await inventoryItem.save();
 
   // Also update main product stats
-  await Product.findByIdAndUpdate(inventoryItem.product._id, {
-    $inc: {
-      totalSold: quantity,
-      totalRevenue: quantity * price,
-      stock: -quantity,
-    },
+  await incrementProductFields(inventoryItem.product._id, {
+    totalSold: quantity,
+    totalRevenue: quantity * price,
+    stock: -quantity,
   });
 
   res.json({
@@ -1062,6 +1065,7 @@ exports.importToInventory = async (req, res) => {
 exports.addOrUpdateInventory = async (req, res) => {
   const { storeId } = req.params;
   const { items, operation = "add" } = req.body; // "add" or "update"
+  const { businessId } = req;
 
   // Validate store
   const store = await Store.findById(storeId);
@@ -1074,23 +1078,23 @@ exports.addOrUpdateInventory = async (req, res) => {
 
   if (isBulk) {
     // Bulk operation
-    return await handleBulkInventory(storeId, items, operation, res);
+    return await handleBulkInventory(storeId, items, operation, res, businessId);
   } else {
     // Single operation
-    return await handleSingleInventory(storeId, items, operation, res);
+    return await handleSingleInventory(storeId, items, operation, res, businessId);
   }
 };
 
 // Handle single inventory item
-const handleSingleInventory = async (storeId, itemData, operation, res) => {
+const handleSingleInventory = async (storeId, itemData, operation, res, businessId) => {
   const { productId, sku, quantity = 1, minStock = 5, price } = itemData;
 
   // Find product by either ID or SKU
   let product;
   if (productId) {
-    product = await Product.findById(productId);
+    product = await findProductById(productId);
   } else if (sku) {
-    product = await Product.findOne({ sku: sku.trim().toUpperCase() });
+    product = await findProductBySku(sku.trim().toUpperCase());
   }
 
   if (!product) {
@@ -1123,6 +1127,7 @@ const handleSingleInventory = async (storeId, itemData, operation, res) => {
     inventoryItem = new StoreInventory({
       store: storeId,
       product: product._id,
+      businessId,
       stock: parseInt(quantity),
       minStock,
       storePrice: price || product.price,
@@ -1155,7 +1160,7 @@ const handleSingleInventory = async (storeId, itemData, operation, res) => {
 };
 
 // Handle bulk inventory operations
-const handleBulkInventory = async (storeId, items, operation, res) => {
+const handleBulkInventory = async (storeId, items, operation, res, businessId) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -1171,11 +1176,9 @@ const handleBulkInventory = async (storeId, items, operation, res) => {
       // Find product
       let product;
       if (productId) {
-        product = await Product.findById(productId).session(session);
+        product = await findProductById(productId, { session });
       } else if (sku) {
-        product = await Product.findOne({
-          sku: sku.trim().toUpperCase(),
-        }).session(session);
+        product = await findProductBySku(sku.trim().toUpperCase(), { session });
       }
 
       if (!product) {
@@ -1211,6 +1214,7 @@ const handleBulkInventory = async (storeId, items, operation, res) => {
         inventoryItem = new StoreInventory({
           store: storeId,
           product: product._id,
+          businessId,
           stock: parseInt(quantity),
           minStock,
           storePrice: price || product.price,
@@ -1276,13 +1280,14 @@ const handleBulkInventory = async (storeId, items, operation, res) => {
 exports.quickAddBySku = async (req, res) => {
   const { storeId } = req.params;
   const { sku, quantity = 1 } = req.body;
+  const { businessId } = req;
 
   if (!sku) {
     return res.status(400).json({ error: "SKU is required" });
   }
 
-  // Find product by SKU
-  const product = await Product.findOne({ sku: sku.trim().toUpperCase() });
+  // Find product by SKU scoped to this business
+  const product = await findProductBySku(sku.trim().toUpperCase(), { businessId });
   if (!product) {
     return res
       .status(404)
@@ -1311,9 +1316,10 @@ exports.quickAddBySku = async (req, res) => {
     inventoryItem = new StoreInventory({
       store: storeId,
       product: product._id,
+      businessId,
       stock: parseInt(quantity),
       status: quantity > 0 ? "In Stock" : "Out of Stock",
-      minStock: product.minStock || 5, // Copy minStock from product
+      minStock: product.minStock || 5,
     });
   }
 
@@ -1327,21 +1333,13 @@ exports.quickAddBySku = async (req, res) => {
   }
 
   // ⭐⭐⭐ REDUCE STOCK FROM PRODUCTS MODEL ⭐⭐⭐
-  // Update the global product stock
-  product.stock -= parseInt(quantity);
-
-  // Update global product status
-  if (product.stock === 0) {
-    product.status = "Out of Stock";
-  } else if (product.stock <= product.minStock) {
-    product.status = "Low Stock";
-  } else {
-    product.status = "In Stock";
-  }
-
   // Save both models
   await inventoryItem.save();
-  await product.save(); // Save the updated product with reduced stock
+  const updatedProduct = await decrementProductStockBySku(
+    sku.trim().toUpperCase(),
+    quantity,
+    { businessId },
+  ); // Save the updated product with reduced stock
 
   await inventoryItem.populate(
     "product",
@@ -1353,8 +1351,8 @@ exports.quickAddBySku = async (req, res) => {
     message: `Added ${quantity} units of "${inventoryItem.product.name}" to store inventory`,
     data: {
       inventoryItem,
-      globalStockRemaining: product.stock,
-      globalStatus: product.status,
+      globalStockRemaining: updatedProduct.stock,
+      globalStatus: updatedProduct.status,
     },
   });
 };

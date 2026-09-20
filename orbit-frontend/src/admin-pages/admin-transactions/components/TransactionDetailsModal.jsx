@@ -143,6 +143,22 @@ const TransactionDetailsModal = ({
     }
   };
 
+  // Map refund reason enum values to readable labels
+  const formatRefundReason = (reason) => {
+    const labels = {
+      customer_return: "Customer returned item(s)",
+      damaged_product: "Damaged product",
+      wrong_item: "Wrong item shipped",
+      duplicate_transaction: "Duplicate transaction",
+      technical_error: "Technical error",
+      customer_cancellation: "Customer changed mind",
+      quality_issue: "Quality issue",
+      missing_items: "Missing items",
+      other: "Other",
+    };
+    return labels[reason] || reason || "Not specified";
+  };
+
   // ✅ ADDED: Format M-Pesa transaction date
   const formatMpesaDate = (dateString) => {
     if (!dateString) return null;
@@ -880,6 +896,105 @@ const TransactionDetailsModal = ({
                       </button>
                     </div>
                   )}
+
+                {/* Refund Details - shown when this transaction has been refunded */}
+                {transaction.refunds?.length > 0 && (
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-sm p-4 border border-blue-200 dark:border-blue-700">
+                    <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2 uppercase tracking-wider">
+                      <RefreshCw className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                      Refund Details
+                    </h4>
+                    <div className="space-y-3">
+                      {transaction.refunds.map((refund, index) => (
+                        <div
+                          key={refund._id || index}
+                          className="bg-white dark:bg-gray-800 rounded p-3 border border-gray-200 dark:border-gray-700 space-y-2"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                              {formatMoney(refund.amount)}
+                            </span>
+                            <span className="text-xs px-2 py-0.5 rounded-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 capitalize">
+                              {refund.method}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                              <span className="text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Refund ID:
+                              </span>
+                              <span className="ml-1 text-gray-900 dark:text-white font-medium">
+                                {refund.refundId}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Date:
+                              </span>
+                              <span className="ml-1 text-gray-900 dark:text-white font-medium">
+                                {formatDate(refund.processedAt)}
+                              </span>
+                            </div>
+                            <div className="col-span-2">
+                              <span className="text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Reason:
+                              </span>
+                              <span className="ml-1 text-gray-900 dark:text-white font-medium">
+                                {formatRefundReason(refund.reason)}
+                                {refund.reason === "other" &&
+                                  refund.reasonText &&
+                                  ` — ${refund.reasonText}`}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Processed By:
+                              </span>
+                              <span className="ml-1 text-gray-900 dark:text-white font-medium">
+                                {refund.processedBy?.name ||
+                                  refund.processedBy?.email ||
+                                  "Unknown"}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Status:
+                              </span>
+                              <span className="ml-1 text-gray-900 dark:text-white font-medium capitalize">
+                                {refund.refundStatus}
+                              </span>
+                            </div>
+                          </div>
+                          {refund.items?.length > 0 && (
+                            <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                              <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Items Refunded:
+                              </span>
+                              <ul className="mt-1 space-y-1">
+                                {refund.items.map((item, i) => (
+                                  <li
+                                    key={item.saleId || i}
+                                    className="text-xs text-gray-700 dark:text-gray-300 flex justify-between"
+                                  >
+                                    <span>
+                                      {item.productName} × {item.quantity}
+                                    </span>
+                                    <span>{formatMoney(item.subtotal)}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          {refund.notes && (
+                            <p className="text-xs text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200 dark:border-gray-700">
+                              {refund.notes}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

@@ -5,7 +5,7 @@ const {
   PlanTemplate,
   Payment,
   Subscription,
-} = require("../../subscription/model/subscription.model");
+} = require("../../subscription/models/subscription.model");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 
@@ -378,6 +378,94 @@ class BusinessService {
       session.endSession();
       throw error;
     }
+  }
+
+  // ── Ecommerce Settings ────────────────────────────────────────────────────────
+  async getEcommerceSettings(businessId) {
+    const business = await Business.findOne({
+      _id: businessId,
+      isDeleted: false,
+    }).select("ecommerce businessName");
+    if (!business) throw new Error("Business not found");
+    return business.ecommerce;
+  }
+
+  async updateEcommerceSettings(businessId, data) {
+    const business = await Business.findOne({
+      _id: businessId,
+      isDeleted: false,
+    });
+    if (!business) throw new Error("Business not found");
+
+    const {
+      enabled,
+      isPublished,
+      storeSlug,
+      storeName,
+      tagline,
+      theme,
+      currency,
+      shippingFee,
+      freeShippingThreshold,
+      taxRate,
+      paymentMethods,
+      contactEmail,
+      contactPhone,
+    } = data;
+
+    if (storeSlug !== undefined && storeSlug !== business.ecommerce.storeSlug) {
+      const normalizedSlug = storeSlug.trim().toLowerCase();
+      const existing = await Business.findOne({
+        "ecommerce.storeSlug": normalizedSlug,
+        _id: { $ne: businessId },
+        isDeleted: false,
+      });
+      if (existing) throw new Error("This store slug is already taken");
+      business.ecommerce.storeSlug = normalizedSlug;
+    }
+
+    if (enabled !== undefined) business.ecommerce.enabled = enabled;
+    if (isPublished !== undefined) business.ecommerce.isPublished = isPublished;
+    if (storeName !== undefined) business.ecommerce.storeName = storeName;
+    if (tagline !== undefined) business.ecommerce.tagline = tagline;
+    if (currency !== undefined) business.ecommerce.currency = currency;
+    if (shippingFee !== undefined) business.ecommerce.shippingFee = shippingFee;
+    if (freeShippingThreshold !== undefined)
+      business.ecommerce.freeShippingThreshold = freeShippingThreshold;
+    if (taxRate !== undefined) business.ecommerce.taxRate = taxRate;
+    if (paymentMethods !== undefined)
+      business.ecommerce.paymentMethods = paymentMethods;
+    if (contactEmail !== undefined) business.ecommerce.contactEmail = contactEmail;
+    if (contactPhone !== undefined) business.ecommerce.contactPhone = contactPhone;
+    if (theme) {
+      if (theme.primaryColor !== undefined)
+        business.ecommerce.theme.primaryColor = theme.primaryColor;
+      if (theme.logoUrl !== undefined) business.ecommerce.theme.logoUrl = theme.logoUrl;
+      if (theme.bannerUrl !== undefined)
+        business.ecommerce.theme.bannerUrl = theme.bannerUrl;
+    }
+
+    if (business.ecommerce.enabled && !business.ecommerce.storeSlug) {
+      throw new Error("A store slug is required before enabling ecommerce");
+    }
+
+    await business.save();
+    return business.ecommerce;
+  }
+
+  // ── Public Storefront Lookup ──────────────────────────────────────────────────
+  async getPublishedBySlug(storeSlug) {
+    const business = await Business.findOne({
+      "ecommerce.storeSlug": storeSlug.trim().toLowerCase(),
+      "ecommerce.enabled": true,
+      "ecommerce.isPublished": true,
+      status: "active",
+      isDeleted: false,
+    }).select(
+      "businessName businessLogo city country ecommerce businessCode",
+    );
+    if (!business) throw new Error("Storefront not found");
+    return business;
   }
 }
 

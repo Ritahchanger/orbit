@@ -22,13 +22,21 @@ const recordMultipleItemsSale = async (req, res) => {
 // Record a sale for specific store
 const recordStoreSale = async (req, res) => {
   const { storeId } = req.params;
-  const result = await salesService.recordSale(req.body, storeId);
+  const businessId = req.businessId;
+  const result = await salesService.recordSale({
+    ...req.body,
+    storeId,
+    businessId,
+  });
   res.status(201).json(result);
 };
 
 // Get daily summary (global or filtered by storeId in query)
 const getDailySummary = async (req, res) => {
+
   const { date, storeId } = req.query;
+   
+  console.log("Business ID in getDailySummary:", req.businessId);
 
   const businessId = req.businessId;
 
@@ -45,9 +53,12 @@ const getStoreDailySummary = async (req, res) => {
   const { storeId } = req.params;
   const { date } = req.query;
 
+  const businessId = req.businessId;
+
   const result = await salesService.getDailySalesSummary(
     date ? new Date(date) : new Date(),
     storeId,
+    businessId,
   );
   res.json(result);
 };

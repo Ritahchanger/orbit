@@ -3,11 +3,15 @@ const router = express.Router();
 const permissionController = require("../controllers/permission.controller");
 const asyncHandler = require("../../middlewares/asyncMiddleware");
 const tokenValidator = require("../../middlewares/refreshTokenValidator");
+const permissionValidator = require("../../middlewares/permissionValidator");
+
 // ==================== PERMISSIONS ROUTES ====================
+
 // Get all available permissions
 router.get(
     "/",
     tokenValidator,
+    permissionValidator(["roles.view"]),
     asyncHandler(permissionController.getPermissions)
 );
 
@@ -15,6 +19,7 @@ router.get(
 router.get(
     "/users/:userId",
     tokenValidator,
+    permissionValidator(["roles.view"]),
     asyncHandler(permissionController.getUserPermissions)
 );
 
@@ -22,6 +27,7 @@ router.get(
 router.post(
     "/users/:userId",
     tokenValidator,
+    permissionValidator(["permissions.manage"]),
     asyncHandler(permissionController.assignPermission)
 );
 
@@ -29,6 +35,7 @@ router.post(
 router.delete(
     "/users/:userId",
     tokenValidator,
+    permissionValidator(["permissions.manage"]),
     asyncHandler(permissionController.revokePermission)
 );
 

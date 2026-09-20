@@ -46,8 +46,6 @@ import ClearCartModal from "./ClearCartItems";
 
 import POSSessionManager from "../POSsessionManager";
 
-import salesApi from "../../services/sales-api";
-
 import CartSummary from "./CartSummary";
 
 import RightPanel from "../components/RightPanel";
@@ -143,18 +141,13 @@ const POSPaymentModal = () => {
   const displayCustomerPhone = currentSession
     ? currentSession.customerPhone
     : customerPhone;
-  const displayPaymentMethod =
-    isMultiSessionMode && currentSession
-      ? currentSession.paymentMethod
-      : paymentMethod;
-  const displayDiscount =
-    isMultiSessionMode && currentSession ? currentSession.discount : discount;
-  const displaySubtotal =
-    isMultiSessionMode && currentSession ? currentSession.subtotal : subtotal;
-  const displayTotal =
-    isMultiSessionMode && currentSession ? currentSession.total : total;
-  const displayNotes =
-    isMultiSessionMode && currentSession ? currentSession.notes : notes;
+  const displayPaymentMethod = currentSession
+    ? currentSession.paymentMethod
+    : paymentMethod;
+  const displayDiscount = currentSession ? currentSession.discount : discount;
+  const displaySubtotal = currentSession ? currentSession.subtotal : subtotal;
+  const displayTotal = currentSession ? currentSession.total : total;
+  const displayNotes = currentSession ? currentSession.notes : notes;
 
   // Handle creating a new session
   const handleCreateNewSession = () => {
@@ -246,7 +239,7 @@ const POSPaymentModal = () => {
       return;
     }
 
-    if (isMultiSessionMode && currentSessionId) {
+    if (currentSessionId) {
       // Add to current session in multi-session mode
       dispatch(
         addToSessionCart({
@@ -351,13 +344,19 @@ const POSPaymentModal = () => {
       // NEW: Shortcut to toggle session manager (Ctrl+M)
       if (e.ctrlKey && e.key === "m" && isPosModalOpen) {
         e.preventDefault();
-        setShowSessionManager(!showSessionManager);
+        setShowSessionManager((prev) => !prev);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isPosModalOpen, displayCart.length, customerName, dispatch]);
+  }, [
+    isPosModalOpen,
+    displayCart.length,
+    customerName,
+    dispatch,
+    handleCreateNewSession,
+  ]);
 
   // Click outside to close search results
   useEffect(() => {
@@ -390,7 +389,7 @@ const POSPaymentModal = () => {
   };
 
   const handleIncrement = (productId) => {
-    if (isMultiSessionMode && currentSessionId) {
+    if (currentSessionId) {
       const item = displayCart.find((item) => item.product._id === productId);
       if (item) {
         dispatch(
@@ -415,7 +414,7 @@ const POSPaymentModal = () => {
   };
 
   const handleDecrement = (productId) => {
-    if (isMultiSessionMode && currentSessionId) {
+    if (currentSessionId) {
       const item = displayCart.find((item) => item.product._id === productId);
       if (item && item.quantity > 1) {
         dispatch(
@@ -442,7 +441,7 @@ const POSPaymentModal = () => {
   const handleQuantityChange = (productId, value) => {
     const quantity = parseInt(value) || 0;
     if (quantity >= 0) {
-      if (isMultiSessionMode && currentSessionId) {
+      if (currentSessionId) {
         dispatch(
           updateSessionCartItemQuantity({
             sessionId: currentSessionId,
@@ -458,7 +457,7 @@ const POSPaymentModal = () => {
 
   const handleRemoveItem = (productId) => {
     if (window.confirm("Remove item from cart?")) {
-      if (isMultiSessionMode && currentSessionId) {
+      if (currentSessionId) {
         dispatch(
           removeFromSessionCart({
             sessionId: currentSessionId,
@@ -473,41 +472,10 @@ const POSPaymentModal = () => {
 
   const handleMpesaSuccess = async (paymentData) => {
     try {
-      // First, record the sale
-      const saleData = {
-        storeId: currentStore?._id,
-        customerName: displayCustomerName.trim(),
-        customerPhone:
-          paymentData.saleData?.customerPhone || displayCustomerPhone,
-        paymentMethod: "mpesa",
-        discount: 0,
-        tax: 0,
-        soldBy: user.employeeId || user.id || user._id,
-        items: displayCart.map((item) => ({
-          sku: item.product.sku,
-          quantity: item.quantity,
-          unitPrice: item.unitPrice || item.product.price || 0,
-          discount: 0,
-          profit:
-            (item.unitPrice || item.product.price || 0) -
-            (item.product.costPrice || 0),
-        })),
-      };
-
-      // Record the sale
-      const saleResponse = await salesApi.recordMultipleSale(saleData);
-
-      // Extract sale IDs
-      const saleIds = saleResponse.data.sales.map((sale) => sale._id);
-
-      // Complete the M-Pesa transaction
-      await salesApi.completeTransaction({
-        transactionId: paymentData.transactionId,
-        saleIds: saleIds,
-        transactionSummary: paymentData.transactionSummary,
-        clientId: wsClientId,
-      });
-
+      // Sales are already recorded server-side by MpesaPaymentModal's call to
+      // /mpesa/complete (with the cart items) before onSuccess fires here.
+      // Do NOT record the sale again here — that would double-create Sale
+      // docs and double-decrement stock for a single M-Pesa payment.
       setLastTransaction({
         transactionId: paymentData.transactionId,
         timestamp: new Date().toISOString(),
@@ -530,7 +498,7 @@ const POSPaymentModal = () => {
       );
 
       // If in multi-session mode, close the current session
-      if (isMultiSessionMode && currentSessionId) {
+      if (currentSessionId) {
         dispatch(closeSession(currentSessionId));
         toast.success("Session completed");
       } else {
@@ -681,7 +649,7 @@ const POSPaymentModal = () => {
           });
 
           // If in multi-session mode, close current session
-          if (isMultiSessionMode && currentSessionId) {
+          if (currentSessionId) {
             dispatch(closeSession(currentSessionId));
             toast.success(
               `Session ${currentSession?.sessionNumber} completed`,
@@ -905,7 +873,7 @@ const POSPaymentModal = () => {
                 {displayCart.length > 0 && (
                   <button
                     onClick={() => {
-                      if (isMultiSessionMode && currentSessionId) {
+                      if (currentSessionId) {
                         dispatch(clearSessionCart(currentSessionId));
                       } else {
                         setShowClearCartModal(true);
@@ -932,8 +900,7 @@ const POSPaymentModal = () => {
               {displayCart.length > 0 && (
                 <CartSummary
                   displayDiscount={displayDiscount}
-                  displaySubtotal={displayTotal}
-                  isMultiSessionMode={isMultiSessionMode}
+                  displaySubtotal={displaySubtotal}
                   currentSessionId={currentSessionId}
                   setSessionDiscount={setSessionDiscount}
                   setDiscount={setDiscount}
@@ -946,9 +913,9 @@ const POSPaymentModal = () => {
             {/* Right Panel - Customer & Payment */}
             <RightPanel
               displayCustomerName={displayCustomerName}
-              isMultiSessionMode={isMultiSessionMode}
               currentSessionId={currentSessionId}
               displayCustomerPhone={displayCustomerPhone}
+              displayCart={displayCart}
               setSessionCustomerPhone={setSessionCustomerPhone}
               setSessionCustomerName={setSessionCustomerName}
               setShowCashModal={setShowCashModal}
@@ -1019,6 +986,7 @@ const POSPaymentModal = () => {
         onConfirm={handleCashPaymentConfirm}
         totalAmount={displayTotal}
         formatCurrency={formatCurrency}
+        isSubmitting={isProcessingPayment}
       />
     </div>
   );

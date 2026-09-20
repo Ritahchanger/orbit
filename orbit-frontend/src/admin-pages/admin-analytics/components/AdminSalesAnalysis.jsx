@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react"
+import { useState, useMemo } from "react"
+import { useFinancialSummary } from "../../hooks/reports.hooks"
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -56,76 +57,42 @@ ChartJS.register(
 
 const AdminSalesAnalysis = () => {
     const [timePeriod, setTimePeriod] = useState('month')
-    const [data, setData] = useState(null)
-    const [loading, setLoading] = useState(true)
 
-    // This would come from your API hook
-    useEffect(() => {
-        // Simulate API call
-        setTimeout(() => {
-            setData({
-                period: "month",
-                dateRange: {
-                    startDate: "2025-11-18T07:25:54.139Z",
-                    endDate: "2025-12-18T07:25:54.139Z"
-                },
-                dailyBreakdown: [
-                    {
-                        _id: "2025-12-16",
-                        dailyRevenue: 465570,
-                        dailyProfit: 399800,
-                        transactionCount: 6,
-                        itemsSold: 6
-                    },
-                    {
-                        _id: "2025-12-17",
-                        dailyRevenue: 3529.98,
-                        dailyProfit: 1529.98,
-                        transactionCount: 3,
-                        itemsSold: 3
-                    },
-                    {
-                        _id: "2025-12-18",
-                        dailyRevenue: 160000,
-                        dailyProfit: 136000,
-                        transactionCount: 2,
-                        itemsSold: 3
-                    }
-                ],
-                paymentMethodBreakdown: [
-                    {
-                        _id: "paybill",
-                        total: 80000,
-                        count: 1
-                    },
-                    {
-                        _id: "cash",
-                        total: 242570,
-                        count: 4
-                    },
-                    {
-                        _id: "card",
-                        total: 306129.99,
-                        count: 5
-                    },
-                    {
-                        _id: "installment",
-                        total: 399.99,
-                        count: 1
-                    }
-                ],
-                overallSummary: {
-                    _id: null,
-                    totalRevenue: 629099.98,
-                    totalProfit: 537329.98,
-                    totalTransactions: 11,
-                    totalItemsSold: 12,
-                    averageTransactionValue: 57190.90727272727
-                }
-            })
-            setLoading(false)
-        }, 1000)
-    }, [])
+    const { data: apiData, isLoading: loading, refetch } = useFinancialSummary({})
+
+    // Normalise API response to the shape used by this component's rendering code
+    const data = useMemo(() => {
+        if (!apiData?.data) return null
+        const d = apiData.data
+        const now = new Date()
+        const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+        return {
+            period: timePeriod,
+            dateRange: {
+                startDate: thirtyDaysAgo.toISOString(),
+                endDate: now.toISOString()
+            },
+            dailyBreakdown: (d.dailyBreakdown || []).map(day => ({
+                _id: day._id,
+                dailyRevenue: day.revenue || 0,
+                dailyProfit: day.profit || 0,
+                transactionCount: day.transactions || 0,
+                itemsSold: day.itemsSold || 0
+            })),
+            paymentMethodBreakdown: (d.paymentMethods || []).map(pm => ({
+                _id: pm._id,
+                total: pm.amount || 0,
+                count: pm.count || 0
+            })),
+            overallSummary: {
+                totalRevenue: d.summary?.totalRevenue || 0,
+                totalProfit: d.summary?.totalProfit || 0,
+                totalTransactions: d.summary?.totalTransactions || 0,
+                totalItemsSold: d.summary?.totalItemsSold || 0,
+                averageTransactionValue: d.summary?.avgTransactionValue || 0
+            }
+        }
+    }, [apiData, timePeriod])
 
   
 
@@ -643,7 +610,7 @@ const AdminSalesAnalysis = () => {
                                 <Download className="h-4 w-4 text-gray-400 group-hover:text-purple-400" />
                             </div>
                         </button>
-                        <button className="w-full text-left p-3 bg-gray-900/30 hover:bg-gray-800/50 rounded-sm transition-colors group">
+                        <button onClick={refetch} className="w-full text-left p-3 bg-gray-900/30 hover:bg-gray-800/50 rounded-sm transition-colors group">
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="text-sm font-medium text-white group-hover:text-purple-300">Refresh Data</p>

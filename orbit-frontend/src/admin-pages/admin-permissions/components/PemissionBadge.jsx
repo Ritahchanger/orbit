@@ -117,15 +117,13 @@ const PermissionBadge = ({ permission, scope, store, onRevoke, showActions = tru
             {showActions && onRevoke && (
                 <div className="relative">
                     {!showConfirm ? (
-                        <>
-                            {/* <button
-                                onClick={() => setShowConfirm(true)}
-                                className="p-1 hover:bg-red-500/10 rounded transition-colors"
-                                title="Revoke Permission"
-                            >
-                                <Trash2 size={14} className="text-red-400" />
-                            </button> */}
-                        </>
+                        <button
+                            onClick={() => setShowConfirm(true)}
+                            className="p-1 hover:bg-red-500/10 rounded transition-colors"
+                            title="Revoke Permission"
+                        >
+                            <Trash2 size={14} className="text-red-400" />
+                        </button>
                     ) : (
                         <div className="flex items-center space-x-1">
                             <button

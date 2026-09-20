@@ -72,8 +72,10 @@ const getAllTransactions = async (req, res) => {
 const getTransactionById = async (req, res) => {
   const { transactionId } = req.params;
 
-  const transaction =
-    await transactionService.getTransactionById(transactionId);
+  const transaction = await transactionService.getTransactionById(
+    transactionId,
+    req.businessId,
+  );
 
   if (!transaction) {
     return res.status(404).json({
@@ -103,6 +105,7 @@ const getStoreTransactions = async (req, res) => {
 
   const result = await transactionService.getStoreTransactions({
     storeId,
+    businessId: req.businessId,
     page: parseInt(page),
     limit: parseInt(limit),
     startDate,

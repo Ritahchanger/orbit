@@ -65,6 +65,16 @@
 
     const dailyItemsRef = useRef(null);
 
+    // user.assignedStore comes back from /users/me populated as a full
+    // {_id, name, ...} object, not a plain id string — normalize before
+    // comparing against a store's _id.
+    const getAssignedStoreId = (assignedStore) => {
+      if (!assignedStore) return null;
+      return typeof assignedStore === "string"
+        ? assignedStore
+        : assignedStore._id;
+    };
+
     const accessibleStores = useMemo(() => {
       if (!stores || stores.length === 0) return [];
 
@@ -72,8 +82,10 @@
         return stores;
       }
 
+      const assignedStoreId = getAssignedStoreId(user?.assignedStore);
+
       const filteredStores = stores.filter((store) => {
-        if (user?.assignedStore && store._id === user.assignedStore) {
+        if (assignedStoreId && store._id === assignedStoreId) {
           return true;
         }
 
@@ -91,8 +103,9 @@
     ]);
 
     const primaryStore = useMemo(() => {
-      if (user?.assignedStore && stores && stores.length > 0) {
-        const foundStore = stores.find((s) => s._id === user.assignedStore);
+      const assignedStoreId = getAssignedStoreId(user?.assignedStore);
+      if (assignedStoreId && stores && stores.length > 0) {
+        const foundStore = stores.find((s) => s._id === assignedStoreId);
         if (foundStore) {
           return foundStore;
         }

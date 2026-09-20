@@ -1,5 +1,10 @@
-import { X, Globe, Store } from "lucide-react"
+import { X, Globe, Store } from "lucide-react";
+import { useStores } from "../../hooks/store-hook";
+
 const AssignPermissionModal = ({ setShowAssignModal, selectedUser, permissionData, setPermissionData, allPermissions, handleAssignPermission, assignMutation }) => {
+    const { data: storesData, isLoading: storesLoading } = useStores({}, { enabled: permissionData.scope === 'store' });
+    const stores = storesData?.data?.stores || storesData?.data || [];
+
     return (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 border border-gray-700 rounded-sm p-6 max-w-md w-full">
@@ -44,24 +49,24 @@ const AssignPermissionModal = ({ setShowAssignModal, selectedUser, permissionDat
                     <div>
                         <label className="block text-sm text-gray-400 mb-2">Scope</label>
                         <div className="flex space-x-4">
-                            <label className="flex items-center">
+                            <label className="flex items-center cursor-pointer">
                                 <input
                                     type="radio"
                                     value="global"
                                     checked={permissionData.scope === 'global'}
-                                    onChange={(e) => setPermissionData(prev => ({ ...prev, scope: e.target.value }))}
+                                    onChange={(e) => setPermissionData(prev => ({ ...prev, scope: e.target.value, storeId: '' }))}
                                     className="mr-2"
                                 />
                                 <span className="flex items-center">
                                     <Globe size={14} className="mr-1" /> Global
                                 </span>
                             </label>
-                            <label className="flex items-center">
+                            <label className="flex items-center cursor-pointer">
                                 <input
                                     type="radio"
                                     value="store"
                                     checked={permissionData.scope === 'store'}
-                                    onChange={(e) => setPermissionData(prev => ({ ...prev, scope: e.target.value }))}
+                                    onChange={(e) => setPermissionData(prev => ({ ...prev, scope: e.target.value, storeId: '' }))}
                                     className="mr-2"
                                 />
                                 <span className="flex items-center">
@@ -73,14 +78,25 @@ const AssignPermissionModal = ({ setShowAssignModal, selectedUser, permissionDat
 
                     {permissionData.scope === 'store' && (
                         <div>
-                            <label className="block text-sm text-gray-400 mb-2">Store ID</label>
-                            <input
-                                type="text"
-                                value={permissionData.storeId}
-                                onChange={(e) => setPermissionData(prev => ({ ...prev, storeId: e.target.value }))}
-                                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-sm text-white"
-                                placeholder="Enter store ID"
-                            />
+                            <label className="block text-sm text-gray-400 mb-2">Store</label>
+                            {storesLoading ? (
+                                <div className="w-full h-10 bg-gray-700 rounded-sm animate-pulse" />
+                            ) : stores.length === 0 ? (
+                                <p className="text-sm text-gray-400 italic">No stores found</p>
+                            ) : (
+                                <select
+                                    value={permissionData.storeId}
+                                    onChange={(e) => setPermissionData(prev => ({ ...prev, storeId: e.target.value }))}
+                                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <option value="">Select a store</option>
+                                    {stores.map(store => (
+                                        <option key={store._id} value={store._id}>
+                                            {store.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
                         </div>
                     )}
                 </div>
@@ -102,7 +118,7 @@ const AssignPermissionModal = ({ setShowAssignModal, selectedUser, permissionDat
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default AssignPermissionModal
+export default AssignPermissionModal;

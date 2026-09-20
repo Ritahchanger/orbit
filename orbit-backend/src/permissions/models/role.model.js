@@ -7,8 +7,7 @@ const RoleSchema = new mongoose.Schema({
         required: [true, "Role name is required"],
         unique: true,
         trim: true,
-        lowercase: true,
-        enum: ["superadmin", "admin", "manager", "cashier", "staff"]
+        lowercase: true
     },
     description: {
         type: String,
@@ -20,6 +19,10 @@ const RoleSchema = new mongoose.Schema({
     isSystemRole: {
         type: Boolean,
         default: false
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     },
     canAssign: {
         type: Boolean,

@@ -24,7 +24,7 @@ Router.post("/resend", asyncWrapper(OTPController.resendOTP));
 
 Router.get("/status", asyncWrapper(OTPController.checkOTPStatus));
 
-Router.post("/reset-password", ResetPasswordController.resetPassword);
+Router.post("/reset-password", asyncWrapper(ResetPasswordController.resetPassword));
 
 Router.post(
   "/validate-reset-token",

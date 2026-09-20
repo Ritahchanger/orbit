@@ -44,20 +44,37 @@ app.use(cookieParser());
 
 app.use(logger);
 
+const staticAllowedOrigins = [
+  "https://megagamers254.com",
+  "https://www.megagamers254.com",
+  "https://api.megagamers254.com",
+  "http://megagamers254.com",
+  "http://31.97.197.116",
+  "https://31.97.197.116",
+  "http://www.megagamers254.com",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:3000",
+];
+
 app.use(
   cors({
-    origin: [
-      "https://megagamers254.com",
-      "https://www.megagamers254.com",
-      "https://api.megagamers254.com",
-      "http://megagamers254.com",
-      "http://31.97.197.116",
-      "https://31.97.197.116",
-      "http://www.megagamers254.com",
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:3000",
-    ],
+    origin: (origin, callback) => {
+      // No Origin header = non-browser request (curl, server-to-server) — allow.
+      if (!origin) return callback(null, true);
+
+      if (staticAllowedOrigins.includes(origin)) return callback(null, true);
+
+      // Any subdomain of localhost, any port — each business's storefront is
+      // exercised locally as <storeSlug>.localhost:<port>, and slugs are
+      // dynamic (one business per slug, many businesses), so a fixed
+      // whitelist entry per business isn't workable.
+      if (/^https?:\/\/[a-z0-9-]+\.localhost(:\d+)?$/i.test(origin)) {
+        return callback(null, true);
+      }
+
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "x-request-time"],
@@ -81,15 +98,13 @@ app.get("/", (req, res) => {
   res.send(html);
 });
 
-// app.use("/api/users", require("./user/users.route"));
-
 app.use("/uploads", express.static(path.join(__dirname, "../../uploads")));
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use("/api/v1/quotes", require("./quotation/quotation.route"));
+app.use("/api/v1/quotes", require("./quotation/quotation.routes"));
 
-app.use("/api/v1/newsletters", require("./newsletters/newsletters.route"));
+app.use("/api/v1/newsletters", require("./newsletters/newsletters.routes"));
 
 app.use(
   "/api/v1/products/related",
@@ -112,9 +127,9 @@ app.use("/api/v1/stores", require("./stores/store.routes"));
 
 app.use("/api/v1/blogs", require("./blogs/blogs.routes"));
 
-app.use("/api/v1/auth", require("./auth/auth.route"));
+app.use("/api/v1/auth", require("./auth/auth.routes"));
 
-app.use("/api/v1/users", require("./user/users.route"));
+app.use("/api/v1/users", require("./user/users.routes"));
 
 app.use("/api/v1/sales", require("./sales/sales.routes"));
 
@@ -136,11 +151,11 @@ app.use("/api/v1/roles", require("./permissions/routes/role.routes"));
 
 app.use("/api/v1/reports", require("./reports/reports.routes"));
 
-app.use("/api/v1/transactions", require("./sales/transaction-delete.route"));
+app.use("/api/v1/transactions", require("./sales/transaction-delete.routes"));
 
-app.use("/api/v1/transactions", require("./sales/transaction.route"));
+app.use("/api/v1/transactions", require("./sales/transaction.routes"));
 
-app.use("/api/v1/store-comparison", require("./stores/store-comparison.route"));
+app.use("/api/v1/store-comparison", require("./stores/store-comparison.routes"));
 
 app.use("/api/v1/mpesa", require("./sales/mpesa-routes"));
 
@@ -166,6 +181,12 @@ app.use(
   "/api/v1/stock-transfers",
   require("./stock-transfer/stock-transfer.routes"),
 );
+
+app.use("/api/v1/orders", require("./orders/order.routes"));
+
+app.use("/api/v1/invoices", require("./invoices/invoice.routes"));
+
+app.use("/api/v1/storefront", require("./storefront/storefront.routes"));
 
 app.use(errorHandler);
 

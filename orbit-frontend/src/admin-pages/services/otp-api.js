@@ -13,8 +13,8 @@ const otpApi = {
     return response.data;
   },
   // ============ PASSWORD RESET OTP ============
-  sendPasswordResetOTP: async (email) => {
-    const response = await api.post("/otp/send-password-reset", { email });
+  sendPasswordResetOTP: async (data) => {
+    const response = await api.post("/otp/send-password-reset", data);
     return response.data;
   },
   verifyPasswordResetOTP: async (resetData) => {

@@ -43,6 +43,8 @@ export const authApiService = {
         );
     },
 
+    impersonateUser: (userId) => api.post(`/auth/impersonate/${userId}`),
+
     // Utility method to check if user is authenticated
     checkAuthStatus: async () => {
         try {

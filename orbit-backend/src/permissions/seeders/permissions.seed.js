@@ -17,6 +17,10 @@ const permissions = [
     { key: "transactions.create", module: "transactions", description: "Create new transactions" },
     { key: "transactions.update", module: "transactions", description: "Update transaction details" },
     { key: "transactions.delete", module: "transactions", description: "Delete transactions" },
+    { key: "transactions.delete.permanent", module: "transactions", description: "Permanently delete transactions (irreversible)" },
+    { key: "transactions.view.deleted", module: "transactions", description: "View soft-deleted transactions" },
+    { key: "transactions.view.stats", module: "transactions", description: "View transaction deletion statistics" },
+    { key: "transactions.restore", module: "transactions", description: "Restore soft-deleted transactions" },
     { key: "transactions.approve", module: "transactions", description: "Approve transactions" },
     { key: "transactions.reverse", module: "transactions", description: "Reverse transactions" },
     { key: "transactions.refund", module: "transactions", description: "Process transaction refunds" },
@@ -32,12 +36,14 @@ const permissions = [
     { key: "products.create", module: "products", description: "Add new products" },
     { key: "products.update", module: "products", description: "Update product details" },
     { key: "products.delete", module: "products", description: "Delete products" },
-    
+    { key: "products.view_cost", module: "products", description: "View product cost prices" },
+
     // Stores Module
     { key: "stores.view", module: "stores", description: "View stores" },
     { key: "stores.create", module: "stores", description: "Create new stores" },
     { key: "stores.update", module: "stores", description: "Update store details" },
     { key: "stores.delete", module: "stores", description: "Delete a store" },
+    { key: "stores.manage", module: "stores", description: "Full store management rights" },
     
     // Workers Module
     { key: "workers.view", module: "workers", description: "View workers/employees" },
@@ -86,6 +92,10 @@ const permissions = [
     { key: "users.create", module: "users", description: "Create users" },
     { key: "users.update", module: "users", description: "Update users" },
     { key: "users.delete", module: "users", description: "Delete users" },
+    { key: "users.export", module: "users", description: "Export user records" },
+    { key: "users.change_role", module: "users", description: "Change a user's role" },
+    { key: "users.assign_store", module: "users", description: "Assign a user to a store" },
+    { key: "users.impersonate", module: "users", description: "Sign in as another user for support/debugging" },
     
     // Profile Module
     { key: "profile.view", module: "profile", description: "View user profile" },
@@ -107,6 +117,9 @@ const permissions = [
     // System Module
     { key: "settings.manage", module: "system", description: "Manage system settings" },
     { key: "database.manage", module: "system", description: "Manage database operations" },
+    { key: "admin.cleanup", module: "system", description: "Run system cleanup tasks (superadmin only)" },
+    { key: "logs.view", module: "system", description: "View system and admin audit logs" },
+    { key: "logs.delete", module: "system", description: "Delete system logs" },
     
     // Payments Module
     { key: "payments.manage", module: "payments", description: "Full payment management rights" },
@@ -120,12 +133,22 @@ const permissions = [
     { key: "consultations.create", module: "consultations", description: "Create consultations" },
     { key: "consultations.update", module: "consultations", description: "Update consultation details" },
     { key: "consultations.delete", module: "consultations", description: "Delete consultations" },
+    { key: "consultations.export", module: "consultations", description: "Export consultation records" },
+    { key: "consultation_types.manage", module: "consultations", description: "Manage consultation types/categories" },
     
     // Newsletter Module
     { key: "newsletter.manage", module: "newsletter", description: "Full newsletter management rights" },
     { key: "newsletter.view", module: "newsletter", description: "View newsletter subscriptions" },
     { key: "newsletter.create", module: "newsletter", description: "Create newsletter campaigns" },
     { key: "newsletter.send", module: "newsletter", description: "Send newsletter emails" },
+
+    // Invoices Module
+    { key: "invoices.view", module: "invoices", description: "View invoices" },
+    { key: "invoices.create", module: "invoices", description: "Create standalone invoices" },
+    { key: "invoices.update", module: "invoices", description: "Update invoice details and status" },
+    { key: "invoices.delete", module: "invoices", description: "Delete/void invoices" },
+    { key: "invoices.generate", module: "invoices", description: "Generate an invoice from a sale or order" },
+    { key: "invoices.export", module: "invoices", description: "Export invoice records" },
 ];
 
 const seedPermissions = async () => {

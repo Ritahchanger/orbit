@@ -2,13 +2,15 @@
 const Log = require("../models/logs.model");
 
 const recordAdminLog = (action = "generic") => {
+
   return (req, res, next) => {
+    
     const startTime = Date.now();
 
-
     // Only record for admins
-    const isAdmin =
-      req.user?.role === "admin" || "superadmin" || "manager" || "cashier";
+    const isAdmin = ["admin", "superadmin", "manager", "cashier"].includes(
+      req.user?.role,
+    );
 
     if (!isAdmin) return next();
 

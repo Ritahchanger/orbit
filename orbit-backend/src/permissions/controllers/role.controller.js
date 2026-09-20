@@ -262,6 +262,162 @@ async function validatePermissions(req, res) {
     });
 }
 
+/**
+ * Bulk update a role's permissions
+ * (relocated from routes/role.routes.js — behavior unchanged)
+ */
+async function bulkUpdateRolePermissions(req, res) {
+    const { id } = req.params;
+    const { permissions } = req.body;
+
+    if (!permissions || !Array.isArray(permissions)) {
+        return res.status(400).json({
+            success: false,
+            message: "Permissions array is required",
+        });
+    }
+
+    // First validate all permissions
+    await roleService.validatePermissions(permissions);
+
+    // Update role with new permissions
+    const role = await roleService.updateRole(id, { permissions });
+
+    return res.status(200).json({
+        success: true,
+        message: "Role permissions updated successfully",
+        data: role,
+    });
+}
+
+/**
+ * Clone an existing role under a new name
+ * (relocated from routes/role.routes.js — behavior unchanged)
+ */
+async function cloneRole(req, res) {
+    const { id } = req.params;
+    const { name: newRoleName, description: newDescription } = req.body;
+
+    if (!newRoleName) {
+        return res.status(400).json({
+            success: false,
+            message: "New role name is required",
+        });
+    }
+
+    // Get existing role
+    const existingRole = await roleService.getRoleById(id);
+
+    // Create new role with same permissions
+    const newRole = await roleService.createRole({
+        name: newRoleName,
+        description: newDescription || `Cloned from ${existingRole.displayName}`,
+        permissions: existingRole.permissions,
+        level: existingRole.level,
+        canAssign: existingRole.canAssign,
+    });
+
+    return res.status(201).json({
+        success: true,
+        message: "Role cloned successfully",
+        data: newRole,
+    });
+}
+
+/**
+ * Export all roles to JSON
+ * (relocated from routes/role.routes.js — behavior unchanged)
+ */
+async function exportRoles(req, res) {
+    const roles = await roleService.getAllRoles({ includeSystemRoles: true });
+
+    // Set headers for file download
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader(
+        "Content-Disposition",
+        "attachment; filename=roles-export.json",
+    );
+
+    return res.json({
+        success: true,
+        timestamp: new Date().toISOString(),
+        count: roles.length,
+        data: roles,
+    });
+}
+
+/**
+ * Import roles from JSON
+ * (relocated from routes/role.routes.js. Uses findRoleByName() — a
+ * non-throwing lookup — instead of getRoleByName(), which threw on a miss
+ * and made the "create new role" branch below unreachable.)
+ */
+async function importRoles(req, res) {
+    const { roles } = req.body;
+
+    if (!roles || !Array.isArray(roles)) {
+        return res.status(400).json({
+            success: false,
+            message: "Roles array is required",
+        });
+    }
+
+    const results = [];
+
+    for (const roleData of roles) {
+        try {
+            // Check if role already exists (non-throwing lookup — getRoleByName
+            // throws on a miss, which made the "create new role" branch below
+            // unreachable; every not-yet-existing role landed in the "failed"
+            // bucket instead of being created)
+            const existingRole = await roleService.findRoleByName(
+                roleData.name.toLowerCase(),
+            );
+
+            if (existingRole) {
+                // Update existing role
+                const updatedRole = await roleService.updateRole(
+                    existingRole._id,
+                    roleData,
+                );
+                results.push({
+                    name: roleData.name,
+                    action: "updated",
+                    status: "success",
+                    data: updatedRole,
+                });
+            } else {
+                // Create new role
+                const newRole = await roleService.createRole(roleData);
+                results.push({
+                    name: roleData.name,
+                    action: "created",
+                    status: "success",
+                    data: newRole,
+                });
+            }
+        } catch (error) {
+            results.push({
+                name: roleData.name,
+                action: "failed",
+                status: "error",
+                error: error.message,
+            });
+        }
+    }
+
+    return res.status(200).json({
+        success: true,
+        message: "Roles import completed",
+        results: results,
+        summary: {
+            total: roles.length,
+            success: results.filter((r) => r.status === "success").length,
+            failed: results.filter((r) => r.status === "error").length,
+        },
+    });
+}
+
 module.exports = {
     getRoles,
     getRoleById,
@@ -277,5 +433,9 @@ module.exports = {
     syncPermissions,
     seedDefaultRoles,
     getRoleStatistics,
-    validatePermissions
+    validatePermissions,
+    bulkUpdateRolePermissions,
+    cloneRole,
+    exportRoles,
+    importRoles
 };

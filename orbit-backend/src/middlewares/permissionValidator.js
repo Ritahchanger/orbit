@@ -1,10 +1,9 @@
 // middlewares/permissionValidator.js
-const { resolveUserPermissions } = require("../permissions/services/permission.service");
+const { findRoleByName, resolveUserPermissions } = require("../permissions");
 
 const permissionValidator = (requiredPermissions = []) => {
     return async (req, res, next) => {
         try {
-            // Get user from request (set by tokenValidator)
             const user = req.user;
 
             if (!user) {
@@ -14,27 +13,33 @@ const permissionValidator = (requiredPermissions = []) => {
                 });
             }
 
-            // Superadmin has all permissions
-            if (user.role === 'superadmin' || user.role === 'admin' || user.role === 'manager' || user.role === 'cashier' || user.role === 'staff') {
+            // Only superadmin bypasses permission checks unconditionally
+            if (user.role === "superadmin") {
                 return next();
             }
 
+            // No restrictions required — allow through
+            if (requiredPermissions.length === 0) {
+                return next();
+            }
 
-            // Get user's permissions
-            const userPermissions = await resolveUserPermissions(user._id);
-            const permissionKeys = userPermissions.map(p => p.key);
+            // Fetch the user's role permissions from DB
+            const role = await findRoleByName(user.role);
+            const rolePermissions = role ? role.permissions : [];
 
-            // Check if user has all required permissions
-            const hasAllPermissions = requiredPermissions.every(perm =>
-                permissionKeys.includes(perm)
-            );
+            // Merge in any user-specific permission overrides
+            const userSpecific = await resolveUserPermissions(user._id);
+            const userSpecificKeys = userSpecific.map(p => p.key);
 
-            if (!hasAllPermissions) {
+            const allPermissions = [...new Set([...rolePermissions, ...userSpecificKeys])];
+
+            const hasAll = requiredPermissions.every(perm => allPermissions.includes(perm));
+
+            if (!hasAll) {
                 return res.status(403).json({
                     success: false,
                     message: "Insufficient permissions",
-                    required: requiredPermissions,
-                    has: permissionKeys
+                    required: requiredPermissions
                 });
             }
 

@@ -44,6 +44,7 @@ export const getAllowedEcommerceNavItems = (userRole) => {
       type: "dropdown",
       items: [
         { name: "Orders", path: "/admin/ecommerce/orders", icon: ShoppingBag },
+        { name: "Invoices", path: "/admin/ecommerce/invoices", icon: FileText },
         { name: "Transactions", path: "/admin/ecommerce/transactions", icon: CreditCard },
         { name: "Shipping", path: "/admin/ecommerce/shipping", icon: Truck },
         { name: "Refunds", path: "/admin/ecommerce/refunds", icon: FileText },

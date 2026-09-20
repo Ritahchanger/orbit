@@ -26,7 +26,7 @@ const AdminGlobalButtons = ({
             {/* Calculator Button - Bottom Left */}
             <button
                 onClick={handleCalculatorOpen}
-                className="fixed left-4 bottom-4 z-40 p-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full shadow-lg hover:shadow-xl shadow-blue-500/25 dark:shadow-blue-500/50 transition-all duration-300 hover:scale-110 group"
+                className="hidden md:block fixed left-4 bottom-4 z-40 p-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full shadow-lg hover:shadow-xl shadow-blue-500/25 dark:shadow-blue-500/50 transition-all duration-300 hover:scale-110 group"
                 aria-label="Open calculator"
                 title="Quick Calculator"
             >
@@ -37,7 +37,7 @@ const AdminGlobalButtons = ({
             </button>
 
             {/* Navigation Buttons Container - Bottom Right */}
-            <div className="fixed right-4 bottom-4 z-40 flex flex-col gap-3">
+            <div className="hidden md:flex fixed right-4 bottom-4 z-40 flex-col gap-3">
                 {/* Scroll to Top Button */}
                 <button
                     onClick={handleScrollToTop}

@@ -144,7 +144,7 @@ export const inventoryApi = {
    */
   manageInventory: async (storeId, items, operation = "add") => {
     try {
-      const response = await api.post(`/${storeId}/inventory/manage`, {
+      const response = await api.post(`/stores-inventory/${storeId}/inventory/manage`, {
         items: Array.isArray(items) ? items : [items],
         operation,
       });
@@ -198,7 +198,7 @@ export const inventoryApi = {
   updateInventoryItem: async (inventoryId, updateData) => {
     try {
       const response = await api.put(
-        `/stores-inventory/${inventoryId}`,
+        `/stores-inventory/inventory/${inventoryId}`,
         updateData,
       );
       return response.data;
@@ -238,7 +238,7 @@ export const inventoryApi = {
    */
   removeFromInventory: async (inventoryId) => {
     try {
-      const response = await api.delete(`/inventory/${inventoryId}`);
+      const response = await api.delete(`/stores-inventory/inventory/${inventoryId}`);
       return response.data;
     } catch (error) {
       throw new Error(
@@ -255,7 +255,7 @@ export const inventoryApi = {
         throw new Error("No items selected for deletion");
       }
 
-      const response = await api.delete(`/${storeId}/inventory`, {
+      const response = await api.delete(`/stores-inventory/${storeId}/inventory`, {
         data: {
           inventoryIds,
           force: options.force || false,
@@ -291,28 +291,6 @@ export const inventoryApi = {
   },
 
   /**
-   * Legacy method - kept for backward compatibility
-   * @deprecated Use deleteInventory(storeId, null, inventoryId) instead
-   */
-  removeFromStoreInventory: async (storeId, inventoryId) => {
-    console.warn(
-      "Deprecated: Use deleteInventory(storeId, null, inventoryId) instead",
-    );
-    return inventoryApi.deleteInventory(storeId, null, inventoryId);
-  },
-
-  /**
-   * Legacy method - kept for backward compatibility
-   * @deprecated Use deleteInventory(storeId, inventoryIds) instead
-   */
-  bulkDeleteInventory: async (storeId, inventoryIds) => {
-    console.warn(
-      "Deprecated: Use deleteInventory(storeId, inventoryIds) instead",
-    );
-    return inventoryApi.deleteInventory(storeId, inventoryIds);
-  },
-
-  /**
    * Clear ALL inventory for a store (destructive — use with caution)
    * POST /:storeId/inventory/clear
    *
@@ -322,7 +300,7 @@ export const inventoryApi = {
    */
   clearStoreInventory: async (storeId, confirmation = "", force = false) => {
     try {
-      const response = await api.post(`/${storeId}/inventory/clear`, {
+      const response = await api.post(`/stores-inventory/${storeId}/inventory/clear`, {
         confirmation,
         force,
       });
@@ -366,7 +344,7 @@ export const inventoryApi = {
   recordSale: async (inventoryId, saleData) => {
     try {
       const response = await api.post(
-        `/stores-inventory/${inventoryId}/sale`,
+        `/stores-inventory/inventory/${inventoryId}/sale`,
         saleData,
       );
       return response.data;
@@ -385,7 +363,7 @@ export const inventoryApi = {
   adjustStock: async (inventoryId, quantity, reason, note = "") => {
     try {
       const response = await api.post(
-        `/stores-inventory/${inventoryId}/adjust`,
+        `/stores-inventory/inventory/${inventoryId}/adjust`,
         {
           quantity,
           reason,

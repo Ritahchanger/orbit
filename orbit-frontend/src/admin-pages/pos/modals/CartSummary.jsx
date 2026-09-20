@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 const CartSummary = ({
   displaySubtotal,
   displayDiscount,
-  isMultiSessionMode,
   currentSessionId,
   setSessionDiscount,
   setDiscount,
@@ -35,7 +34,7 @@ const CartSummary = ({
               max={displaySubtotal}
               value={displayDiscount || ""}
               onChange={(e) => {
-                if (isMultiSessionMode && currentSessionId) {
+                if (currentSessionId) {
                   dispatch(
                     setSessionDiscount({
                       sessionId: currentSessionId,

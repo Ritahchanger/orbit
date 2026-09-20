@@ -127,8 +127,8 @@ const MainReportContent = ({
                             {sale.store?.name || "Unknown Store"}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {sale.date
-                              ? new Date(sale.date).toLocaleDateString()
+                            {sale.saleDate
+                              ? new Date(sale.saleDate).toLocaleDateString()
                               : "No date"}
                           </p>
                         </div>
@@ -210,7 +210,7 @@ const MainReportContent = ({
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Out of Stockfe
+                          Out of Stock
                         </p>
                         <p className="text-base font-medium text-red-600">
                           {inventoryData.summary?.outOfStockCount || 0}

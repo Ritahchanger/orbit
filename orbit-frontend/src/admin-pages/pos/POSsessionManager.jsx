@@ -42,23 +42,6 @@ const POSSessionManager = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "n") {
-        e.preventDefault();
-        handleCreateNewSession();
-      }
-      if ((e.ctrlKey || e.metaKey) && e.key === "m") {
-        e.preventDefault();
-        setIsMinimized(!isMinimized);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isMinimized]);
-
   const handleCreateNewSession = () => {
     if (activeSessions.length >= maxSessions) {
       toast.error(`Maximum ${maxSessions} sessions allowed`);
@@ -80,6 +63,23 @@ const POSSessionManager = () => {
 
     toast.success("New POS session created");
   };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "n") {
+        e.preventDefault();
+        handleCreateNewSession();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "m") {
+        e.preventDefault();
+        setIsMinimized(!isMinimized);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMinimized, activeSessions, maxSessions, currentStore, user, handleCreateNewSession]);
 
   const handleSwitchSession = (sessionId) => {
     dispatch(switchSession(sessionId));

@@ -390,6 +390,128 @@ class GlobalProductAnalysisService {
     return Math.min(100, score);
   }
 
+  // ─── Per-Store Inventory Breakdown ─────────────────────────────────────────
+  async getStoreInventoryBreakdown(businessId) {
+    const mongoose = require("mongoose");
+    const StoreInventory = require("../../store-inventory/store-inventory.model");
+
+    const bizId = new mongoose.Types.ObjectId(businessId);
+
+    return StoreInventory.aggregate([
+      { $match: { businessId: bizId } },
+      {
+        $lookup: {
+          from: "products",
+          localField: "product",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      {
+        $unwind: {
+          path: "$productDetails",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $group: {
+          _id: "$store",
+          totalItems: { $sum: 1 },
+          totalStock: { $sum: "$stock" },
+          totalValue: {
+            $sum: {
+              $multiply: [
+                "$stock",
+                { $ifNull: ["$productDetails.costPrice", 0] },
+              ],
+            },
+          },
+          totalRetailValue: {
+            $sum: {
+              $multiply: [
+                "$stock",
+                { $ifNull: ["$productDetails.price", 0] },
+              ],
+            },
+          },
+          lowStockCount: {
+            $sum: { $cond: [{ $eq: ["$status", "Low Stock"] }, 1, 0] },
+          },
+          outOfStockCount: {
+            $sum: { $cond: [{ $eq: ["$status", "Out of Stock"] }, 1, 0] },
+          },
+          totalStoreSold: { $sum: "$storeSold" },
+          totalStoreRevenue: { $sum: "$storeRevenue" },
+        },
+      },
+      {
+        $lookup: {
+          from: "stores",
+          localField: "_id",
+          foreignField: "_id",
+          as: "storeDetails",
+        },
+      },
+      {
+        $unwind: {
+          path: "$storeDetails",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          storeId: "$_id",
+          storeName: "$storeDetails.name",
+          storeCode: "$storeDetails.code",
+          storeStatus: "$storeDetails.status",
+          totalItems: 1,
+          totalStock: 1,
+          totalValue: { $round: ["$totalValue", 2] },
+          totalRetailValue: { $round: ["$totalRetailValue", 2] },
+          lowStockCount: 1,
+          outOfStockCount: 1,
+          inStockCount: {
+            $subtract: [
+              "$totalItems",
+              { $add: ["$lowStockCount", "$outOfStockCount"] },
+            ],
+          },
+          inventoryHealth: {
+            $cond: [
+              { $gt: ["$totalItems", 0] },
+              {
+                $round: [
+                  {
+                    $multiply: [
+                      {
+                        $divide: [
+                          {
+                            $subtract: [
+                              "$totalItems",
+                              { $add: ["$lowStockCount", "$outOfStockCount"] },
+                            ],
+                          },
+                          "$totalItems",
+                        ],
+                      },
+                      100,
+                    ],
+                  },
+                  1,
+                ],
+              },
+              0,
+            ],
+          },
+          totalStoreSold: 1,
+          totalStoreRevenue: { $round: ["$totalStoreRevenue", 2] },
+        },
+      },
+      { $sort: { totalValue: -1 } },
+    ]);
+  }
+
   getDefaultSummary() {
     return {
       totalProducts: 0,

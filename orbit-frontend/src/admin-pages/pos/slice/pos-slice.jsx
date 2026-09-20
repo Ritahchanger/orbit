@@ -235,32 +235,12 @@ const posSlice = createSlice({
         state.subtotal = 0;
         state.total = 0;
       } else {
-        // Find a session to pause/replace
-        const pausedSession = state.activeSessions.find(
-          (id) => state.sessions[id].status === "paused",
-        );
-
-        if (pausedSession) {
-          // Replace paused session
-          const index = state.activeSessions.indexOf(pausedSession);
-          state.activeSessions[index] = sessionId;
-          state.currentSessionId = sessionId;
-
-          // Clear old single session state
-          state.cart = [];
-          state.customerName = "";
-          state.customerPhone = "";
-          state.paymentMethod = "cash";
-          state.discount = 0;
-          state.notes = "";
-          state.subtotal = 0;
-          state.total = 0;
-        } else {
-          // No room, don't create
-          delete state.sessions[sessionId];
-          state.sessionCounter--;
-          return;
-        }
+        // No room. A paused session still holds a customer's cart — never
+        // silently evict it to make space; require the user to explicitly
+        // close a session first.
+        delete state.sessions[sessionId];
+        state.sessionCounter--;
+        return;
       }
     },
 
@@ -604,6 +584,7 @@ const posSlice = createSlice({
       // Sync to current session if exists
       if (state.currentSessionId && state.sessions[state.currentSessionId]) {
         const session = state.sessions[state.currentSessionId];
+        session.cart = [...state.cart];
         session.subtotal = state.subtotal;
         session.total = state.total;
         session.discount = state.discount;

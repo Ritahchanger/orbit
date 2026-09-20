@@ -4,7 +4,7 @@ const {
   PlanTemplate,
   Subscription,
   Payment,
-} = require("../model/subscription.model");
+} = require("../models/subscription.model");
 const Business = require("../../business/models/business.model");
 
 class SubscriptionService {

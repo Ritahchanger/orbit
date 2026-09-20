@@ -9,6 +9,8 @@ const asyncWrapper = require("../middlewares/asyncMiddleware");
 
 const tokenValidator = require("../middlewares/refreshTokenValidator");
 
+const permissionValidator = require("../middlewares/permissionValidator");
+
 const recordAdminLog = require("../custom-logs/middleware/record-admin.middleware");
 
 // All refund routes require authentication
@@ -17,6 +19,7 @@ router.use(tokenValidator);
 // Refund operations
 router.post(
   "/",
+  permissionValidator(["sales.refund"]),
   recordAdminLog("PROCESS_REFUND"),
   asyncWrapper(refundController.processRefund),
 );
@@ -38,6 +41,7 @@ router.get("/summary", asyncWrapper(refundController.getRefundSummary));
 
 router.put(
   "/:refundId/approve",
+  permissionValidator(["transactions.approve"]),
   recordAdminLog("APPROVE_REFUND"),
   asyncWrapper(refundController.approveRefund),
 );

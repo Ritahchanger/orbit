@@ -221,10 +221,65 @@ const changePasswordController = async (req, res) => {
   res.status(200).json({ success: true, result });
 };
 
+const impersonateUser = async (req, res) => {
+  if (req.user.role !== "superadmin") {
+    return res
+      .status(403)
+      .json({ success: false, message: "Only superadmins can impersonate users" });
+  }
+
+  const { userId } = req.params;
+  const User = require("../../user/user.model");
+
+  const target = await User.findOne({
+    _id: userId,
+    businessId: req.businessId,
+  }).select("-password");
+
+  if (!target) {
+    return res.status(404).json({ success: false, message: "User not found" });
+  }
+
+  if (target.role === "superadmin") {
+    return res
+      .status(403)
+      .json({ success: false, message: "Cannot impersonate another superadmin" });
+  }
+
+  const jwt = require("jsonwebtoken");
+  const impersonationToken = jwt.sign(
+    {
+      id: target._id,
+      role: target.role,
+      firstName: target.firstName,
+      impersonatedBy: req.user._id,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" },
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: `Now impersonating ${target.firstName} ${target.lastName}`,
+    data: {
+      impersonationToken,
+      targetUser: {
+        _id: target._id,
+        email: target.email,
+        firstName: target.firstName,
+        lastName: target.lastName,
+        role: target.role,
+        assignedStore: target.assignedStore,
+      },
+    },
+  });
+};
+
 module.exports = {
   signIn,
   signUp,
   getMe,
   changePasswordController,
   refreshToken,
+  impersonateUser,
 };

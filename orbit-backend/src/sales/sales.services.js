@@ -1,5 +1,5 @@
 const Sale = require("./sales.model");
-const Product = require("../products/products.model");
+const { findProductById, incrementProductFields } = require("../products");
 const Store = require("../stores/store.model");
 const StoreInventory = require("../store-inventory/store-inventory.model");
 const mongoose = require("mongoose");
@@ -34,7 +34,7 @@ const recordSale = async (saleData) => {
   }
 
   // Find the product
-  const product = await Product.findById(saleData.productId);
+  const product = await findProductById(saleData.productId);
   if (!product) {
     throw new Error("Product not found");
   }
@@ -43,7 +43,7 @@ const recordSale = async (saleData) => {
   const storeInventory = await StoreInventory.findOne({
     store: storeId,
     product: saleData.productId,
-    businssId: saleData.businessId,
+    businessId: saleData.businessId,
   });
 
   if (!storeInventory) {
@@ -126,11 +126,9 @@ const recordSale = async (saleData) => {
   }
 
   // Update global product sales counters
-  await Product.findByIdAndUpdate(product._id, {
-    $inc: {
-      totalSold: saleData.quantity,
-      totalRevenue: total,
-    },
+  await incrementProductFields(product._id, {
+    totalSold: saleData.quantity,
+    totalRevenue: total,
   });
 
   return {
@@ -178,7 +176,7 @@ const getDailySalesSummary = async (
   const matchStage = {
     saleDate: { $gte: startOfDay, $lte: endOfDay },
     status: "completed",
-    businssId: businessId,
+    businessId: businessId,
   };
 
   // Convert string storeId to ObjectId if provided
@@ -451,9 +449,9 @@ const getTopSellingProducts = async (
   // Get product details for each
   const enrichedProducts = await Promise.all(
     topProducts.map(async (product) => {
-      const productDetails = await Product.findById(
-        product._id.productId,
-      ).select("category status images costPrice");
+      const productDetails = await findProductById(product._id.productId, {
+        select: "category status images costPrice",
+      });
 
       const storeDetails = await Store.findById(product._id.storeId).select(
         "name code",
@@ -876,7 +874,7 @@ const getSalesByProduct = async (
   storeId = null,
 ) => {
   // Validate product exists
-  const product = await Product.findById(productId);
+  const product = await findProductById(productId);
   if (!product) {
     throw new Error("Product not found");
   }
@@ -1212,13 +1210,11 @@ const refundSale = async (saleId, reason, storeId = null) => {
     }
 
     // Update global product counters (optional)
-    await Product.findByIdAndUpdate(
+    await incrementProductFields(
       sale.productId,
       {
-        $inc: {
-          totalSold: -sale.quantity,
-          totalRevenue: -sale.total,
-        },
+        totalSold: -sale.quantity,
+        totalRevenue: -sale.total,
       },
       { session },
     );

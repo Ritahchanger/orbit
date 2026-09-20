@@ -10,6 +10,7 @@ class RefundController {
     const refundData = {
       ...req.body,
       processedBy: req.user._id, // From auth middleware
+      businessId: req.businessId,
     };
 
     const result = await refundService.processRefund(refundData);
@@ -32,6 +33,7 @@ class RefundController {
     const result = await refundService.canRefundTransaction(
       transactionId,
       amount ? parseFloat(amount) : null,
+      req.businessId,
     );
 
     return res.status(200).json(result);

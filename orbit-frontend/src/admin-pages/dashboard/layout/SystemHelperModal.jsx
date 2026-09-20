@@ -25,9 +25,23 @@ import {
 import { useRoleContext } from "../../../context/RolePermissionContext";
 import { usePermissionCheck } from "../../../context/RolePermissionContext";
 
+import { useDispatch } from "react-redux";
+
+import { openChat } from "../../admin-support-chat/slices/SupportChartSlice";
+
 const SystemHelperModal = () => {
+  
   const [isOpen, setIsOpen] = useState(false);
+
   const [activeTab, setActiveTab] = useState("quicktips");
+
+  const handleContactSupport = () => {
+    toast.success("Opening support chat...");
+    setIsOpen((prev) => !prev);
+    dispatch(openChat());
+  };
+
+  const dispatch = useDispatch();
 
   // Permission hooks
   const { userRoleName, userPermissions } = useRoleContext();
@@ -589,6 +603,14 @@ const SystemHelperModal = () => {
               <div className="text-gray-600 dark:text-gray-400">
                 v2.1.0 • Mega Gamers Inventory System
               </div>
+              <button
+                className="text-sm bg-blue-600 text-white px-4 py-2 rounded-sm hover:bg-blue-700 transition-colors font-medium shadow-sm"
+                onClick={() => {
+                  handleContactSupport();
+                }}
+              >
+                CONSULT CUSTOMER CARE
+              </button>
             </div>
           </div>
         </div>

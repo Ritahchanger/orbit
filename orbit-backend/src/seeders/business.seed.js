@@ -6,13 +6,13 @@ const bcrypt = require("bcryptjs");
 const connectDb = require("../config/db.connection");
 
 // ✅ Register ALL models first — fixes "Schema hasn't been registered for model Role"
-const Role = require("../permissions/models/role.model");
+const { countRoles, findAllRoles, deleteAllRoles, insertRoles } = require("../permissions");
 const User = require("../user/user.model");
 const Business = require("../business/models/business.model");
 const {
   PlanTemplate,
   Subscription,
-} = require("../subscription/model/subscription.model");
+} = require("../subscription/models/subscription.model");
 
 // ── Plan Seed Data ────────────────────────────────────────────────────────────
 
@@ -327,17 +327,17 @@ const seedRoles = async (force = false) => {
   console.log("\n🔐 Seeding roles...");
 
   if (force) {
-    await Role.deleteMany({});
+    await deleteAllRoles();
     console.log("   🗑️  Cleared existing roles");
   }
 
-  const existing = await Role.countDocuments();
+  const existing = await countRoles();
   if (existing > 0 && !force) {
     console.log(`   ✅ Roles already seeded (${existing} found) — skipping`);
-    return await Role.find();
+    return await findAllRoles();
   }
 
-  const created = await Role.insertMany(roleSeeds);
+  const created = await insertRoles(roleSeeds);
   console.log(`   ✅ Created ${created.length} roles:`);
   created.forEach((r) =>
     console.log(

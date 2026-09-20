@@ -15,11 +15,8 @@ const Business = require("../../business/models/business.model");
 
 const {
   resolveUserPermissions,
-} = require("../../permissions/services/permission.service");
-
-const Role = require("../../permissions/models/role.model");
-
-const mongoose = require("mongoose");
+  findRoleByName,
+} = require("../../permissions");
 
 const registerUser = async (userData) => {
   const requiredFields = ["email", "firstName", "lastName"];
@@ -290,10 +287,7 @@ const getCurrentAdmin = async (adminId) => {
   const accessibleStores = await userInstance.getAccessibleStores();
 
   // Get role details
-  const Role = mongoose.model("Role");
-  const roleDetails = await Role.findOne({ name: user.role })
-    .select("name permissions description level")
-    .lean();
+  const roleDetails = await findRoleByName(user.role);
 
   // Build the enhanced response object
   const response = {

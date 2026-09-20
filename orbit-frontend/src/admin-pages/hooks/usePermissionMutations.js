@@ -154,57 +154,61 @@ export const useOptimisticAssignPermission = (userId, options = {}) => {
             return await permissionApi.assignPermission(userId, permissionData);
         },
         onMutate: async (permissionData) => {
-            // Cancel any outgoing refetches
             await queryClient.cancelQueries({ queryKey: permissionKeys.userPermissions(userId) });
 
-            // Snapshot the previous value
             const previousPermissions = queryClient.getQueryData(permissionKeys.userPermissions(userId));
 
-            // Optimistically update to the new value
+            // data shape: { user, permissions: [...], summary: {...} }
             queryClient.setQueryData(permissionKeys.userPermissions(userId), (old) => {
-                if (!old?.data) return old;
+                if (!old?.data?.permissions) return old;
 
                 const newPermission = {
-                    _id: `temp-${Date.now()}`, // Temporary ID
+                    _id: `temp-${Date.now()}`,
                     user: userId,
                     permission: permissionData.permission,
                     scope: permissionData.scope,
                     store: permissionData.storeId || null,
+                    source: 'user',
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
-                    __v: 0
                 };
 
                 return {
                     ...old,
-                    data: [...old.data, newPermission]
+                    data: {
+                        ...old.data,
+                        permissions: [...old.data.permissions, newPermission],
+                        summary: {
+                            ...old.data.summary,
+                            total: (old.data.summary?.total || 0) + 1,
+                            fromUser: (old.data.summary?.fromUser || 0) + 1,
+                        },
+                    },
                 };
             });
 
             return { previousPermissions };
         },
         onError: (err, variables, context) => {
-            // Roll back to previous value on error
             if (context?.previousPermissions) {
                 queryClient.setQueryData(permissionKeys.userPermissions(userId), context.previousPermissions);
             }
         },
         onSuccess: (data) => {
-            // Replace temporary permission with real one from server
             queryClient.setQueryData(permissionKeys.userPermissions(userId), (old) => {
-                if (!old?.data) return old;
+                if (!old?.data?.permissions) return old;
 
-                // Remove temporary permission
-                const filtered = old.data.filter(p => !p._id.startsWith('temp-'));
-                // Add the real permission from server
+                const filtered = old.data.permissions.filter(p => !String(p._id).startsWith('temp-'));
                 return {
                     ...old,
-                    data: [...filtered, data.data]
+                    data: {
+                        ...old.data,
+                        permissions: [...filtered, data.data],
+                    },
                 };
             });
         },
         onSettled: () => {
-            // Always refetch after error or success
             queryClient.invalidateQueries({ queryKey: permissionKeys.userPermissions(userId) });
         },
         ...options
@@ -226,19 +230,29 @@ export const useOptimisticRevokePermission = (userId, options = {}) => {
 
             const previousPermissions = queryClient.getQueryData(permissionKeys.userPermissions(userId));
 
-            // Optimistically remove the permission
+            // data shape: { user, permissions: [...], summary: {...} }
             queryClient.setQueryData(permissionKeys.userPermissions(userId), (old) => {
-                if (!old?.data) return old;
+                if (!old?.data?.permissions) return old;
+
+                const filtered = old.data.permissions.filter(perm =>
+                    !(perm.permission === permissionData.permission &&
+                        perm.scope === permissionData.scope &&
+                        (perm.scope === 'global' ||
+                            perm.store?._id === permissionData.storeId ||
+                            perm.store === permissionData.storeId))
+                );
 
                 return {
                     ...old,
-                    data: old.data.filter(perm =>
-                        !(perm.permission === permissionData.permission &&
-                            perm.scope === permissionData.scope &&
-                            (perm.scope === 'global' ||
-                                perm.store?._id === permissionData.storeId ||
-                                perm.store === permissionData.storeId))
-                    )
+                    data: {
+                        ...old.data,
+                        permissions: filtered,
+                        summary: {
+                            ...old.data.summary,
+                            total: Math.max(0, (old.data.summary?.total || 1) - 1),
+                            fromUser: Math.max(0, (old.data.summary?.fromUser || 1) - 1),
+                        },
+                    },
                 };
             });
 

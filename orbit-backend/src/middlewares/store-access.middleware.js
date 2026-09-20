@@ -106,4 +106,57 @@ const canManageStore = (source = "params", storeIdParam = "storeId") => {
     };
 };
 
-module.exports = { storeAccess, canManageStore };
+// Middleware for routes identified by an inventory item rather than a store
+// (e.g. /inventory/:inventoryId/...). Resolves the owning store from the
+// inventory item first, then applies the same manage-permission check as
+// canManageStore.
+const canManageInventoryItem = (paramName = "inventoryId") => {
+    return async (req, res, next) => {
+        try {
+            const inventoryId = req.params[paramName];
+            if (!inventoryId) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Inventory ID is required"
+                });
+            }
+
+            const StoreInventory = require("../store-inventory/store-inventory.model");
+            const inventoryItem = await StoreInventory.findById(inventoryId).select("store");
+            if (!inventoryItem) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Inventory item not found"
+                });
+            }
+
+            const storeId = inventoryItem.store.toString();
+
+            // Superadmin can manage all stores
+            if (req.user.role === "superadmin") {
+                req.storeId = storeId;
+                return next();
+            }
+
+            // Check if user has manage permission for this store
+            const permissions = req.user.getStorePermissions(storeId);
+            if (!permissions.canManage) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Not authorized to manage this store"
+                });
+            }
+
+            req.storeId = storeId;
+            next();
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: "Store management validation failed",
+                error: error.message
+            });
+        }
+    };
+};
+
+module.exports = { storeAccess, canManageStore, canManageInventoryItem };

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { AuthProvider } from './context/authentication/AuthenticationContext';
-import ErrorFallback from './ErrrorBoundary';
+import ErrorFallback from './ErrorBoundary';
 import App from './App';
 import "./globals/styles/HeroSection.css"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'

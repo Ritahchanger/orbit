@@ -1,11 +1,12 @@
 import { User, CreditCard, Receipt } from "lucide-react";
 import { useDispatch } from "react-redux";
+import { toast } from "react-hot-toast";
 import { paymentMethods } from "../modals/payments.methods";
 const RightPanel = ({
   displayCustomerName,
-  isMultiSessionMode,
   currentSessionId,
   displayCustomerPhone,
+  displayCart,
   setSessionCustomerPhone,
   setSessionCustomerName,
   setShowCashModal,
@@ -40,7 +41,7 @@ const RightPanel = ({
               type="text"
               value={displayCustomerName}
               onChange={(e) => {
-                if (isMultiSessionMode && currentSessionId) {
+                if (currentSessionId) {
                   dispatch(
                     setSessionCustomerName({
                       sessionId: currentSessionId,
@@ -65,7 +66,7 @@ const RightPanel = ({
               type="tel"
               value={displayCustomerPhone}
               onChange={(e) => {
-                if (isMultiSessionMode && currentSessionId) {
+                if (currentSessionId) {
                   dispatch(
                     setSessionCustomerPhone({
                       sessionId: currentSessionId,

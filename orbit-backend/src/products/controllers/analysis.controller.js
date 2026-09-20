@@ -40,6 +40,12 @@ class AnalysisController {
     res.json({ success: true, data });
   }
 
+  async getGlobalStoresInventory(req, res) {
+    const { businessId } = req;
+    const data = await globalAnalysisService.getStoreInventoryBreakdown(businessId);
+    res.json({ success: true, data });
+  }
+
   // ─── Store Analysis ───────────────────────────────────────────────────────
 
   async getStoreDashboard(req, res) {

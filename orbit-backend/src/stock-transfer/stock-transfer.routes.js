@@ -38,6 +38,7 @@ router.post(
  */
 router.get(
   "/history",
+  tokenValidator,
   asyncHandler(StockTransferControllers.getTransferHistory),
 );
 

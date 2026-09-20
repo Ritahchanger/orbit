@@ -75,7 +75,7 @@ class OTPController {
      * Send password reset OTP
      */
     sendPasswordResetOTP = async (req, res) => {
-        const { email } = req.body;
+        const { email, businessId } = req.body;
 
         if (!email) {
             return res.status(400).json({
@@ -84,8 +84,9 @@ class OTPController {
             });
         }
 
-        // Check if user exists
-        const user = await User.findOne({ email });
+        // Find user scoped to business when businessId is provided
+        const query = businessId ? { email, businessId } : { email };
+        const user = await User.findOne(query);
         if (!user) {
             // For security, return success even if user doesn't exist
             return res.status(200).json({

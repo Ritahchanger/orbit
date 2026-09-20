@@ -228,7 +228,9 @@ UserSchema.methods.hasPermission = async function (
 
 // Replace the getAllPermissions method in your User model with this:
 UserSchema.methods.getAllPermissions = async function () {
+
   const user = this;
+  
   let permissions = [];
 
   // Get role permissions using role name

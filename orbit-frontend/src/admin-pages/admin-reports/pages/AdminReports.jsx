@@ -137,9 +137,16 @@ const AdminReports = () => {
     { enabled: shouldFetchInventory },
   );
 
+  const {
+    data: storePerformanceApiResponse,
+  } = useReports.useStorePerformanceReport({
+    startDate: dateRange.startDate,
+    endDate: dateRange.endDate,
+  });
+
   const { mutate: exportReport } = useReports.useExportExcel();
 
-  const salesData = salesApiResponse?.data || [];
+  const salesData = salesApiResponse?.data || {};
   const inventoryData = inventoryApiResponse?.data || {};
 
   // Set default store selection based on context
@@ -224,7 +231,7 @@ const AdminReports = () => {
         potentialProfit: 0,
       };
 
-    const sales = Array.isArray(salesData) ? salesData : [];
+    const sales = Array.isArray(salesData?.sales) ? salesData.sales : [];
     const inventorySummary = inventoryData.summary || {};
 
     const totalRevenue = sales.reduce(
@@ -330,15 +337,16 @@ const AdminReports = () => {
   ].filter(Boolean); // Remove falsy values
 
   // Recent sales from actual data
-  const recentSales = Array.isArray(salesData) ? salesData.slice(0, 3) : [];
-  const storePerformanceData =
-    contextStores?.map((store) => ({
-      id: store._id,
-      name: store.name,
-      revenue: 0,
-      transactions: 0,
-      status: store.status || "active",
-    })) || [];
+  const recentSales = Array.isArray(salesData?.sales) ? salesData.sales.slice(0, 3) : [];
+  const storePerformanceData = Array.isArray(storePerformanceApiResponse?.data)
+    ? storePerformanceApiResponse.data
+    : contextStores?.map((store) => ({
+        id: store._id,
+        name: store.name,
+        revenue: 0,
+        transactions: 0,
+        status: store.status || "active",
+      })) || [];
 
   // Redirect if no permission to view reports at all
   if (!canViewReports && !rolesLoading) {

@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const connectDb = require("../config/db.connection");
@@ -7,6 +6,10 @@ const connectDb = require("../config/db.connection");
 // Default superadmin credentials
 const DEFAULT_EMAIL = "superadmin@orbit.com";
 const DEFAULT_PASSWORD = "MyOrbitSecureSuperAdmin123!";
+
+// Orbit test business credentials
+const ORBIT_OWNER_EMAIL = "codewithmunyao@gmail.com";
+const ORBIT_OWNER_PASSWORD = "Orbit@2024!";
 
 // Superadmin seed template
 const superadminSeed = {
@@ -291,6 +294,15 @@ Examples:
       console.error("❌ Error removing existing superadmin:", error.message);
       if (verbose) console.error("Details:", error);
     }
+
+    // Wipe the Orbit test business so it gets re-created fresh
+    if (mongoose.models.User) delete mongoose.models.User;
+    try {
+      const { wipe: wipeOrbit } = require("./orbit-test.seed");
+      await wipeOrbit();
+    } catch (error) {
+      if (verbose) console.error("Orbit wipe warning:", error.message);
+    }
   }
 
   // Main execution
@@ -310,7 +322,25 @@ Examples:
     console.error("💥 Failed to create superadmin");
     process.exit(1);
   }
+
+  // ── Orbit test business seed ───────────────────────────────────────────────
+  // The SimpleUser model created above is scoped to this script. Re-register
+  // the real User model (with businessId) before running the business seed.
+  if (mongoose.models.User) delete mongoose.models.User;
+
+  try {
+    const { seed: seedOrbit } = require("./orbit-test.seed");
+    await seedOrbit();
+  } catch (error) {
+    // If Orbit data already exists, log and continue — don't fail the whole run
+    if (error.message && error.message.includes("already exists")) {
+      console.log("\nℹ️  Orbit test data already exists — skipping");
+    } else {
+      console.error("\n⚠️  Orbit seed warning:", error.message);
+    }
+  }
 };
+
 
 // Safety check: prevent accidental execution in production
 const isProduction = process.env.NODE_ENV === "production";
@@ -345,5 +375,6 @@ if (require.main === module) {
     }
   })();
 }
+
 
 module.exports = { superadminSeed, createSuperAdmin };

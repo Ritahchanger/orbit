@@ -18,6 +18,7 @@ const initiateMpesaPayment = async (req, res) => {
       customerName,
       customerEmail,
       storeId,
+      businessId: req.businessId,
       soldBy: req.user._id,
       saleIds,
       notes,
@@ -66,7 +67,19 @@ const handleMpesaCallback = async (req, res) => {
  * Complete M-Pesa Transaction (called by frontend after payment success)
  */
 const completeMpesaTransaction = async (req, res) => {
-  const { transactionId, saleIds, transactionSummary, clientId } = req.body;
+  const {
+    transactionId,
+    saleIds,
+    transactionSummary,
+    clientId,
+    items,
+    storeId,
+    customerName,
+    customerPhone,
+    mpesaReceipt,
+    mpesaCheckoutId,
+    soldBy,
+  } = req.body;
 
   // Call the service
   const result = await posService.completeMpesaTransaction({
@@ -74,6 +87,14 @@ const completeMpesaTransaction = async (req, res) => {
     saleIds,
     transactionSummary,
     clientId: clientId || req.headers["x-client-id"],
+    items,
+    storeId,
+    businessId: req.businessId,
+    customerName,
+    customerPhone,
+    mpesaReceipt,
+    mpesaCheckoutId,
+    soldBy,
   });
 
   res.status(200).json({

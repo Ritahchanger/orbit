@@ -12,13 +12,14 @@ const connectDb = async () => {
             return mongoose.connection;
         }
 
-        const connection = await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/megagamers", {
+        const connection = await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/orbitdb", {
             maxPoolSize: 10, // Better for multiple workers
             serverSelectionTimeoutMS: 10000, // 10 second timeout
             socketTimeoutMS: 45000, // 45 second socket timeout
         });
 
         isConnected = true;
+        
         console.log(`✅ Database connected successfully: ${connection.connection.host}`);
 
         // Handle connection events

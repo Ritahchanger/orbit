@@ -458,9 +458,7 @@ const AdminTransactions = () => {
                   <ShoppingCart className="h-6 w-6 text-gray-500 dark:text-gray-400" />
                 </div>
                 <h3 className="text-base font-medium text-gray-900 dark:text-white mb-1">
-                  No Transactions Found in <p>
-                    
-                  </p>
+                  No Transactions Found{currentStore?.name ? ` in ${currentStore.name}` : ""}
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-md mx-auto">
                   {searchTerm || paymentMethod || status
@@ -490,6 +488,7 @@ const AdminTransactions = () => {
                 getStatusBadge={getStatusBadge}
                 formatDate={formatDate}
                 formatCurrency={formatCurrency}
+                onRefetch={refetchTransactions}
               />
             )}
         </div>

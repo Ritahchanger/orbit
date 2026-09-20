@@ -77,12 +77,16 @@ exports.bulkTransfer = async (req, res) => {
 
 exports.getTransferHistory = async (req, res) => {
   try {
+
+    const businessId = req.businessId; // 🔥 from middleware
+
     const { page = 1, limit = 20, ...filters } = req.query;
 
     const result = await StockTransferService.getTransferHistory(
       filters,
       parseInt(page),
       parseInt(limit),
+      businessId, // 🔥 PASS IT
     );
 
     res.json({

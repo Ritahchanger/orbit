@@ -93,7 +93,7 @@ const ResetPassword = ({
   const handleResendOTP = async () => {
     if (otpResendCooldown > 0) return;
     try {
-      await otpApi.resendOTP({ email: resetEmail, purpose: "password-reset" });
+      await otpApi.resendOTP({ email: resetEmail, purpose: "password_reset" });
       setOtpResendCooldown(60);
       toast.success("New OTP sent to your email!");
     } catch (error) {

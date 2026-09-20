@@ -1,6 +1,7 @@
-const Product = require("./products.model");
-const Store = require("../stores/store.model");
-const StoreInventory = require("../store-inventory/store-inventory.model");
+const mongoose = require("mongoose");
+const productRepository = require("./repositories/product.repository");
+const storeReadRepository = require("./repositories/store-read.repository");
+const storeInventoryRepository = require("./repositories/store-inventory.repository");
 const { LocalStorage, UPLOADS_DIR } = require("../utils/localStorage");
 const path = require("path");
 const {
@@ -40,14 +41,20 @@ const productService = {
   /**
    * Create a new global product
    */
-  createProduct: async (productData, files = []) => {
+  createProduct: async (productData, files = [], businessId) => {
     // Validate product data
     const validation = validateCreateProduct(productData, files);
 
     if (!validation.isValid) {
+      console.log("🔥 PRODUCT VALIDATION ERROR:");
+      console.log(JSON.stringify(validation.product.error?.details, null, 2));
+
+      console.log("🔥 FILE VALIDATION ERROR:");
+      console.log(JSON.stringify(validation.files, null, 2));
+
       throw new ValidationError("Product validation failed", {
-        product: validation.product.error?.details || null,
-        files: validation.files.error || null,
+        productErrors: validation.product.error?.details || [],
+        fileErrors: validation.files?.error || [],
       });
     }
 
@@ -63,9 +70,9 @@ const productService = {
         validatedData.sku = `${prefix}-${timestamp}-${random}`;
       } else {
         // Check if SKU already exists globally
-        const existingProduct = await Product.findOne({
-          sku: validatedData.sku,
-        });
+        const existingProduct = await productRepository.findBySku(
+          validatedData.sku,
+        );
         if (existingProduct) {
           throw new ConflictError("SKU already exists");
         }
@@ -143,9 +150,13 @@ const productService = {
           : "electrical";
       }
 
+      // Tag the product with the requester's business — required by the
+      // schema, and previously silently dropped since this function never
+      // accepted a businessId parameter despite the controller passing one.
+      validatedData.businessId = businessId;
+
       // Create global product
-      const product = new Product(validatedData);
-      await product.save();
+      const product = await productRepository.create(validatedData);
 
       return {
         success: true,
@@ -163,7 +174,7 @@ const productService = {
     }
   },
 
-  updateProduct: async (productId, updateData, files = []) => {
+  updateProduct: async (productId, updateData, files = [], businessId) => {
     // Validate product ID
     const { error: idError } = validateProductId(productId);
     if (idError) {
@@ -176,18 +187,23 @@ const productService = {
       throw new ValidationError("Update validation failed", error.details);
     }
 
-    // Check if product exists
-    const product = await Product.findById(productId);
+    // Check if product exists and belongs to the requester's business —
+    // previously this was a plain findById with no ownership check at all,
+    // so any business could update any other business's product by id.
+    const product = await productRepository.findByIdAndBusiness(
+      productId,
+      businessId,
+    );
     if (!product) {
       throw new NotFoundError("Product not found");
     }
 
     // Check SKU uniqueness globally
     if (value.sku && value.sku !== product.sku) {
-      const skuExists = await Product.findOne({
-        sku: value.sku,
-        _id: { $ne: productId },
-      });
+      const skuExists = await productRepository.findBySkuExcludingId(
+        value.sku,
+        productId,
+      );
       if (skuExists) {
         throw new ConflictError("SKU already exists");
       }
@@ -424,7 +440,7 @@ const productService = {
       });
 
       // Save product (this will update the DB with the new images array)
-      await product.save();
+      await productRepository.save(product);
 
       // Prepare response message
       let message = "Product updated successfully";
@@ -487,14 +503,19 @@ const productService = {
     }
   },
 
-  deleteProduct: async (productId) => {
+  deleteProduct: async (productId, businessId) => {
     // Validate product ID
     const { error } = validateProductId(productId);
     if (error) {
       throw new ValidationError("Invalid product ID", error.details);
     }
 
-    const product = await Product.findById(productId);
+    // Ownership-scoped lookup — previously a plain findById with no business
+    // check, so any business could delete any other business's product.
+    const product = await productRepository.findByIdAndBusiness(
+      productId,
+      businessId,
+    );
     if (!product) {
       throw new NotFoundError("Product not found");
     }
@@ -573,7 +594,7 @@ const productService = {
     }
 
     // Delete product from database
-    await product.deleteOne();
+    await productRepository.deleteOne(product);
 
     // Prepare response message
     let message = "Product deleted successfully";
@@ -653,7 +674,7 @@ const productService = {
       throw new ValidationError("Invalid product ID", error.details);
     }
 
-    const product = await Product.findById(productId);
+    const product = await productRepository.findById(productId, { lean: false });
     if (!product) {
       throw new NotFoundError("Product not found");
     }
@@ -692,7 +713,7 @@ const productService = {
   cleanupOrphanedImages: async () => {
     try {
       // Get all products with their images
-      const products = await Product.find({}, "images");
+      const products = await productRepository.find({}, { select: "images" });
 
       // Collect all valid image filenames from database
       const validFilenames = new Set();
@@ -785,16 +806,15 @@ const productService = {
     }
 
     // Get low stock products
-    const lowStockProducts = await Product.find({
-      ...query,
-      businessId: businessId,
-    })
-      .sort({ [sortBy]: sortOrder === "asc" ? 1 : -1 })
-      .limit(limit)
-      .select(
-        "name sku stock minStock price costPrice category brand totalSold status productType lastRestock",
-      )
-      .lean();
+    const lowStockProducts = await productRepository.find(
+      { ...query, businessId },
+      {
+        sort: { [sortBy]: sortOrder === "asc" ? 1 : -1 },
+        limit,
+        select:
+          "name sku stock minStock price costPrice category brand totalSold status productType lastRestock",
+      },
+    );
 
     if (lowStockProducts.length === 0) {
       return {
@@ -1087,13 +1107,13 @@ const productService = {
 
     // Execute query
     const [products, total] = await Promise.all([
-      Product.find(query).sort(sort).skip(skip).limit(limit).lean(),
-      Product.countDocuments(query),
+      productRepository.find(query, { sort, skip, limit }),
+      productRepository.countDocuments(query),
     ]);
 
     // Convert to frontend format
     const productsFormatted = products.map((product) => {
-      const productObj = new Product(product);
+      const productObj = productRepository.hydrate(product);
       return productObj.toFrontendFormat();
     });
 
@@ -1123,15 +1143,19 @@ const productService = {
   /**
    * Get single product by ID (global)
    */
-  getProductById: async (productId) => {
+  getProductById: async (productId, businessId) => {
     // Validate product ID
     const { error } = validateProductId(productId);
     if (error) {
       throw new ValidationError("Invalid product ID", error.details);
     }
 
-    // Find product
-    const product = await Product.findById(productId);
+    // Ownership-scoped lookup — previously a plain findById with no business
+    // check, so any business could read any other business's product by id.
+    const product = await productRepository.findByIdAndBusiness(
+      productId,
+      businessId,
+    );
 
     if (!product) {
       throw new NotFoundError("Product not found");
@@ -1148,7 +1172,34 @@ const productService = {
     };
   },
 
-  updateProductStock: async (productId, stockData) => {
+  /**
+   * Get product by SKU (global) — relocated from products.controller.js,
+   * which previously did an inline `require("./products.model")` and query
+   * instead of going through this service.
+   *
+   * Returns null (rather than throwing) when not found so the controller
+   * can issue its original plain 404 JSON response — see the same note on
+   * removeProductFromStore for why (the global error handler doesn't read
+   * a thrown error's .status).
+   */
+  getProductBySku: async (sku, businessId) => {
+    const product = await productRepository.findBySkuAndBusiness(
+      sku,
+      businessId,
+      { lean: false },
+    );
+
+    if (!product) {
+      return null;
+    }
+
+    return {
+      success: true,
+      data: product.toFrontendFormat(),
+    };
+  },
+
+  updateProductStock: async (productId, stockData, businessId) => {
     // Validate product ID
     const { error: idError } = validateProductId(productId);
     if (idError) {
@@ -1173,8 +1224,12 @@ const productService = {
       });
     }
 
-    // Check if product exists
-    const product = await Product.findById(productId);
+    // Ownership-scoped lookup — previously a plain findById with no business
+    // check.
+    const product = await productRepository.findByIdAndBusiness(
+      productId,
+      businessId,
+    );
     if (!product) {
       throw new NotFoundError("Product not found");
     }
@@ -1214,7 +1269,7 @@ const productService = {
       product.lastRestock = new Date();
     }
 
-    await product.save();
+    await productRepository.save(product);
 
     // Log the update for audit purposes
     console.log(
@@ -1237,7 +1292,7 @@ const productService = {
     };
   },
 
-  restockProduct: async (productId, quantity, buyingPrice) => {
+  restockProduct: async (productId, quantity, buyingPrice, businessId) => {
     const { error } = validateProductId(productId);
     if (error) {
       throw new ValidationError("Invalid product ID", error.details);
@@ -1249,7 +1304,12 @@ const productService = {
       });
     }
 
-    const product = await Product.findById(productId);
+    // Ownership-scoped lookup — previously a plain findById with no business
+    // check.
+    const product = await productRepository.findByIdAndBusiness(
+      productId,
+      businessId,
+    );
     if (!product) {
       throw new NotFoundError("Product not found");
     }
@@ -1276,10 +1336,13 @@ const productService = {
    * Get products by category (global)
    */
   getProductsByCategory: async (category, limit = 20) => {
-    const products = await Product.find({
-      category: category,
-      status: { $in: ["active", "In Stock", "Low Stock"] },
-    }).limit(limit);
+    const products = await productRepository.find(
+      {
+        category: category,
+        status: { $in: ["active", "In Stock", "Low Stock"] },
+      },
+      { limit, lean: false },
+    );
 
     const productsFormatted = products.map((product) =>
       product.toFrontendFormat(),
@@ -1297,10 +1360,13 @@ const productService = {
    * Get featured products (global)
    */
   getFeaturedProducts: async (limit = 10) => {
-    const products = await Product.find({
-      isFeatured: true,
-      status: { $in: ["active", "In Stock"] },
-    }).limit(limit);
+    const products = await productRepository.find(
+      {
+        isFeatured: true,
+        status: { $in: ["active", "In Stock"] },
+      },
+      { limit, lean: false },
+    );
 
     const productsFormatted = products.map((product) =>
       product.toFrontendFormat(),
@@ -1317,10 +1383,13 @@ const productService = {
    * Get low stock products (global)
    */
   getLowStockProducts: async (limit = 20) => {
-    const products = await Product.find({
-      $expr: { $lte: ["$stock", "$minStock"] },
-      status: { $in: ["active", "Low Stock"] },
-    }).limit(limit);
+    const products = await productRepository.find(
+      {
+        $expr: { $lte: ["$stock", "$minStock"] },
+        status: { $in: ["active", "Low Stock"] },
+      },
+      { limit, lean: false },
+    );
 
     const productsFormatted = products.map((product) =>
       product.toFrontendFormat(),
@@ -1336,8 +1405,13 @@ const productService = {
   /**
    * Get product statistics (global)
    */
-  getProductStats: async () => {
-    const stats = await Product.aggregate([
+  getProductStats: async (businessId) => {
+    const stats = await productRepository.aggregate([
+      {
+        $match: {
+          businessId: new mongoose.Types.ObjectId(businessId),
+        },
+      },
       {
         $group: {
           _id: null,
@@ -1425,21 +1499,35 @@ const productService = {
   /**
    * Add product to a store's inventory
    */
-  addProductToStore: async (storeId, productId, inventoryData = {}) => {
-    // Validate store exists
-    const store = await Store.findById(storeId);
+  addProductToStore: async (
+    storeId,
+    productId,
+    inventoryData = {},
+    businessId,
+  ) => {
+    // Validate store exists and belongs to the requester's business —
+    // previously a plain findById with no business check.
+    const store = await storeReadRepository.findByIdAndBusiness(
+      storeId,
+      businessId,
+    );
     if (!store) {
       throw new NotFoundError("Store not found");
     }
 
-    // Validate product exists
-    const product = await Product.findById(productId);
+    // Validate product exists and belongs to the requester's business —
+    // previously a plain findById with no business check, so a product
+    // from a different business could be linked into this store.
+    const product = await productRepository.findByIdAndBusiness(
+      productId,
+      businessId,
+    );
     if (!product) {
       throw new NotFoundError("Product not found");
     }
 
     // Check if product already exists in store inventory
-    const existingInventory = await StoreInventory.findOne({
+    const existingInventory = await storeInventoryRepository.findOne({
       store: storeId,
       product: productId,
     });
@@ -1449,7 +1537,7 @@ const productService = {
     }
 
     // Create store inventory entry
-    const storeInventory = new StoreInventory({
+    const storeInventory = await storeInventoryRepository.create({
       store: storeId,
       product: productId,
       stock: inventoryData.stock || 0,
@@ -1458,8 +1546,6 @@ const productService = {
       storePrice: inventoryData.price || product.price,
       status: inventoryData.stock > 0 ? "In Stock" : "Out of Stock",
     });
-
-    await storeInventory.save();
 
     // Populate references
     await storeInventory.populate("store", "name code");
@@ -1473,11 +1559,58 @@ const productService = {
   },
 
   /**
+   * Remove a product from a store's inventory — relocated from
+   * products.controller.js's deleteStoreProduct, which previously queried
+   * StoreInventory directly instead of going through this service.
+   *
+   * Returns null (rather than throwing) on either "not found" case so the
+   * controller can issue its original plain 404 JSON response — the app's
+   * global error handler doesn't read a thrown error's .status, so a thrown
+   * NotFoundError here would surface as a 500 instead of the 404 this
+   * endpoint returned before this refactor.
+   */
+  removeProductFromStore: async (storeId, productId, businessId) => {
+    const store = await storeReadRepository.findByIdAndBusiness(
+      storeId,
+      businessId,
+    );
+    if (!store) {
+      return null;
+    }
+
+    const inventoryItem = await storeInventoryRepository.findOneAndDelete({
+      store: storeId,
+      product: productId,
+    });
+
+    if (!inventoryItem) {
+      return null;
+    }
+
+    return {
+      success: true,
+      message: "Product removed from store inventory successfully",
+    };
+  },
+
+  /**
    * Get products in a specific store
    */
-  getProductsByStore: async (storeId, filters = {}, page = 1, limit = 20) => {
-    // Validate store exists
-    const store = await Store.findById(storeId);
+  getProductsByStore: async (
+    storeId,
+    filters = {},
+    page = 1,
+    limit = 20,
+    businessId,
+  ) => {
+    // Validate store exists and belongs to the requester's business —
+    // previously a plain findById with no business check, and businessId
+    // was never even accepted as a parameter despite the controller
+    // passing one.
+    const store = await storeReadRepository.findByIdAndBusiness(
+      storeId,
+      businessId,
+    );
     if (!store) {
       throw new NotFoundError("Store not found");
     }
@@ -1498,37 +1631,42 @@ const productService = {
 
     if (filters.search) {
       // We'll need to search in product collection and join
-      const searchProducts = await Product.find({
-        $or: [
-          { name: { $regex: filters.search, $options: "i" } },
-          { sku: { $regex: filters.search, $options: "i" } },
-          { brand: { $regex: filters.search, $options: "i" } },
-        ],
-      }).select("_id");
+      const searchProducts = await productRepository.find(
+        {
+          $or: [
+            { name: { $regex: filters.search, $options: "i" } },
+            { sku: { $regex: filters.search, $options: "i" } },
+            { brand: { $regex: filters.search, $options: "i" } },
+          ],
+        },
+        { select: "_id" },
+      );
 
       inventoryQuery.product = { $in: searchProducts.map((p) => p._id) };
     }
 
     // Execute query with population
     const [inventoryItems, total] = await Promise.all([
-      StoreInventory.find(inventoryQuery)
-        .populate({
-          path: "product",
-          select: "name sku price images brand category",
-          match: filters.category ? { category: filters.category } : {},
-        })
-        .populate("store", "name code")
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-      StoreInventory.countDocuments(inventoryQuery),
+      storeInventoryRepository.find(inventoryQuery, {
+        populate: [
+          {
+            path: "product",
+            select: "name sku price images brand category",
+            match: filters.category ? { category: filters.category } : {},
+          },
+          { path: "store", select: "name code" },
+        ],
+        skip,
+        limit,
+      }),
+      storeInventoryRepository.countDocuments(inventoryQuery),
     ]);
 
     // Filter out items where product was not found (due to category filter)
     const validItems = inventoryItems.filter((item) => item.product);
 
     const formattedItems = validItems.map((item) => {
-      const product = new Product(item.product);
+      const product = productRepository.hydrate(item.product);
       return {
         ...item,
         product: product.toFrontendFormat(),

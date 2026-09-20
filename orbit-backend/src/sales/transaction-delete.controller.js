@@ -1,5 +1,6 @@
 // transaction-delete.controller.js
 const transactionDeleteService = require("./transaction-delete.service");
+const Transaction = require("./transaction.model");
 
 /**
  * Transaction Delete Controller
@@ -24,6 +25,7 @@ const transactionDeleteController = {
     const result = await transactionDeleteService.softDeleteTransactions(
       transactionIds,
       userId,
+      req.businessId,
     );
 
     return res.status(200).json({
@@ -64,6 +66,7 @@ const transactionDeleteController = {
     const result = await transactionDeleteService.permanentDeleteTransactions(
       transactionIds,
       userId,
+      req.businessId,
     );
     return res.status(200).json({
       success: true,
@@ -90,8 +93,10 @@ const transactionDeleteController = {
       });
     }
 
-    const result =
-      await transactionDeleteService.restoreTransactions(transactionIds);
+    const result = await transactionDeleteService.restoreTransactions(
+      transactionIds,
+      req.businessId,
+    );
     return res.status(200).json({
       success: true,
       message: result.message,
@@ -119,8 +124,10 @@ const transactionDeleteController = {
       searchTerm: req.query.search,
     };
 
-    const result =
-      await transactionDeleteService.getDeletedTransactions(filters);
+    const result = await transactionDeleteService.getDeletedTransactions(
+      filters,
+      req.businessId,
+    );
 
     return res.status(200).json({
       success: true,
@@ -139,6 +146,7 @@ const transactionDeleteController = {
     const transaction = await Transaction.findOne({
       _id: id,
       isDeleted: true,
+      businessId: req.businessId,
     })
       .populate("storeId", "name location storeCode")
       .populate("soldBy", "name email")
@@ -195,11 +203,13 @@ const transactionDeleteController = {
       result = await transactionDeleteService.permanentDeleteTransactions(
         transactionIds,
         userId,
+        req.businessId,
       );
     } else {
       result = await transactionDeleteService.softDeleteTransactions(
         transactionIds,
         userId,
+        req.businessId,
       );
     }
 
@@ -248,9 +258,10 @@ const transactionDeleteController = {
    * GET /api/transactions/delete-stats
    */
   getDeleteStats: async (req, res) => {
+    const businessId = req.businessId;
     const stats = await Transaction.aggregate([
       {
-        $match: { isDeleted: true },
+        $match: { isDeleted: true, businessId },
       },
       {
         $group: {
@@ -272,9 +283,12 @@ const transactionDeleteController = {
       },
     ]);
 
-    const totalDeleted = await Transaction.countDocuments({ isDeleted: true });
+    const totalDeleted = await Transaction.countDocuments({
+      isDeleted: true,
+      businessId,
+    });
     const totalRevenueDeleted = await Transaction.aggregate([
-      { $match: { isDeleted: true } },
+      { $match: { isDeleted: true, businessId } },
       { $group: { _id: null, total: { $sum: "$total" } } },
     ]);
 

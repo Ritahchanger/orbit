@@ -32,6 +32,16 @@ import supportChatSlice from "../admin-pages/admin-support-chat/slices/SupportCh
 
 export const store = configureStore({
 
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // deleteModal intentionally stores an onConfirm callback in state to
+        // power a single reusable confirmation dialog for any delete action.
+        ignoredActions: ["deleteModal/openDeleteModal"],
+        ignoredPaths: ["deleteModal.onConfirm"],
+      },
+    }),
+
   reducer: {
 
     searchModal: searchModalSlice.reducer,

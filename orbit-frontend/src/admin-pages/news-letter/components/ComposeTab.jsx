@@ -51,7 +51,7 @@ const ComposeTab = ({
                     type="text"
                     value={campaignId}
                     onChange={(e) => setCampaignId(e.target.value)}
-                    placeholder="campaign-20240101-abc123"
+                    placeholder="CAMPAIGN-20240101-ABC123"
                     className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                 />
                 <div className="flex items-center gap-2 mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -66,10 +66,10 @@ const ComposeTab = ({
                     Newsletter Content
                 </label>
                 <div className="border border-gray-300 dark:border-gray-700 rounded-sm overflow-hidden">
-                    <SimpleEditor onContentChange={handleContentChange}
-
+                    <SimpleEditor
+                        initialContent={content}
+                        onContentChange={handleContentChange}
                         showThemeToggle={false} // Disable theme toggle
-
                     />
                 </div>
             </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdminNavbar from "./Navbar";
+import ImpersonationBanner from "./ImpersonationBanner";
 import { useStoreSelectionModal } from "../../hooks/useStoreSelectionModal";
 import { useAuth } from "../../../context/authentication/AuthenticationContext";
 import { useStoreContext } from "../../../context/store/StoreContext";
@@ -14,7 +15,7 @@ const AdminLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { openModal, isOpen: modalIsOpen } = useStoreSelectionModal();
-  const { isAuthenticated, user, userRole } = useAuth();
+  const { isAuthenticated, user, userRole, isImpersonating } = useAuth();
 
   // Pull currentStore and isLoading from StoreContext so we wait for it to hydrate
   const { currentStore, isLoading: storeLoading } = useStoreContext();
@@ -96,7 +97,8 @@ const AdminLayout = ({ children }) => {
   const handleForward = () => navigate(1);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 relative ${isImpersonating ? "pt-10" : ""}`}>
+      <ImpersonationBanner />
       <AdminGlobalButtons
         handleCalculatorOpen={handleCalculatorOpen}
         historyState={historyState}

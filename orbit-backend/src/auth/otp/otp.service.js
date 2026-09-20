@@ -149,7 +149,7 @@ class OTPService {
                 role: user.role
             },
             process.env.JWT_SECRET,
-            { expiresIn: '7d' }
+            { expiresIn: '1h' }
         );
 
         // Step 4: Return formatted response
@@ -207,8 +207,8 @@ class OTPService {
         // Just clean up attempts and set shorter expiry
         await RedisClient.del(attemptsKey);
 
-        // Set shorter expiry (30 seconds) for cleanup
-        await RedisClient.expire(key, 30);
+        // Keep OTP alive long enough for the reset-password step (15 min)
+        await RedisClient.expire(key, 15 * 60);
 
         console.log(`[OTP Service] OTP verified successfully for ${email}`);
 

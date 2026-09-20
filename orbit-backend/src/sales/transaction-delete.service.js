@@ -14,7 +14,7 @@ const transactionDeleteService = {
    * @param {String} deletedBy - User ID who is performing the delete
    * @returns {Object} - Result of soft delete operation
    */
-  softDeleteTransactions: async (transactionIds, deletedBy = null) => {
+  softDeleteTransactions: async (transactionIds, deletedBy = null, businessId) => {
     if (!transactionIds || transactionIds.length === 0) {
       throw new Error("No transaction IDs provided");
     }
@@ -30,6 +30,7 @@ const transactionDeleteService = {
     const transactions = await Transaction.find({
       _id: { $in: validIds },
       isDeleted: { $ne: true },
+      businessId,
     }).lean();
     if (transactions.length === 0) {
       throw new Error("No active transactions found with the provided IDs");
@@ -90,7 +91,7 @@ const transactionDeleteService = {
    * @param {String} deletedBy - User ID who is performing the delete (for logging)
    * @returns {Object} - Result of permanent delete operation
    */
-  permanentDeleteTransactions: async (transactionIds, deletedBy = null) => {
+  permanentDeleteTransactions: async (transactionIds, deletedBy = null, businessId) => {
     // Validate input
     if (!transactionIds || transactionIds.length === 0) {
       throw new Error("No transaction IDs provided");
@@ -110,6 +111,7 @@ const transactionDeleteService = {
     // Find transactions to be deleted (to get their saleIds)
     const transactionsToDelete = await Transaction.find({
       _id: { $in: validIds },
+      businessId,
     }).lean();
 
     if (transactionsToDelete.length === 0) {
@@ -177,7 +179,7 @@ const transactionDeleteService = {
    * @param {Array|String} transactionIds - Single ID or array of transaction IDs
    * @returns {Object} - Result of restore operation
    */
-  restoreTransactions: async (transactionIds) => {
+  restoreTransactions: async (transactionIds, businessId) => {
     // Validate input
     if (!transactionIds || transactionIds.length === 0) {
       throw new Error("No transaction IDs provided");
@@ -198,6 +200,7 @@ const transactionDeleteService = {
     const transactions = await Transaction.find({
       _id: { $in: validIds },
       isDeleted: true,
+      businessId,
     }).lean();
 
     if (transactions.length === 0) {
@@ -262,7 +265,7 @@ const transactionDeleteService = {
    * @param {Object} filters - Filter options
    * @returns {Object} - Deleted transactions and pagination info
    */
-  getDeletedTransactions: async (filters = {}) => {
+  getDeletedTransactions: async (filters = {}, businessId) => {
     const {
       page = 1,
       limit = 20,
@@ -274,7 +277,7 @@ const transactionDeleteService = {
       searchTerm,
     } = filters;
 
-    const query = { isDeleted: true };
+    const query = { isDeleted: true, businessId };
 
     // Date range filter
     if (startDate || endDate) {

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-require("./model/category.model");
+require("./models/category.model");
 
 const productSchema = new mongoose.Schema(
   {

@@ -180,7 +180,7 @@ const UserDetailsModal = () => {
 
       {/* Modal */}
       <div
-        className={`fixed top-0 h-full z-[9999] ${positionClasses[position]} w-full md:w-[300px] lg:w-[800px] overflow-hidden`}
+        className={`fixed top-0 h-full z-[9999] ${positionClasses[position]} max-w-full ${sizeClasses[size] || sizeClasses.md} overflow-hidden`}
       >
         <div className="h-full bg-white dark:bg-gray-800 border-l border-gray-300 dark:border-gray-700 shadow-xl flex flex-col">
           {/* Header */}

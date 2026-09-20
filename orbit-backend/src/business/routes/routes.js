@@ -17,6 +17,16 @@ router.get("/", asyncWrapper(businessCtrl.getAll));
 
 router.get("/my-business", asyncWrapper(businessCtrl.getMyBusiness));
 
+router.get(
+  "/ecommerce-settings",
+  asyncWrapper(businessCtrl.getEcommerceSettings),
+);
+
+router.patch(
+  "/ecommerce-settings",
+  asyncWrapper(businessCtrl.updateEcommerceSettings),
+);
+
 router.get("/:id", asyncWrapper(businessCtrl.getById));
 
 router.patch("/:id", asyncWrapper(businessCtrl.update));

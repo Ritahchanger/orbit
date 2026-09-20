@@ -1,4 +1,4 @@
-const Category = require("../model/category.model");
+const Category = require("../models/category.model");
 
 class CategoriesService {
   // Get all categories
@@ -23,6 +23,7 @@ class CategoriesService {
       slug: data.slug || data.name.toLowerCase().replace(/\s+/g, "-"),
       description: data.description || `${data.name} products`,
       status: data.status || "active",
+      businessId: data.businessId, // Associate with business
     });
     await category.save();
     return category;

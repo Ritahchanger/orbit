@@ -130,6 +130,29 @@ const deleteBusiness = async (req, res) => {
   });
 };
 
+// ── Ecommerce Settings ───────────────────────────────────────────────────────────
+const getEcommerceSettings = async (req, res) => {
+  const ecommerce = await businessService.getEcommerceSettings(req.businessId);
+
+  res.status(200).json({
+    success: true,
+    data: ecommerce,
+  });
+};
+
+const updateEcommerceSettings = async (req, res) => {
+  const ecommerce = await businessService.updateEcommerceSettings(
+    req.businessId,
+    req.body,
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Ecommerce settings updated successfully",
+    data: ecommerce,
+  });
+};
+
 module.exports = {
   register,
   getAll,
@@ -139,4 +162,6 @@ module.exports = {
   updateStatus,
   deleteBusiness,
   searchPublic,
+  getEcommerceSettings,
+  updateEcommerceSettings,
 };

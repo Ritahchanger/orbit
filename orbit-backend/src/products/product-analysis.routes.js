@@ -76,6 +76,11 @@ router.get("/global/brand-performance",
     asyncWrapper(analysisController.getGlobalBrandPerformance)
 );
 
+router.get("/global/stores-inventory",
+    tokenValidator,
+    asyncWrapper(analysisController.getGlobalStoresInventory)
+);
+
 // Extended Store Analysis
 router.get("/stores/:storeId/category-analysis",
     tokenValidator,

@@ -12,6 +12,10 @@ const tokenValidator = require("../middlewares/refreshTokenValidator");
 
 const refreshTokenValidator = require("../middlewares/refreshTokenValidator");
 
+const permissionValidator = require("../middlewares/permissionValidator");
+
+const recordAdminLog = require("../custom-logs/middleware/record-admin.middleware");
+
 /**
  * @swagger
  * tags:
@@ -156,6 +160,14 @@ Router.get("/login/failed", GoogleAuthController.loginFailed);
  *         description: User logged out successfully
  */
 Router.post("/logout", GoogleAuthController.logout);
+
+Router.post(
+  "/impersonate/:userId",
+  tokenValidator,
+  permissionValidator(["users.impersonate"]),
+  recordAdminLog("IMPERSONATE_USER"),
+  asyncWrapper(NormalUserAuthController.impersonateUser),
+);
 
 /**
  * @swagger

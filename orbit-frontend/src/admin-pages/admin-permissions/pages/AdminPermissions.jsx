@@ -23,10 +23,10 @@ import {
 } from 'lucide-react';
 import SelectedUserInfo from '../components/SelectedUserInfo';
 import AssignPermissionModal from '../components/AssignPermissionModal';
-import RevokePermissionModal from '../components/RevokePermissionModal';
 import StatsOverview from '../components/StatsOverview';
 import FilteredUsers from '../components/FilteredUsers';
 import PermissionsHeader from '../components/PermissionsHeader';
+import ConfirmModal from '../components/ConfirmModal';
 
 import PermissionSkeletonLoader from '../preloaders/Preloader';
 
@@ -45,9 +45,8 @@ const AdminPermissions = () => {
 
     const [userPermissions, setUserPermissions] = useState([]); // Add state for user permissions
     const [showAssignModal, setShowAssignModal] = useState(false);
-    const [showRevokeModal, setShowRevokeModal] = useState(false);
-    const [selectedPermission, setSelectedPermission] = useState(null);
     const [moduleFilter, setModuleFilter] = useState('all');
+    const [permissionToRevoke, setPermissionToRevoke] = useState(null);
 
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
@@ -142,15 +141,21 @@ const AdminPermissions = () => {
         }
     };
 
-    const handleRevokePermission = async (permission) => {
+    const handleRevokePermission = (permission) => {
         if (!selectedUser) return;
+        setPermissionToRevoke(permission);
+    };
+
+    const confirmRevokePermission = async () => {
+        if (!permissionToRevoke) return;
         try {
             await revokeMutation.mutateAsync({
-                permission: permission.permission,
-                scope: permission.scope,
-                storeId: permission.store?._id || permission.store
+                permission: permissionToRevoke.permission,
+                scope: permissionToRevoke.scope,
+                storeId: permissionToRevoke.store?._id || permissionToRevoke.store
             });
             toast.success('Permission revoked successfully');
+            setPermissionToRevoke(null);
             // Refresh user permissions after revoking
             refetchUserPermissions();
         } catch (error) {
@@ -336,15 +341,20 @@ const AdminPermissions = () => {
                     />
                 )}
 
-                {/* Revoke Permission Modal */}
-                {showRevokeModal && selectedUser && selectedPermission && (
-                    <RevokePermissionModal
-                        setShowRevokeModal={setShowRevokeModal}
-                        setSelectedPermission={setSelectedPermission}
-                        handleRevokePermission={handleRevokePermission}
-                        revokeMutation={revokeMutation}
+                {permissionToRevoke && (
+                    <ConfirmModal
+                        isOpen={!!permissionToRevoke}
+                        onClose={() => setPermissionToRevoke(null)}
+                        onConfirm={confirmRevokePermission}
+                        title="Revoke Permission"
+                        message={`Are you sure you want to revoke "${permissionToRevoke.permission}" from this user? They will immediately lose this access.`}
+                        confirmText="Revoke"
+                        cancelText="Cancel"
+                        variant="danger"
+                        isLoading={revokeMutation.isLoading}
                     />
                 )}
+
             </div>
         </AdminLayout>
     );

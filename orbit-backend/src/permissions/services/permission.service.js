@@ -1,14 +1,11 @@
 // services/permission.service.js
-const UserPermission = require("../models/user-permission.model");
-
-const User = require("../../user/user.model");
-
-const Permission = require("../models/permission.model");
-
-const Role = require("../models/role.model");
+const userPermissionRepository = require("../repositories/user-permission.repository");
+const permissionRepository = require("../repositories/permission.repository");
+const roleRepository = require("../repositories/role.repository");
+const userReadRepository = require("../repositories/user-read.repository");
 
 async function resolveUserPermissions(userId) {
-    const permissions = await UserPermission.find({ user: userId });
+    const permissions = await userPermissionRepository.findByUser(userId);
 
     return permissions.map(p => ({
         key: p.permission,
@@ -23,7 +20,7 @@ async function hasPermission(user, permission, options = {}) {
 
     const { storeId } = options;
 
-    return await UserPermission.exists({
+    return await userPermissionRepository.exists({
         user: user._id,
         permission,
         ...(storeId
@@ -36,34 +33,35 @@ async function hasPermission(user, permission, options = {}) {
  * Get all registered permissions
  */
 async function getAllPermissions() {
-    return await Permission.find({});
+    return await permissionRepository.findAll();
 }
 
 /**
- * Get a user's assigned permissions
+ * Get a user's assigned permissions.
+ * Returns null if the user doesn't exist or doesn't belong to businessId
+ * (caller — permission.controller.js — returns 404 in that case).
  */
-// src/permissions/services/permission.service.js
-async function getUserPermissions(userId) {
-    // 1. Get user
-    const user = await User.findById(userId).lean();
+async function getUserPermissions(userId, businessId) {
+    // 1. Get user, scoped to the requester's business
+    const user = businessId !== undefined
+        ? await userReadRepository.findByIdAndBusiness(userId, businessId)
+        : await userReadRepository.findByIdLean(userId);
 
     if (!user) {
-        throw new Error("User not found");
+        return null;
     }
 
     // 2. Get role permissions based on role name (not roleRef)
     let rolePermissions = [];
     if (user.role) {
-        const role = await Role.findOne({ name: user.role }).lean();
+        const role = await roleRepository.findByName(user.role);
         if (role) {
             rolePermissions = role.permissions || [];
         }
     }
 
     // 3. Get user-specific permissions
-    const userSpecificPermissions = await UserPermission.find({ user: userId })
-        .populate("store", "name code")
-        .lean();
+    const userSpecificPermissions = await userPermissionRepository.findByUserPopulated(userId);
 
     // 4. Transform user-specific permissions to match structure
     const transformedUserPermissions = userSpecificPermissions.map(perm => ({
@@ -130,16 +128,22 @@ async function getUserPermissions(userId) {
 /**
  * Assign a permission to a user
  * scope: "global" or "store"
+ * Returns null if the target user doesn't belong to businessId.
  */
-async function assignPermissionToUser({ userId, permission, scope = "global", storeId = null }) {
-    const exists = await UserPermission.exists({
+async function assignPermissionToUser({ userId, permission, scope = "global", storeId = null, businessId }) {
+    if (businessId !== undefined) {
+        const user = await userReadRepository.findByIdAndBusiness(userId, businessId);
+        if (!user) return null;
+    }
+
+    const exists = await userPermissionRepository.exists({
         user: userId,
         permission,
         ...(scope === "store" ? { scope, store: storeId } : { scope: "global" })
     });
 
     if (exists) throw new Error("User already has this permission");
-    return await UserPermission.create({
+    return await userPermissionRepository.create({
         user: userId,
         permission,
         scope,
@@ -149,9 +153,15 @@ async function assignPermissionToUser({ userId, permission, scope = "global", st
 
 /**
  * Revoke a permission from a user
+ * Returns null if the target user doesn't belong to businessId.
  */
-async function revokePermissionFromUser({ userId, permission, scope = "global", storeId = null }) {
-    const deleted = await UserPermission.findOneAndDelete({
+async function revokePermissionFromUser({ userId, permission, scope = "global", storeId = null, businessId }) {
+    if (businessId !== undefined) {
+        const user = await userReadRepository.findByIdAndBusiness(userId, businessId);
+        if (!user) return null;
+    }
+
+    const deleted = await userPermissionRepository.findOneAndDelete({
         user: userId,
         permission,
         ...(scope === "store" ? { scope, store: storeId } : { scope: "global" })

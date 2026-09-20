@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Product = require('../products/products.model');
+const {
+    findProductBySku,
+    upsertProductBySku,
+    createProduct,
+    countProducts,
+    findProducts,
+    deleteProductsByFilter,
+} = require('../products');
 
 // Load environment variables
 dotenv.config();
@@ -504,6 +511,8 @@ const gamingProducts = [
     }
 ];
 
+const BUSINESS_ID = "6a34199a7aa90a62cc731380";
+
 async function seedProducts() {
     try {
         // Connect to MongoDB
@@ -519,29 +528,26 @@ async function seedProducts() {
         let updated = 0;
 
         for (let productData of gamingProducts) {
-            const existingProduct = await Product.findOne({ sku: productData.sku });
+            const data = { ...productData, businessId: BUSINESS_ID };
+            const existingProduct = await findProductBySku(productData.sku);
 
             if (existingProduct) {
                 console.log(`⚠️  Product ${productData.sku} already exists - updating`);
-                await Product.findOneAndUpdate(
-                    { sku: productData.sku },
-                    productData,
-                    { upsert: true, new: true, runValidators: true }
-                );
+                await upsertProductBySku(productData.sku, data);
                 updated++;
             } else {
                 // Create new product
-                await Product.create(productData);
+                await createProduct(data);
                 console.log(`✅ Created product: ${productData.name} (${productData.sku})`);
                 created++;
             }
         }
 
         // Verify the data
-        const productCount = await Product.countDocuments();
-        const gamingCount = await Product.countDocuments({ productType: "gaming" });
-        const featuredCount = await Product.countDocuments({ isFeatured: true });
-        const lowStockCount = await Product.countDocuments({ status: "Low Stock" });
+        const productCount = await countProducts();
+        const gamingCount = await countProducts({ productType: "gaming" });
+        const featuredCount = await countProducts({ isFeatured: true });
+        const lowStockCount = await countProducts({ status: "Low Stock" });
 
         console.log(`\n📊 Product Statistics:`);
         console.log(`   Total products in database: ${productCount}`);
@@ -552,7 +558,7 @@ async function seedProducts() {
 
         // List all products with basic info
         console.log('\n🛍️  List of products:');
-        const allProducts = await Product.find({}).select('name sku category price stock status -_id');
+        const allProducts = await findProducts({}, { select: 'name sku category price stock status -_id' });
         allProducts.forEach(product => {
             const stockStatus = product.stock === 0 ? '🔴' : product.stock <= product.minStock ? '🟡' : '🟢';
             console.log(`   ${stockStatus} ${product.name} (${product.sku}) - KSh ${product.price.toLocaleString()} - Stock: ${product.stock}`);
@@ -604,7 +610,7 @@ Examples:
 if (args.includes('--list') || args.includes('-l')) {
     (async () => {
         await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/megagamers');
-        const products = await Product.find({}).select('name sku category price costPrice stock minStock status isFeatured');
+        const products = await findProducts({}, { select: 'name sku category price costPrice stock minStock status isFeatured' });
         console.log('\n🛍️  Existing Products:');
         products.forEach((product, index) => {
             const profit = product.price - product.costPrice;
@@ -623,14 +629,14 @@ if (args.includes('--list') || args.includes('-l')) {
 } else if (args.includes('--stats')) {
     (async () => {
         await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/megagamers');
-        const total = await Product.countDocuments();
-        const gaming = await Product.countDocuments({ productType: "gaming" });
-        const featured = await Product.countDocuments({ isFeatured: true });
-        const lowStock = await Product.countDocuments({ status: "Low Stock" });
-        const outOfStock = await Product.countDocuments({ status: "Out of Stock" });
+        const total = await countProducts();
+        const gaming = await countProducts({ productType: "gaming" });
+        const featured = await countProducts({ isFeatured: true });
+        const lowStock = await countProducts({ status: "Low Stock" });
+        const outOfStock = await countProducts({ status: "Out of Stock" });
 
         // Calculate total inventory value
-        const products = await Product.find({});
+        const products = await findProducts({});
         let totalInventoryValue = 0;
         let totalPotentialRevenue = 0;
 
@@ -655,9 +661,10 @@ if (args.includes('--list') || args.includes('-l')) {
 } else if (args.includes('--low-stock')) {
     (async () => {
         await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/megagamers');
-        const lowStockProducts = await Product.find({
-            $expr: { $lte: ["$stock", "$minStock"] }
-        }).select('name sku stock minStock category');
+        const lowStockProducts = await findProducts(
+            { $expr: { $lte: ["$stock", "$minStock"] } },
+            { select: 'name sku stock minStock category' }
+        );
 
         console.log('\n⚠️  Low Stock Products:');
         if (lowStockProducts.length === 0) {
@@ -680,7 +687,7 @@ if (args.includes('--list') || args.includes('-l')) {
     if (args.includes('--force') || args.includes('-f')) {
         (async () => {
             await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/megagamers');
-            await Product.deleteMany({});
+            await deleteProductsByFilter({});
             console.log('🗑️  All products deleted (force mode)');
             await mongoose.connection.close();
             seedProducts();

@@ -2,7 +2,7 @@
 
 const mongoose = require("mongoose");
 const connectDb = require("../config/db.connection");
-const Category = require("../products/model/category.model");
+const Category = require("../products/models/category.model");
 
 const categories = [
   "gaming-pcs",
@@ -32,6 +32,8 @@ const categories = [
   "Solar Products",
 ];
 
+const BUSINESS_ID = "6a34199a7aa90a62cc731380";
+
 const seedCategories = async () => {
   try {
     console.log("🌱 Seeding categories...");
@@ -42,13 +44,14 @@ const seedCategories = async () => {
         .replace(/ /g, "-")
         .replace(/&/g, "and");
 
-      const exists = await Category.findOne({ name: categoryName });
+      const exists = await Category.findOne({ name: categoryName, businessId: BUSINESS_ID });
 
       if (!exists) {
         await Category.create({
           name: categoryName,
           slug: slug,
           description: `${categoryName} products`,
+          businessId: BUSINESS_ID,
         });
 
         console.log(`✅ Added: ${categoryName}`);

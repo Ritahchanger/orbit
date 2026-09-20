@@ -244,11 +244,11 @@ const AdminStoresLoading = ({
   return (
     <div className="border-t border-gray-200 dark:border-gray-800 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 sticky top-0 z-40">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-14 gap-2 overflow-x-auto md:overflow-visible">
           {/* Left: Current Store — fixed width, never shifts */}
-          <div className="flex items-center gap-3 w-[230px]  shrink-0">
+          <div className="flex items-center gap-3 w-[180px] sm:w-[230px] shrink-0">
             <div
-              className={`flex items-center gap-2 px-4 py-2 rounded-sm border shadow-sm w-[220px] shrink-0 overflow-hidden ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-sm border shadow-sm w-[170px] sm:w-[220px] shrink-0 overflow-hidden ${
                 isCurrentStoreAccessible
                   ? "border-blue-200 dark:border-blue-500/30 bg-linear-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
                   : "border-yellow-200 dark:border-yellow-500/30 bg-linear-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20"

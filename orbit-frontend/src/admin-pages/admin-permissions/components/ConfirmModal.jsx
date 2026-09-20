@@ -8,14 +8,12 @@ const ConfirmModal = ({
     message,
     confirmText = "Confirm",
     cancelText = "Cancel",
-    variant = "warning", // 'warning', 'danger', 'info', 'success'
+    variant = "warning", 
     isLoading = false,
     confirmDisabled = false,
-    size = "md" // 'sm', 'md', 'lg'
+    size = "md" 
 }) => {
     if (!isOpen) return null
-
-    // Variant configurations
     const variants = {
         warning: {
             icon: AlertCircle,
@@ -51,7 +49,6 @@ const ConfirmModal = ({
         }
     }
 
-    // Size configurations
     const sizes = {
         sm: "max-w-sm",
         md: "max-w-md",
@@ -77,7 +74,6 @@ const ConfirmModal = ({
         }
     }
 
-    // Add event listener for keyboard shortcuts
     React.useEffect(() => {
         if (isOpen) {
             document.addEventListener('keydown', handleKeyDown)
@@ -89,7 +85,6 @@ const ConfirmModal = ({
 
     return (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-            {/* Backdrop */}
             <div
                 className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
                 onClick={onClose}
@@ -121,14 +116,11 @@ const ConfirmModal = ({
                                 </button>
                             </div>
                         </div>
-
-                        {/* Content */}
                         <div className="p-6">
                             <div className="mb-6">
                                 <p className="text-gray-300">{message}</p>
                             </div>
 
-                            {/* Warning/Danger Note */}
                             {variant === 'danger' && (
                                 <div className={`mb-6 p-4 rounded-sm ${config.bgColor} ${config.borderColor} border`}>
                                     <div className="flex items-start gap-3">
@@ -143,7 +135,7 @@ const ConfirmModal = ({
                                 </div>
                             )}
 
-                            {/* Actions */}
+                         
                             <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
                                 <button
                                     type="button"

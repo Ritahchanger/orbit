@@ -61,6 +61,7 @@ const RoleManagement = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
   const [showCloneModal, setShowCloneModal] = useState(false);
   const [showPermissionsModal, setShowPermissionsModal] = useState(false);
 
@@ -293,7 +294,10 @@ const RoleManagement = () => {
   // Handle bulk delete
   const handleBulkDelete = async () => {
     if (selectedRoles.length === 0) return;
+    setShowBulkDeleteModal(true);
+  };
 
+  const confirmBulkDelete = async () => {
     try {
       // Delete each selected role
       for (const roleId of selectedRoles) {
@@ -302,6 +306,7 @@ const RoleManagement = () => {
 
       toast.success(`${selectedRoles.length} role(s) deleted successfully`);
       setSelectedRoles([]);
+      setShowBulkDeleteModal(false);
       refetchRoles();
       refetchStats();
     } catch (error) {
@@ -710,6 +715,20 @@ const RoleManagement = () => {
             onConfirm={() => handleDeleteRole(selectedRole._id)}
             title="Delete Role"
             message={`Are you sure you want to delete the role "${selectedRole.name}"? This action cannot be undone.`}
+            confirmText="Delete"
+            cancelText="Cancel"
+            variant="danger"
+            isLoading={deleteRoleMutation.isLoading}
+          />
+        )}
+
+        {showBulkDeleteModal && (
+          <ConfirmModal
+            isOpen={showBulkDeleteModal}
+            onClose={() => setShowBulkDeleteModal(false)}
+            onConfirm={confirmBulkDelete}
+            title="Delete Roles"
+            message={`Are you sure you want to delete ${selectedRoles.length} selected role(s)? This action cannot be undone.`}
             confirmText="Delete"
             cancelText="Cancel"
             variant="danger"

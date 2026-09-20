@@ -322,7 +322,7 @@ const ShortcutsOverlay = () => {
       {/* Keyboard Shortcuts Toggle Button */}
       <button
         onClick={() => setShowShortcuts(!showShortcuts)}
-        className="fixed bottom-4 right-16 z-[30] p-2 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full shadow-lg shadow-blue-500/20 dark:shadow-blue-500/30 transition-all duration-300 hover:scale-110 group border border-white/10 dark:border-white/20"
+        className="hidden md:block fixed bottom-4 right-16 z-[30] p-2 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full shadow-lg shadow-blue-500/20 dark:shadow-blue-500/30 transition-all duration-300 hover:scale-110 group border border-white/10 dark:border-white/20"
         aria-label="Keyboard shortcuts"
         title="Toggle keyboard shortcuts (Ctrl + /)"
       >
@@ -505,7 +505,7 @@ const ShortcutsOverlay = () => {
 
       {/* Floating Helper - Shows when shortcuts are hidden */}
       {!showShortcuts && isVisible && (
-        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-[9999] animate-pulse">
+        <div className="hidden md:block fixed bottom-20 left-1/2 transform -translate-x-1/2 z-[9999] animate-pulse">
           <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 shadow-lg">
             <div className="flex items-center space-x-2">
               <Keyboard

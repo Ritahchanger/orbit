@@ -39,7 +39,7 @@ router.post(
 // Get deleted transactions (read-only)
 router.get(
   "/deleted",
-  // authorize(["transactions.view.deleted"]),
+  authorize(["transactions.view.deleted"]),
   asyncWrapper(transactionDeleteController.getDeletedTransactions),
 );
 

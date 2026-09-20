@@ -2,11 +2,14 @@ import React, { useRef, useState, useEffect } from 'react';
 
 const AvailablePermissions = ({
     filteredPermissions,
+    userPermissions = [],
     getModuleIcon,
     getPermissionBadgeColor,
     setPermissionData,
     setShowAssignModal
 }) => {
+    const assignedKeys = new Set((userPermissions || []).map(p => p.permission));
+    const isAssigned = (key) => assignedKeys.has(key);
     const tableRef = useRef(null);
     const [showScrollIndicator, setShowScrollIndicator] = useState(false);
 
@@ -55,12 +58,19 @@ const AvailablePermissions = ({
 
             {/* Search and Info Bar */}
             <div className="bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 p-3">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                         Showing all available system permissions
                     </p>
-                    <div className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 rounded-full">
-                        {filteredPermissions.length} total
+                    <div className="flex items-center gap-2">
+                        {assignedKeys.size > 0 && (
+                            <div className="text-xs px-2 py-1 bg-amber-100 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300 rounded-full">
+                                {assignedKeys.size} assigned
+                            </div>
+                        )}
+                        <div className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 rounded-full">
+                            {filteredPermissions.length} total
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,10 +136,15 @@ const AvailablePermissions = ({
                                 </div>
 
                                 {/* Action Button */}
-                                <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                                <div className="pt-2 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
                                     <div className="text-xs text-primary-600 dark:text-primary-400 font-medium">
-                                        Click to assign this permission →
+                                        {isAssigned(perm.key) ? 'Assign again (different scope) →' : 'Click to assign →'}
                                     </div>
+                                    {isAssigned(perm.key) && (
+                                        <span className="px-2 py-0.5 text-xs rounded-full bg-amber-100 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300">
+                                            Assigned
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -214,9 +229,15 @@ const AvailablePermissions = ({
                                             </span>
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap">
-                                            <span className="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800">
-                                                Available
-                                            </span>
+                                            {isAssigned(perm.key) ? (
+                                                <span className="px-2 py-1 text-xs rounded-full bg-amber-100 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                                    Assigned
+                                                </span>
+                                            ) : (
+                                                <span className="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800">
+                                                    Available
+                                                </span>
+                                            )}
                                         </td>
                                     </tr>
                                 );

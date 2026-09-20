@@ -35,13 +35,23 @@ const seedRoles = async () => {
     const sensitivePermissions = [
       ...profitRelatedPermissions,
       "users.delete",
+      "users.change_role",
+      "users.assign_store",
+      "users.export",
+      "users.impersonate",
       "roles.manage",
       "permissions.manage",
       "database.manage",
       "settings.manage",
+      "admin.cleanup",
+      "logs.delete",
       "analytics.export",
       "reports.delete",
       "transactions.delete",
+      "transactions.delete.permanent",
+      "transactions.restore",
+      "transactions.view.deleted",
+      "transactions.view.stats",
       "transactions.reverse",
       "transactions.approve",
       "transactions.audit",
@@ -49,9 +59,17 @@ const seedRoles = async () => {
       "sales.void",
       "sales.refund",
       "stores.delete",
+      "stores.manage",
       "workers.delete",
       "products.delete",
       "inventory.delete",
+      "consultation_types.manage",
+      "consultations.delete",
+      "consultations.export",
+      "newsletter.manage",
+      "newsletter.view",
+      "newsletter.create",
+      "newsletter.send",
     ];
 
     // Define role permission assignments
@@ -68,9 +86,22 @@ const seedRoles = async () => {
         name: "admin",
         description: "Administrator with management permissions",
         permissions: permissionKeys.filter(
-          (key) => !sensitivePermissions.includes(key) || 
-                   key === "users.view" || 
-                   key === "roles.view"
+          (key) => !sensitivePermissions.includes(key) ||
+                   key === "users.view" ||
+                   key === "users.create" ||
+                   key === "users.update" ||
+                   key === "users.export" ||
+                   key === "users.change_role" ||
+                   key === "users.assign_store" ||
+                   key === "roles.view" ||
+                   key === "logs.view" ||
+                   key === "stores.manage" ||
+                   key === "transactions.view.deleted" ||
+                   key === "transactions.restore" ||
+                   key === "transactions.view.stats" ||
+                   key === "consultations.delete" ||
+                   key === "consultations.export" ||
+                   key === "consultation_types.manage"
         ),
         isSystemRole: true,
         canAssign: true,
@@ -83,6 +114,7 @@ const seedRoles = async () => {
           "products.view",
           "products.create",
           "products.update",
+          "products.view_cost",
           "sales.view",
           "sales.create",
           "sales.update",
@@ -92,15 +124,17 @@ const seedRoles = async () => {
           "inventory.create",
           "dashboard.view",
           "reports.view",
+          "reports.sales.view",
+          "reports.inventory.view",
           "stores.view",
           "transactions.view",
-           "transactions.mpesa.view",
+          "transactions.mpesa.view",
           "workers.view",
+          "consultations.view",
           "profile.view",
           "profile.update",
           "profile.change_password",
-        ].filter(permission => 
-          // Ensure no profit permissions sneak in
+        ].filter(permission =>
           !profitRelatedPermissions.includes(permission) &&
           !sensitivePermissions.includes(permission)
         ),
@@ -122,7 +156,7 @@ const seedRoles = async () => {
           "profile.update",
           "inventory.view",
           "profile.change_password",
-          "customers.view", // Add if exists
+          "consultations.view",
         ].filter(permission => 
           // Strict filter - no profit, no financial, no sensitive data
           !profitRelatedPermissions.includes(permission) &&

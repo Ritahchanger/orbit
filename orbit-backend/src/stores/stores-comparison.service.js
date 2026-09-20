@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Store = require('./store.model');
 const StoreInventory = require('../store-inventory/store-inventory.model');
 const Sale = require('../sales/sales.model');
-const Product = require('../products/products.model');
+const { findProducts } = require('../products');
 
 class StoreComparisonService {
     /**
@@ -1201,10 +1201,10 @@ class StoreComparisonService {
         if (sales.length === 0) return [];
 
         const productIds = sales.map(s => s._id);
-        const products = await Product.find(
+        const products = await findProducts(
             { _id: { $in: productIds } },
-            '_id category'
-        ).lean();
+            { select: '_id category' }
+        );
 
         // Create a map for quick lookup
         const productCategoryMap = {};

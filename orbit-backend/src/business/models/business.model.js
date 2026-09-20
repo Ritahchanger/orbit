@@ -13,6 +13,7 @@ const businessSchema = new mongoose.Schema(
       type: String,
       required: [true, "Business type is required"],
       trim: true,
+      
     },
 
     registrationNumber: {
@@ -190,6 +191,40 @@ const businessSchema = new mongoose.Schema(
       currency: { type: String, default: "KES" },
       timezone: { type: String, default: "Africa/Nairobi" },
     },
+
+    // ── Ecommerce Storefront Configuration ────────────────────
+
+    ecommerce: {
+      enabled: { type: Boolean, default: false },
+      isPublished: { type: Boolean, default: false },
+      storeSlug: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        match: [
+          /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+          "Store slug can only contain lowercase letters, numbers and hyphens",
+        ],
+      },
+      storeName: { type: String, trim: true, default: "" },
+      tagline: { type: String, trim: true, default: "" },
+      theme: {
+        primaryColor: { type: String, trim: true, default: "#3b82f6" },
+        logoUrl: { type: String, trim: true, default: "" },
+        bannerUrl: { type: String, trim: true, default: "" },
+      },
+      currency: { type: String, trim: true, default: "KES" },
+      shippingFee: { type: Number, min: 0, default: 0 },
+      freeShippingThreshold: { type: Number, min: 0, default: null },
+      taxRate: { type: Number, min: 0, max: 100, default: 0 },
+      paymentMethods: {
+        type: [String],
+        enum: ["cash", "mpesa", "card", "paybill", "other"],
+        default: ["mpesa", "cash"],
+      },
+      contactEmail: { type: String, trim: true, lowercase: true, default: "" },
+      contactPhone: { type: String, trim: true, default: "" },
+    },
   },
   {
     timestamps: true,
@@ -210,6 +245,19 @@ businessSchema.index(
 businessSchema.index(
   { registrationNumber: 1 },
   { unique: true, partialFilterExpression: { isDeleted: false } },
+);
+
+// Storefront slugs are globally unique (used for public storefront URLs) but
+// only enforced once a business actually sets one and isn't soft-deleted.
+businessSchema.index(
+  { "ecommerce.storeSlug": 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      "ecommerce.storeSlug": { $type: "string" },
+      isDeleted: false,
+    },
+  },
 );
 
 // Query performance

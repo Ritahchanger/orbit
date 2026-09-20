@@ -4,6 +4,8 @@ const newsletterController = require("./newsletter.controller");
 
 const tokenValidator = require("../middlewares/tokenValidator");
 
+const permissionValidator = require("../middlewares/permissionValidator");
+
 const asyncWrapper = require("../middlewares/asyncMiddleware");
 
 Router.post("/subscribe", asyncWrapper(newsletterController.subscribe));
@@ -16,12 +18,14 @@ Router.post(
 Router.get(
   "/subscribers",
   tokenValidator,
+  permissionValidator(["newsletter.view"]),
   asyncWrapper(newsletterController.getAllNewsLettersController),
 );
 
 Router.post(
   "/send",
   tokenValidator,
+  permissionValidator(["newsletter.send"]),
   asyncWrapper(newsletterController.sendNewsletterController),
 );
 

@@ -1,7 +1,7 @@
 // services/store.service.js
 const Store = require("./store.model");
 const User = require("../user/user.model");
-const Product = require("../products/products.model");
+const { findProducts } = require("../products");
 const StoreInventory = require("../store-inventory/store-inventory.model");
 
 class StoreService {
@@ -357,13 +357,16 @@ class StoreService {
 
     if (filters.search) {
       // Search in product details
-      const searchProducts = await Product.find({
-        $or: [
-          { name: { $regex: filters.search, $options: "i" } },
-          { sku: { $regex: filters.search, $options: "i" } },
-          { brand: { $regex: filters.search, $options: "i" } },
-        ],
-      }).select("_id");
+      const searchProducts = await findProducts(
+        {
+          $or: [
+            { name: { $regex: filters.search, $options: "i" } },
+            { sku: { $regex: filters.search, $options: "i" } },
+            { brand: { $regex: filters.search, $options: "i" } },
+          ],
+        },
+        { select: "_id" },
+      );
 
       query.product = { $in: searchProducts.map((p) => p._id) };
     }

@@ -1,6 +1,6 @@
 // services/stockTransfer.service.js
 const StoreInventory = require("../store-inventory/store-inventory.model");
-const Product = require("../products/products.model");
+const { findProductById, findProducts } = require("../products");
 const StockTransfer = require("../stock-transfer/stock-transfer.model");
 
 const mongoose = require("mongoose");
@@ -60,7 +60,7 @@ class StockTransferService {
       }).session(session);
 
       if (!destInventory) {
-        const product = await Product.findById(productId).session(session);
+        const product = await findProductById(productId, { session });
 
         if (!product) {
           throw new Error("Product not found");
@@ -144,38 +144,44 @@ class StockTransferService {
   /**
    * Get transfer history
    */
-  async getTransferHistory(filters = {}, page = 1, limit = 20) {
-    const query = {};
+  async getTransferHistory(filters = {}, page = 1, limit = 20, businessId) {
     const { search } = filters;
 
-    if (filters.sourceStore) query.sourceStore = filters.sourceStore;
-    if (filters.destinationStore)
-      query.destinationStore = filters.destinationStore;
-    if (filters.product) query.product = filters.product;
-    if (filters.status) query.status = filters.status;
+    const query = {
+      businessId,
+      ...(filters.sourceStore && { sourceStore: filters.sourceStore }),
+      ...(filters.destinationStore && {
+        destinationStore: filters.destinationStore,
+      }),
+      ...(filters.product && { product: filters.product }),
+      ...(filters.status && { status: filters.status }),
+    };
 
+    // Date filter
     if (filters.fromDate || filters.toDate) {
-      query.transferredAt = {};
-      if (filters.fromDate)
-        query.transferredAt.$gte = new Date(filters.fromDate);
-      if (filters.toDate) query.transferredAt.$lte = new Date(filters.toDate);
+      query.transferredAt = {
+        ...(filters.fromDate && { $gte: new Date(filters.fromDate) }),
+        ...(filters.toDate && { $lte: new Date(filters.toDate) }),
+      };
     }
 
-    // 🔍 SEARCH LOGIC (THE FIX)
+    // 🔍 SEARCH
     if (search) {
       const regex = new RegExp(search, "i");
 
       const [products, stores, users] = await Promise.all([
-        mongoose
-          .model("Product")
-          .find({
+        findProducts(
+          {
+            businessId,
             $or: [{ name: regex }, { sku: regex }],
-          })
-          .select("_id"),
+          },
+          { select: "_id" },
+        ),
 
         mongoose
           .model("Store")
           .find({
+            businessId,
             $or: [{ name: regex }, { code: regex }],
           })
           .select("_id"),
@@ -183,6 +189,7 @@ class StockTransferService {
         mongoose
           .model("User")
           .find({
+            businessId,
             email: regex,
           })
           .select("_id"),

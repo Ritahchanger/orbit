@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const CashPaymentModal = ({
   isOpen,
@@ -6,10 +6,12 @@ const CashPaymentModal = ({
   totalAmount,
   onConfirm,
   formatCurrency,
+  isSubmitting = false,
 }) => {
   const [amountGiven, setAmountGiven] = useState("");
   const [change, setChange] = useState(0);
   const [error, setError] = useState("");
+  const hasSubmittedRef = useRef(false);
 
   // Calculate change when amount given changes
   useEffect(() => {
@@ -39,11 +41,14 @@ const CashPaymentModal = ({
       setAmountGiven("");
       setChange(0);
       setError("");
+      hasSubmittedRef.current = false;
     }
   }, [isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (hasSubmittedRef.current || isSubmitting) return;
 
     if (!amountGiven || isNaN(amountGiven)) {
       setError("Please enter a valid amount");
@@ -57,6 +62,8 @@ const CashPaymentModal = ({
       );
       return;
     }
+
+    hasSubmittedRef.current = true;
 
     onConfirm({
       amountGiven: given,
@@ -197,10 +204,10 @@ const CashPaymentModal = ({
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={!amountGiven || change < 0}
+            disabled={!amountGiven || change < 0 || isSubmitting}
             className="flex-1 py-3 px-4 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-sm transition-colors font-medium"
           >
-            Confirm Payment
+            {isSubmitting ? "Processing..." : "Confirm Payment"}
           </button>
         </div>
       </div>

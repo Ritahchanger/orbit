@@ -4,6 +4,7 @@ const tokenValidator = require("../middlewares/refreshTokenValidator");
 const {
   storeAccess,
   canManageStore,
+  canManageInventoryItem,
 } = require("../middlewares/store-access.middleware");
 const StockInventoryController = require("./stock-inventory.controller");
 
@@ -21,7 +22,7 @@ router.use(tokenValidator);
  */
 router.get(
   "/:storeId/inventory",
-  storeAccess("id"),
+  storeAccess("params", "storeId"),
   asyncHandler(StockInventoryController.getStoreInventory),
 );
 
@@ -32,7 +33,7 @@ router.get(
  */
 router.get(
   "/:storeId/inventory/stats",
-  storeAccess("id"),
+  storeAccess("params", "storeId"),
   asyncHandler(StockInventoryController.getInventoryStats),
 );
 
@@ -43,7 +44,7 @@ router.get(
  */
 router.get(
   "/:storeId/inventory/alerts",
-  storeAccess("id"),
+  storeAccess("params", "storeId"),
   asyncHandler(StockInventoryController.getLowStockAlerts),
 );
 
@@ -54,7 +55,7 @@ router.get(
  */
 router.get(
   "/:storeId/inventory/available",
-  storeAccess("id"),
+  storeAccess("params", "storeId"),
   asyncHandler(StockInventoryController.getAvailableProducts),
 );
 
@@ -65,7 +66,7 @@ router.get(
  */
 router.post(
   "/:storeId/inventory/manage",
-  canManageStore("id"),
+  canManageStore("params", "storeId"),
   asyncHandler(StockInventoryController.addOrUpdateInventory),
 );
 
@@ -76,7 +77,7 @@ router.post(
  */
 router.post(
   "/:storeId/inventory/quick-add",
-  canManageStore("id"),
+  canManageStore("params", "storeId"),
   asyncHandler(StockInventoryController.quickAddBySku),
 );
 
@@ -87,7 +88,7 @@ router.post(
  */
 router.put(
   "/inventory/:inventoryId", // Fixed: Added "inventory/" prefix
-  canManageStore("id"),
+  canManageInventoryItem("inventoryId"),
   asyncHandler(StockInventoryController.updateInventoryItem),
 );
 
@@ -98,7 +99,7 @@ router.put(
  */
 router.delete(
   "/inventory/:inventoryId", // Fixed: Added "inventory/" prefix
-  canManageStore("id"),
+  canManageInventoryItem("inventoryId"),
   asyncHandler(StockInventoryController.removeFromInventory),
 );
 
@@ -109,6 +110,7 @@ router.delete(
  */
 router.post(
   "/inventory/:inventoryId/restock", // Fixed: Added "inventory/" prefix
+  canManageInventoryItem("inventoryId"),
   asyncHandler(StockInventoryController.restockProduct),
 );
 
@@ -122,20 +124,20 @@ router.post(
 // Bulk delete inventory items
 router.delete(
   "/:storeId/inventory",
-  canManageStore("id"),
+  canManageStore("params", "storeId"),
   asyncHandler(StockInventoryController.deleteInventory),
 );
 
 // Clear entire store inventory (danger zone)
 router.post(
   "/:storeId/inventory/clear",
-  canManageStore("id"),
+  canManageStore("params", "storeId"),
   asyncHandler(StockInventoryController.clearStoreInventory),
 );
 
 router.post(
   "/inventory/:inventoryId/sale", // Fixed: Added "inventory/" prefix
-  canManageStore("id"),
+  canManageInventoryItem("inventoryId"),
   asyncHandler(StockInventoryController.recordSale),
 );
 
@@ -146,7 +148,7 @@ router.post(
  */
 router.post(
   "/inventory/:inventoryId/adjust", // Fixed: Added "inventory/" prefix
-  canManageStore("id"),
+  canManageInventoryItem("inventoryId"),
   asyncHandler(StockInventoryController.adjustStock),
 );
 
@@ -157,7 +159,7 @@ router.post(
  */
 router.get(
   "/:storeId/inventory/report",
-  storeAccess("id"),
+  storeAccess("params", "storeId"),
   asyncHandler(StockInventoryController.generateInventoryReport),
 );
 

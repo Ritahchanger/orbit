@@ -1,13 +1,18 @@
 // routes/appRoutes.js
 import { useSimpleRolePermissionCheck } from "../context/RolePermissionContext";
 // Public Components
-import Home from "../everyone-pages/home/pages/Home";
-import Products from "../everyone-pages/products/pages/Products";
-import ProductDetails from "../everyone-pages/products/pages/ProductDetails";
 import Community from "../everyone-pages/community/pages/Community";
 import SetUpConsultation from "../everyone-pages/consultation/pages/SetUpConsultation";
 import AdminLogin from "../authentication/login/Login";
 import PageNotFound from "../components/common/PageNotFound";
+import RootHome from "../everyone-pages/storefront/pages/RootHome";
+import RootProducts from "../everyone-pages/storefront/pages/RootProducts";
+import RootProductDetail from "../everyone-pages/storefront/pages/RootProductDetail";
+import StorefrontHome from "../everyone-pages/storefront/pages/StorefrontHome";
+import StorefrontProductDetail from "../everyone-pages/storefront/pages/StorefrontProductDetail";
+import StorefrontCart from "../everyone-pages/storefront/pages/StorefrontCart";
+import StorefrontCheckout from "../everyone-pages/storefront/pages/StorefrontCheckout";
+import StorefrontOrderConfirmation from "../everyone-pages/storefront/pages/StorefrontOrderConfirmation";
 // Admin Components
 import AdminDashboard from "../admin-pages/dashboard/pages/AdminDashboard";
 import AdminProducts from "../admin-pages/products/pages/Products";
@@ -38,6 +43,14 @@ import AdminSubscriptions from "../admin-pages/admin-subscriptions/pages/AdminSu
 
 import AdminBusinessProfile from "../admin-pages/admin-business-profile/pages/AdminBusinessProfile";
 
+import AdminEcommerceSettings from "../admin-ecommerce/settings/pages/AdminEcommerceSettings";
+import AdminEcommerceOrders from "../admin-ecommerce/orders/pages/AdminEcommerceOrders";
+import AdminEcommerceOrderDetail from "../admin-ecommerce/orders/pages/AdminEcommerceOrderDetail";
+import AdminEcommerceInvoices from "../admin-ecommerce/invoices/pages/AdminEcommerceInvoices";
+import AdminEcommerceInvoiceDetail from "../admin-ecommerce/invoices/pages/AdminEcommerceInvoiceDetail";
+import AdminEcommerceCustomers from "../admin-ecommerce/customers/pages/AdminEcommerceCustomers";
+import AdminEcommerceCustomerDetail from "../admin-ecommerce/customers/pages/AdminEcommerceCustomerDetail";
+
 // import AdminCategoriesPage from "../admin-pages/admin-categories/pages/AdminCategories";
 
 // Hook to use role-based route protection
@@ -53,16 +66,36 @@ export const useRouteAccess = () => {
 
 // Route definitions
 export const publicRoutes = [
-  { path: "/", element: <Home /> },
+  // Domain-aware: renders that business's storefront when the hostname (or a
+  // ?store= override) resolves to a tenant, otherwise falls back to the
+  // platform's own marketing pages. See useStoreSlug for resolution order.
+  { path: "/", element: <RootHome /> },
   { path: "/community", element: <Community /> },
   { path: "/setup-consultation", element: <SetUpConsultation /> },
-  { path: "/products", element: <Products /> },
-  { path: "/products/category/:category", element: <Products /> },
-  { path: "/products/:id", element: <ProductDetails /> },
-  { path: "/category/:category", element: <Products /> },
-  { path: "/brand/:brand", element: <Products /> },
+  { path: "/products", element: <RootProducts /> },
+  { path: "/products/category/:category", element: <RootProducts /> },
+  { path: "/products/:id", element: <RootProductDetail /> },
+  { path: "/category/:category", element: <RootProducts /> },
+  { path: "/brand/:brand", element: <RootProducts /> },
   { path: "/admin/login", element: <AdminLogin /> },
   { path: "/admin/signup", element: <AdminSignup /> },
+
+  // Domain-scoped cart/checkout (no :slug in the path — the tenant is
+  // implicit from the hostname or a ?store= override)
+  { path: "/cart", element: <StorefrontCart /> },
+  { path: "/checkout", element: <StorefrontCheckout /> },
+  { path: "/order-confirmation/:orderNumber", element: <StorefrontOrderConfirmation /> },
+
+  // Path-scoped storefront (explicit /store/:slug, always works regardless of domain)
+  { path: "/store/:slug", element: <StorefrontHome /> },
+  { path: "/store/:slug/products/:productId", element: <StorefrontProductDetail /> },
+  { path: "/store/:slug/cart", element: <StorefrontCart /> },
+  { path: "/store/:slug/checkout", element: <StorefrontCheckout /> },
+  {
+    path: "/store/:slug/order-confirmation/:orderNumber",
+    element: <StorefrontOrderConfirmation />,
+  },
+
   { path: "*", element: <PageNotFound /> },
 ];
 
@@ -224,5 +257,40 @@ export const protectedRoutes = [
     path: "/admin/ecommerce",
     element: <AdminEcommerceDashboard />,
     roles: ["admin", "superadmin", "manager", "cashier"],
+  },
+  {
+    path: "/admin/ecommerce/settings/store",
+    element: <AdminEcommerceSettings />,
+    roles: ["admin", "superadmin"],
+  },
+  {
+    path: "/admin/ecommerce/orders",
+    element: <AdminEcommerceOrders />,
+    roles: ["admin", "superadmin", "manager", "cashier"],
+  },
+  {
+    path: "/admin/ecommerce/orders/:orderId",
+    element: <AdminEcommerceOrderDetail />,
+    roles: ["admin", "superadmin", "manager", "cashier"],
+  },
+  {
+    path: "/admin/ecommerce/invoices",
+    element: <AdminEcommerceInvoices />,
+    roles: ["admin", "superadmin", "manager"],
+  },
+  {
+    path: "/admin/ecommerce/invoices/:invoiceId",
+    element: <AdminEcommerceInvoiceDetail />,
+    roles: ["admin", "superadmin", "manager"],
+  },
+  {
+    path: "/admin/ecommerce/customers",
+    element: <AdminEcommerceCustomers />,
+    roles: ["admin", "superadmin", "manager"],
+  },
+  {
+    path: "/admin/ecommerce/customers/:phone",
+    element: <AdminEcommerceCustomerDetail />,
+    roles: ["admin", "superadmin", "manager"],
   },
 ];

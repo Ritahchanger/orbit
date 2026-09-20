@@ -105,6 +105,7 @@ export default defineConfig(({ mode }) => {
       host: true,
       allowedHosts: [
         "localhost",
+        ".localhost",
         ".trycloudflare.com",
         ".ngrok-free.app",
         ".ngrok.io",

@@ -1,7 +1,7 @@
 // services/role.service.js
-const Role = require("../models/role.model");
-const Permission = require("../models/permission.model");
-const User = require("../../user/user.model");
+const roleRepository = require("../repositories/role.repository");
+const permissionRepository = require("../repositories/permission.repository");
+const userReadRepository = require("../repositories/user-read.repository");
 
 class RoleService {
     /**
@@ -20,14 +20,12 @@ class RoleService {
         const sort = {};
         sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
 
-        const roles = await Role.find(query)
-            .sort(sort)
-            .lean();
+        const roles = await roleRepository.findAll(query, sort);
 
         // Get user counts for each role
         const rolesWithUserCounts = await Promise.all(
             roles.map(async (role) => {
-                const userCount = await User.countDocuments({ role: role.name });
+                const userCount = await userReadRepository.countByRole(role.name);
                 return {
                     ...role,
                     userCount
@@ -44,13 +42,13 @@ class RoleService {
      */
     async getRoleById(roleId) {
 
-        const role = await Role.findById(roleId).lean();
+        const role = await roleRepository.findById(roleId);
         if (!role) {
             throw new Error("Role not found");
         }
 
         // Get user count
-        const userCount = await User.countDocuments({ role: role.name });
+        const userCount = await userReadRepository.countByRole(role.name);
 
         return {
             ...role,
@@ -64,13 +62,13 @@ class RoleService {
      */
     async getRoleByName(roleName) {
 
-        const role = await Role.findOne({ name: roleName.toLowerCase() }).lean();
+        const role = await roleRepository.findByName(roleName);
         if (!role) {
             throw new Error(`Role '${roleName}' not found`);
         }
 
         // Get user count
-        const userCount = await User.countDocuments({ role: role.name });
+        const userCount = await userReadRepository.countByRole(role.name);
 
         return {
             ...role,
@@ -80,13 +78,20 @@ class RoleService {
     }
 
     /**
+     * Get role by name — thin passthrough for external consumers (no throw,
+     * no userCount enrichment). Matches how permissionValidator middleware and
+     * normal-auth.service used to query the Role model directly.
+     */
+    async findRoleByName(name) {
+        return await roleRepository.findByNameRaw(name);
+    }
+
+    /**
      * Create a new role
      */
     async createRole(roleData) {
 
-        const existingRole = await Role.findOne({
-            name: roleData.name.toLowerCase()
-        });
+        const existingRole = await roleRepository.findOneByName(roleData.name);
 
         if (existingRole) {
             throw new Error(`Role '${roleData.name}' already exists`);
@@ -102,7 +107,7 @@ class RoleService {
             throw new Error("Role level must be between 1 and 10");
         }
 
-        const role = new Role({
+        const savedRole = await roleRepository.create({
             name: roleData.name.toLowerCase(),
             description: roleData.description || "",
             permissions: roleData.permissions || [],
@@ -111,7 +116,6 @@ class RoleService {
             level: roleData.level || 4
         });
 
-        const savedRole = await role.save();
         return savedRole.toObject();
 
     }
@@ -121,7 +125,7 @@ class RoleService {
      */
     async updateRole(roleId, updates) {
 
-        const role = await Role.findById(roleId);
+        const role = await roleRepository.findByIdForUpdate(roleId);
         if (!role) {
             throw new Error("Role not found");
         }
@@ -132,16 +136,15 @@ class RoleService {
         }
 
         // If name is being updated, check for duplicates
-        if (updates.name && updates.name !== role.name) {
-            const existingRole = await Role.findOne({
-                name: updates.name.toLowerCase(),
-                _id: { $ne: roleId }
-            });
+        if (updates.name && updates.name.toLowerCase() !== role.name) {
+            const existingRole = await roleRepository.findByNameExcludingId(updates.name, roleId);
 
             if (existingRole) {
                 throw new Error(`Role '${updates.name}' already exists`);
             }
             updates.name = updates.name.toLowerCase();
+        } else {
+            delete updates.name;
         }
 
         // Validate permissions if being updated
@@ -155,7 +158,7 @@ class RoleService {
         }
 
         Object.assign(role, updates);
-        const updatedRole = await role.save();
+        const updatedRole = await roleRepository.save(role);
 
         return updatedRole.toObject();
 
@@ -166,7 +169,7 @@ class RoleService {
      */
     async deleteRole(roleId) {
 
-        const role = await Role.findById(roleId);
+        const role = await roleRepository.findByIdForUpdate(roleId);
         if (!role) {
             throw new Error("Role not found");
         }
@@ -177,12 +180,12 @@ class RoleService {
         }
 
         // Check if any users are assigned to this role
-        const userCount = await User.countDocuments({ role: role.name });
+        const userCount = await userReadRepository.countByRole(role.name);
         if (userCount > 0) {
             throw new Error(`Cannot delete role. ${userCount} user(s) are assigned to this role.`);
         }
 
-        await role.deleteOne();
+        await roleRepository.deleteOne(role);
 
         return {
             success: true,
@@ -196,7 +199,7 @@ class RoleService {
      */
     async addPermissionToRole(roleId, permissionKey) {
 
-        const role = await Role.findById(roleId);
+        const role = await roleRepository.findByIdForUpdate(roleId);
         if (!role) {
             throw new Error("Role not found");
         }
@@ -210,7 +213,7 @@ class RoleService {
         }
 
         role.permissions.push(permissionKey);
-        await role.save();
+        await roleRepository.save(role);
 
         return role.toObject();
 
@@ -221,7 +224,7 @@ class RoleService {
      */
     async removePermissionFromRole(roleId, permissionKey) {
 
-        const role = await Role.findById(roleId);
+        const role = await roleRepository.findByIdForUpdate(roleId);
         if (!role) {
             throw new Error("Role not found");
         }
@@ -238,7 +241,7 @@ class RoleService {
         }
 
         role.permissions.splice(index, 1);
-        await role.save();
+        await roleRepository.save(role);
 
         return role.toObject();
 
@@ -249,26 +252,19 @@ class RoleService {
      */
     async getUsersByRole(roleId, options = {}) {
 
-        const role = await Role.findById(roleId);
+        const role = await roleRepository.findById(roleId);
         if (!role) {
             throw new Error("Role not found");
         }
 
         const { page = 1, limit = 10, sortBy = 'createdAt', sortOrder = 'desc' } = options;
-        const skip = (page - 1) * limit;
 
-        const sort = {};
-        sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
-
-        const [users, total] = await Promise.all([
-            User.find({ role: role.name })
-                .select('-password')
-                .sort(sort)
-                .skip(skip)
-                .limit(limit)
-                .lean(),
-            User.countDocuments({ role: role.name })
-        ]);
+        const [users, total] = await userReadRepository.findPaginatedByRole(role.name, {
+            page,
+            limit,
+            sortBy,
+            sortOrder
+        });
 
         return {
             users,
@@ -287,7 +283,7 @@ class RoleService {
      */
     async checkUserPermission(userId, permissionKey) {
 
-        const user = await User.findById(userId);
+        const user = await userReadRepository.findByIdLean(userId);
         if (!user) {
             throw new Error("User not found");
         }
@@ -297,7 +293,7 @@ class RoleService {
             return true;
         }
 
-        const role = await Role.findOne({ name: user.role });
+        const role = await roleRepository.findOneByName(user.role);
         if (!role) {
             return false;
         }
@@ -311,7 +307,7 @@ class RoleService {
      */
     async getAssignableRoles(roleName) {
 
-        const currentRole = await Role.findOne({ name: roleName });
+        const currentRole = await roleRepository.findByNameRaw(roleName);
         if (!currentRole) {
             throw new Error("Current role not found");
         }
@@ -322,10 +318,7 @@ class RoleService {
         }
 
         // Get roles at or below current role level
-        const assignableRoles = await Role.find({
-            level: { $lte: currentRole.level },
-            isSystemRole: false
-        }).sort({ level: -1 }).lean();
+        const assignableRoles = await roleRepository.findAssignable(currentRole.level);
 
         return assignableRoles;
 
@@ -336,9 +329,7 @@ class RoleService {
      */
     async validatePermissions(permissionKeys) {
 
-        const permissions = await Permission.find({
-            key: { $in: permissionKeys }
-        });
+        const permissions = await permissionRepository.findByKeys(permissionKeys);
 
         const foundKeys = permissions.map(p => p.key);
         const invalidKeys = permissionKeys.filter(key => !foundKeys.includes(key));
@@ -356,13 +347,13 @@ class RoleService {
      */
     async syncRolePermissions(roleId) {
 
-        const role = await Role.findById(roleId);
+        const role = await roleRepository.findByIdForUpdate(roleId);
         if (!role) {
             throw new Error("Role not found");
         }
 
         // Get all available permissions
-        const allPermissions = await Permission.find({}).select('key');
+        const allPermissions = await permissionRepository.findAllKeys();
         const allPermissionKeys = allPermissions.map(p => p.key);
 
         // Remove permissions that no longer exist
@@ -373,7 +364,7 @@ class RoleService {
         // Update if there are changes
         if (validPermissions.length !== role.permissions.length) {
             role.permissions = validPermissions;
-            await role.save();
+            await roleRepository.save(role);
         }
 
         return {
@@ -388,15 +379,14 @@ class RoleService {
      */
     async seedDefaultRoles() {
 
-        const defaultRoles = Role.getDefaultRoles();
+        const defaultRoles = roleRepository.getDefaultRoles();
         const results = [];
 
         for (const [key, roleData] of Object.entries(defaultRoles)) {
-            const existingRole = await Role.findOne({ name: roleData.name });
+            const existingRole = await roleRepository.findOneByName(roleData.name);
 
             if (!existingRole) {
-                const role = new Role(roleData);
-                await role.save();
+                await roleRepository.create(roleData);
                 results.push({
                     role: roleData.name,
                     action: 'created',
@@ -420,7 +410,7 @@ class RoleService {
      */
     async getRoleStatistics() {
 
-        const roles = await Role.find().lean();
+        const roles = await roleRepository.findAll();
         const statistics = {
             totalRoles: roles.length,
             systemRoles: roles.filter(r => r.isSystemRole).length,
@@ -432,7 +422,7 @@ class RoleService {
 
         // Get user counts for each role
         for (const role of roles) {
-            const userCount = await User.countDocuments({ role: role.name });
+            const userCount = await userReadRepository.countByRole(role.name);
             statistics.totalUsers += userCount;
 
             // Count by level
@@ -452,6 +442,34 @@ class RoleService {
 
         return statistics;
 
+    }
+
+    /**
+     * Count all roles (raw passthrough — used by seeders)
+     */
+    async countRoles() {
+        return await roleRepository.countAll();
+    }
+
+    /**
+     * Get all roles, no enrichment (raw passthrough — used by seeders)
+     */
+    async findAllRoles() {
+        return await roleRepository.findAll();
+    }
+
+    /**
+     * Delete all roles (raw passthrough — used by seeders)
+     */
+    async deleteAllRoles() {
+        return await roleRepository.deleteAll();
+    }
+
+    /**
+     * Bulk insert roles (raw passthrough — used by seeders)
+     */
+    async insertRoles(docs) {
+        return await roleRepository.insertMany(docs);
     }
 }
 

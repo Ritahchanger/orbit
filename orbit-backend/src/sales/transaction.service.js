@@ -13,6 +13,12 @@ const populateTransaction = (query) => {
       select:
         "productName sku quantity unitPrice total discount subtotal profit saleDate customerName paymentMethod",
       // Keep it simple - don't populate productId for now
+    })
+    .populate({
+      path: "refunds",
+      select:
+        "refundId amount method reason reasonText items refundStatus processedAt notes",
+      populate: { path: "processedBy", select: "name email" },
     });
 };
 
@@ -134,11 +140,17 @@ const getAllTransactions = async (filters = {}, businessId) => {
         select: "productName sku quantity unitPrice total",
         options: { limit: 5 },
       })
+      .populate({
+        path: "refunds",
+        select:
+          "refundId amount method reason reasonText items refundStatus processedAt notes",
+        populate: { path: "processedBy", select: "name email" },
+      })
       .lean()
       .sort({ [sortBy]: sortOrder })
       .skip(skip)
       .limit(limit),
-    Transaction.countDocuments(query),
+    Transaction.countDocuments({ ...query, businessId: businessId }),
   ]);
 
   // Calculate totals
@@ -303,10 +315,11 @@ const getAllTransactions = async (filters = {}, businessId) => {
 //     });
 // };
 // 2. Get transaction by ID with sales details - FIXED
-const getTransactionById = async (transactionId) => {
+const getTransactionById = async (transactionId, businessId) => {
   const transaction = await populateTransaction(
     Transaction.findOne({
       $or: [{ _id: transactionId }, { transactionId: transactionId }],
+      businessId,
     }).lean(), // Add lean() here too
   );
 
@@ -328,21 +341,24 @@ const getTransactionById = async (transactionId) => {
 };
 
 // 3. Get store transactions with filters - FIXED
-const getStoreTransactions = async ({ storeId, ...filters }) => {
+const getStoreTransactions = async ({ storeId, businessId, ...filters }) => {
   if (!storeId) {
     throw new Error("Store ID is required");
   }
 
-  // Verify store exists
-  const store = await Store.findById(storeId).lean();
+  // Verify store exists and belongs to the requester's business
+  const store = await Store.findOne({ _id: storeId, businessId }).lean();
   if (!store) {
     throw new Error("Store not found");
   }
 
-  return getAllTransactions({
-    storeId,
-    ...filters,
-  });
+  return getAllTransactions(
+    {
+      storeId,
+      ...filters,
+    },
+    businessId,
+  );
 };
 
 // 4. Get today's transactions summary - FIXED
@@ -410,10 +426,16 @@ const getTodaySummary = async (storeId = null, businessId) => {
       : 0;
 
   // Get top products sold today - FIXED: Use lean() and don't populate
-  const todaySales = await Sale.find({
+  const todaySalesQuery = {
     saleDate: { $gte: today, $lt: tomorrow },
     status: "completed",
-  })
+    businessId,
+  };
+  if (storeId) {
+    todaySalesQuery.storeId = storeId;
+  }
+
+  const todaySales = await Sale.find(todaySalesQuery)
     .lean()
     .select("productName sku quantity total");
 

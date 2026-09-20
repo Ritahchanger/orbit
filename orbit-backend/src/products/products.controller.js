@@ -1,5 +1,4 @@
 const productService = require("./product.service");
-const StoreInventory = require("../store-inventory/store-inventory.model");
 
 const productController = {
   /**
@@ -162,23 +161,22 @@ const productController = {
    */
   deleteStoreProduct: async (req, res) => {
     const { storeId, productId } = req.params;
+    const businessId = req.businessId;
 
-    const inventoryItem = await StoreInventory.findOneAndDelete({
-      store: storeId,
-      product: productId,
-    });
+    const result = await productService.removeProductFromStore(
+      storeId,
+      productId,
+      businessId,
+    );
 
-    if (!inventoryItem) {
+    if (!result) {
       return res.status(404).json({
         success: false,
         error: "Product not found in this store inventory",
       });
     }
 
-    res.json({
-      success: true,
-      message: "Product removed from store inventory successfully",
-    });
+    res.json(result);
   },
 
   updateStoreProductStock: async (req, res) => {
@@ -189,9 +187,8 @@ const productController = {
   },
 
   getGlobalLowStockProducts: async (req, res) => {
-
     const businessId = req.businessId;
-    
+
     const result = await productService.getGlobalLowStockProducts(
       {},
       businessId,
@@ -262,28 +259,31 @@ const productController = {
 
   getProductStats: async (req, res) => {
     const businessId = req.businessId;
-
     const result = await productService.getProductStats(businessId);
     res.json(result);
   },
 
   createProduct: async (req, res) => {
-    const businessId = req.businessId;
+    try {
+      const businessId = req.businessId;
 
-    let productData;
-    if (req.body.product) {
-      productData = JSON.parse(req.body.product);
-    } else {
-      productData = req.body;
+      let productData;
+      if (req.body.product) {
+        productData = JSON.parse(req.body.product);
+      } else {
+        productData = req.body;
+      }
+
+      const result = await productService.createProduct(
+        productData,
+        req.files || [],
+        businessId,
+      );
+      res.status(201).json(result);
+    } catch (error) {
+      console.error("❌ CREATE PRODUCT ERROR:", error);
+      throw error;
     }
-
-    const result = await productService.createProduct(
-      productData,
-      req.files || [],
-      businessId,
-    );
-
-    res.status(201).json(result);
   },
 
   getProducts: async (req, res) => {
@@ -350,16 +350,15 @@ const productController = {
     const { sku } = req.params;
     const businessId = req.businessId;
 
-    const Product = require("./products.model");
-    const product = await Product.findOne({ sku, businessId });
+    const result = await productService.getProductBySku(sku, businessId);
 
-    if (!product) {
+    if (!result) {
       return res
         .status(404)
         .json({ success: false, error: "Product not found" });
     }
 
-    res.json({ success: true, data: product.toFrontendFormat() });
+    res.json(result);
   },
 
   getLowStockProducts: async (req, res) => {

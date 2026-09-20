@@ -109,11 +109,18 @@ const CashRefundModal = ({
   const maxRefundAmount = transaction.total || 0;
   const refundAmountNum = parseFloat(refundAmount) || 0;
 
+  // The backend requires an item breakdown for any refund that isn't the
+  // full remaining balance — it can't figure out what to restock/mark
+  // refunded otherwise.
+  const isFullRefundAmount = refundAmountNum >= maxRefundAmount;
+  const requiresItemSelection = !isFullRefundAmount;
+
   // ✅ Fixed validation logic
   const isValidRefund =
     refundAmountNum > 0 &&
     refundAmountNum <= maxRefundAmount &&
-    refundReason.trim() !== "";
+    refundReason.trim() !== "" &&
+    (!requiresItemSelection || selectedItems.length > 0);
 
   // Refund reasons presets
 
@@ -133,12 +140,24 @@ const CashRefundModal = ({
     return reasonMap[displayReason] || "other";
   };
 
-  // Handle full refund - ✅ Added safe check for items
+  // The transaction object never has an `items` field — the backend returns
+  // the sale line items under `saleIds` (populated) / `salesDetails`.
+  const transactionItems = transaction.saleIds || transaction.salesDetails || [];
+
+  // Handle full refund
   const handleFullRefund = () => {
     setRefundAmount(maxRefundAmount.toString());
     setIsPartialRefund(false);
-    if (transaction.items && Array.isArray(transaction.items)) {
-      setSelectedItems(transaction.items);
+    if (Array.isArray(transactionItems)) {
+      setSelectedItems(
+        transactionItems.map((item) => ({
+          saleId: item._id,
+          sku: item.sku,
+          productName: item.productName,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+        })),
+      );
     }
   };
 
@@ -147,7 +166,16 @@ const CashRefundModal = ({
     if (selectedItems.find((i) => i.sku === item.sku)) {
       setSelectedItems(selectedItems.filter((i) => i.sku !== item.sku));
     } else {
-      setSelectedItems([...selectedItems, item]);
+      setSelectedItems([
+        ...selectedItems,
+        {
+          saleId: item._id,
+          sku: item.sku,
+          productName: item.productName,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+        },
+      ]);
     }
   };
 
@@ -340,10 +368,7 @@ const CashRefundModal = ({
   };
 
   // Safe check for items
-  const hasItems =
-    transaction.items &&
-    Array.isArray(transaction.items) &&
-    transaction.items.length > 0;
+  const hasItems = Array.isArray(transactionItems) && transactionItems.length > 0;
 
   return (
     <div className="fixed inset-0 z-[1000] overflow-y-auto">
@@ -483,15 +508,24 @@ const CashRefundModal = ({
                 </div>
 
                 {/* Items Selection (for partial refund) - ✅ FIXED with safe check */}
-                {isPartialRefund && hasItems && (
+                {(isPartialRefund || requiresItemSelection) && hasItems && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Select Items to Refund
+                      {requiresItemSelection && (
+                        <span className="text-red-500"> *</span>
+                      )}
                     </label>
+                    {requiresItemSelection && selectedItems.length === 0 && (
+                      <p className="text-xs text-red-500 mb-2">
+                        Required: a partial refund amount needs at least one
+                        item selected so we know what to restock.
+                      </p>
+                    )}
                     <div className="border border-gray-200 dark:border-gray-700 rounded-sm max-h-48 overflow-y-auto">
-                      {transaction.items.map((item, index) => (
+                      {transactionItems.map((item, index) => (
                         <div
-                          key={index}
+                          key={item._id || index}
                           className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800"
                         >
                           <div className="flex items-center gap-3">
@@ -594,18 +628,8 @@ const CashRefundModal = ({
                         💵 Cash
                       </span>
                     </button>
-                    <button
-                      onClick={() => setRefundMethod("bank")}
-                      className={`p-3 border rounded-sm text-center transition-all ${
-                        refundMethod === "bank"
-                          ? "bg-green-50 dark:bg-green-900/30 border-green-500"
-                          : "border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
-                      }`}
-                    >
-                      <span className="block font-medium text-gray-900 dark:text-white">
-                        🏦 Bank
-                      </span>
-                    </button>
+                    {/* Bank transfer refunds aren't wired up yet — no dedicated
+                        UI for collecting bank reference/account/name exists. */}
                     {/* <button
                       onClick={() => setRefundMethod("mpesa")}
                       className={`p-3 border rounded-sm text-center transition-all ${

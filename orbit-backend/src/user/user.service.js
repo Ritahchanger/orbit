@@ -543,25 +543,34 @@ const getAllUsers = async (options = {}, businessId) => {
   };
 };
 
-const getUserStats = async () => {
-  const totalUsers = await User.countDocuments();
-  const adminUsers = await User.countDocuments({ role: "admin" });
-  const superAdminUsers = await User.countDocuments({ role: "superadmin" });
-  const cashiers = await User.countDocuments({ role: "cashier" });
-  const staffs = await User.countDocuments({ role: "staff" });
-  const managerUsers = await User.countDocuments({ role: "manager" });
+const getUserStats = async (businessId) => {
+  const totalUsers = await User.countDocuments({ businessId });
+  const adminUsers = await User.countDocuments({ role: "admin", businessId });
+  const superAdminUsers = await User.countDocuments({
+    role: "superadmin",
+    businessId,
+  });
+  const cashiers = await User.countDocuments({ role: "cashier", businessId });
+  const staffs = await User.countDocuments({ role: "staff", businessId });
+  const managerUsers = await User.countDocuments({
+    role: "manager",
+    businessId,
+  });
   const newsletterSubscribers = await User.countDocuments({
     newsletter: true,
+    businessId,
   });
 
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
   const recentUsers = await User.countDocuments({
     createdAt: { $gte: oneWeekAgo },
+    businessId,
   });
 
   // Store-related stats
   const usersWithStores = await User.countDocuments({
+    businessId,
     $or: [
       { assignedStore: { $ne: null } },
       { storePermissions: { $exists: true, $ne: [] } },

@@ -87,7 +87,10 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState(null);
 
-  const [userRole, setUserRole] = useState(null); // Add user role state
+  const [userRole, setUserRole] = useState(null);
+
+  const [isImpersonating, setIsImpersonating] = useState(false);
+  const [impersonatingAs, setImpersonatingAs] = useState(null);
 
   // Check authentication status from cookies and sessionStorage on initial load
   useEffect(() => {
@@ -110,6 +113,15 @@ export const AuthProvider = ({ children }) => {
         // Set authorization header for future requests
         authApiService.setAuthToken(cookieToken);
       }
+    }
+
+    // Restore impersonation banner state across refreshes/remounts
+    const impersonationTargetRaw = sessionStorage.getItem("impersonation_target");
+    if (sessionStorage.getItem("impersonation_return_token") && impersonationTargetRaw) {
+      try {
+        setImpersonatingAs(JSON.parse(impersonationTargetRaw));
+        setIsImpersonating(true);
+      } catch (_) {}
     }
   }, []);
 
@@ -641,6 +653,66 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const impersonate = async (userId) => {
+    try {
+      const response = await authApiService.impersonateUser(userId);
+      if (!response.data.success) throw new Error(response.data.message);
+
+      const { impersonationToken, targetUser } = response.data.data;
+
+      // Save original session so we can return
+      sessionStorage.setItem("impersonation_return_token", localStorage.getItem("authToken") || "");
+      sessionStorage.setItem("impersonation_return_user", JSON.stringify(user));
+      sessionStorage.setItem("impersonation_return_role", JSON.stringify(userRole || "superadmin"));
+      sessionStorage.setItem("impersonation_target", JSON.stringify(targetUser));
+
+      // Switch to impersonated user
+      localStorage.setItem("authToken", impersonationToken);
+      authApiService.setAuthToken(impersonationToken);
+      setUser(targetUser);
+      setUserRole(targetUser.role);
+      setIsImpersonating(true);
+      setImpersonatingAs(targetUser);
+
+      return targetUser;
+    } catch (err) {
+      throw new Error(err.response?.data?.message || err.message || "Impersonation failed");
+    }
+  };
+
+  const stopImpersonating = () => {
+    const returnToken = sessionStorage.getItem("impersonation_return_token");
+    const returnUserRaw = sessionStorage.getItem("impersonation_return_user");
+    const returnRoleRaw = sessionStorage.getItem("impersonation_return_role");
+
+    if (returnToken) {
+      localStorage.setItem("authToken", returnToken);
+      authApiService.setAuthToken(returnToken);
+    }
+
+    if (returnUserRaw) {
+      try {
+        setUser(JSON.parse(returnUserRaw));
+      } catch (_) {}
+    }
+
+    let returnRole = "superadmin";
+    if (returnRoleRaw) {
+      try {
+        returnRole = JSON.parse(returnRoleRaw) || "superadmin";
+      } catch (_) {}
+    }
+
+    setUserRole(returnRole);
+    setIsImpersonating(false);
+    setImpersonatingAs(null);
+
+    sessionStorage.removeItem("impersonation_return_token");
+    sessionStorage.removeItem("impersonation_return_user");
+    sessionStorage.removeItem("impersonation_return_role");
+    sessionStorage.removeItem("impersonation_target");
+  };
+
   const requireAuth = useCallback(() => {
     return false;
   }, [pageToRedirect]);
@@ -711,6 +783,10 @@ export const AuthProvider = ({ children }) => {
     requireAuth,
     getCookie: () => getCookie("token"),
     prepareForAuthentication,
+    impersonate,
+    stopImpersonating,
+    isImpersonating,
+    impersonatingAs,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

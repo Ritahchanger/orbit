@@ -2,7 +2,7 @@
 const Refund = require("./refund.model");
 const Transaction = require("../sales/transaction.model");
 const Sale = require("../sales/sales.model");
-const Product = require("../products/products.model");
+const { findProductBySku, incrementProductFields } = require("../products");
 const StoreInventory = require("../store-inventory/store-inventory.model");
 const mongoose = require("mongoose");
 
@@ -20,6 +20,9 @@ class RefundService {
   async processRefund(refundData) {
     console.log(refundData);
 
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
       const {
         transactionId,
@@ -31,6 +34,7 @@ class RefundService {
         returnToStock = true,
         notes,
         processedBy,
+        businessId,
         mpesaPhone,
         bankReference,
         bankAccount,
@@ -46,10 +50,14 @@ class RefundService {
       if (!reason) throw new Error("Refund reason is required");
       if (!processedBy) throw new Error("Processed by user is required");
 
-      // Find original transaction - NO .session()
-      const transaction = await Transaction.findById(transactionId)
+      // Find original transaction
+      const transaction = await Transaction.findOne({
+        _id: transactionId,
+        businessId,
+      })
         .populate("storeId")
-        .populate("saleIds");
+        .populate("saleIds")
+        .session(session);
 
       if (!transaction) throw new Error("Transaction not found");
 
@@ -85,9 +93,11 @@ class RefundService {
 
       if (items && items.length > 0) {
         itemsToRefund = items;
-      } else {
+      } else if (amount >= availableAmount) {
+        // No item breakdown given, but this covers the full remaining
+        // balance — safe to treat every unrefunded item as returned.
         for (const saleId of transaction.saleIds || []) {
-          const sale = await Sale.findById(saleId); // NO .session()
+          const sale = await Sale.findById(saleId).session(session);
           if (sale && sale.status !== "refunded") {
             itemsToRefund.push({
               saleId: sale._id,
@@ -100,11 +110,20 @@ class RefundService {
             });
           }
         }
+      } else {
+        // Partial refund with no item breakdown: restocking/marking every
+        // item as refunded here would return 100% of stock and flag every
+        // line item "refunded" for a fraction of the sale's value, which
+        // permanently desyncs stock and refund bookkeeping. Require the
+        // caller to specify which items are being returned instead.
+        throw new Error(
+          "Item details are required for partial refunds. Please specify which items are being returned.",
+        );
       }
 
       // Process each item being refunded
       for (const item of itemsToRefund) {
-        const sale = await Sale.findById(item.saleId); // NO .session()
+        const sale = await Sale.findById(item.saleId).session(session);
         if (!sale) {
           throw new Error(`Sale record not found for SKU: ${item.sku}`);
         }
@@ -114,7 +133,7 @@ class RefundService {
           continue;
         }
 
-        const product = await Product.findOne({ sku: item.sku }); // NO .session()
+        const product = await findProductBySku(item.sku, { session });
         if (!product) {
           throw new Error(`Product not found with SKU: ${item.sku}`);
         }
@@ -123,7 +142,7 @@ class RefundService {
           const storeInventory = await StoreInventory.findOne({
             store: transaction.storeId,
             product: product._id,
-          }); // NO .session()
+          }).session(session);
 
           if (storeInventory) {
             await StoreInventory.findByIdAndUpdate(
@@ -136,23 +155,28 @@ class RefundService {
                     storeInventory.minStock,
                   ),
                 },
-              }, // NO { session }
+              },
+              { session },
             );
           } else {
-            await StoreInventory.create([
-              {
-                store: transaction.storeId,
-                product: product._id,
-                stock: item.quantity,
-                minStock: 5,
-                status: "In Stock",
-              },
-            ]); // NO { session }
+            await StoreInventory.create(
+              [
+                {
+                  store: transaction.storeId,
+                  product: product._id,
+                  stock: item.quantity,
+                  minStock: 5,
+                  status: "In Stock",
+                },
+              ],
+              { session },
+            );
           }
 
-          await Product.findByIdAndUpdate(
+          await incrementProductFields(
             product._id,
-            { $inc: { stock: item.quantity } }, // NO { session }
+            { stock: item.quantity },
+            { session },
           );
         }
 
@@ -160,7 +184,7 @@ class RefundService {
         sale.notes = sale.notes
           ? `${sale.notes}\nRefunded: ${new Date().toISOString()}`
           : `Refunded: ${new Date().toISOString()}`;
-        await sale.save(); // NO { session }
+        await sale.save({ session });
 
         processedItems.push({
           saleId: sale._id,
@@ -181,6 +205,7 @@ class RefundService {
         refundId,
         transaction: transaction._id,
         storeId: transaction.storeId,
+        businessId,
         amount: refundAmount,
         originalAmount: amount,
         remainingBalance: availableAmount - amount,
@@ -200,12 +225,12 @@ class RefundService {
         }),
         ...(method === "bank" && {
           bankReference,
-          bankAccount,
+          bankAccount,                     
           bankName,
         }),
       });
 
-      await refund.save(); // NO { session }
+      await refund.save({ session });
 
       // ============ UPDATE TRANSACTION ============
       if (!transaction.refunds) transaction.refunds = [];
@@ -228,7 +253,10 @@ class RefundService {
           : `⚠️ M-Pesa Refund: KES ${refundAmount} given to customer (12% fee: KES ${feeDeducted.toFixed(2)} deducted)`;
       }
 
-      await transaction.save(); // NO { session }
+      await transaction.save({ session });
+
+      await session.commitTransaction();
+      session.endSession();
 
       console.log("✅ Refund processed successfully:", {
         refundId: refund.refundId,
@@ -268,6 +296,8 @@ class RefundService {
         },
       };
     } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
       console.error("❌ Refund failed:", error);
       throw error;
     }
@@ -465,9 +495,12 @@ class RefundService {
   /**
    * Check if transaction can be refunded
    */
-  async canRefundTransaction(transactionId, amount = null) {
+  async canRefundTransaction(transactionId, amount = null, businessId) {
     try {
-      const transaction = await Transaction.findById(transactionId);
+      const transaction = await Transaction.findOne({
+        _id: transactionId,
+        businessId,
+      });
 
       if (!transaction) {
         return {

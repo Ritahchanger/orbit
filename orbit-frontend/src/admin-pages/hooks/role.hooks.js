@@ -3,9 +3,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import rolesApi from '../services/role-api';
 
-
-import permissionApi from '../services/permission-api';
-
 export const useRoles = (options = {}) => {
     return useQuery({
         queryKey: ['roles', options],
@@ -107,26 +104,3 @@ export const useAssignableRoles = (roleName) => {
     });
 };
 
-// Combined permissions hook (roles + user-specific)
-export const useUserAllPermissions = (userId) => {
-    return useQuery({
-        queryKey: ['permissions', 'user', userId],
-        queryFn: async () => {
-            const [rolePerms, userPerms] = await Promise.all([
-                // Get user's role to get role permissions
-                // This is a simplified version - you might need to adjust based on your user data
-                rolesApi.getRoleByName('user-role-placeholder').catch(() => ({ data: { permissions: [] } })),
-                permissionApi.getUserPermissions(userId)
-            ]);
-
-            // Combine role and user-specific permissions
-            const allPermissions = [
-                ...(rolePerms.data?.permissions || []),
-                ...(userPerms.data?.permissions || []).map(p => p.permission || p.key)
-            ];
-
-            return [...new Set(allPermissions)]; // Remove duplicates
-        },
-        enabled: !!userId
-    });
-};

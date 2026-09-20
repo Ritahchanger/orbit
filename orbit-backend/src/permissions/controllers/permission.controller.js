@@ -1,7 +1,5 @@
 const permissionService = require("../services/permission.service");
 
-const User = require("../../user/user.model");
-
 /**
  * GET /api/permissions
  */
@@ -19,17 +17,14 @@ async function getUserPermissions(req, res) {
 
     const { userId } = req.params;
 
-    // Validate user exists
-    const user = await User.findById(userId);
-    if (!user) {
+    // Service validates the user exists and belongs to the same business
+    const permissions = await permissionService.getUserPermissions(userId, req.businessId);
+    if (!permissions) {
         return res.status(404).json({
             success: false,
             message: "User not found"
         });
     }
-
-    // Get user permissions from service
-    const permissions = await permissionService.getUserPermissions(userId);
 
     return res.status(200).json({
         success: true,
@@ -51,8 +46,13 @@ async function assignPermission(req, res) {
         userId,
         permission,
         scope,
-        storeId
+        storeId,
+        businessId: req.businessId
     });
+
+    if (!newPermission) {
+        return res.status(404).json({ success: false, message: "User not found" });
+    }
 
     res.status(201).json({ success: true, data: newPermission });
 }
@@ -70,8 +70,13 @@ async function revokePermission(req, res) {
         userId,
         permission,
         scope,
-        storeId
+        storeId,
+        businessId: req.businessId
     });
+
+    if (!removedPermission) {
+        return res.status(404).json({ success: false, message: "User not found" });
+    }
 
     res.status(200).json({ success: true, data: removedPermission });
 

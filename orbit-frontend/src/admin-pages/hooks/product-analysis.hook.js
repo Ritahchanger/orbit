@@ -2,8 +2,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import productAnalysisApi from '../services/product-analysis-api';
 
-
-import { productAnalysisKeys } from './product-analysis-queries';
 // Query keys
 export const productAnalysisKeys = {
     all: ['product-analysis'],

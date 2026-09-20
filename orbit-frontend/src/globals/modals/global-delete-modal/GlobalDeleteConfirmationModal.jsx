@@ -1,9 +1,16 @@
 // src/admin-pages/products/components/GlobalDeleteConfirmationModal.jsx
 import { AlertTriangle, X } from 'lucide-react';
+
 import { useDispatch, useSelector } from 'react-redux';
+
+import { toast } from 'react-hot-toast';
+
 import { closeDeleteModal, setDeleteModalLoading } from '../slices/delete-modal-slice';
+
 const GlobalDeleteConfirmationModal = () => {
+
     const dispatch = useDispatch();
+    
     const deleteModal = useSelector(state => state.deleteModal);
 
     const handleClose = () => {
@@ -19,6 +26,7 @@ const GlobalDeleteConfirmationModal = () => {
             dispatch(closeDeleteModal());
         } catch (error) {
             console.error('Delete failed:', error);
+            toast.error(error?.message || 'Failed to delete. Please try again.');
             dispatch(setDeleteModalLoading(false));
         }
     };

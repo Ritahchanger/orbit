@@ -22,9 +22,9 @@ const AdminNewsletter = () => {
   const [expandedSubscriber, setExpandedSubscriber] = useState(null);
 
   const {
-    sendNewsletter,
+    sendNewsletterAsync,
     isSendingNewsletter,
-    unsubscribe,
+    unsubscribeAsync,
     isUnsubscribing,
     updatePreferences,
     isUpdatingPreferences,
@@ -103,7 +103,7 @@ const AdminNewsletter = () => {
   const generateCampaignId = () => {
     const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
     const random = Math.random().toString(36).substring(2, 8);
-    return `campaign-${date}-${random}`;
+    return `CAMPAIGN-${date}-${random}`.toUpperCase();
   };
 
   // Send newsletter
@@ -132,16 +132,23 @@ const AdminNewsletter = () => {
     };
 
     try {
-      await sendNewsletter(sendData);
+      await sendNewsletterAsync(sendData);
       // Reset form after successful send
       setSubject("");
       setContent("");
       setCampaignId("");
       setSelectedSubscribers([]);
-      toast.success("Newsletter queued for sending!");
     } catch (error) {
       console.error("Newsletter send error:", error);
     }
+  };
+
+  const toggleSubscriberSelection = (email) => {
+    setSelectedSubscribers((prev) =>
+      prev.includes(email)
+        ? prev.filter((selectedEmail) => selectedEmail !== email)
+        : [...prev, email],
+    );
   };
 
   const selectAllSubscribers = () => {
@@ -164,8 +171,7 @@ const AdminNewsletter = () => {
     if (!confirm(`Are you sure you want to unsubscribe ${email}?`)) return;
 
     try {
-      await unsubscribe({ email });
-      toast.success(`${email} unsubscribed successfully`);
+      await unsubscribeAsync({ email });
       refetchSubscribers();
       refetchStats();
     } catch (error) {
@@ -245,6 +251,7 @@ const AdminNewsletter = () => {
             isSendingNewsletter={isSendingNewsletter}
             stats={stats}
             content={content}
+            setContent={setContent}
           />
         )}
 
@@ -256,6 +263,7 @@ const AdminNewsletter = () => {
             refetchSubscribers={refetchSubscribers}
             handleUnsubscribe={handleUnsubscribe}
             setSelectedSubscribers={setSelectedSubscribers}
+            toggleSubscriberSelection={toggleSubscriberSelection}
             isLoadingSubscribers={isLoadingSubscribers}
             filteredSubscribers={filteredSubscribers}
             expandedSubscriber={expandedSubscriber}
