@@ -33,7 +33,7 @@ graph TB
     API["orbit-backend<br/>Express REST API"]
     Mongo[("MongoDB")]
     Redis[("Redis")]
-    MPESA["M-Pesa API"]
+    MPESA["M-Pesa Daraja API<br/>(STK Push, POS sales only)"]
 
     AdminUI --> API
     MarketingUI --> API
@@ -129,10 +129,7 @@ npm run dev            # http://localhost:5000
 npm run dev             # http://localhost:5173
 ```
 
-Default superadmin (from `admin.seed.js` — change before deploying anywhere real):
-```
-superadmin@orbit.com / MyOrbitSecureSuperAdmin123!
-```
+The superadmin account is created by `admin.seed.js`. Change the default credentials in that file before seeding anything outside local development.
 
 To try a business's storefront locally, give it `ecommerce.enabled`, `ecommerce.isPublished`, and an `ecommerce.storeSlug`, then visit `http://<storeSlug>.localhost:5173/products` (any `*.localhost` subdomain resolves to `127.0.0.1` automatically).
 
@@ -177,5 +174,5 @@ No automated test suite yet. Verification has been manual (`node --check`, direc
 ## Known gaps
 
 - No idempotency key on checkout — a retried/duplicated request can create a duplicate order
-- No real payment gateway — payment method is recorded, not processed
+- No payment gateway on storefront checkout — the payment method is recorded, not processed. (M-Pesa STK Push is wired up only for in-store POS sales via `/api/v1/mpesa`.)
 - No custom-domain support for storefronts (subdomain-of-platform-domain only)
