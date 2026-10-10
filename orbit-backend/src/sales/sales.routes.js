@@ -28,6 +28,14 @@ router.post(
   asyncWrapper(salesController.recordSale),
 );
 
+// Daily product sales as PDF (dashboard Print) → log
+router.get(
+  "/daily/pdf",
+  tokenValidator,
+  recordAdminLog("PRINT_DAILY_SALES"),
+  asyncWrapper(salesController.getDailySummaryPdf),
+);
+
 // Get global daily summary (optional store filter) → log
 router.get(
   "/daily",

@@ -1,3 +1,5 @@
+const reportService = require("../reports/reports.service");
+const { renderReportPdf } = require("../reports/reports.pdf");
 const salesService = require("./sales.services");
 
 const posSalesService = require("./pos-service");
@@ -46,6 +48,34 @@ const getDailySummary = async (req, res) => {
     businessId,
   );
   res.json(result);
+};
+
+// Daily product sales as a PDF (same data as GET /sales/daily)
+const getDailySummaryPdf = async (req, res) => {
+  const { date, storeId } = req.query;
+  const businessId = req.businessId;
+  const day = date ? new Date(date) : new Date();
+
+  const [result, meta] = await Promise.all([
+    salesService.getDailySalesSummary(day, storeId, businessId),
+    reportService.getPdfMeta(businessId, storeId),
+  ]);
+
+  const buffer = await renderReportPdf("dailySales", result.data, {
+    ...meta,
+    startDate: result.data.date,
+    endDate: result.data.date,
+    // Profit is superadmin-only on the dashboard; keep the PDF consistent
+    showProfit: req.user?.role === "superadmin",
+  });
+
+  const stamp = new Date(result.data.date).toISOString().split("T")[0];
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    `inline; filename="${meta.slug}_daily-sales_${stamp}.pdf"`,
+  );
+  res.send(buffer);
 };
 
 // Get store-specific daily summary
@@ -242,6 +272,7 @@ module.exports = {
   recordSale,
   recordStoreSale,
   getDailySummary,
+  getDailySummaryPdf,
   getStoreDailySummary,
   getSalesByDateRange,
   getStoreSalesByDateRange,
