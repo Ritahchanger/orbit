@@ -365,6 +365,15 @@ export const useExportJSON = () => {
     };
 };
 
+export const useExportPDF = () => {
+    const exportMutation = useExportReport();
+
+    return {
+        ...exportMutation,
+        mutate: (type, filters) => exportMutation.mutate({ type, filters, format: 'pdf' }),
+    };
+};
+
 // ============ BATCH REPORTS ============
 export const useBatchReports = () => {
     const queryClient = useQueryClient();
@@ -881,6 +890,7 @@ export const useReports = {
     useExportCSV,
     useExportExcel,
     useExportJSON,
+    useExportPDF,
     useBatchReports,
     useScheduleReport,
     useCancelScheduledReport,

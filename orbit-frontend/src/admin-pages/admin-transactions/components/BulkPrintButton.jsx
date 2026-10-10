@@ -1,155 +1,55 @@
 // components/BulkPrintButton.jsx
 import { useState } from "react";
 import { Printer, Download, Loader2 } from "lucide-react";
-import { generateMultipleTransactionsPDF } from "./GenerateTransactionPDF";
 import { toast } from "react-hot-toast";
+import transactionsApi from "../../services/transaction-api";
+import { downloadPdf, printPdf, pdfErrorMessage } from "./pdfFile";
 
-const BulkPrintButton = ({
-  transactions,
-  pagination,
-  onFetchAll,
-  formatCurrency,
-  formatDate,
-  title = "Transactions Report",
-  isLoading = false,
-}) => {
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [allTransactions, setAllTransactions] = useState(null);
+// Transactions report PDF, rendered server-side for the list's active filters.
+const BulkPrintButton = ({ filters = {}, total = 0, isLoading = false }) => {
+  const [busy, setBusy] = useState(null); // "print" | "download" | null
 
-  // Fetch all transactions (no setIsProcessing here — callers manage that)
-  const fetchAllData = async () => {
-    if (allTransactions) return allTransactions;
-
-    try {
-      // If everything fits on one page, just use current transactions
-      if (pagination.total <= pagination.limit) {
-        return transactions;
-      }
-
-      // onFetchAll handles all pages internally
-      const data = await onFetchAll();
-
-      if (data?.length) {
-        setAllTransactions(data);
-        return data;
-      }
-
-      return transactions; // fallback to current page
-    } catch (error) {
-      console.error("Error fetching all transactions:", error);
-      toast.error("Failed to load all transactions");
-      return null;
-    }
-  };
-
-  // Handle print
-  const handlePrint = async () => {
-    if (!transactions?.length && !pagination?.total) {
-      toast.error("No transactions to print");
+  const run = async (mode) => {
+    if (!total) {
+      toast.error("No transactions to export");
       return;
     }
-
     try {
-      setIsProcessing(true);
-
-      const dataToPrint = await fetchAllData();
-
-      if (!dataToPrint || dataToPrint.length === 0) {
-        toast.error("No transactions to print");
-        return;
-      }
-
-      const doc = generateMultipleTransactionsPDF(
-        dataToPrint,
-        formatCurrency,
-        formatDate,
-        title,
-      );
-
-      const pdfBlob = doc.output("blob");
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      const printWindow = window.open(pdfUrl);
-
-      if (printWindow) {
-        printWindow.onload = () => {
-          printWindow.print();
-        };
-      }
-
-      toast.success(`Generated PDF with ${dataToPrint.length} transactions`);
+      setBusy(mode);
+      const { blob, filename } = await transactionsApi.exportTransactionsPdf(filters);
+      if (mode === "print") printPdf(blob);
+      else downloadPdf(blob, filename);
+      toast.success(`PDF report ready (${total} transactions)`);
     } catch (error) {
-      console.error("Bulk print error:", error);
-      toast.error("Failed to generate report");
+      toast.error(await pdfErrorMessage(error, "Failed to generate report"));
     } finally {
-      setIsProcessing(false);
+      setBusy(null);
     }
   };
 
-  // Handle download
-  const handleDownload = async () => {
-    if (!transactions?.length && !pagination?.total) {
-      toast.error("No transactions to download");
-      return;
-    }
-
-    try {
-      setIsProcessing(true);
-
-      const dataToPrint = await fetchAllData();
-
-      if (!dataToPrint || dataToPrint.length === 0) {
-        toast.error("No transactions to download");
-        return;
-      }
-
-      const doc = generateMultipleTransactionsPDF(
-        dataToPrint,
-        formatCurrency,
-        formatDate,
-        title,
-      );
-
-      const fileName = `transactions-report-${new Date().toISOString().slice(0, 10)}.pdf`;
-      doc.save(fileName);
-
-      toast.success(`Downloaded ${dataToPrint.length} transactions`);
-    } catch (error) {
-      console.error("Bulk download error:", error);
-      toast.error("Failed to download report");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const buttonText = () => {
-    if (isProcessing) return "Processing...";
-    if (pagination?.total > (transactions?.length || 0)) {
-      return `Print All (${pagination.total} transactions)`;
-    }
-    return `Print Report (${transactions?.length || 0})`;
-  };
+  const disabled = !!busy || isLoading || !total;
 
   return (
     <div className="flex items-center gap-2">
       <button
-        onClick={handlePrint}
-        disabled={isProcessing || isLoading || !transactions?.length}
+        onClick={() => run("print")}
+        disabled={disabled}
         className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isProcessing ? (
+        {busy === "print" ? (
           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
         ) : (
           <Printer className="h-4 w-4 mr-2" />
         )}
-        {buttonText()}
+        {busy === "print" ? "Preparing..." : `Print Report (${total})`}
       </button>
 
       <button
-        onClick={handleDownload}
-        disabled={isProcessing || isLoading || !transactions?.length}
+        onClick={() => run("download")}
+        disabled={disabled}
         className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isProcessing ? (
+        {busy === "download" ? (
           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
         ) : (
           <Download className="h-4 w-4 mr-2" />

@@ -117,7 +117,7 @@ const reportsApi = {
         
         return {
             data: response.data,
-            filename: this.extractFilename(response) || `${type}_report.${format}`
+            filename: reportsApi.extractFilename(response) || `${type}_report.${format}`
         };
     },
 
@@ -175,20 +175,26 @@ const reportsApi = {
     },
 
     downloadCSV: async (type, filters = {}) => {
-        const result = await this.exportReport(type, filters, 'csv');
-        this.downloadFile(result.data, result.filename);
+        const result = await reportsApi.exportReport(type, filters, 'csv');
+        reportsApi.downloadFile(result.data, result.filename);
         return result;
     },
 
     downloadExcel: async (type, filters = {}) => {
-        const result = await this.exportReport(type, filters, 'excel');
-        this.downloadFile(result.data, result.filename);
+        const result = await reportsApi.exportReport(type, filters, 'excel');
+        reportsApi.downloadFile(result.data, result.filename);
         return result;
     },
 
     downloadJSON: async (type, filters = {}) => {
-        const result = await this.exportReport(type, filters, 'json');
-        this.downloadFile(result.data, result.filename);
+        const result = await reportsApi.exportReport(type, filters, 'json');
+        reportsApi.downloadFile(result.data, result.filename);
+        return result;
+    },
+
+    downloadPDF: async (type, filters = {}) => {
+        const result = await reportsApi.exportReport(type, filters, 'pdf');
+        reportsApi.downloadFile(result.data, result.filename);
         return result;
     },
 
@@ -245,7 +251,7 @@ const reportsApi = {
     // ============ QUICK REPORTS (Commonly used reports) ============
     getTodaySales: async (storeId = null) => {
         const today = new Date().toISOString().split('T')[0];
-        return this.getSalesReport({
+        return reportsApi.getSalesReport({
             startDate: today,
             endDate: today,
             storeId,
@@ -260,7 +266,7 @@ const reportsApi = {
         const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0)
             .toISOString().split('T')[0];
             
-        return this.getSalesReport({
+        return reportsApi.getSalesReport({
             startDate: firstDay,
             endDate: lastDay,
             storeId,
@@ -275,7 +281,7 @@ const reportsApi = {
         const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0)
             .toISOString().split('T')[0];
             
-        return this.getProductPerformanceReport({
+        return reportsApi.getProductPerformanceReport({
             startDate: firstDay,
             endDate: lastDay,
             storeId,
@@ -284,7 +290,7 @@ const reportsApi = {
     },
 
     getInventorySnapshot: async (storeId = null) => {
-        return this.getInventoryReport({
+        return reportsApi.getInventoryReport({
             storeId,
             sortBy: 'stock',
             sortOrder: 'asc',

@@ -30,6 +30,13 @@ const AdminTransactions = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [status, setStatus] = useState("");
 
+  // Shared by the list query and the PDF report
+  const listFilters = {
+    ...(searchTerm && { customerName: searchTerm }),
+    ...(paymentMethod && { paymentMethod }),
+    ...(status && { status }),
+  };
+
   // Fetch today's summary
   const {
     data: todayData,
@@ -44,13 +51,7 @@ const AdminTransactions = () => {
     isLoading: transactionsLoading,
     error: transactionsError,
     refetch: refetchTransactions,
-  } = useTransactions({
-    page,
-    limit,
-    ...(searchTerm && { customerName: searchTerm }),
-    ...(paymentMethod && { paymentMethod }),
-    ...(status && { status }),
-  });
+  } = useTransactions({ page, limit, ...listFilters });
 
   // Extract data
   const todaySummary = todayData?.data || {};
@@ -489,6 +490,7 @@ const AdminTransactions = () => {
                 formatDate={formatDate}
                 formatCurrency={formatCurrency}
                 onRefetch={refetchTransactions}
+                filters={listFilters}
               />
             )}
         </div>

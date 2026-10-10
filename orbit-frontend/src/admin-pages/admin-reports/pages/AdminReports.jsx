@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useReports } from "../../hooks/reports.hooks";
 import {
   Download,
+  FileText,
   TrendingUp,
   AlertTriangle,
   Store,
@@ -144,7 +145,10 @@ const AdminReports = () => {
     endDate: dateRange.endDate,
   });
 
-  const { mutate: exportReport } = useReports.useExportExcel();
+  const { mutate: exportExcel, isPending: excelExporting } =
+    useReports.useExportExcel();
+  const { mutate: exportPdf, isPending: pdfExporting } =
+    useReports.useExportPDF();
 
   const salesData = salesApiResponse?.data || {};
   const inventoryData = inventoryApiResponse?.data || {};
@@ -187,18 +191,25 @@ const AdminReports = () => {
     return hasPermission(permissions) || userRoleName === "superadmin";
   };
 
+  // Tabs without their own export map to the closest backend report type
+  const EXPORT_TYPE_FOR_TAB = { alerts: "inventory" };
+
   // Handle export with permission check
-  const handleExport = (type) => {
+  const handleExport = (type, fileFormat = "excel") => {
     if (!canExportReports) {
       alert("You do not have permission to export reports");
       return;
     }
 
-    exportReport(type, {
+    const exportType = EXPORT_TYPE_FOR_TAB[type] || type;
+    const exportFilters = {
       ...filters,
       storeId: selectedStore === "all" ? undefined : selectedStore,
       ...dateRange,
-    });
+    };
+
+    if (fileFormat === "pdf") exportPdf(exportType, exportFilters);
+    else exportExcel(exportType, exportFilters);
   };
 
   // Handle refresh all reports
@@ -328,9 +339,18 @@ const AdminReports = () => {
       color: "orange",
     },
     canExportReports && {
-      title: "Export Report",
+      title: pdfExporting ? "Preparing PDF…" : "PDF Report",
+      description: "Printable report with charts",
+      action: () => handleExport(selectedReport, "pdf"),
+      disabled: pdfExporting,
+      icon: FileText,
+      color: "red",
+    },
+    canExportReports && {
+      title: excelExporting ? "Exporting…" : "Export Excel",
       description: "Download current view",
-      action: () => handleExport(selectedReport),
+      action: () => handleExport(selectedReport, "excel"),
+      disabled: excelExporting,
       icon: Download,
       color: "blue",
     },
@@ -437,7 +457,7 @@ const AdminReports = () => {
           {/* COMPACT Quick Actions - only show if there are actions */}
           {quickActions.length > 0 && (
             <div className="mb-2">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                 {quickActions.map((action, index) => {
                   const Icon = action.icon;
                   const colors =
@@ -447,7 +467,8 @@ const AdminReports = () => {
                     <button
                       key={index}
                       onClick={action.action}
-                      className={`p-2 sm:p-3 rounded-sm border border-gray-200 dark:border-gray-700 
+                      disabled={action.disabled}
+                      className={`disabled:opacity-60 disabled:cursor-wait p-2 sm:p-3 rounded-sm border border-gray-200 dark:border-gray-700 
                                               bg-white dark:bg-gray-800 text-left hover:shadow-sm transition-shadow
                                               hover:border-${action.color}-300 dark:hover:border-${action.color}-600`}
                     >
