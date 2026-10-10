@@ -1,3 +1,4 @@
+import { statusClass } from "../../../components/common/status/statusStyles";
 // inventory.data.js
 export const stores = [
     { id: 'store-1', name: 'Nairobi Main Store', code: 'NBO-001', status: 'active' },
@@ -143,14 +144,9 @@ export const tabs = [
     { id: 'transfers', name: 'Transfers', icon: 'RefreshCw' },
 ];
 
-export const statusColors = {
-    'In Stock': 'bg-green-500/10 text-green-400 border border-green-500/20',
-    'Low Stock': 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20',
-    'Out of Stock': 'bg-red-500/10 text-red-400 border border-red-500/20',
-    'active': 'bg-green-500/10 text-green-400 border border-green-500/20',
-    'inactive': 'bg-gray-500/10 text-gray-400 border border-gray-500/20',
-    'maintenance': 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
-};
+export const statusColors = Object.fromEntries(
+    ['In Stock', 'Low Stock', 'Out of Stock', 'active', 'inactive', 'maintenance'].map((s) => [s, statusClass(s)]),
+);
 
 export const inventoryActions = [
     { id: 'transfer', name: 'Transfer Stock', icon: 'RefreshCw', description: 'Move items between stores' },

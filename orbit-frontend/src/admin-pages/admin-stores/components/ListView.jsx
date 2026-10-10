@@ -1,3 +1,4 @@
+import StatusBadge from "../../../components/common/status/StatusBadge";
 import { Store, MapPin, Clock, Edit, Eye, Trash2, Package, ShoppingCart } from "lucide-react"
 import { useRole } from "../../../context/authentication/RoleContext";
 import { toast } from "react-hot-toast";
@@ -84,7 +85,7 @@ const ListView = ({
                         <th className="py-3 px-4 text-left text-gray-700 dark:text-gray-300 font-medium text-sm">Actions</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-300 dark:divide-gray-700">
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                     {filteredStores.map(store => {
                         const storePermissions = getStorePermissions(store._id);
                         const canViewStore = canAccessStore(store._id);
@@ -141,13 +142,7 @@ const ListView = ({
                                     </div>
                                 </td>
                                 <td className="py-4 px-4">
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-sm text-xs font-medium ${store.status === 'active'
-                                        ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400'
-                                        : store.status === 'inactive'
-                                            ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400'
-                                            : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400'}`}>
-                                        {store.status === 'active' ? 'Active' : store.status === 'inactive' ? 'Inactive' : 'Maintenance'}
-                                    </span>
+                                    <StatusBadge status={store.status} />
                                 </td>
                                 <td className="py-4 px-4">
                                     {store.manager ? (

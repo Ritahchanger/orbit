@@ -114,7 +114,7 @@ const ListView = ({
 
   const NewsletterBadge = ({ subscribed }) =>
     subscribed ? (
-      <span className="inline-flex items-center px-2 py-1 bg-green-500/10 text-green-400 text-xs rounded-sm">
+      <span className="inline-flex items-center px-2 py-1 bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 text-xs rounded-sm">
         <Mail size={10} className="mr-1" />
         Subscribed
       </span>
@@ -125,7 +125,7 @@ const ListView = ({
     if (typeof getRoleBadge !== "function") {
       console.warn("getRoleBadge is not a function");
       return (
-        <span className="px-2 py-1 bg-gray-500/20 text-gray-400 rounded text-xs">
+        <span className="px-2 py-1 bg-gray-50 dark:bg-gray-500/20 text-gray-700 dark:text-gray-400 rounded text-xs">
           {role || "Unknown"}
         </span>
       );
@@ -136,7 +136,7 @@ const ListView = ({
     } catch (error) {
       console.error("Error rendering role badge:", error);
       return (
-        <span className="px-2 py-1 bg-gray-500/20 text-gray-400 rounded text-xs">
+        <span className="px-2 py-1 bg-gray-50 dark:bg-gray-500/20 text-gray-700 dark:text-gray-400 rounded text-xs">
           {role || "Unknown"}
         </span>
       );
@@ -148,7 +148,7 @@ const ListView = ({
     if (user?.isSuspended) {
       return (
         <span
-          className="inline-flex items-center px-2 py-1 bg-red-500/10 text-red-400 text-xs rounded-sm"
+          className="inline-flex items-center px-2 py-1 bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 text-xs rounded-sm"
           title={user.suspensionReason || "User suspended"}
         >
           <Lock size={10} className="mr-1" />

@@ -249,13 +249,13 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
         <div className="flex min-h-full items-center justify-center p-4 text-center">
           {/* Modal panel with animation */}
           <div
-            className={`relative w-full max-w-8xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm shadow-2xl transform transition-all duration-300 ${
+            className={`relative w-full max-w-8xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-2xl transform transition-all duration-300 ${
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-300 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-sm bg-blue-100 dark:bg-blue-500/20">
                   <Store className="h-6 w-6 text-blue-600 dark:text-blue-400" />
@@ -310,7 +310,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                 {/* Left Column - Store Info */}
                 <div className="lg:col-span-2 space-y-6">
                   {/* Contact Information */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
+                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                       <Building2 size={18} />
                       Store Information
@@ -434,7 +434,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                   </div>
 
                   {/* Opening Hours */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
+                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                       <Clock size={18} />
                       Opening Hours
@@ -484,7 +484,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                 {/* Right Column - Actions & Store Workers */}
                 <div className="space-y-6">
                   {/* Quick Actions */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
+                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                       Quick Actions
                     </h3>
@@ -529,7 +529,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                   </div>
 
                   {/* Store Workers Section */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
+                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         <Users size={18} />
@@ -731,7 +731,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between p-6 border-t border-gray-300 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-t border-gray-200 dark:border-gray-700">
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 Store ID: {store._id}
               </div>

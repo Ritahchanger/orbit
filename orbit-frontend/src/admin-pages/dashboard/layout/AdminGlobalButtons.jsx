@@ -46,7 +46,7 @@ const AdminGlobalButtons = ({
                     title="Scroll to Top"
                 >
                     <ChevronUp size={24} />
-                    <span className="absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none">
+                    <span className="absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none">
                         Top
                     </span>
                 </button>
@@ -59,7 +59,7 @@ const AdminGlobalButtons = ({
                     title="Scroll to Bottom"
                 >
                     <ChevronDown size={24} />
-                    <span className="absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none">
+                    <span className="absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none">
                         Bottom
                     </span>
                 </button>
@@ -76,7 +76,7 @@ const AdminGlobalButtons = ({
                     title={historyState.canGoBack ? "Go Back" : "Cannot go back"}
                 >
                     <ArrowLeft size={24} />
-                    <span className={`absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none ${!historyState.canGoBack && 'hidden'
+                    <span className={`absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none ${!historyState.canGoBack && 'hidden'
                         }`}>
                         Back
                     </span>
@@ -94,7 +94,7 @@ const AdminGlobalButtons = ({
                     title={historyState.canGoForward ? "Go Forward" : "Cannot go forward"}
                 >
                     <ArrowRight size={24} />
-                    <span className={`absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none ${!historyState.canGoForward && 'hidden'
+                    <span className={`absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none ${!historyState.canGoForward && 'hidden'
                         }`}>
                         Forward
                     </span>

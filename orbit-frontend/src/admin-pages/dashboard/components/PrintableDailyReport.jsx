@@ -771,7 +771,7 @@ const PrintDailySales = ({
             </span>
           </div>
 
-          <div className="border border-gray-300 dark:border-gray-700 rounded-sm bg-gray-50 dark:bg-gray-800/50 p-4 overflow-auto">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-sm bg-gray-50 dark:bg-gray-800/50 p-4 overflow-auto">
             <div
               ref={printRef}
               className="bg-white text-black mx-auto shadow"

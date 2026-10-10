@@ -138,9 +138,9 @@ const ExportButton = ({
                         className="fixed inset-0 z-40"
                         onClick={() => setShowDropdown(false)}
                     />
-                    <div className="absolute top-full right-0 mt-1 w-56 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm shadow-lg z-50">
+                    <div className="absolute top-full right-0 mt-1 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-lg z-50">
                         <div className="py-1">
-                            <div className="px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-300 dark:border-gray-700 font-medium">
+                            <div className="px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 font-medium">
                                 Export Options
                             </div>
 
@@ -186,7 +186,7 @@ const ExportButton = ({
                                 </div>
                             </button>
 
-                            <div className="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-300 dark:border-gray-700">
+                            <div className="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700">
                                 Files download in selected format
                             </div>
                         </div>

@@ -78,7 +78,7 @@ const GridView = ({
   // Newsletter badge
   const NewsletterBadge = ({ subscribed }) =>
     subscribed ? (
-      <span className="inline-flex items-center px-2 py-1 bg-green-500/10 text-green-400 text-xs rounded-sm">
+      <span className="inline-flex items-center px-2 py-1 bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 text-xs rounded-sm">
         <Mail size={10} className="mr-1" />
         Subscribed
       </span>
@@ -89,7 +89,7 @@ const GridView = ({
     if (user.isSuspended) {
       return (
         <span
-          className="inline-flex items-center px-2 py-1 bg-red-500/10 text-red-400 text-xs rounded-sm"
+          className="inline-flex items-center px-2 py-1 bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 text-xs rounded-sm"
           title={user.suspensionReason || "User suspended"}
         >
           <Lock size={10} className="mr-1" />

@@ -97,7 +97,7 @@ const AdminLayout = ({ children }) => {
   const handleForward = () => navigate(1);
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 relative ${isImpersonating ? "pt-10" : ""}`}>
+    <div className={`admin-shell min-h-screen bg-gray-50 dark:bg-gray-900 relative ${isImpersonating ? "pt-10" : ""}`}>
       <ImpersonationBanner />
       <AdminGlobalButtons
         handleCalculatorOpen={handleCalculatorOpen}

@@ -327,7 +327,7 @@ const ShortcutsOverlay = () => {
         title="Toggle keyboard shortcuts (Ctrl + /)"
       >
         <Keyboard size={18} />
-        <span className="absolute top-0 right-full mr-2 px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-gray-200 dark:border-gray-700 shadow-sm">
+        <span className="absolute top-0 right-full mr-2 px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-gray-200 dark:border-gray-700 shadow-sm">
           Shortcuts (Ctrl + /)
         </span>
       </button>
@@ -401,7 +401,7 @@ const ShortcutsOverlay = () => {
                         <button
                           key={index}
                           onClick={() => handleShortcutAction(shortcut.action)}
-                          className="flex items-center space-x-2 px-3 py-1.5 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-700 transition-colors group"
+                          className="flex items-center space-x-2 px-3 py-1.5 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm border border-gray-200 dark:border-gray-700 transition-colors group"
                         >
                           <shortcut.icon
                             size={14}
@@ -443,7 +443,7 @@ const ShortcutsOverlay = () => {
                               title={`${shortcut.description} (${shortcut.key})`}
                             >
                               <div
-                                className={`p-1.5 sm:p-2 rounded-md bg-white dark:bg-gray-800 ${shortcut.color} group-hover:bg-gray-100 dark:group-hover:bg-gray-700 transition-colors`}
+                                className={`p-1.5 sm:p-2 rounded-sm bg-white dark:bg-gray-800 ${shortcut.color} group-hover:bg-gray-100 dark:group-hover:bg-gray-700 transition-colors`}
                               >
                                 <Icon size={16} className="sm:w-5 sm:h-5" />
                               </div>

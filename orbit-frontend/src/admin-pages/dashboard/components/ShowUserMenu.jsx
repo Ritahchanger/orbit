@@ -73,9 +73,9 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
       />
 
       {/* User Menu */}
-      <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm shadow-xl py-1 z-50">
+      <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-xl py-1 z-50">
         {/* User Info */}
-        <div className="px-4 py-3 border-b border-gray-300 dark:border-gray-700">
+        <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
           <p className="text-sm font-medium text-gray-900 dark:text-white">
             {userDisplayName}
           </p>
@@ -154,7 +154,7 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
         </Link>
 
         {/* Divider */}
-        <div className="border-t border-gray-300 dark:border-gray-700 my-1" />
+        <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
 
         {/* Logout Button */}
         <button

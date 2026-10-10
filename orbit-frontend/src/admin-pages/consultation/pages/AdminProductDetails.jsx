@@ -265,7 +265,7 @@ const AdminProductDetails = () => {
                                     {stockStatus.text}
                                 </span>
                                 {product.isFeatured && (
-                                    <span className="text-xs px-2 py-1 rounded-sm bg-purple-500/20 text-purple-400">
+                                    <span className="text-xs px-2 py-1 rounded-sm bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400">
                                         <Star className="h-3 w-3 inline mr-1" />
                                         Featured
                                     </span>

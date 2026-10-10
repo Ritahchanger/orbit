@@ -1,3 +1,4 @@
+import SharedStatusBadge from "../../../components/common/status/StatusBadge";
 import { useState, useEffect } from "react";
 import {
   ArrowRightLeft,
@@ -19,6 +20,11 @@ import AdminLayout from "../../dashboard/layout/Layout";
 import { useTransferHistory } from "../../hooks/stockTransfer.mutations";
 import { format } from "date-fns";
 import { useDebounce } from "../../../globals/hooks/useDebounce";
+import { toast } from "react-hot-toast";
+import { useStoreContext } from "../../../context/store/StoreContext";
+import stockTransferApi from "../../services/stock-transfers-api";
+import PageContainer from "../../components/ui/PageContainer";
+import StatCard from "../../components/ui/StatCard";
 
 const AdminStockTransfers = () => {
   const [filters, setFilters] = useState({
@@ -66,46 +72,19 @@ const AdminStockTransfers = () => {
     pages: 1,
   };
 
-  // Debug: Log when filters change
-  useEffect(() => {
-    console.log("📊 Current filters:", filters);
-  }, [filters]);
+  const summary = data?.summary;
+  const { stores = [] } = useStoreContext();
+  const [isExporting, setIsExporting] = useState(false);
 
   // Status badge component
-  const StatusBadge = ({ status }) => {
-    const statusConfig = {
-      completed: {
-        bg: "bg-emerald-100 dark:bg-emerald-900/30",
-        text: "text-emerald-700 dark:text-emerald-400",
-        icon: CheckCircle,
-        label: "Completed",
-      },
-      pending: {
-        bg: "bg-amber-100 dark:bg-amber-900/30",
-        text: "text-amber-700 dark:text-amber-400",
-        icon: Clock,
-        label: "Pending",
-      },
-      cancelled: {
-        bg: "bg-rose-100 dark:bg-rose-900/30",
-        text: "text-rose-700 dark:text-rose-400",
-        icon: XCircle,
-        label: "Cancelled",
-      },
-    };
-
-    const config = statusConfig[status] || statusConfig.completed;
-    const Icon = config.icon;
-
-    return (
-      <span
-        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
-      >
-        <Icon size={12} className="mr-1" />
-        {config.label}
-      </span>
-    );
+  const TRANSFER_STATUS_ICONS = {
+    completed: CheckCircle,
+    pending: Clock,
+    cancelled: XCircle,
   };
+  const StatusBadge = ({ status }) => (
+    <SharedStatusBadge status={status} icon={TRANSFER_STATUS_ICONS[status]} />
+  );
 
   // Format date
   const formatDate = (dateString) => {
@@ -149,23 +128,65 @@ const AdminStockTransfers = () => {
     // The debounce effect will handle clearing the filters.search
   };
 
-  // Export data
-  const handleExport = () => {
-    // Implement CSV export
-    console.log("Exporting transfers...");
+  // Export every transfer matching the current filters as CSV
+  const handleExport = async () => {
+    if (!pagination.total) {
+      toast.error("No transfers to export");
+      return;
+    }
+    try {
+      setIsExporting(true);
+      const result = await stockTransferApi.getTransferHistory({
+        ...filters,
+        page: 1,
+        limit: Math.min(pagination.total, 5000),
+      });
+      const rows = (result?.transfers || []).map((t) => [
+        t.transferNumber,
+        t.transferredAt ? format(new Date(t.transferredAt), "yyyy-MM-dd HH:mm") : "",
+        t.sourceStore?.name,
+        t.destinationStore?.name,
+        t.product?.name,
+        t.product?.sku,
+        t.quantity,
+        t.status,
+        t.transferredBy?.name || t.transferredBy?.email,
+        t.notes,
+      ]);
+      const header = ["Transfer #", "Date", "From", "To", "Product", "SKU", "Quantity", "Status", "Transferred by", "Notes"];
+      const csv = [header, ...rows]
+        .map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","))
+        .join("\n");
+      const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `stock-transfers-${format(new Date(), "yyyy-MM-dd")}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+      toast.success(`Exported ${rows.length} transfers`);
+    } catch {
+      toast.error("Failed to export transfers");
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   // Check if any filters are active (including search)
   const hasActiveFilters =
-    filters.status || filters.fromDate || filters.toDate || filters.search;
+    filters.status ||
+    filters.sourceStore ||
+    filters.destinationStore ||
+    filters.fromDate ||
+    filters.toDate ||
+    filters.search;
 
   return (
     <AdminLayout>
-      <div className="space-y-2 p-4 sm:p-6">
+      <PageContainer>
         {/* Header */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
               Stock Transfers
             </h1>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -186,17 +207,18 @@ const AdminStockTransfers = () => {
             </button>
             <button
               onClick={handleExport}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition-colors text-sm"
+              disabled={isExporting || !pagination.total}
+              className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition-colors text-sm disabled:opacity-50"
             >
               <Download size={18} />
-              <span>Export</span>
+              <span>{isExporting ? "Exporting..." : "Export CSV"}</span>
             </button>
           </div>
         </div>
 
         {/* Filters */}
         <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex flex-col lg:flex-row lg:flex-wrap gap-3">
             {/* Search - Removed the form wrapper */}
             <div className="flex-1">
               <div className="relative">
@@ -239,6 +261,38 @@ const AdminStockTransfers = () => {
                 <option value="completed">Completed</option>
                 <option value="pending">Pending</option>
                 <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            {/* Store filters */}
+            <div className="flex items-center space-x-2">
+              <Store size={18} className="text-gray-400 shrink-0" />
+              <select
+                value={filters.sourceStore}
+                onChange={(e) => handleFilterChange("sourceStore", e.target.value)}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm max-w-[160px]"
+                aria-label="From store"
+              >
+                <option value="">From: any store</option>
+                {stores.map((st) => (
+                  <option key={st._id} value={st._id}>
+                    {st.name}
+                  </option>
+                ))}
+              </select>
+              <ArrowRightLeft size={14} className="text-gray-400 shrink-0" />
+              <select
+                value={filters.destinationStore}
+                onChange={(e) => handleFilterChange("destinationStore", e.target.value)}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm max-w-[160px]"
+                aria-label="To store"
+              >
+                <option value="">To: any store</option>
+                {stores.map((st) => (
+                  <option key={st._id} value={st._id}>
+                    {st.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -292,83 +346,35 @@ const AdminStockTransfers = () => {
           )}
         </div>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
-          <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Total Transfers
-                </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                  {pagination.total}
-                </p>
-              </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-sm">
-                <ArrowRightLeft
-                  className="text-blue-600 dark:text-blue-400"
-                  size={24}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Completed
-                </p>
-                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-                  {transfers.filter((t) => t.status === "completed").length}
-                </p>
-              </div>
-              <div className="p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-sm">
-                <CheckCircle
-                  className="text-emerald-600 dark:text-emerald-400"
-                  size={24}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Total Items
-                </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                  {transfers.reduce((acc, t) => acc + t.quantity, 0)}
-                </p>
-              </div>
-              <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-sm">
-                <Package
-                  className="text-purple-600 dark:text-purple-400"
-                  size={24}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Unique Products
-                </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                  {new Set(transfers.map((t) => t.product?._id)).size}
-                </p>
-              </div>
-              <div className="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-sm">
-                <Store
-                  className="text-amber-600 dark:text-amber-400"
-                  size={24}
-                />
-              </div>
-            </div>
-          </div>
+        {/* Summary Cards (whole filtered set, not just this page) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <StatCard
+            title="Total Transfers"
+            value={summary?.total ?? pagination.total}
+            icon={<ArrowRightLeft className="h-5 w-5" />}
+            color="blue"
+            hint={summary?.pending ? `${summary.pending} pending` : undefined}
+          />
+          <StatCard
+            title="Completed"
+            value={summary?.completed ?? "—"}
+            valueClassName="text-green-600 dark:text-green-400"
+            icon={<CheckCircle className="h-5 w-5" />}
+            color="green"
+            hint={summary?.cancelled ? `${summary.cancelled} cancelled` : undefined}
+          />
+          <StatCard
+            title="Units Moved"
+            value={summary?.totalItems?.toLocaleString() ?? "—"}
+            icon={<Package className="h-5 w-5" />}
+            color="purple"
+          />
+          <StatCard
+            title="Unique Products"
+            value={summary?.uniqueProducts ?? "—"}
+            icon={<Store className="h-5 w-5" />}
+            color="orange"
+          />
         </div>
 
         {/* Transfers Table */}
@@ -519,7 +525,7 @@ const AdminStockTransfers = () => {
                           <div className="flex items-center space-x-2">
                             <User size={14} className="text-gray-400" />
                             <span className="text-sm text-gray-700 dark:text-gray-300">
-                              {transfer.transferredBy?.email}
+                              {transfer.transferredBy?.name || transfer.transferredBy?.email}
                             </span>
                           </div>
                         </td>
@@ -607,7 +613,7 @@ const AdminStockTransfers = () => {
             </>
           )}
         </div>
-      </div>
+      </PageContainer>
     </AdminLayout>
   );
 };

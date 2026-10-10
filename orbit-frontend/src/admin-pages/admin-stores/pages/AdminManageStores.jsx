@@ -1,3 +1,5 @@
+import PageContainer from "../../components/ui/PageContainer";
+import Card from "../../components/ui/Card";
 import { useState } from 'react';
 import AdminLayout from "../../dashboard/layout/Layout";
 import { useStoreContext } from '../../../context/store/StoreContext';
@@ -207,7 +209,7 @@ const AdminManageStores = () => {
 
     return (
         <AdminLayout>
-            <div className="space-y-2 mx-4 pt-5">
+            <PageContainer>
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                     <div>
@@ -243,7 +245,7 @@ const AdminManageStores = () => {
                 </div>
 
                 {/* Statistics Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                     <StoreStatsCard
                         title="Total Stores"
                         value={stats.total}
@@ -285,8 +287,8 @@ const AdminManageStores = () => {
                 </div>
 
                 {/* Filters and Search */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <Card>
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                         <div className="flex-1 w-full">
                             <div className="relative">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 h-4 w-4" />
@@ -328,10 +330,10 @@ const AdminManageStores = () => {
                             <ExportButton stores={stores} filteredStores={filteredStores} />
                         </div>
                     </div>
-                </div>
+                </Card>
 
                 {/* Stores Display */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm overflow-hidden">
+                <Card padded={false}>
                     {filteredStores.length === 0 ? (
                         <div className="p-8 text-center">
                             <Store className="h-12 w-12 text-gray-500 dark:text-gray-600 mx-auto mb-4" />
@@ -370,7 +372,7 @@ const AdminManageStores = () => {
                             handleStoreSwitch={handleStoreSwitch}
                         />
                     )}
-                </div>
+                </Card>
 
                 {/* Pagination/Info */}
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-600 dark:text-gray-400">
@@ -387,7 +389,7 @@ const AdminManageStores = () => {
                         </button>
                     </div>
                 </div>
-            </div>
+            </PageContainer>
 
             {/* Modals */}
             {showCreateModal && (

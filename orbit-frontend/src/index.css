@@ -242,6 +242,36 @@
   box-shadow: var(--shadow-glow-blue);
 }
 
+/* Admin light mode: the base theme variables are dark-theme colours
+   (--color-text is near-white), which made unstyled table cells and form
+   controls white-on-white in light mode. Scoped to the admin shells so the
+   storefront keeps its look. Base layer, so Tailwind utilities still win. */
+@layer base {
+  .admin-shell :where(select, input, textarea) {
+    color: var(--color-gray-900);
+  }
+  .admin-shell :where(option) {
+    color: var(--color-gray-900);
+    background-color: var(--color-white);
+  }
+  html:not(.dark) .admin-shell :where(td) {
+    color: var(--color-gray-900);
+  }
+  html:not(.dark) .admin-shell :where(th) {
+    color: var(--color-gray-500);
+  }
+  html:not(.dark) .admin-shell :where(p) {
+    color: var(--color-gray-600);
+  }
+  .dark .admin-shell :where(select, input, textarea) {
+    color: var(--color-white);
+  }
+  .dark .admin-shell :where(option) {
+    color: var(--color-white);
+    background-color: var(--color-gray-800);
+  }
+}
+
 /* Special styles for gaming theme sections */
 .gaming-theme {
   background-color: var(--color-dark);

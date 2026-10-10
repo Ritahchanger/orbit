@@ -340,7 +340,7 @@ const AdminSalesAnalysis = () => {
                         <div className="p-2 bg-blue-500/20 rounded-lg">
                             <DollarSign className="h-5 w-5 text-blue-500" />
                         </div>
-                        <span className="text-xs font-medium text-blue-400 bg-blue-500/10 px-2 py-1 rounded-full">
+                        <span className="text-xs font-medium text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-1 rounded-full">
                             Total
                         </span>
                     </div>
@@ -357,7 +357,7 @@ const AdminSalesAnalysis = () => {
                         <div className="p-2 bg-green-500/20 rounded-lg">
                             <TrendingUp className="h-5 w-5 text-green-500" />
                         </div>
-                        <span className="text-xs font-medium text-green-400 bg-green-500/10 px-2 py-1 rounded-full">
+                        <span className="text-xs font-medium text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-2 py-1 rounded-full">
                             {metrics?.profitMargin}%
                         </span>
                     </div>
@@ -374,7 +374,7 @@ const AdminSalesAnalysis = () => {
                         <div className="p-2 bg-purple-500/20 rounded-lg">
                             <ShoppingCart className="h-5 w-5 text-purple-500" />
                         </div>
-                        <span className="text-xs font-medium text-purple-400 bg-purple-500/10 px-2 py-1 rounded-full">
+                        <span className="text-xs font-medium text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 px-2 py-1 rounded-full">
                             Avg {Math.round(data.overallSummary.totalItemsSold / data.overallSummary.totalTransactions)}
                         </span>
                     </div>
@@ -391,7 +391,7 @@ const AdminSalesAnalysis = () => {
                         <div className="p-2 bg-amber-500/20 rounded-lg">
                             <Target className="h-5 w-5 text-amber-500" />
                         </div>
-                        <span className="text-xs font-medium text-amber-400 bg-amber-500/10 px-2 py-1 rounded-full">
+                        <span className="text-xs font-medium text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2 py-1 rounded-full">
                             {formatCurrency(metrics?.maxTransactionValue || 0)}
                         </span>
                     </div>

@@ -175,22 +175,22 @@ const RoleManagement = () => {
   // Get role badge color
   const getRoleBadgeColor = (role) => {
     if (role.name === "superadmin")
-      return "bg-purple-500/20 text-purple-400 border-purple-500/30";
+      return "bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-500/30";
     if (role.name === "admin")
-      return "bg-red-500/20 text-red-400 border-red-500/30";
+      return "bg-red-50 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/30";
     if (role.name === "manager")
-      return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+      return "bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/30";
     if (role.name === "cashier")
-      return "bg-green-500/20 text-green-400 border-green-500/30";
+      return "bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/30";
     if (role.name === "staff")
-      return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+      return "bg-yellow-50 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/30";
     if (role.level >= 8)
-      return "bg-indigo-500/20 text-indigo-400 border-indigo-500/30";
+      return "bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/30";
     if (role.level >= 5)
-      return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
+      return "bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/30";
     if (role.level >= 3)
-      return "bg-amber-500/20 text-amber-400 border-amber-500/30";
-    return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+      return "bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/30";
+    return "bg-gray-50 dark:bg-gray-500/20 text-gray-700 dark:text-gray-400 border-gray-200 dark:border-gray-500/30";
   };
 
   // Get status display
@@ -199,8 +199,8 @@ const RoleManagement = () => {
     return {
       text: isActive ? "Active" : "Inactive",
       color: isActive
-        ? "bg-green-500/20 text-green-400 border-green-500/30"
-        : "bg-red-500/20 text-red-400 border-red-500/30",
+        ? "bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/30"
+        : "bg-red-50 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/30",
       icon: isActive ? Check : X,
     };
   };
