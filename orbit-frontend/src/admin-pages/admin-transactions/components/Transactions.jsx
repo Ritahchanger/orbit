@@ -17,7 +17,6 @@ import { useRoleContext } from "../../../context/RolePermissionContext";
 import CashRefundModal from "./CashRefundModal";
 import PrintTransactionButton from "./PrintTransactionButton";
 import BulkPrintButton from "./BulkPrintButton";
-import transactionsApi from "../../services/transaction-api";
 import { useSoftDeleteTransactions } from "../../hooks/transaction-delete.mutations";
 const Transactions = ({
   transactions,
@@ -28,13 +27,13 @@ const Transactions = ({
   formatDate,
   formatCurrency,
   onRefetch, // Add this prop to refresh transactions after delete
+  filters = {}, // Active list filters, applied to the PDF report
 }) => {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [copiedField, setCopiedField] = useState(null);
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [transactionToRefund, setTransactionToRefund] = useState(null);
-  const [isFetchingAll, setIsFetchingAll] = useState(false);
 
   // New state for bulk selection
   const [selectedTransactions, setSelectedTransactions] = useState([]);
@@ -237,53 +236,6 @@ const Transactions = ({
     setSelectedTransaction(null);
   };
 
-  // ============ FETCH ALL TRANSACTIONS FOR BULK PRINT ============
-  const fetchAllTransactions = async () => {
-    try {
-      setIsFetchingAll(true);
-
-      let allTransactions = [];
-      const totalPages = pagination.pages;
-      const limit = pagination.limit;
-
-      const baseParams = {
-        limit,
-      };
-
-      for (let page = 1; page <= totalPages; page++) {
-        const response = await transactionsApi.getAllTransactions({
-          ...baseParams,
-          page,
-        });
-
-        if (response?.transactions) {
-          allTransactions = [...allTransactions, ...response.transactions];
-        } else if (response?.data) {
-          allTransactions = [...allTransactions, ...response.data];
-        } else if (Array.isArray(response)) {
-          allTransactions = [...allTransactions, ...response];
-        }
-
-        if (page < totalPages) {
-          await new Promise((resolve) => setTimeout(resolve, 100));
-        }
-      }
-
-      if (allTransactions.length === 0) {
-        toast.error("No transactions found");
-        return [];
-      }
-
-      return allTransactions;
-    } catch (error) {
-      console.error("Error fetching all transactions:", error);
-      toast.error("Failed to load all transactions");
-      throw error;
-    } finally {
-      setIsFetchingAll(false);
-    }
-  };
-
   return (
     <>
       <div className="overflow-x-auto">
@@ -318,13 +270,8 @@ const Transactions = ({
 
         <div className="mb-4 flex justify-end pt-4 pr-4">
           <BulkPrintButton
-            transactions={transactions}
-            pagination={pagination}
-            onFetchAll={fetchAllTransactions}
-            formatCurrency={formatCurrency}
-            formatDate={formatDate}
-            title="Transactions Report"
-            isLoading={isFetchingAll}
+            filters={filters}
+            total={pagination.total || transactions.length}
           />
         </div>
 
@@ -706,12 +653,10 @@ const Transactions = ({
                             <Eye className="w-3.5 h-3.5 mr-1" />
                             Details
                           </button>
-                          {/* <PrintTransactionButton
+                          <PrintTransactionButton
                             transaction={transaction}
-                            formatCurrency={formatCurrency}
-                            formatDate={formatDate}
                             variant="icon"
-                          /> */}
+                          />
                         </>
                       )}
                       {canRefundTransaction &&

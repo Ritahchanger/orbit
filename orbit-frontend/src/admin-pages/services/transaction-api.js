@@ -1,5 +1,12 @@
 import { api } from "../../api/axios-conf";
 
+const filenameFrom = (response, fallback) => {
+    const match = /filename="?([^";]+)"?/.exec(
+        response.headers?.["content-disposition"] || "",
+    );
+    return match ? match[1] : fallback;
+};
+
 const transactionsApi = {
     /**
      * 1. Get all transactions with pagination and filtering
@@ -16,6 +23,30 @@ const transactionsApi = {
      * @param {string} params.sortOrder - Sort order (asc, desc)
      * @returns {Promise} Transaction data with pagination and summary
      */
+    /**
+     * Server-rendered PDFs (PDFKit). Resolve to { blob, filename }.
+     */
+    getReceiptPdf: async (transactionId) => {
+        const response = await api.get(`/transactions/${transactionId}/receipt`, {
+            responseType: "blob",
+        });
+        return {
+            blob: response.data,
+            filename: filenameFrom(response, `receipt-${transactionId}.pdf`),
+        };
+    },
+
+    exportTransactionsPdf: async (params = {}) => {
+        const response = await api.get("/transactions/export/pdf", {
+            params,
+            responseType: "blob",
+        });
+        return {
+            blob: response.data,
+            filename: filenameFrom(response, "transactions-report.pdf"),
+        };
+    },
+
     getAllTransactions: async (params = {}) => {
         const response = await api.get("/transactions", { params });
         return response.data;

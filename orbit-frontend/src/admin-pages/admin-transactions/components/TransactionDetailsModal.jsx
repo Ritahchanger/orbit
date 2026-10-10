@@ -26,6 +26,7 @@ import { usePermissionCheck } from "../../../context/RolePermissionContext";
 import { useRoleContext } from "../../../context/RolePermissionContext";
 import { useState } from "react"; // ✅ ADDED
 import { toast } from "react-hot-toast"; // ✅ ADDED
+import { useReceiptPdf } from "./useReceiptPdf";
 
 const TransactionDetailsModal = ({
   transaction,
@@ -45,6 +46,7 @@ const TransactionDetailsModal = ({
 }) => {
   const [copiedField, setCopiedField] = useState(null); // ✅ ADDED
   const [isRefunding, setIsRefunding] = useState(false); // ✅ ADDED
+  const receiptPdf = useReceiptPdf(transaction);
 
   if (!isOpen || !transaction) return null;
 
@@ -1113,51 +1115,20 @@ const TransactionDetailsModal = ({
                   Close
                 </button>
                 <button
-                  onClick={() => window.print()}
-                  className="px-4 py-2 text-xs font-medium text-white bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 rounded-sm transition-colors flex items-center gap-2 uppercase tracking-wider"
+                  onClick={receiptPdf.print}
+                  disabled={!!receiptPdf.busy}
+                  className="px-4 py-2 text-xs font-medium text-white bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 rounded-sm transition-colors flex items-center gap-2 uppercase tracking-wider disabled:opacity-50"
                 >
                   <Printer className="h-4 w-4" />
-                  Print
+                  {receiptPdf.busy === "print" ? "Preparing..." : "Print Receipt"}
                 </button>
                 <button
-                  onClick={() => {
-                    const receiptData = {
-                      transactionId:
-                        transaction.transactionId || transaction._id,
-                      date: formatDate(transaction.createdAt),
-                      customer: transaction.customerName || "Walk-in Customer",
-                      total: formatMoney(transaction.total),
-                      paymentMethod: transaction.paymentMethod,
-                      items: transaction.saleIds?.length || 0,
-                      ...(isCashPayment && {
-                        amountGiven: formatMoney(transaction.amountGiven),
-                        change: formatMoney(transaction.change),
-                      }),
-                      ...(isMpesaPayment &&
-                        canViewMpesa && {
-                          mpesaReceipt: transaction.mpesaReceipt,
-                          mpesaPhone: formatPhoneDisplay(
-                            transaction.mpesaPhone || transaction.customerPhone,
-                          ),
-                        }),
-                    };
-                    console.log("Receipt data:", receiptData);
-                    // Create downloadable JSON
-                    const dataStr = JSON.stringify(receiptData, null, 2);
-                    const dataUri =
-                      "data:application/json;charset=utf-8," +
-                      encodeURIComponent(dataStr);
-                    const exportFileDefaultName = `receipt-${transaction.transactionId || transaction._id.slice(-8)}.json`;
-                    const linkElement = document.createElement("a");
-                    linkElement.setAttribute("href", dataUri);
-                    linkElement.setAttribute("download", exportFileDefaultName);
-                    linkElement.click();
-                    toast.success("Receipt exported successfully");
-                  }}
-                  className="px-4 py-2 text-xs font-medium text-white bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-600 rounded-sm transition-colors flex items-center gap-2 uppercase tracking-wider"
+                  onClick={receiptPdf.download}
+                  disabled={!!receiptPdf.busy}
+                  className="px-4 py-2 text-xs font-medium text-white bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-600 rounded-sm transition-colors flex items-center gap-2 uppercase tracking-wider disabled:opacity-50"
                 >
                   <Download className="h-4 w-4" />
-                  Export
+                  {receiptPdf.busy === "download" ? "Preparing..." : "Download PDF"}
                 </button>
               </div>
             </div>
