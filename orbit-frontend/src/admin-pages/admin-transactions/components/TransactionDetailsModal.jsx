@@ -17,7 +17,6 @@ import {
   Copy, // ✅ ADDED: For copy functionality
   AlertCircle, // ✅ ADDED: For failed status
   Clock, // ✅ ADDED: For pending status
-  Download, // ✅ ADDED: For export
   Printer, // ✅ ADDED: For print
   RefreshCw, // ✅ ADDED: For refund/void
 } from "lucide-react";
@@ -1116,19 +1115,11 @@ const TransactionDetailsModal = ({
                 </button>
                 <button
                   onClick={receiptPdf.print}
-                  disabled={!!receiptPdf.busy}
+                  disabled={receiptPdf.busy}
                   className="px-4 py-2 text-xs font-medium text-white bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 rounded-sm transition-colors flex items-center gap-2 uppercase tracking-wider disabled:opacity-50"
                 >
                   <Printer className="h-4 w-4" />
-                  {receiptPdf.busy === "print" ? "Preparing..." : "Print Receipt"}
-                </button>
-                <button
-                  onClick={receiptPdf.download}
-                  disabled={!!receiptPdf.busy}
-                  className="px-4 py-2 text-xs font-medium text-white bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-600 rounded-sm transition-colors flex items-center gap-2 uppercase tracking-wider disabled:opacity-50"
-                >
-                  <Download className="h-4 w-4" />
-                  {receiptPdf.busy === "download" ? "Preparing..." : "Download PDF"}
+                  {receiptPdf.busy ? "Preparing..." : "Print Receipt"}
                 </button>
               </div>
             </div>

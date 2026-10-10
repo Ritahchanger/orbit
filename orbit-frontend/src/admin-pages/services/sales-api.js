@@ -180,7 +180,13 @@ const salesApi = {
       params,
       responseType: "blob",
     });
-    return response.data;
+    const match = /filename="?([^";]+)"?/.exec(
+      response.headers?.["content-disposition"] || "",
+    );
+    return {
+      blob: response.data,
+      filename: match ? match[1] : `daily-sales-${params.date || "today"}.pdf`,
+    };
   },
 
   // Get store-specific daily summary

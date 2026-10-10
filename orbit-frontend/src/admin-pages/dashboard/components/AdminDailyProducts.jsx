@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import salesApi from "../../services/sales-api";
 import { toast } from "react-hot-toast";
-import { printPdf, pdfErrorMessage } from "../../admin-transactions/components/pdfFile";
+import { downloadPdf, pdfErrorMessage } from "../../admin-transactions/components/pdfFile";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminCopySKU from "../../products/components/AdminCopySKU";
@@ -31,15 +31,15 @@ const AdminDailyProducts = ({
   const { userRole } = useAuth();
   const [isPrinting, setIsPrinting] = useState(false);
 
-  // Daily sales PDF rendered by the backend (same template as the reports)
+  // "Print" downloads the backend daily-sales PDF (same template as the reports)
   const handlePrint = async () => {
     try {
       setIsPrinting(true);
-      const blob = await salesApi.getDailySummaryPdf({
+      const { blob, filename } = await salesApi.getDailySummaryPdf({
         date: selectedDate || (summary?.date ? new Date(summary.date) : new Date()),
         storeId,
       });
-      printPdf(blob);
+      downloadPdf(blob, filename);
     } catch (error) {
       toast.error(await pdfErrorMessage(error, "Failed to generate the report"));
     } finally {
