@@ -20,6 +20,19 @@ router.get(
   asyncWrapper(transactionController.getAllTransactions),
 );
 
+// Transactions report as PDF (SENSITIVE READ → log)
+router.get(
+  "/export/pdf",
+  recordAdminLog("EXPORT_TRANSACTIONS_PDF"),
+  asyncWrapper(transactionController.exportTransactionsPdf),
+);
+
+// Customer receipt PDF for one transaction
+router.get(
+  "/:transactionId/receipt",
+  asyncWrapper(transactionController.getTransactionReceiptPdf),
+);
+
 // Get transaction by ID (SENSITIVE READ → log)
 router.get(
   "/:transactionId",

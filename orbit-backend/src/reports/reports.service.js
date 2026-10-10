@@ -12,6 +12,10 @@ const mongoose = require("mongoose");
 
 const { writeToBuffer } = require("fast-csv");
 
+const { renderReportPdf } = require("./reports.pdf");
+
+const Business = require("../business/models/business.model");
+
 class ReportService {
   /**
    * Get overall system dashboard statistics
@@ -298,7 +302,11 @@ class ReportService {
         limit = 50,
       } = filters;
 
-      const matchStage = { status, businessId };
+      // Cast ids explicitly: aggregate() does not cast strings to ObjectId.
+      const matchStage = {
+        status,
+        businessId: new mongoose.Types.ObjectId(businessId),
+      };
 
       // Apply filters
       if (startDate && endDate) {
@@ -308,8 +316,8 @@ class ReportService {
         };
       }
 
-      if (storeId) matchStage.storeId = storeId;
-      if (productId) matchStage.productId = productId;
+      if (storeId) matchStage.storeId = new mongoose.Types.ObjectId(storeId);
+      if (productId) matchStage.productId = new mongoose.Types.ObjectId(productId);
       if (paymentMethod) matchStage.paymentMethod = paymentMethod;
 
       const skip = (page - 1) * limit;
@@ -1109,15 +1117,21 @@ class ReportService {
     try {
       let data;
 
+      // Exports cover the whole filtered set, not just the first API page.
+      const exportFilters = { ...filters, page: 1, limit: filters.limit || 5000 };
+
       switch (type) {
         case "sales":
-          data = await this.getSalesReport(filters, businessId);
+          data = await this.getSalesReport(exportFilters, businessId);
           break;
         case "inventory":
-          data = await this.getInventoryReport(filters, businessId);
+          data = await this.getInventoryReport(exportFilters, businessId);
           break;
         case "products":
-          data = await this.getProductPerformanceReport(filters, businessId);
+          data = await this.getProductPerformanceReport(
+            { ...filters, limit: filters.limit || 100 },
+            businessId,
+          );
           break;
         case "stores":
           data = await this.getStorePerformanceReport(filters, businessId);
@@ -1141,7 +1155,7 @@ class ReportService {
       } else if (format === "json") {
         return await this.generateJSON(data, type);
       } else if (format === "pdf") {
-        return await this.generatePDF(data, type);
+        return await this.generatePDF(data, type, filters, businessId);
       } else {
         throw new Error(`Invalid format. Valid formats: csv, excel, json, pdf`);
       }
@@ -1268,21 +1282,75 @@ class ReportService {
   }
 
   /**
-   * Generate PDF file (simplified version - you might want to use pdfkit or puppeteer)
+   * Business/store details used for PDF letterheads (tenant-scoped).
    */
-  async generatePDF(data, type) {
-    try {
-      const filename = `${type}_report_${new Date().toISOString().split("T")[0]}.pdf`;
+  async getPdfMeta(businessId, storeId) {
+    const [business, store] = await Promise.all([
+      businessId
+        ? Business.findById(businessId)
+            .select(
+              "businessName businessEmail businessPhone businessAddress city country website taxId registrationNumber settings ecommerce.theme.primaryColor",
+            )
+            .lean()
+        : null,
+      storeId && mongoose.isValidObjectId(storeId)
+        ? Store.findOne({ _id: storeId, businessId })
+            .select("name code address phone")
+            .lean()
+        : null,
+    ]);
 
-      // For a real implementation, you'd use pdfkit, puppeteer, or a PDF library
-      // This is a placeholder that returns HTML that can be converted to PDF
-      const html = this.generateHTMLReport(data, type);
+    const businessName = business?.businessName || "Orbit";
+    return {
+      business,
+      store,
+      businessName,
+      storeName: store?.name,
+      currency: business?.settings?.currency || "KES",
+      timezone: business?.settings?.timezone || "Africa/Nairobi",
+      brandColor: business?.ecommerce?.theme?.primaryColor,
+      slug:
+        businessName
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "") || "orbit",
+    };
+  }
+
+  /**
+   * Generate a vector PDF report (PDFKit) with KPI cards, charts and tables.
+   */
+  async generatePDF(data, type, filters = {}, businessId) {
+    try {
+      const meta = await this.getPdfMeta(businessId, filters.storeId);
+
+      // The sales PDF also charts the trend, payment mix and store split.
+      if (type === "sales") {
+        const [trend, financial, byStore] = await Promise.all([
+          this.getSalesTrendReport("daily", filters, businessId),
+          this.getFinancialSummary({ ...filters, businessId }),
+          filters.storeId
+            ? []
+            : this.getStorePerformanceReport(filters, businessId),
+        ]);
+        data = {
+          ...data,
+          trend,
+          paymentMethods: financial.paymentMethods,
+          byStore,
+        };
+      }
+
+      const buffer = await renderReportPdf(type, data, {
+        ...meta,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      });
 
       return {
         contentType: "application/pdf",
-        filename,
-        buffer: Buffer.from(html, "utf8"), // In reality, this would be PDF buffer
-        note: "PDF generation requires additional setup with puppeteer or pdfkit",
+        filename: `${meta.slug}_${type}_report_${new Date().toISOString().split("T")[0]}.pdf`,
+        buffer,
       };
     } catch (error) {
       throw new Error(`Failed to generate PDF: ${error.message}`);
@@ -1797,34 +1865,6 @@ class ReportService {
 
   // Similar methods for other report types...
   // You can follow the same pattern for createProductsExcel, createStoresExcel, etc.
-
-  generateHTMLReport(data, type) {
-    // Simplified HTML generation for PDF conversion
-    return `
-            <html>
-                <head>
-                    <title>${type.toUpperCase()} Report</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 40px; }
-                        h1 { color: #333; border-bottom: 2px solid #4F81BD; padding-bottom: 10px; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                        th { background-color: #4F81BD; color: white; padding: 10px; text-align: left; }
-                        td { padding: 8px; border: 1px solid #ddd; }
-                        .summary { background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; }
-                        .total { font-weight: bold; color: #4F81BD; }
-                    </style>
-                </head>
-                <body>
-                    <h1>${type.toUpperCase()} REPORT</h1>
-                    <div class="summary">
-                        <p>Generated on: ${new Date().toLocaleDateString()}</p>
-                        <p>Report Type: ${type}</p>
-                    </div>
-                    <p>Note: For full PDF generation, implement with puppeteer or pdfkit.</p>
-                </body>
-            </html>
-        `;
-  }
 }
 
 module.exports = new ReportService();
