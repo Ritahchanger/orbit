@@ -788,6 +788,62 @@ function buildTransactions(doc, d, ctx) {
   });
 }
 
+function buildDailySales(doc, d, ctx) {
+  const { fmt } = ctx;
+  const items = d.itemsSold || [];
+  const showProfit = !!ctx.showProfit;
+  const multiStore = new Set(items.map((i) => String(i.storeId || ""))).size > 1;
+  let y = masthead(doc, ctx);
+
+  y = cards(doc, ctx, [
+    { label: "Revenue", value: fmt.money(d.totalSales), hint: `${fmt.num(d.totalTransactions)} transactions`, color: C.blue },
+    showProfit
+      ? { label: "Profit", value: fmt.money(d.totalProfit), hint: `${d.metrics?.profitMargin ?? "0.0"}% margin`, color: C.green }
+      : { label: "Products sold", value: fmt.num(items.length), color: C.green },
+    { label: "Items sold", value: fmt.num(d.totalItemsSold), hint: `${d.metrics?.itemsPerTransaction ?? "0.0"} per transaction`, color: C.purple },
+    { label: "Average sale", value: fmt.money(d.averageTransaction), color: C.orange },
+  ], y);
+
+  y = sideBySide(doc, ctx, y, 190,
+    (x, yy, w) => barChart(doc, { title: "Top products", subtitle: "by units sold", rows: items.slice(0, 8).map((i) => ({ label: i.productName, value: i.totalQuantitySold })), x, y: yy, width: w, fmt: fmt.num, color: C.blue }),
+    (x, yy, w) => barChart(doc, { title: "Payment methods", rows: (d.paymentMethods || []).map((p) => ({ label: p.paymentMethod || "other", value: p.totalAmount })), x, y: yy, width: w, fmt: fmt.money, color: C.purple }),
+  );
+
+  const columns = [
+    { header: "#", w: 0.4, align: "right", value: (r) => String(items.indexOf(r) + 1) },
+    { header: "Product", w: 3, value: (r) => r.productName },
+    { header: "SKU", w: 1.2, value: (r) => r.sku || "—" },
+    ...(multiStore ? [{ header: "Store", w: 1.5, value: (r) => r.storeName || "—" }] : []),
+    { header: "Category", w: 1.3, value: (r) => r.category || "—" },
+    { header: "Qty", w: 0.6, align: "right", value: (r) => fmt.num(r.totalQuantitySold), bold: true },
+    { header: "Avg price", w: 1.1, align: "right", value: (r) => fmt.money(r.sellingPrice) },
+    { header: "Revenue", w: 1.2, align: "right", value: (r) => fmt.money(r.totalRevenue), bold: true },
+    ...(showProfit
+      ? [
+          { header: "Profit", w: 1.1, align: "right", value: (r) => fmt.money(r.totalProfit), color: (r) => (r.totalProfit < 0 ? C.red : C.green) },
+          { header: "Margin", w: 0.8, align: "right", value: (r) => `${r.profitMargin}%` },
+        ]
+      : []),
+  ];
+  const totals = columns.map((c) => {
+    if (c.header === "Product") return "Total";
+    if (c.header === "Qty") return fmt.num(d.totalItemsSold);
+    if (c.header === "Revenue") return fmt.money(d.totalSales);
+    if (c.header === "Profit") return fmt.money(d.totalProfit);
+    return null;
+  });
+
+  table(doc, ctx, {
+    title: "Products sold",
+    subtitle: `${fmt.num(items.length)} products`,
+    y,
+    columns,
+    rows: items,
+    totals: items.length ? totals : null,
+    emptyText: "No sales recorded for this day.",
+  });
+}
+
 const BUILDERS = {
   dashboard: { title: "Business Dashboard", build: buildDashboard },
   sales: { title: "Sales Report", build: buildSales },
@@ -796,6 +852,7 @@ const BUILDERS = {
   stores: { title: "Store Performance", build: buildStores },
   financial: { title: "Financial Summary", build: buildFinancial },
   transactions: { title: "Transactions Report", build: buildTransactions },
+  dailySales: { title: "Daily Product Sales", build: buildDailySales },
 };
 
 function createDoc(layout, title, businessName) {
@@ -835,6 +892,7 @@ function baseCtx(meta, title) {
     businessName: meta.businessName || "Orbit",
     brand: isHex(meta.brandColor) ? meta.brandColor : C.brand,
     timezone: meta.timezone || "Africa/Nairobi",
+    showProfit: meta.showProfit,
   };
 }
 
@@ -854,7 +912,9 @@ function renderReportPdf(type, data, meta = {}) {
     // Dashboard and inventory are point-in-time snapshots, not period reports.
     type === "dashboard" || type === "inventory"
       ? `As of ${fmt.date(new Date())}`
-      : meta.startDate && meta.endDate
+      : meta.startDate && meta.endDate && fmt.date(meta.startDate) === fmt.date(meta.endDate)
+        ? fmt.date(meta.startDate)
+        : meta.startDate && meta.endDate
         ? `${fmt.date(meta.startDate)} – ${fmt.date(meta.endDate)}`
         : meta.startDate
           ? `From ${fmt.date(meta.startDate)}`
