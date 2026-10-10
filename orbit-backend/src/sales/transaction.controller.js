@@ -1,4 +1,9 @@
 const transactionService = require("./transaction.service");
+const reportService = require("../reports/reports.service");
+const { renderReportPdf, renderReceiptPdf } = require("../reports/reports.pdf");
+
+// Max rows rendered into a transactions PDF report.
+const PDF_ROW_LIMIT = 5000;
 // 1. Get all transactions with pagination and filters
 const getAllTransactions = async (req, res) => {
   try {
@@ -138,7 +143,116 @@ const getTodaySummary = async (req, res) => {
   });
 };
 
+// 5. Transactions report PDF (same filters as the list endpoint)
+const exportTransactionsPdf = async (req, res) => {
+  const {
+    storeId,
+    startDate,
+    endDate,
+    paymentMethod,
+    paymentStatus,
+    status,
+    customerName,
+    customerPhone,
+    minAmount,
+    maxAmount,
+    hasChange,
+    soldBy,
+  } = req.query;
+  const businessId = req.businessId;
+
+  const [result, meta] = await Promise.all([
+    transactionService.getAllTransactions(
+      {
+        page: 1,
+        limit: PDF_ROW_LIMIT,
+        storeId,
+        startDate,
+        endDate,
+        paymentMethod,
+        paymentStatus,
+        status,
+        customerName,
+        customerPhone,
+        minAmount: minAmount ? parseFloat(minAmount) : undefined,
+        maxAmount: maxAmount ? parseFloat(maxAmount) : undefined,
+        hasChange: hasChange === undefined ? undefined : hasChange === "true",
+        soldBy,
+        sortBy: "createdAt",
+        sortOrder: -1,
+      },
+      businessId,
+    ),
+    reportService.getPdfMeta(businessId, storeId),
+  ]);
+
+  const extraScope = [
+    paymentMethod && `Payment: ${paymentMethod}`,
+    status && `Status: ${status}`,
+    paymentStatus && `Payment status: ${paymentStatus}`,
+    customerName && `Customer: ${customerName}`,
+  ].filter(Boolean);
+
+  const buffer = await renderReportPdf(
+    "transactions",
+    {
+      transactions: result.transactions,
+      summary: result.summary,
+      truncatedFrom:
+        result.pagination.total > result.transactions.length
+          ? result.pagination.total
+          : null,
+    },
+    { ...meta, startDate, endDate, extraScope },
+  );
+
+  const date = new Date().toISOString().split("T")[0];
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="${meta.slug}_transactions_${date}.pdf"`,
+  );
+  res.send(buffer);
+};
+
+// 6. Single transaction receipt PDF
+const getTransactionReceiptPdf = async (req, res) => {
+  const businessId = req.businessId;
+  let transaction;
+  try {
+    transaction = await transactionService.getTransactionById(
+      req.params.transactionId,
+      businessId,
+    );
+  } catch {
+    transaction = null;
+  }
+  if (!transaction) {
+    return res.status(404).json({
+      success: false,
+      message: "Transaction not found",
+    });
+  }
+
+  const meta = await reportService.getPdfMeta(
+    businessId,
+    transaction.storeId?._id || transaction.storeId,
+  );
+  const buffer = await renderReceiptPdf(transaction, meta);
+
+  const ref =
+    transaction.transactionId || String(transaction._id).slice(-8).toUpperCase();
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    `${req.query.inline === "true" ? "inline" : "attachment"}; filename="receipt-${ref}.pdf"`,
+  );
+  res.send(buffer);
+};
+
 module.exports = {
+  exportTransactionsPdf,
+  getTransactionReceiptPdf,
   getAllTransactions,
   getTransactionById,
   getStoreTransactions,
