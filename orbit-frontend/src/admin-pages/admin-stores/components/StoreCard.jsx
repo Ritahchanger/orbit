@@ -1,3 +1,4 @@
+import StatusBadge from "../../../components/common/status/StatusBadge";
 import {
     Store,
     MapPin,
@@ -10,7 +11,8 @@ import {
     Users,
     AlertTriangle,
     X,
-    Package
+    Package,
+    Wrench
 } from 'lucide-react';
 
 import { useState } from 'react';
@@ -116,7 +118,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
 
     return (
         <>
-            <div className={`bg-white dark:bg-gray-800 border rounded-sm p-4 hover:shadow-sm transition-all duration-200 ${isCurrentStore ? 'border-blue-500 dark:border-blue-400' : 'border-gray-300 dark:border-gray-700'}`}>
+            <div className={`bg-white dark:bg-gray-800 border rounded-sm p-4 hover:shadow-sm transition-all duration-200 ${isCurrentStore ? 'border-blue-500 dark:border-blue-400' : 'border-gray-200 dark:border-gray-700'}`}>
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                         <div className={`w-12 h-12 rounded-sm flex items-center justify-center ${isCurrentStore ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600'}`}>
@@ -154,10 +156,10 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                                     className="fixed inset-0 z-40"
                                     onClick={() => setShowMenu(false)}
                                 />
-                                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm shadow-lg z-50">
+                                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-lg z-50">
                                     <div className="py-1">
                                         {/* Quick permission summary */}
-                                        <div className="px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-300 dark:border-gray-700">
+                                        <div className="px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                                             <p className="font-medium">Permissions:</p>
                                             <div className="flex flex-wrap gap-1 mt-1">
                                                 {storePermissions.canView && <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs">View</span>}
@@ -216,20 +218,11 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-300 dark:border-gray-700">
-                    <span className={`inline-flex items-center px-2 py-1 rounded-sm text-xs font-medium ${store.status === 'active' ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400'}`}>
-                        {store.status === 'active' ? (
-                            <>
-                                <CheckCircle size={12} className="mr-1" />
-                                Active
-                            </>
-                        ) : (
-                            <>
-                                <XCircle size={12} className="mr-1" />
-                                Inactive
-                            </>
-                        )}
-                    </span>
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <StatusBadge
+                        status={store.status}
+                        icon={store.status === 'active' ? CheckCircle : store.status === 'maintenance' ? Wrench : XCircle}
+                    />
 
                     <div className="flex items-center gap-2">
                         {/* Products button - only if can view store */}
@@ -299,8 +292,8 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                             onClick={() => !isDeleting && setShowDeleteModal(false)}
                         />
 
-                        <div className="relative z-[10000] w-full max-w-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm shadow-xl">
-                            <div className="flex items-center justify-between p-6 border-b border-gray-300 dark:border-gray-700">
+                        <div className="relative z-[10000] w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-xl">
+                            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
                                 <div className="flex items-center gap-3">
                                     <div className="p-2 rounded-sm bg-red-100 dark:bg-red-900/30">
                                         <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-500" />

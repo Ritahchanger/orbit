@@ -167,13 +167,13 @@ const AdminPermissions = () => {
     const getPermissionBadgeColor = (permissionKey) => {
         const action = permissionKey.split('.')[1];
         switch (action) {
-            case 'view': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-            case 'create': return 'bg-green-500/10 text-green-400 border-green-500/20';
-            case 'update': return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
-            case 'delete': return 'bg-red-500/10 text-red-400 border-red-500/20';
-            case 'manage': return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
-            case 'generate': return 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
-            default: return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+            case 'view': return 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/30';
+            case 'create': return 'bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/30';
+            case 'update': return 'bg-yellow-50 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/30';
+            case 'delete': return 'bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/30';
+            case 'manage': return 'bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-500/30';
+            case 'generate': return 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/30';
+            default: return 'bg-gray-50 dark:bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-200 dark:border-gray-500/30';
         }
     };
 

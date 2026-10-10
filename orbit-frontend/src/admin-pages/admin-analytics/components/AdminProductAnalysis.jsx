@@ -449,8 +449,8 @@ const AdminProductAnalysis = ({ viewMode = 'store', currentStore = null }) => {
                         </div>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-xs font-medium ${activeView === 'store'
-                        ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                        : 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                        ? 'bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30'
+                        : 'bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30'
                         }`}>
                         {activeView === 'store' ? 'Store View' : 'Global View'}
                     </div>
@@ -625,7 +625,7 @@ const AdminProductAnalysis = ({ viewMode = 'store', currentStore = null }) => {
                             <AlertTriangle size={18} className="text-red-500" />
                             Low Stock Alerts
                         </h4>
-                        <span className="text-xs text-red-400 bg-red-500/10 px-2 py-1 rounded">
+                        <span className="text-xs text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-500/10 px-2 py-1 rounded">
                             {lowStockData?.data?.summary?.totalAlerts || lowStockData?.data?.products?.length || 0} Products
                         </span>
                     </div>
@@ -657,7 +657,7 @@ const AdminProductAnalysis = ({ viewMode = 'store', currentStore = null }) => {
                                             <span className="text-gray-300 text-sm">{product.minStock}</span>
                                         </td>
                                         <td className="py-3 px-2">
-                                            <span className={`text-xs px-2 py-1 rounded-full ${product.severity === 'critical' ? 'bg-red-500/20 text-red-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
+                                            <span className={`text-xs px-2 py-1 rounded-full ${product.severity === 'critical' ? 'bg-red-50 dark:bg-red-500/20 text-red-700 dark:text-red-400' : 'bg-yellow-50 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400'}`}>
                                                 {product.severity === 'critical' ? 'Critical' : 'Warning'}
                                             </span>
                                         </td>
@@ -675,7 +675,7 @@ const AdminProductAnalysis = ({ viewMode = 'store', currentStore = null }) => {
                             <TrendingUp size={18} className="text-green-500" />
                             Top Performing Products
                         </h4>
-                        <span className="text-xs text-green-400 bg-green-500/10 px-2 py-1 rounded">
+                        <span className="text-xs text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-2 py-1 rounded">
                             By Revenue
                         </span>
                     </div>
@@ -707,7 +707,7 @@ const AdminProductAnalysis = ({ viewMode = 'store', currentStore = null }) => {
                                             <span className="text-gray-300 text-sm">{product.totalSold || 0}</span>
                                         </td>
                                         <td className="py-3 px-2">
-                                            <span className={`text-xs px-2 py-1 rounded-full ${(parseFloat(product.profitMargin) || 0) > 20 ? 'bg-green-500/20 text-green-400' : 'bg-blue-500/20 text-blue-400'}`}>
+                                            <span className={`text-xs px-2 py-1 rounded-full ${(parseFloat(product.profitMargin) || 0) > 20 ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400' : 'bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400'}`}>
                                                 {(parseFloat(product.profitMargin) || 0).toFixed(1)}%
                                             </span>
                                         </td>
@@ -727,7 +727,7 @@ const AdminProductAnalysis = ({ viewMode = 'store', currentStore = null }) => {
                             <Package size={18} className="text-blue-500" />
                             Product Recommendations
                         </h4>
-                        <span className="text-xs text-blue-400 bg-blue-500/10 px-2 py-1 rounded">
+                        <span className="text-xs text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-1 rounded">
                             Smart Suggestions
                         </span>
                     </div>

@@ -128,13 +128,13 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
       <div className="fixed inset-0 z-[60] overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4">
           <div
-            className={`relative w-full max-w-4xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm shadow-2xl transform transition-all duration-300 ${
+            className={`relative w-full max-w-4xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-2xl transform transition-all duration-300 ${
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-300 dark:border-gray-700">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-sm bg-blue-100 dark:bg-blue-500/20">
                   <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -157,7 +157,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
             </div>
 
             {/* Stats Summary */}
-            <div className="grid grid-cols-3 gap-3 p-4 border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+            <div className="grid grid-cols-3 gap-3 p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
               <div className="text-center p-2 bg-purple-100 dark:bg-purple-500/10 rounded-sm">
                 <span className="text-xs text-purple-600 dark:text-purple-400 block">
                   Managers
@@ -185,7 +185,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
             </div>
 
             {/* Search and Filter */}
-            <div className="p-4 border-b border-gray-300 dark:border-gray-700">
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* Search */}
                 <div className="flex-1 relative">
@@ -370,7 +370,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
 
             {/* Pagination */}
             {filteredWorkers.length > 0 && (
-              <div className="flex items-center justify-between p-4 border-t border-gray-300 dark:border-gray-700">
+              <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="text-sm text-gray-600 dark:text-gray-400">
                   Showing {(currentPage - 1) * itemsPerPage + 1} -{" "}
                   {Math.min(currentPage * itemsPerPage, filteredWorkers.length)}{" "}
@@ -403,7 +403,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
             )}
 
             {/* Footer */}
-            <div className="flex justify-end p-4 border-t border-gray-300 dark:border-gray-700">
+            <div className="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700">
               <button
                 onClick={onClose}
                 className="px-4 py-2 text-sm bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 rounded-sm transition-colors"

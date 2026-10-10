@@ -631,7 +631,7 @@ const AdminAllProducts = ({
                             const newLimit = parseInt(e.target.value);
                             onPageChange(1, newLimit); // Reset to page 1 when changing limit
                           }}
-                          className="text-sm border border-gray-300 dark:border-gray-600 rounded-sm px-2 py-1 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500"
+                          className="text-sm text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-sm px-2 py-1 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           <option value={10}>10</option>
                           <option value={20}>20</option>

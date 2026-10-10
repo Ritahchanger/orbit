@@ -1,3 +1,4 @@
+import StatusBadge from "../../../components/common/status/StatusBadge";
 // src/pages/admin/components/ConsultationEmailsPanel.jsx
 import { useState } from "react";
 import {
@@ -128,38 +129,10 @@ const ConsultationEmailsPanel = ({ onClose }) => {
   };
 
   // Get status badge
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case "sent":
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-sm text-xs font-medium">
-            <CheckCircle className="h-3 w-3" />
-            Sent
-          </span>
-        );
-      case "pending":
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-sm text-xs font-medium">
-            <Clock className="h-3 w-3" />
-            Pending
-          </span>
-        );
-      case "failed":
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-sm text-xs font-medium">
-            <XCircle className="h-3 w-3" />
-            Failed
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-500/10 text-gray-600 dark:text-gray-400 rounded-sm text-xs font-medium">
-            <Mail className="h-3 w-3" />
-            {status || "Unknown"}
-          </span>
-        );
-    }
-  };
+  const STATUS_ICONS = { sent: CheckCircle, pending: Clock, failed: XCircle };
+  const getStatusBadge = (status) => (
+    <StatusBadge status={status} icon={STATUS_ICONS[status]} />
+  );
 
   // Get template badge
   const getTemplateBadge = (template) => {

@@ -1,5 +1,5 @@
 import AdminLayout from "../../dashboard/layout/Layout";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useReports } from "../../hooks/reports.hooks";
 import {
   Download,
@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import colorClasses from "../components/ColorClass";
+import PageContainer from "../../components/ui/PageContainer";
+import StatCard from "../../components/ui/StatCard";
 import { useStoreContext } from "../../../context/store/StoreContext";
 import MainReportContent from "../components/MainReportContent";
 import { reportTypes } from "../components/ReportsTypes";
@@ -54,7 +56,6 @@ const AdminReports = () => {
       : "dashboard";
   });
 
-  const [selectedStore, setSelectedStore] = useState("all");
   const [dateRange, setDateRange] = useState({
     startDate: format(
       new Date(new Date().setMonth(new Date().getMonth() - 1)),
@@ -80,6 +81,11 @@ const AdminReports = () => {
     loading: storesLoading,
     currentStore,
   } = useStoreContext();
+
+  // The global store switcher is the single source of truth, so the summary,
+  // exports and every report tab always show the same store.
+  const selectedStore =
+    currentStore && currentStore !== "global" ? currentStore._id : "all";
 
   // Check if user has access to reports at all
   const canViewReports =
@@ -153,12 +159,6 @@ const AdminReports = () => {
   const salesData = salesApiResponse?.data || {};
   const inventoryData = inventoryApiResponse?.data || {};
 
-  // Set default store selection based on context
-  useEffect(() => {
-    if (currentStore && currentStore !== "global") {
-      setSelectedStore(currentStore._id);
-    }
-  }, [currentStore]);
 
   // Filter report types based on permissions
   const filteredReportTypes = reportTypes.filter((report) => {
@@ -242,17 +242,12 @@ const AdminReports = () => {
         potentialProfit: 0,
       };
 
-    const sales = Array.isArray(salesData?.sales) ? salesData.sales : [];
+    const salesSummary = salesData?.summary || {};
     const inventorySummary = inventoryData.summary || {};
 
-    const totalRevenue = sales.reduce(
-      (sum, sale) => sum + (sale.totalSales || sale.totalAmount || 0),
-      0,
-    );
-    const totalTransactions = sales.reduce(
-      (sum, sale) => sum + (sale.transactionCount || 1),
-      0,
-    );
+    // Totals for the whole period/store, not just the first page of rows
+    const totalRevenue = salesSummary.totalSales || 0;
+    const totalTransactions = salesSummary.totalTransactions || 0;
     const lowStockItems = inventorySummary.lowStockCount || 0;
     const outOfStockItems = inventorySummary.outOfStockCount || 0;
     const uniqueProducts = inventorySummary.uniqueProductCount || 0;
@@ -283,7 +278,6 @@ const AdminReports = () => {
     canViewSalesReport && {
       title: "Revenue",
       value: formatCurrency(metrics.totalRevenue),
-      change: "+12.5%",
       icon: TrendingUp,
       color: "green",
       description: `${metrics.totalTransactions} transactions`,
@@ -417,11 +411,9 @@ const AdminReports = () => {
 
   return (
     <AdminLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        {/* Main Content */}
-        <div className="px-4 sm:px-6 py-4">
+      <PageContainer>
           {/* Report Type Navigation */}
-          <div className="mb-2">
+          <div>
             <div className="border-b border-gray-200 dark:border-gray-700">
               <nav className="-mb-px flex space-x-4 sm:space-x-6 overflow-x-auto">
                 {filteredReportTypes.map((report) => {
@@ -438,7 +430,7 @@ const AdminReports = () => {
                                                 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-lg flex items-center
                                                 ${
                                                   isActive
-                                                    ? `${colors.text} border-${report.color}-500`
+                                                    ? `${colors.text} ${colors.tab}`
                                                     : "text-black dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 border-transparent"
                                                 }
                                             `}
@@ -454,10 +446,45 @@ const AdminReports = () => {
             </div>
           </div>
 
+          {/* Scope: store comes from the global switcher, period is set here */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-3">
+            <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+              <Store className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <span className="font-medium">{currentStoreName}</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                (change with the store switcher)
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <input
+                type="date"
+                value={dateRange.startDate}
+                max={dateRange.endDate}
+                onChange={(e) =>
+                  setDateRange((r) => ({ ...r, startDate: e.target.value }))
+                }
+                className="px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                aria-label="Start date"
+              />
+              <span className="text-gray-500 dark:text-gray-400">to</span>
+              <input
+                type="date"
+                value={dateRange.endDate}
+                min={dateRange.startDate}
+                onChange={(e) =>
+                  setDateRange((r) => ({ ...r, endDate: e.target.value }))
+                }
+                className="px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                aria-label="End date"
+              />
+            </div>
+          </div>
+
           {/* COMPACT Quick Actions - only show if there are actions */}
           {quickActions.length > 0 && (
-            <div className="mb-2">
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+            <div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                 {quickActions.map((action, index) => {
                   const Icon = action.icon;
                   const colors =
@@ -470,7 +497,7 @@ const AdminReports = () => {
                       disabled={action.disabled}
                       className={`disabled:opacity-60 disabled:cursor-wait p-2 sm:p-3 rounded-sm border border-gray-200 dark:border-gray-700 
                                               bg-white dark:bg-gray-800 text-left hover:shadow-sm transition-shadow
-                                              hover:border-${action.color}-300 dark:hover:border-${action.color}-600`}
+                                              ${colors.hoverBorder}`}
                     >
                       <div className="flex items-center mb-1">
                         <div className={`p-1.5 rounded-sm ${colors.bg}`}>
@@ -492,9 +519,9 @@ const AdminReports = () => {
 
           {/* COMPACT Summary Cards - only show if there are cards */}
           {summaryCards.length > 0 && (
-            <div className="mb-2">
+            <div>
               <div
-                className={`grid gap-2 ${
+                className={`grid gap-3 ${
                   summaryCards.length === 1
                     ? "grid-cols-1"
                     : summaryCards.length === 2
@@ -504,38 +531,23 @@ const AdminReports = () => {
                         : "grid-cols-2 lg:grid-cols-4"
                 }`}
               >
-                {summaryCards.map((card, index) => {
+                {summaryCards.map((card) => {
                   const Icon = card.icon;
-                  const colors = colorClasses[card.color] || colorClasses.blue;
-                  const isRed = card.color === "red";
-
                   return (
-                    <div
-                      key={index}
-                      className="bg-white dark:bg-gray-800 rounded-sm shadow-sm border border-gray-200 dark:border-gray-700 p-3"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <Icon className={`h-5 w-5 ${colors.text}`} />
-                        <span
-                          className={`text-xs font-medium ${isRed ? "text-red-600" : "text-green-600"}`}
-                        >
-                          {card.change}
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-0.5">
-                        {card.value}
-                      </h3>
-                      <div className="flex justify-between items-end">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {card.title}
-                        </p>
-                        {card.description && (
-                          <p className="text-xs text-gray-400 dark:text-gray-500">
-                            {card.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
+                    <StatCard
+                      key={card.title}
+                      title={card.title}
+                      value={card.value}
+                      icon={<Icon className="h-5 w-5" />}
+                      color={card.color}
+                      hint={card.description}
+                      badge={card.change}
+                      badgeClassName={
+                        card.color === "red"
+                          ? "text-red-600 dark:text-red-400"
+                          : "text-green-600 dark:text-green-400"
+                      }
+                    />
                   );
                 })}
               </div>
@@ -562,7 +574,7 @@ const AdminReports = () => {
           />
 
           {/* Bottom Actions */}
-          <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
               <div className="text-xs text-gray-500 dark:text-gray-400">
                 Last updated:{" "}
@@ -593,8 +605,7 @@ const AdminReports = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+      </PageContainer>
     </AdminLayout>
   );
 };

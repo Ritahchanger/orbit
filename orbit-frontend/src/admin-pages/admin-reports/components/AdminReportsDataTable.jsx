@@ -25,9 +25,9 @@ const AdminReportsDataTable = () => {
                             <td className="px-4 py-3 text-gray-300">{(index + 1) * 25}</td>
                             <td className="px-4 py-3 text-gray-300">KSh {((index + 1) * 15000).toLocaleString()}</td>
                             <td className="px-4 py-3">
-                                <span className={`px-2 py-1 rounded-sm text-xs ${index % 3 === 0 ? 'bg-green-500/20 text-green-400' :
-                                    index % 3 === 1 ? 'bg-yellow-500/20 text-yellow-400' :
-                                        'bg-red-500/20 text-red-400'
+                                <span className={`px-2 py-1 rounded-sm text-xs ${index % 3 === 0 ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400' :
+                                    index % 3 === 1 ? 'bg-yellow-50 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400' :
+                                        'bg-red-50 dark:bg-red-500/20 text-red-700 dark:text-red-400'
                                     }`}>
                                     {index % 3 === 0 ? '+15.2%' : index % 3 === 1 ? '+2.1%' : '-5.8%'}
                                 </span>

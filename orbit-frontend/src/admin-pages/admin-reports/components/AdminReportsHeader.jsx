@@ -44,10 +44,10 @@ const AdminReportsHeader = ({loadReportData,loading,exportToPDF,exportToExcel,qu
                             <div className="p-2 bg-gray-900/50 rounded-sm">
                                 <stat.icon className="h-5 w-5 text-primary" />
                             </div>
-                            <span className={`text-sm font-medium px-2 py-1 rounded-sm ${stat.color === 'green' ? 'bg-green-500/20 text-green-400' :
-                                stat.color === 'blue' ? 'bg-blue-500/20 text-blue-400' :
-                                    stat.color === 'purple' ? 'bg-purple-500/20 text-purple-400' :
-                                        'bg-orange-500/20 text-orange-400'
+                            <span className={`text-sm font-medium px-2 py-1 rounded-sm ${stat.color === 'green' ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400' :
+                                stat.color === 'blue' ? 'bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400' :
+                                    stat.color === 'purple' ? 'bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400' :
+                                        'bg-orange-50 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400'
                                 }`}>
                                 {stat.change}
                             </span>

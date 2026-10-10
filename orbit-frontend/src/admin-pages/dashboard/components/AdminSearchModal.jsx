@@ -691,7 +691,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                         </div>
 
                         {/* Footer */}
-                        <div className="border-t border-gray-300 dark:border-gray-700 p-4 bg-gray-100 dark:bg-gray-900/50">
+                        <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-100 dark:bg-gray-900/50">
                             <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                                 <div className="flex items-center gap-4">
                                     <span>Press <kbd className="px-1.5 py-0.5 bg-gray-300 dark:bg-gray-800 rounded text-xs">Esc</kbd> to close</span>

@@ -58,7 +58,7 @@ const RoleDetailsModal = ({
                                                 {status.text}
                                             </div>
                                             {role.isSystemRole && (
-                                                <div className="px-2 py-1 rounded-sm text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                                                <div className="px-2 py-1 rounded-sm text-xs font-medium bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30">
                                                     System Role
                                                 </div>
                                             )}
@@ -132,7 +132,7 @@ const RoleDetailsModal = ({
                                                             <ModuleIcon className="h-4 w-4 text-gray-400" />
                                                             <span className="text-sm text-white capitalize">{module}</span>
                                                         </div>
-                                                        <span className="px-2 py-1 text-xs font-medium bg-blue-500/20 text-blue-400 rounded-sm">
+                                                        <span className="px-2 py-1 text-xs font-medium bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-sm">
                                                             {count} permission{count !== 1 ? 's' : ''}
                                                         </span>
                                                     </div>
@@ -159,12 +159,12 @@ const RoleDetailsModal = ({
                                                         {perms.map(({ key, action }) => (
                                                             <div key={key} className="flex items-center justify-between text-sm">
                                                                 <span className="text-gray-300">{key}</span>
-                                                                <span className={`px-2 py-0.5 rounded-sm text-xs ${action === 'view' ? 'bg-blue-500/20 text-blue-400' :
-                                                                    action === 'create' ? 'bg-green-500/20 text-green-400' :
-                                                                        action === 'update' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                                            action === 'delete' ? 'bg-red-500/20 text-red-400' :
-                                                                                action === 'manage' ? 'bg-purple-500/20 text-purple-400' :
-                                                                                    'bg-gray-500/20 text-gray-400'
+                                                                <span className={`px-2 py-0.5 rounded-sm text-xs ${action === 'view' ? 'bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400' :
+                                                                    action === 'create' ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400' :
+                                                                        action === 'update' ? 'bg-yellow-50 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400' :
+                                                                            action === 'delete' ? 'bg-red-50 dark:bg-red-500/20 text-red-700 dark:text-red-400' :
+                                                                                action === 'manage' ? 'bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400' :
+                                                                                    'bg-gray-50 dark:bg-gray-500/20 text-gray-700 dark:text-gray-400'
                                                                     }`}>
                                                                     {action}
                                                                 </span>

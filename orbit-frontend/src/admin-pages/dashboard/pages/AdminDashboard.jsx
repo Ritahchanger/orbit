@@ -1,4 +1,5 @@
-  import { useState, useEffect, useRef, useMemo } from "react";
+  import PageContainer from "../../components/ui/PageContainer";
+import { useState, useEffect, useRef, useMemo } from "react";
   import { useDailySummary } from "../../hooks/sales.hooks";
   import { ShoppingCart, Filter, Store, AlertCircle } from "lucide-react";
   import { format } from "date-fns";
@@ -384,7 +385,7 @@
 
     return (
       <AdminLayout>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+        <PageContainer>
           <AdminHeader
             handleDateChange={handleDateChange}
             isAdmin={isAdmin}
@@ -406,7 +407,7 @@
             isManager={isManager}
           />
           {!isAdmin && !isSuperadmin && (
-            <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-sm">
+            <div className="p-3 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-sm">
               <div className="flex items-start gap-3">
                 <Store className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                 <div>
@@ -514,7 +515,7 @@
             useRole={userRole}
             isViewingAllStores={isViewingAllStores}
           />
-        </div>
+        </PageContainer>
       </AdminLayout>
     );
   };

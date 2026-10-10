@@ -125,19 +125,19 @@ const mockBusinessSubscription = {
 const planConfig = {
   basic: {
     name: "Basic",
-    color: "bg-gray-500/10 text-gray-400 border-gray-500/20",
+    color: "bg-gray-50 dark:bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-200 dark:border-gray-500/30",
     icon: Package,
     bgGradient: "from-gray-500/20 to-gray-600/20",
   },
   professional: {
     name: "Professional",
-    color: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    color: "bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/30",
     icon: TrendingUp,
     bgGradient: "from-blue-500/20 to-blue-600/20",
   },
   enterprise: {
     name: "Enterprise",
-    color: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+    color: "bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-500/30",
     icon: Crown,
     bgGradient: "from-purple-500/20 to-purple-600/20",
   },
@@ -147,31 +147,31 @@ const planConfig = {
 const statusConfig = {
   active: {
     label: "Active",
-    color: "bg-green-500/10 text-green-400 border-green-500/20",
+    color: "bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/30",
     icon: CheckCircle,
     bgColor: "bg-green-500/5",
   },
   expired: {
     label: "Expired",
-    color: "bg-red-500/10 text-red-400 border-red-500/20",
+    color: "bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/30",
     icon: XCircle,
     bgColor: "bg-red-500/5",
   },
   past_due: {
     label: "Past Due",
-    color: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+    color: "bg-yellow-50 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/30",
     icon: AlertCircle,
     bgColor: "bg-yellow-500/5",
   },
   trial: {
     label: "Trial",
-    color: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    color: "bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/30",
     icon: Clock,
     bgColor: "bg-blue-500/5",
   },
   cancelled: {
     label: "Cancelled",
-    color: "bg-gray-500/10 text-gray-400 border-gray-500/20",
+    color: "bg-gray-50 dark:bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-200 dark:border-gray-500/30",
     icon: XCircle,
     bgColor: "bg-gray-500/5",
   },
@@ -507,7 +507,7 @@ const AdminSubscriptionProfile = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="inline-flex items-center px-2 py-1 rounded-sm text-xs bg-green-500/10 text-green-400 border border-green-500/20">
+                          <span className="inline-flex items-center px-2 py-1 rounded-sm text-xs bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-500/30">
                             {payment.status}
                           </span>
                         </td>

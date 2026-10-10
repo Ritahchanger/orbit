@@ -200,7 +200,7 @@ const AdminDailyProducts = ({
 
               {/* Print Options Panel */}
               {showPrintOptions && (
-                <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-700">
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <PrintDailySales
                     itemsSold={itemsSold}
                     summary={summary}
@@ -218,7 +218,7 @@ const AdminDailyProducts = ({
           )}
 
           {/* Summary Stats Bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-gray-100 dark:bg-gray-800/30 border-b border-gray-300 dark:border-gray-700">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-gray-100 dark:bg-gray-800/30 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 dark:bg-blue-500/10 rounded-sm">
                 <Package className="h-4 w-4 text-blue-600 dark:text-blue-500" />
@@ -330,7 +330,7 @@ const AdminDailyProducts = ({
               {itemsSold.map((item, index) => (
                 <tr
                   key={`${item.productId}-${item.storeId || ""}-${index}`}
-                  className={`border-t border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors 
+                  className={`border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors 
                                         ${highlightFirstItem && index === 0 ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}
                 >
                   <td className="p-4 text-gray-600 dark:text-gray-400">
@@ -531,7 +531,7 @@ const AdminDailyProducts = ({
                   </td>
                 </tr>
                 {/* Additional summary row */}
-                <tr className="border-t border-gray-300 dark:border-gray-700">
+                <tr className="border-t border-gray-200 dark:border-gray-700">
                   <td
                     colSpan="10"
                     className="p-3 text-xs text-gray-600 dark:text-gray-500"
@@ -584,7 +584,7 @@ const AdminDailyProducts = ({
 
           {/* Legend for non-superadmin users */}
           {!canSeeProfit && (
-            <div className="p-4 border-t border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/30">
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/30">
               <p className="text-xs text-gray-600 dark:text-gray-500 text-center">
                 <span className="text-blue-600 dark:text-blue-400">Note:</span>{" "}
                 Profit and margin details are only visible to super
@@ -625,14 +625,14 @@ const AdminDailyProducts = ({
             </div>
             <button
               onClick={() => setShowPrintOptions(!showPrintOptions)}
-              className="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-sm text-sm flex items-center gap-1"
+              className="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-sm text-sm flex items-center gap-1"
             >
               <Printer className="h-3 w-3" />
               {showPrintOptions ? "Hide" : "Options"}
             </button>
           </div>
           {showPrintOptions && (
-            <div className="mt-3 pt-3 border-t border-gray-300 dark:border-gray-700">
+            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
               <PrintDailySales
                 itemsSold={itemsSold}
                 summary={summary}

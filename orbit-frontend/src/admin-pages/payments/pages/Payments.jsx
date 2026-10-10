@@ -1,3 +1,4 @@
+import { statusClass } from "../../../components/common/status/statusStyles";
 import React, { useState, useEffect } from 'react';
 import AdminLayout from "../../dashboard/layout/Layout";
 import {
@@ -299,16 +300,7 @@ const Payments = () => {
     });
 
     // Get status color
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'completed': return 'bg-green-500/10 text-green-400 border border-green-500/20';
-            case 'pending': return 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20';
-            case 'failed': return 'bg-red-500/10 text-red-400 border border-red-500/20';
-            case 'refunded': return 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
-            case 'cancelled': return 'bg-gray-500/10 text-gray-400 border border-gray-500/20';
-            default: return 'bg-gray-500/10 text-gray-400 border border-gray-500/20';
-        }
-    };
+    const getStatusColor = statusClass;
 
     // Get status icon
     const getStatusIcon = (status) => {
@@ -908,7 +900,7 @@ const Payments = () => {
                             {selectedPayment.status === 'completed' && (
                                 <button
                                     onClick={() => handleRefund(selectedPayment.id)}
-                                    className="px-4 py-2 border border-red-700 text-red-400 rounded-sm hover:bg-red-500/10 flex items-center space-x-2"
+                                    className="px-4 py-2 border border-red-700 text-red-700 dark:text-red-400 rounded-sm hover:bg-red-500/10 flex items-center space-x-2"
                                 >
                                     <ArrowDownRight className="h-4 w-4" />
                                     <span>Refund Payment</span>

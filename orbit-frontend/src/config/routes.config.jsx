@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 // routes/appRoutes.js
 import { useSimpleRolePermissionCheck } from "../context/RolePermissionContext";
 // Public Components
@@ -121,8 +122,14 @@ export const protectedRoutes = [
 
   // Stores (admin, superadmin)
   {
-    path: "/admin/stock-tranfers",
+    path: "/admin/stock-transfers",
     element: <AdminStockTransfers />,
+    roles: ["admin", "superadmin"],
+  },
+  // Old misspelled URL, kept so existing bookmarks still work
+  {
+    path: "/admin/stock-tranfers",
+    element: <Navigate to="/admin/stock-transfers" replace />,
     roles: ["admin", "superadmin"],
   },
   {

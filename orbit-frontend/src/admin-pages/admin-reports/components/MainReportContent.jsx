@@ -124,9 +124,10 @@ const MainReportContent = ({
                       >
                         <div className="flex-1">
                           <p className="font-medium text-gray-900 dark:text-white text-sm">
-                            {sale.store?.name || "Unknown Store"}
+                            {sale.productName || "Sale"}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {sale.storeId?.name || "Unknown store"} ·{" "}
                             {sale.saleDate
                               ? new Date(sale.saleDate).toLocaleDateString()
                               : "No date"}
@@ -134,12 +135,10 @@ const MainReportContent = ({
                         </div>
                         <div className="text-right">
                           <p className="font-medium text-green-600 text-sm">
-                            {formatCurrency(
-                              sale.totalSales || sale.totalAmount || 0,
-                            )}
+                            {formatCurrency(sale.total || 0)}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {sale.transactionCount || 1} trans
+                            {sale.quantity || 1} item{sale.quantity === 1 ? "" : "s"}
                           </p>
                         </div>
                       </div>

@@ -118,7 +118,7 @@ const AdminEcommerceLayout = ({ children }) => {
     navigate(1);
   };
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
+    <div className="admin-shell min-h-screen bg-gray-50 dark:bg-gray-900 relative">
       <AdminGlobalButtons
         handleCalculatorOpen={handleCalculatorOpen}
         historyState={historyState}

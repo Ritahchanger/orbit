@@ -473,7 +473,7 @@ const AdminWorkers = () => {
 
     return (
       <div
-        className={`inline-flex items-center px-3 py-1 rounded-full ${roleConfig?.color || "bg-gray-500/10 text-gray-400 border-gray-500/20"} border`}
+        className={`inline-flex items-center px-3 py-1 rounded-full ${roleConfig?.color || "bg-gray-50 dark:bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-200 dark:border-gray-500/30"} border`}
       >
         <Icon size={14} className="mr-2" />
         <span className="text-sm font-medium">
@@ -499,7 +499,7 @@ const AdminWorkers = () => {
   // Newsletter badge
   const NewsletterBadge = ({ subscribed }) =>
     subscribed ? (
-      <span className="inline-flex items-center px-2 py-1 bg-green-500/10 text-green-400 text-xs rounded-sm">
+      <span className="inline-flex items-center px-2 py-1 bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 text-xs rounded-sm">
         <Mail size={10} className="mr-1" />
         Subscribed
       </span>

@@ -163,12 +163,12 @@ const PermissionSelector = ({ selectedPermissions, onChange }) => {
                                                 />
                                                 <div className="flex-1">
                                                     <div className="text-sm text-gray-300">{permission}</div>
-                                                    <div className={`text-xs px-1.5 py-0.5 rounded-sm inline-block mt-1 ${action === 'view' ? 'bg-blue-500/20 text-blue-400' :
-                                                            action === 'create' ? 'bg-green-500/20 text-green-400' :
-                                                                action === 'update' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                                    action === 'delete' ? 'bg-red-500/20 text-red-400' :
-                                                                        action === 'manage' ? 'bg-purple-500/20 text-purple-400' :
-                                                                            'bg-gray-500/20 text-gray-400'
+                                                    <div className={`text-xs px-1.5 py-0.5 rounded-sm inline-block mt-1 ${action === 'view' ? 'bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400' :
+                                                            action === 'create' ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400' :
+                                                                action === 'update' ? 'bg-yellow-50 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400' :
+                                                                    action === 'delete' ? 'bg-red-50 dark:bg-red-500/20 text-red-700 dark:text-red-400' :
+                                                                        action === 'manage' ? 'bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400' :
+                                                                            'bg-gray-50 dark:bg-gray-500/20 text-gray-700 dark:text-gray-400'
                                                         }`}>
                                                         {action}
                                                     </div>

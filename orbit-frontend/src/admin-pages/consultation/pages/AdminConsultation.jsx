@@ -1,4 +1,5 @@
 // src/pages/admin/AdminConsultation.jsx
+import { statusClass } from "../../../components/common/status/statusStyles";
 import { useState } from "react";
 import { AlertCircle, BarChart3, CalendarDays, Mail } from "lucide-react";
 
@@ -215,20 +216,7 @@ const AdminConsultation = () => {
   };
 
   // Get status color
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "pending":
-        return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20";
-      case "confirmed":
-        return "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20";
-      case "completed":
-        return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20";
-      case "cancelled":
-        return "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-600 dark:text-gray-400 border border-gray-500/20";
-    }
-  };
+  const getStatusColor = statusClass;
 
   // Get setup type color
   const getSetupTypeColor = (type) => {

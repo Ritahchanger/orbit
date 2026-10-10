@@ -1,3 +1,4 @@
+import StatusBadge from "../../../components/common/status/StatusBadge";
 import { useState } from "react";
 import AdminLayout from "../../dashboard/layout/Layout";
 import {
@@ -20,6 +21,8 @@ import {
 } from "lucide-react";
 
 import Transactions from "../components/Transactions";
+import PageContainer from "../../components/ui/PageContainer";
+import StatCard from "../../components/ui/StatCard";
 
 import { useStoreContext } from "../../../context/store/StoreContext";
 
@@ -68,8 +71,6 @@ const AdminTransactions = () => {
 
   const { currentStore } = useStoreContext();
 
-  console.log(currentStore);
-
   // Clear filters
   const clearFilters = () => {
     setSearchTerm("");
@@ -111,37 +112,7 @@ const AdminTransactions = () => {
   };
 
   // Get status badge
-  const getStatusBadge = (status) => {
-    const config = {
-      completed: {
-        color:
-          "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-        label: "Completed",
-      },
-      pending: {
-        color:
-          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-        label: "Pending",
-      },
-      cancelled: {
-        color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
-        label: "Cancelled",
-      },
-      refunded: {
-        color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-        label: "Refunded",
-      },
-    };
-
-    const cfg = config[status?.toLowerCase()] || config.completed;
-    return (
-      <span
-        className={`px-2 py-1 rounded-full text-center text-xs font-medium ${cfg.color}`}
-      >
-        {cfg.label}
-      </span>
-    );
-  };
+  const getStatusBadge = (status) => <StatusBadge status={status} />;
 
   // Refresh all data
   const refreshAll = () => {
@@ -151,7 +122,7 @@ const AdminTransactions = () => {
 
   return (
     <AdminLayout>
-      <div className="p-4 md:p-6 space-y-2">
+      <PageContainer>
         {/* Header - FIXED: Uniform font sizes */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -179,113 +150,49 @@ const AdminTransactions = () => {
 
         {/* Today's Summary Cards - FIXED: Uniform typography */}
         {!todayLoading && !todayError && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-2">
-            <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Today's Revenue
-                  </p>
-                  <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                    {formatCurrency(todaySummary.totalRevenue)}
-                  </p>
-                </div>
-                <div className="p-2 rounded-sm bg-green-100 dark:bg-green-900/30">
-                  <DollarSign className="h-5 w-5 text-green-600 dark:text-green-400" />
-                </div>
-              </div>
-              <div className="flex items-center mt-3">
-                <span className="text-xs text-green-600 dark:text-green-400 font-medium">
-                  {todaySummary.totalTransactions || 0} transactions
-                </span>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Items Sold
-                  </p>
-                  <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                    {todaySummary.totalItems?.toLocaleString() || 0}
-                  </p>
-                </div>
-                <div className="p-2 rounded-sm bg-blue-100 dark:bg-blue-900/30">
-                  <ShoppingCart className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                </div>
-              </div>
-              <div className="flex items-center mt-3">
-                <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
-                  Avg:{" "}
-                  {Math.round(todaySummary.averageItemsPerTransaction) || 0} per
-                  transaction
-                </span>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Transactions
-                  </p>
-                  <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                    {todaySummary.totalTransactions || 0}
-                  </p>
-                </div>
-                <div className="p-2 rounded-sm bg-purple-100 dark:bg-purple-900/30">
-                  <BarChart3 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                </div>
-              </div>
-              <div className="flex items-center mt-3">
-                <span className="text-xs text-purple-600 dark:text-purple-400 font-medium">
-                  Avg:{" "}
-                  {formatCurrency(Math.round(todaySummary.averageTransaction))}
-                </span>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Today's Profit
-                  </p>
-                  <p className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                    {formatCurrency(todaySummary.totalProfit)}
-                  </p>
-                </div>
-                <div className="p-2 rounded-sm bg-orange-100 dark:bg-orange-900/30">
-                  <TrendingUp className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                </div>
-              </div>
-              <div className="flex items-center mt-3">
-                <span className="text-xs text-orange-600 dark:text-orange-400 font-medium">
-                  Margin:{" "}
-                  {(
-                    (todaySummary.totalProfit /
-                      (todaySummary.totalRevenue || 1)) *
-                    100
-                  ).toFixed(1)}
-                  %
-                </span>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <StatCard
+              title="Today's Revenue"
+              value={formatCurrency(todaySummary.totalRevenue)}
+              icon={<DollarSign className="h-5 w-5" />}
+              color="green"
+              hint={`${todaySummary.totalTransactions || 0} transactions`}
+            />
+            <StatCard
+              title="Items Sold"
+              value={todaySummary.totalItems?.toLocaleString() || 0}
+              icon={<ShoppingCart className="h-5 w-5" />}
+              color="blue"
+              hint={`Avg ${Math.round(todaySummary.averageItemsPerTransaction) || 0} per transaction`}
+            />
+            <StatCard
+              title="Transactions"
+              value={todaySummary.totalTransactions || 0}
+              icon={<BarChart3 className="h-5 w-5" />}
+              color="purple"
+              hint={`Avg ${formatCurrency(Math.round(todaySummary.averageTransaction))}`}
+            />
+            <StatCard
+              title="Today's Profit"
+              value={formatCurrency(todaySummary.totalProfit)}
+              icon={<TrendingUp className="h-5 w-5" />}
+              color="orange"
+              hint={`Margin ${((todaySummary.totalProfit / (todaySummary.totalRevenue || 1)) * 100).toFixed(1)}%`}
+            />
           </div>
         )}
 
         {/* Loading state for summary - FIXED: Consistent sizing */}
         {todayLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
                 className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4"
               >
                 <div className="animate-pulse">
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-3"></div>
-                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-sm w-1/2 mb-3"></div>
+                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-sm w-3/4"></div>
                 </div>
               </div>
             ))}
@@ -293,7 +200,7 @@ const AdminTransactions = () => {
         )}
 
         {/* Filters Section - FIXED: Uniform typography */}
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4 md:p-5">
+        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
             <div>
               <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white flex items-center">
@@ -499,7 +406,7 @@ const AdminTransactions = () => {
         {!transactionsLoading &&
           !transactionsError &&
           summary.totalTransactions > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4 md:p-5">
+            <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
               <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Transaction Summary
               </h3>
@@ -531,7 +438,7 @@ const AdminTransactions = () => {
               </div>
             </div>
           )}
-      </div>
+      </PageContainer>
     </AdminLayout>
   );
 };

@@ -85,8 +85,8 @@ export const navItems = [
     requiredRole: "superadmin",
   },
   {
-    name: "Stock Transfers ",
-    path: "/admin/stock-tranfers",
+    name: "Stock Transfers",
+    path: "/admin/stock-transfers",
     icon: ArrowRightLeft,
     type: "link",
     requiredRole: "superadmin",

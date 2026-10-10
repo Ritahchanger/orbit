@@ -4,6 +4,7 @@ import {
     ShoppingCart,
     BarChart3,
 } from "lucide-react";
+import StatCard from "../../components/ui/StatCard";
 import { useAuth } from "../../../context/authentication/AuthenticationContext";
 
 // Main SummaryCards Component
@@ -16,88 +17,49 @@ const SummaryCards = ({ summary, formatCurrency: propsFormatCurrency, itemsSold 
         return `KSh ${Math.round(amount).toLocaleString()}`;
     });
 
+    const margin =
+        summary?.totalProfit > 0 && summary?.totalSales > 0
+            ? `${Math.round((summary.totalProfit / summary.totalSales) * 100)}% margin`
+            : "No profit";
+
     return (
-        <>
-            {/* Summary Cards - Match theme */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
-                {/* Revenue Card */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm">Total Revenue</p>
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-1">
-                                {formatCurrency(summary?.totalSales || 0)}
-                            </h3>
-                        </div>
-                        <div className="p-2 bg-blue-50 dark:bg-blue-500/20 rounded-sm">
-                            <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                        </div>
-                    </div>
-                    <p className="text-gray-500 dark:text-gray-500 text-xs mt-2">
-                        {summary?.totalTransactions || 0} transactions
-                    </p>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <StatCard
+                title="Total Revenue"
+                value={formatCurrency(summary?.totalSales || 0)}
+                icon={<DollarSign className="h-5 w-5" />}
+                color="blue"
+                hint={`${summary?.totalTransactions || 0} transactions`}
+            />
 
-                {/* Profit Card - Only for superadmin */}
-                {userRole === 'superadmin' && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm">Total Profit</p>
-                                <h3 className="text-xl font-bold text-green-600 dark:text-green-400 mt-1">
-                                    {formatCurrency(summary?.totalProfit || 0)}
-                                </h3>
-                            </div>
-                            <div className="p-2 bg-green-50 dark:bg-green-500/20 rounded-sm">
-                                <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-500" />
-                            </div>
-                        </div>
-                        <p className="text-gray-500 dark:text-gray-500 text-xs mt-2">
-                            {summary?.totalProfit > 0 && summary?.totalSales > 0 ?
-                                `${Math.round((summary.totalProfit / summary.totalSales) * 100)}% margin` :
-                                'No profit'
-                            }
-                        </p>
-                    </div>
-                )}
+            {/* Profit Card - Only for superadmin */}
+            {userRole === "superadmin" && (
+                <StatCard
+                    title="Total Profit"
+                    value={formatCurrency(summary?.totalProfit || 0)}
+                    valueClassName="text-green-600 dark:text-green-400"
+                    icon={<TrendingUp className="h-5 w-5" />}
+                    color="green"
+                    hint={margin}
+                />
+            )}
 
-                {/* Items Sold Card */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm">Items Sold</p>
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-1">
-                                {summary?.totalItemsSold || 0}
-                            </h3>
-                        </div>
-                        <div className="p-2 bg-purple-50 dark:bg-purple-500/20 rounded-sm">
-                            <ShoppingCart className="h-5 w-5 text-purple-600 dark:text-purple-500" />
-                        </div>
-                    </div>
-                    <p className="text-gray-500 dark:text-gray-500 text-xs mt-2">
-                        {itemsSold?.length || 0} products sold
-                    </p>
-                </div>
+            <StatCard
+                title="Items Sold"
+                value={summary?.totalItemsSold || 0}
+                icon={<ShoppingCart className="h-5 w-5" />}
+                color="purple"
+                hint={`${itemsSold?.length || 0} products sold`}
+            />
 
-                {/* Average Transaction Card */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm">Avg. Transaction</p>
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-1">
-                                {formatCurrency(summary?.averageTransaction || 0)}
-                            </h3>
-                        </div>
-                        <div className="p-2 bg-yellow-50 dark:bg-yellow-500/20 rounded-sm">
-                            <BarChart3 className="h-5 w-5 text-yellow-600 dark:text-yellow-500" />
-                        </div>
-                    </div>
-                    <p className="text-gray-500 dark:text-gray-500 text-xs mt-2">
-                        Per transaction average
-                    </p>
-                </div>
-            </div>
-        </>
+            <StatCard
+                title="Avg. Transaction"
+                value={formatCurrency(summary?.averageTransaction || 0)}
+                icon={<BarChart3 className="h-5 w-5" />}
+                color="yellow"
+                hint="Per transaction average"
+            />
+        </div>
     );
 };
 

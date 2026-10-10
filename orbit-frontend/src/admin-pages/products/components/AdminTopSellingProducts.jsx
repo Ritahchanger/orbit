@@ -21,7 +21,7 @@ const AdminTopSellingProducts = ({storeProducts}) => {
                             .map((product, index) => (
                                 <tr key={product.id} className="border-t border-gray-800 hover:bg-gray-900/30">
                                     <td className="py-4 px-4">
-                                        <div className={`w-8 h-8 rounded-sm flex items-center justify-center ${index < 3 ? 'bg-yellow-500/20 text-yellow-500' : 'bg-gray-800 text-gray-400'}`}>
+                                        <div className={`w-8 h-8 rounded-sm flex items-center justify-center ${index < 3 ? 'bg-yellow-50 dark:bg-yellow-500/20 text-yellow-500' : 'bg-gray-800 text-gray-700 dark:text-gray-400'}`}>
                                             <span className="font-bold">#{index + 1}</span>
                                         </div>
                                     </td>
