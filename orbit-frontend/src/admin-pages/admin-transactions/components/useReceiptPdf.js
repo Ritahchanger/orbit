@@ -1,29 +1,24 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import transactionsApi from "../../services/transaction-api";
-import { downloadPdf, printPdf, pdfErrorMessage } from "./pdfFile";
+import { downloadPdf, pdfErrorMessage } from "./pdfFile";
 
-// Receipt PDF is rendered server-side with the business's own letterhead.
+// "Print" in the UI downloads the server-rendered receipt PDF (business letterhead).
 export const useReceiptPdf = (transaction) => {
-  const [busy, setBusy] = useState(null); // "print" | "download" | null
+  const [busy, setBusy] = useState(false);
 
-  const run = async (mode) => {
+  const print = async () => {
     if (!transaction?._id) return;
     try {
-      setBusy(mode);
+      setBusy(true);
       const { blob, filename } = await transactionsApi.getReceiptPdf(transaction._id);
-      if (mode === "print") printPdf(blob);
-      else downloadPdf(blob, filename);
+      downloadPdf(blob, filename);
     } catch (error) {
       toast.error(await pdfErrorMessage(error, "Failed to generate receipt"));
     } finally {
-      setBusy(null);
+      setBusy(false);
     }
   };
 
-  return {
-    busy,
-    print: () => run("print"),
-    download: () => run("download"),
-  };
+  return { busy, print };
 };
