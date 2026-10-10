@@ -29,31 +29,31 @@ class ReportService {
       const startOfYear = new Date(date.getFullYear(), 0, 1);
 
       const bizId = new mongoose.Types.ObjectId(businessId);
+      // aggregate() does not cast strings, so a raw storeId matched nothing
+      // and every per-store dashboard showed zero sales and inventory.
+      const storeObjId = storeId ? new mongoose.Types.ObjectId(storeId) : null;
 
       // 🔐 BASE TENANT FILTERS
       const saleFilter = {
         businessId: bizId,
         status: "completed",
-        ...(storeId ? { storeId } : {}),
+        ...(storeObjId ? { storeId: storeObjId } : {}),
       };
 
       const inventoryFilter = {
         businessId: bizId,
-        ...(storeId ? { store: storeId } : {}),
+        ...(storeObjId ? { store: storeObjId } : {}),
       };
 
+      // One name per promise below; each sales aggregate returns count,
+      // revenue and profit together.
       const [
         totalStores,
         totalProducts,
 
         totalSalesToday,
-        totalRevenueToday,
-
         totalSalesMonth,
-        totalRevenueMonth,
-
         totalSalesYear,
-        totalRevenueYear,
 
         lowStockProducts,
 

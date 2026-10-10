@@ -35,6 +35,21 @@ class StockTransferService {
         throw new Error("Source and destination stores cannot be the same");
       }
 
+      if (!businessId) {
+        throw new Error("Business context is required for stock transfers");
+      }
+
+      const ownedStores = await mongoose
+        .model("Store")
+        .countDocuments({
+          _id: { $in: [sourceStoreId, destinationStoreId] },
+          businessId,
+        })
+        .session(session);
+      if (ownedStores !== 2) {
+        throw new Error("Both stores must belong to your business");
+      }
+
       // 🔥 SOURCE INVENTORY
       const sourceInventory = await StoreInventory.findOne({
         store: sourceStoreId,
@@ -159,15 +174,23 @@ class StockTransferService {
 
     // Date filter
     if (filters.fromDate || filters.toDate) {
+      // toDate is a calendar day: include all of it
+      const toDate = filters.toDate ? new Date(filters.toDate) : null;
+      if (toDate && /^\d{4}-\d{2}-\d{2}$/.test(filters.toDate)) {
+        toDate.setUTCHours(23, 59, 59, 999);
+      }
       query.transferredAt = {
         ...(filters.fromDate && { $gte: new Date(filters.fromDate) }),
-        ...(filters.toDate && { $lte: new Date(filters.toDate) }),
+        ...(toDate && { $lte: toDate }),
       };
     }
 
     // 🔍 SEARCH
     if (search) {
-      const regex = new RegExp(search, "i");
+      const regex = new RegExp(
+        String(search).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+        "i",
+      );
 
       const [products, stores, users] = await Promise.all([
         findProducts(
@@ -220,8 +243,45 @@ class StockTransferService {
       StockTransfer.countDocuments(query),
     ]);
 
+    // Totals for the whole filtered set (not just this page)
+    const [agg] = await StockTransfer.aggregate([
+      {
+        $match: {
+          ...query,
+          businessId: new mongoose.Types.ObjectId(businessId),
+          ...(query.sourceStore && {
+            sourceStore: new mongoose.Types.ObjectId(query.sourceStore),
+          }),
+          ...(query.destinationStore && {
+            destinationStore: new mongoose.Types.ObjectId(query.destinationStore),
+          }),
+          ...(query.product && {
+            product: new mongoose.Types.ObjectId(query.product),
+          }),
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          completed: { $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] } },
+          pending: { $sum: { $cond: [{ $eq: ["$status", "pending"] }, 1, 0] } },
+          cancelled: { $sum: { $cond: [{ $eq: ["$status", "cancelled"] }, 1, 0] } },
+          totalItems: { $sum: "$quantity" },
+          products: { $addToSet: "$product" },
+        },
+      },
+    ]);
+
     return {
       transfers,
+      summary: {
+        total,
+        completed: agg?.completed || 0,
+        pending: agg?.pending || 0,
+        cancelled: agg?.cancelled || 0,
+        totalItems: agg?.totalItems || 0,
+        uniqueProducts: agg?.products?.length || 0,
+      },
       pagination: {
         page,
         limit,
@@ -234,8 +294,9 @@ class StockTransferService {
   /**
    * Get transfer by ID
    */
-  async getTransferById(transferId) {
-    return StockTransfer.findById(transferId)
+  async getTransferById(transferId, businessId) {
+    if (!mongoose.isValidObjectId(transferId)) return null;
+    return StockTransfer.findOne({ _id: transferId, businessId })
       .populate("sourceStore", "name code address")
       .populate("destinationStore", "name code address")
       .populate("product", "name sku price")
@@ -245,10 +306,12 @@ class StockTransferService {
   /**
    * Cancel a pending transfer
    */
-  async cancelTransfer(transferId, userId, reason) {
+  async cancelTransfer(transferId, userId, reason, businessId) {
     // NO TRANSACTIONS - removed session logic
     try {
-      const transfer = await StockTransfer.findById(transferId);
+      const transfer = mongoose.isValidObjectId(transferId)
+        ? await StockTransfer.findOne({ _id: transferId, businessId })
+        : null;
 
       if (!transfer) {
         throw new Error("Transfer not found");
@@ -278,7 +341,7 @@ class StockTransferService {
   /**
    * Validate bulk transfer
    */
-  async validateBulkTransfer(items, sourceStoreId) {
+  async validateBulkTransfer(items, sourceStoreId, businessId) {
     const validationResults = {
       valid: true,
       items: [],
@@ -289,6 +352,7 @@ class StockTransferService {
       const inventory = await StoreInventory.findOne({
         store: sourceStoreId,
         product: item.productId,
+        businessId,
       }).populate("product", "name sku");
 
       if (!inventory) {
@@ -333,6 +397,7 @@ class StockTransferService {
     destinationStoreId,
     items,
     userId,
+    businessId,
     reason = "bulk_transfer",
     notes = "",
   }) {
@@ -351,6 +416,7 @@ class StockTransferService {
             productId: item.productId,
             quantity: item.quantity,
             userId,
+            businessId,
             reason,
             notes: `${notes} ${item.notes || ""}`.trim(),
           });
