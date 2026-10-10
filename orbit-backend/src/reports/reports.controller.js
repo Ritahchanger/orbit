@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const reportService = require("./reports.service");
 
 class ReportController {

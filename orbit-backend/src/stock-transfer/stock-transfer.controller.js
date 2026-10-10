@@ -46,6 +46,7 @@ exports.bulkTransfer = async (req, res) => {
     const validation = await StockTransferService.validateBulkTransfer(
       items,
       sourceStoreId,
+      req.businessId,
     );
 
     if (!validation.valid) {
@@ -61,6 +62,7 @@ exports.bulkTransfer = async (req, res) => {
       destinationStoreId,
       items,
       userId,
+      businessId: req.businessId,
       reason,
       notes,
     });
@@ -106,7 +108,10 @@ exports.getTransferById = async (req, res) => {
   try {
     const { transferId } = req.params;
 
-    const transfer = await StockTransferService.getTransferById(transferId);
+    const transfer = await StockTransferService.getTransferById(
+      transferId,
+      req.businessId,
+    );
 
     if (!transfer) {
       return res.status(404).json({
@@ -138,6 +143,7 @@ exports.cancelTransfer = async (req, res) => {
       transferId,
       userId,
       reason,
+      req.businessId,
     );
 
     res.json(result);
