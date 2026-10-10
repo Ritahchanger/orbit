@@ -485,6 +485,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
                 summary={summary}
                 dailyItemsRef={dailyItemsRef}
                 storeId={effectiveStoreId}
+                selectedDate={selectedDate}
                 isManagerView={!isAdmin && !isSuperadmin}
               />
             )}

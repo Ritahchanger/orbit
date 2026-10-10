@@ -23,6 +23,9 @@ import {
 import Transactions from "../components/Transactions";
 import PageContainer from "../../components/ui/PageContainer";
 import StatCard from "../../components/ui/StatCard";
+import transactionsApi from "../../services/transaction-api";
+import { downloadPdf, pdfErrorMessage } from "../components/pdfFile";
+import { toast } from "react-hot-toast";
 
 import { useStoreContext } from "../../../context/store/StoreContext";
 
@@ -114,6 +117,20 @@ const AdminTransactions = () => {
   // Get status badge
   const getStatusBadge = (status) => <StatusBadge status={status} />;
 
+  // Transactions report PDF, rendered by the backend for the active filters
+  const [isExporting, setIsExporting] = useState(false);
+  const handleExportPdf = async () => {
+    try {
+      setIsExporting(true);
+      const { blob, filename } = await transactionsApi.exportTransactionsPdf(listFilters);
+      downloadPdf(blob, filename);
+    } catch (error) {
+      toast.error(await pdfErrorMessage(error, "Failed to export transactions"));
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   // Refresh all data
   const refreshAll = () => {
     refetchToday();
@@ -141,9 +158,13 @@ const AdminTransactions = () => {
               <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
               Refresh
             </button>
-            <button className="inline-flex items-center px-3 py-2 border border-transparent rounded-sm text-xs sm:text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 transition-colors">
+            <button
+              onClick={handleExportPdf}
+              disabled={isExporting || !pagination.total}
+              className="inline-flex items-center px-3 py-2 border border-transparent rounded-sm text-xs sm:text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 transition-colors disabled:opacity-60"
+            >
               <Download className="h-3.5 w-3.5 mr-1.5" />
-              Export
+              {isExporting ? "Preparing..." : "Export PDF"}
             </button>
           </div>
         </div>

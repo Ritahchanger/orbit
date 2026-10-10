@@ -13,11 +13,12 @@ import {
   Eye,
   RefreshCw,
 } from "lucide-react";
-import PrintDailySales from "./PrintableDailyReport";
+import salesApi from "../../services/sales-api";
+import { toast } from "react-hot-toast";
+import { printPdf, pdfErrorMessage } from "../../admin-transactions/components/pdfFile";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminCopySKU from "../../products/components/AdminCopySKU";
-import PrintContent from "../../admin-reports/components/PrintContent";
 
 const AdminDailyProducts = ({
   itemsSold,
@@ -25,9 +26,26 @@ const AdminDailyProducts = ({
   summary,
   dailyItemsRef,
   storeId,
+  selectedDate,
 }) => {
   const { userRole } = useAuth();
-  const [showPrintOptions, setShowPrintOptions] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false);
+
+  // Daily sales PDF rendered by the backend (same template as the reports)
+  const handlePrint = async () => {
+    try {
+      setIsPrinting(true);
+      const blob = await salesApi.getDailySummaryPdf({
+        date: selectedDate || (summary?.date ? new Date(summary.date) : new Date()),
+        storeId,
+      });
+      printPdf(blob);
+    } catch (error) {
+      toast.error(await pdfErrorMessage(error, "Failed to generate the report"));
+    } finally {
+      setIsPrinting(false);
+    }
+  };
   const [expandedItems, setExpandedItems] = useState({});
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -87,10 +105,6 @@ const AdminDailyProducts = ({
   // Check if user can see profit details
   const canSeeProfit = userRole === "superadmin";
 
-  // Get current date for printing
-  const getCurrentDate = () => {
-    return summary?.date ? new Date(summary.date) : new Date();
-  };
 
   useEffect(() => {
     if (itemsSold.length > 0 && highlightFirstItem) {
@@ -123,97 +137,15 @@ const AdminDailyProducts = ({
                     Need a printable report?
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => setShowPrintOptions(!showPrintOptions)}
-                    className="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-sm transition-colors text-sm flex items-center gap-2"
-                  >
-                    <Printer className="h-3 w-3" />
-                    {showPrintOptions ? "Hide Print Options" : "Print Report"}
-                  </button>
-
-                  {userRole === "superadmin" && (
-                    <button
-                      onClick={() => {
-                        const printWindow = window.open("", "_blank");
-                        printWindow.document.write(`
-                                                    <html>
-                                                        <head>
-                                                            <title>Daily Sales Report</title>
-                                                            <style>
-                                                                body { font-family: Arial, sans-serif; padding: 20px; }
-                                                                table { width: 100%; border-collapse: collapse; }
-                                                                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                                                                th { background-color: #f2f2f2; }
-                                                                .total { font-weight: bold; background-color: #f8f8f8; }
-                                                                @media print {
-                                                                    @page { margin: 15mm; }
-                                                                    body { -webkit-print-color-adjust: exact; }
-                                                                }
-                                                            </style>
-                                                        </head>
-                                                        <body>
-                                                            <h2>Daily Sales Report</h2>
-                                                            <p>Date: ${getCurrentDate().toLocaleDateString()}</p>
-                                                            <p>Total Items: ${totalQuantity}</p>
-                                                            <p>Total Revenue: ${formatCurrency(totalRevenue)}</p>
-                                                            <br>
-                                                            <table>
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Product</th>
-                                                                        <th>Qty</th>
-                                                                        <th>Price</th>
-                                                                        <th>Revenue</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    ${itemsSold
-                                                                      .map(
-                                                                        (
-                                                                          item,
-                                                                        ) => `
-                                                                        <tr>
-                                                                            <td>${item.productName}</td>
-                                                                            <td>${item.totalQuantitySold || 0}</td>
-                                                                            <td>${formatCurrency(item.sellingPrice)}</td>
-                                                                            <td>${formatCurrency(item.totalRevenue)}</td>
-                                                                        </tr>
-                                                                    `,
-                                                                      )
-                                                                      .join("")}
-                                                                </tbody>
-                                                            </table>
-                                                        </body>
-                                                    </html>
-                                                `);
-                        printWindow.document.close();
-                        printWindow.print();
-                      }}
-                      className="px-3 py-1.5 bg-blue-50 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-500/30 hover:bg-blue-100 dark:hover:bg-blue-500/30 rounded-sm transition-colors text-sm flex items-center gap-2"
-                    >
-                      Quick Print
-                    </button>
-                  )}
-                </div>
+                <button
+                  onClick={handlePrint}
+                  disabled={isPrinting}
+                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-sm transition-colors text-sm flex items-center gap-2 disabled:opacity-60"
+                >
+                  <Printer className="h-3 w-3" />
+                  {isPrinting ? "Preparing..." : "Print"}
+                </button>
               </div>
-
-              {/* Print Options Panel */}
-              {showPrintOptions && (
-                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <PrintDailySales
-                    itemsSold={itemsSold}
-                    summary={summary}
-                    storeLabel={
-                      getStoreDetails()?.name ||
-                      (storeId === "global" ? "All Stores" : "Store")
-                    }
-                    selectedDate={getCurrentDate()}
-                    formatCurrency={formatCurrency}
-                    storeDetails={getStoreDetails()}
-                  />
-                </div>
-              )}
             </div>
           )}
 
@@ -624,28 +556,14 @@ const AdminDailyProducts = ({
               </span>
             </div>
             <button
-              onClick={() => setShowPrintOptions(!showPrintOptions)}
-              className="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-sm text-sm flex items-center gap-1"
+              onClick={handlePrint}
+              disabled={isPrinting}
+              className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-sm text-sm flex items-center gap-1 disabled:opacity-60"
             >
               <Printer className="h-3 w-3" />
-              {showPrintOptions ? "Hide" : "Options"}
+              {isPrinting ? "Preparing..." : "Print"}
             </button>
           </div>
-          {showPrintOptions && (
-            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-              <PrintDailySales
-                itemsSold={itemsSold}
-                summary={summary}
-                storeLabel={
-                  getStoreDetails()?.name ||
-                  (storeId === "global" ? "All Stores" : "Store")
-                }
-                selectedDate={getCurrentDate()}
-                formatCurrency={formatCurrency}
-                storeDetails={getStoreDetails()}
-              />
-            </div>
-          )}
         </div>
       )}
 

@@ -477,6 +477,9 @@ const POSPaymentModal = () => {
       // Do NOT record the sale again here — that would double-create Sale
       // docs and double-decrement stock for a single M-Pesa payment.
       setLastTransaction({
+        // Snapshot the cart: it is cleared right after this, and the receipt
+        // must keep showing what was sold.
+        items: displayCart.map((item) => ({ ...item })),
         transactionId: paymentData.transactionId,
         timestamp: new Date().toISOString(),
         soldBy: user,
@@ -610,6 +613,9 @@ const POSPaymentModal = () => {
         onSuccess: (data) => {
           console.log("✅ Transaction successful:", data);
           setLastTransaction({
+            // Snapshot the cart: it is cleared right after this, and the
+            // receipt must keep showing what was sold.
+            items: displayCart.map((item) => ({ ...item })),
             transactionId:
               data.data?.transaction?.transactionId || `TRX-${Date.now()}`,
             timestamp: new Date().toISOString(),
@@ -938,7 +944,7 @@ const POSPaymentModal = () => {
                 setLastTransaction(null);
               }}
               transaction={lastTransaction}
-              items={displayCart}
+              items={lastTransaction?.items || []}
               storeDetails={currentStore}
               formatCurrency={formatCurrency}
             />

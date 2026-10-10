@@ -170,6 +170,19 @@ const salesApi = {
     return response.data;
   },
 
+  // Daily product sales as a server-rendered PDF (same params as getDailySummary)
+  getDailySummaryPdf: async ({ date, storeId } = {}) => {
+    const params = {};
+    if (date) params.date = date.toISOString().split("T")[0];
+    if (storeId && storeId !== "all" && storeId !== "global") params.storeId = storeId;
+
+    const response = await api.get("/sales/daily/pdf", {
+      params,
+      responseType: "blob",
+    });
+    return response.data;
+  },
+
   // Get store-specific daily summary
   getStoreDailySummary: async (storeId, date) => {
     const params = date ? { date: date.toISOString().split("T")[0] } : {};
