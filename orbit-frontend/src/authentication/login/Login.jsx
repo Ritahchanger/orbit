@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "../../context/authentication/AuthenticationContext";
 import otpApi from "../../admin-pages/services/otp-api";
 
-import { useSearchBusinesses } from "../../../../universal-main-frontend/src/globals/hooks/useBusinessQueries";
+import { useSearchBusinesses } from "../../admin-pages/hooks/business.queries";
 
 import ResetPassword from "../reset-password/ResetPassword";
 
