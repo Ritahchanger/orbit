@@ -3,13 +3,10 @@ import {
     LogOut,
     FileText,
     Shield,
-    Store,
-    Building2,
-    ChevronRight
+    Building2
 } from 'lucide-react';
-import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import AllStoresOption from './AllStoresOption';
+import StoreSwitcher from './StoreSwitcher';
 import { useStoreContext } from '../../../context/store/StoreContext';
 
 const MobileMenuOpen = ({
@@ -22,7 +19,6 @@ const MobileMenuOpen = ({
     userRole,
     handleLogout
 }) => {
-    const [showStoreMenu, setShowStoreMenu] = useState(false);
     const { isAllStores, selectAllStores } = useStoreContext();
     // Same rule as the desktop strip: admins and superadmins with several stores
     const canViewAllStores =
@@ -32,95 +28,32 @@ const MobileMenuOpen = ({
         <div className="lg:hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
             <div className="container mx-auto px-4 py-4 pt-1">
                 {/* Store Switcher - Mobile */}
-                <div className="mb-2">
-                    <button
-                        onClick={() => setShowStoreMenu(!showStoreMenu)}
-                        className="flex items-center justify-between w-full px-4 py-2 bg-gray-50 dark:bg-gray-700/50 rounded-sm border border-gray-200 dark:border-gray-600 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 flex items-center justify-center rounded-sm bg-blue-100 dark:bg-blue-500/10">
-                                <Store size={18} className="text-blue-600 dark:text-blue-400" />
-                            </div>
-                            <div className="text-left">
-                                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                    {isAllStores ? 'All stores' : currentStore?.name || 'Select Store'}
-                                </p>
-                                <p className="text-xs text-gray-600 dark:text-gray-400">
-                                    {isAllStores
-                                        ? `${stores?.length || 0} stores combined`
-                                        : currentStore?.code || 'No store selected'}
-                                </p>
-                            </div>
-                        </div>
-                        <ChevronRight
-                            size={16}
-                            className={`text-gray-500 dark:text-gray-400 transition-transform ${showStoreMenu ? 'rotate-90' : ''}`}
-                        />
-                    </button>
-
-                    {/* Store List */}
-                    {showStoreMenu && stores && stores.length > 0 && (
-                        <div className="mt-2 bg-gray-50 dark:bg-gray-700/50 rounded-sm border border-gray-200 dark:border-gray-600 overflow-hidden">
-                            {canViewAllStores && (
-                                <AllStoresOption
-                                    variant="mobile"
-                                    active={isAllStores}
-                                    storeCount={stores.length}
-                                    onSelect={() => {
-                                        selectAllStores();
-                                        setShowStoreMenu(false);
-                                        setIsMobileMenuOpen(false);
-                                        toast.success('Showing all stores');
-                                    }}
-                                />
-                            )}
-                            {stores.map(store => (
-                                <button
-                                    key={store._id}
-                                    onClick={() => {
-                                        handleStoreSwitch(store._id);
-                                        setShowStoreMenu(false);
-                                        setIsMobileMenuOpen(false);
-                                    }}
-                                    className={`w-full text-left px-4 py-3 border-b border-gray-200 dark:border-gray-600 last:border-b-0 flex items-center justify-between transition-colors ${!isAllStores && currentStore?._id === store._id ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-8 h-8 flex items-center justify-center rounded-sm ${!isAllStores && currentStore?._id === store._id ? 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400' : 'bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400'}`}>
-                                            <Store size={14} />
-                                        </div>
-                                        <div className="text-left">
-                                            <p className="text-xs font-medium">
-                                                {store.name}
-                                            </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                {store.code}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {!isAllStores && currentStore?._id === store._id && (
-                                        <div className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400"></div>
-                                    )}
-                                </button>
-                            ))}
-
-                            {/* Manage Stores Link for Superadmin */}
-                            {userRole === 'superadmin' && (
-                                <>
-                                    <div className="border-t border-gray-200 dark:border-gray-600 my-1" />
-                                    <Link
-                                        to="/admin/stores"
-                                        className="flex items-center px-4 py-3 text-xs text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                        onClick={() => {
-                                            setShowStoreMenu(false);
-                                            setIsMobileMenuOpen(false);
-                                        }}
-                                    >
-                                        <Building2 className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
-                                        Manage All Stores
-                                    </Link>
-                                </>
-                            )}
-                        </div>
+                <div className="mb-3 space-y-2">
+                    <StoreSwitcher
+                        fullWidth
+                        stores={stores || []}
+                        currentStore={currentStore}
+                        isAllStores={isAllStores}
+                        canViewAllStores={canViewAllStores}
+                        onSelectStore={(id) => {
+                            handleStoreSwitch(id);
+                            setIsMobileMenuOpen(false);
+                        }}
+                        onSelectAll={() => {
+                            selectAllStores();
+                            setIsMobileMenuOpen(false);
+                            toast.success('Showing all stores');
+                        }}
+                    />
+                    {(userRole === 'superadmin' || userRole === 'admin') && (
+                        <Link
+                            to="/admin/stores"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="flex items-center gap-2 px-1 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                        >
+                            <Building2 size={15} />
+                            Manage stores
+                        </Link>
                     )}
                 </div>
 

@@ -1,29 +1,32 @@
 import { useEffect, useCallback, useMemo, useRef } from "react";
-import { Store, Lock, AlertCircle, RefreshCw, Layers } from "lucide-react";
+import {
+  Store,
+  Lock,
+  AlertCircle,
+  RefreshCw,
+  Building2,
+  Package,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { usePermissions } from "../../../context/permissions/permissions-context";
 import { useAuth } from "../../../context/authentication/AuthenticationContext";
 import { useQueryClient } from "@tanstack/react-query";
-import StoresControls from "./StoresControls";
-import AllStoresOption from "./AllStoresOption";
+import StoreSwitcher from "./StoreSwitcher";
 import { useStoreContext } from "../../../context/store/StoreContext";
 import { useRole } from "../../../context/authentication/RoleContext";
-import { useDispatch } from "react-redux";
-import { openCategoriesModal } from "../../../store/features/categoryModalSlice";
+
+const stripLinkClass =
+  "inline-flex h-9 items-center gap-1.5 rounded-sm px-3 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200/70 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white";
+
+// The strip under the admin navbar: the store switcher plus quick links.
 const AdminStoresLoading = ({
   storesLoading,
   stores,
   currentStore,
   handleStoreSwitch,
-  toggleStoresMenu,
-  showStoresMenu,
-  setShowStoresMenu,
 }) => {
-  const { hasPermission, getStorePermissions: getPermissionsForStore } =
-    usePermissions();
-
-  const dispatch = useDispatch();
+  const { hasPermission } = usePermissions();
 
   const { isSuperadmin, isAdmin, user } = useAuth();
   const {
@@ -121,9 +124,8 @@ const AdminStoresLoading = ({
   const handleSelectAllStores = useCallback(() => {
     if (!canViewAllStores) return;
     selectAllStores();
-    setShowStoresMenu(false);
     toast.success("Showing all stores");
-  }, [canViewAllStores, selectAllStores, setShowStoresMenu]);
+  }, [canViewAllStores, selectAllStores]);
   const isCurrentStoreAccessible =
     currentStore && canAccessStore(currentStore._id);
   const hasStoreAccess = accessibleStores.length > 0;
@@ -161,14 +163,6 @@ const AdminStoresLoading = ({
       handleStoreSwitch(storeId);
     },
     [canAccessStore, handleStoreSwitch],
-  );
-
-  const handleQuickSwitch = useCallback(
-    (storeId) => {
-      handleStoreSwitchWithPermission(storeId);
-      setShowStoresMenu(false);
-    },
-    [handleStoreSwitchWithPermission, setShowStoresMenu],
   );
 
   // Handle refetching stores when empty
@@ -276,198 +270,42 @@ const AdminStoresLoading = ({
   const isSingleStoreUser =
     !isSuperadmin && !isAdmin && accessibleStores.length === 1;
 
-  return (
-    <div className="border-t border-gray-200 dark:border-gray-800 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 sticky top-0 z-40">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-14 gap-2 overflow-x-auto md:overflow-visible">
-          {/* Left: Current Store — fixed width, never shifts */}
-          <div className="flex items-center gap-3 w-[180px] sm:w-[230px] shrink-0">
-            <div
-              className={`flex items-center gap-2 px-4 py-2 rounded-sm border shadow-sm w-[170px] sm:w-[220px] shrink-0 overflow-hidden ${
-                isCurrentStoreAccessible
-                  ? "border-blue-200 dark:border-blue-500/30 bg-linear-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
-                  : "border-yellow-200 dark:border-yellow-500/30 bg-linear-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20"
-              }`}
-            >
-              <Store
-                size={16}
-                className={`shrink-0 ${
-                  isCurrentStoreAccessible
-                    ? "text-blue-600 dark:text-blue-400"
-                    : "text-yellow-600 dark:text-yellow-400"
-                }`}
-              />
-              <div className="flex items-center gap-1 min-w-0 flex-1">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 shrink-0">
-                  {isSingleStoreUser ? "Your Store:" : "Current:"}
-                </span>
-                {isAllStores ? (
-                  <span className="text-sm font-semibold block truncate text-blue-700 dark:text-blue-400">
-                    All stores
-                  </span>
-                ) : (
-                <span className="relative group min-w-0 flex-1">
-                  <span
-                    className={`text-sm font-semibold block truncate ${
-                      isCurrentStoreAccessible
-                        ? "text-blue-700 dark:text-blue-400"
-                        : "text-yellow-700 dark:text-yellow-400"
-                    }`}
-                  >
-                    {currentStore?.name || "No store selected"}
-                  </span>
-                  {currentStore?.name && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block z-50">
-                      <div className="bg-gray-900 text-white text-xs rounded-sm py-1.5 px-2.5 whitespace-nowrap shadow-lg">
-                        {currentStore.name}
-                        <div className="absolute -top-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
-                      </div>
-                    </div>
-                  )}
-                </span>
-                )}
-              </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 px-1.5 py-0.5 rounded shrink-0">
-                {isAllStores ? (
-                  <Layers size={12} className="inline" />
-                ) : (
-                  currentStore?.code || "N/A"
-                )}
-              </span>
-              {!isCurrentStoreAccessible && currentStore && (
-                <AlertCircle
-                  size={14}
-                  className="text-yellow-600 dark:text-yellow-400 animate-pulse shrink-0"
-                  title="Auto-switching to accessible store..."
-                />
-              )}
-            </div>
+  const canManageStores =
+    isAdmin ||
+    isSuperadmin ||
+    hasPermission("stores.manage") ||
+    canManageStore(currentStore?._id);
+  const canViewInventory =
+    hasPermission("inventory.view") || hasPermission("products.view");
 
-            {/* Store Products button for single store users */}
-            {isSingleStoreUser && (
-              <button
-                className="px-4 py-2 rounded-sm text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 
-                          bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-sm
-                          hover:from-blue-700 hover:to-indigo-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                onClick={() => navigate("/admin/inventory")}
-              >
-                <Store size={14} />
-                MANAGE STORES
-              </button>
+  return (
+    <div className="sticky top-0 z-40 border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
+      <div className="container mx-auto px-4">
+        <div className="flex h-12 items-center justify-between gap-3">
+          <StoreSwitcher
+            stores={accessibleStores}
+            currentStore={currentStore}
+            isAllStores={isAllStores}
+            canViewAllStores={canViewAllStores}
+            onSelectStore={handleStoreSwitchWithPermission}
+            onSelectAll={handleSelectAllStores}
+            label={isSingleStoreUser ? "Your store" : "Store"}
+          />
+
+          <div className="flex shrink-0 items-center gap-1">
+            {canViewInventory && (
+              <Link to="/admin/inventory" className={stripLinkClass}>
+                <Package size={15} />
+                <span className="hidden sm:inline">Inventory</span>
+              </Link>
+            )}
+            {canManageStores && (
+              <Link to="/admin/stores" className={stripLinkClass}>
+                <Building2 size={15} />
+                <span className="hidden sm:inline">Manage stores</span>
+              </Link>
             )}
           </div>
-
-          {/* Center: Store Scrollable Strip (only show for superadmins/admins or users with multiple stores) */}
-          {hasMultipleAccessibleStores && (
-            <div className="hidden lg:flex flex-1 mx-6 ml-0 relative">
-              <div className="flex items-center gap-2 overflow-x-auto py-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
-                {canViewAllStores && (
-                  <AllStoresOption
-                    active={isAllStores}
-                    onSelect={handleSelectAllStores}
-                  />
-                )}
-                {accessibleStores.map((store) => {
-                  const isCurrent =
-                    !isAllStores && currentStore?._id === store._id;
-                  const permissions = getPermissionsForStore(store._id);
-
-                  return (
-                    <div
-                      key={store._id}
-                      className="relative flex-shrink-0 group"
-                    >
-                      <button
-                        onClick={() =>
-                          handleStoreSwitchWithPermission(store._id)
-                        }
-                        className={`px-3 py-2 rounded-sm text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 shadow-sm ${
-                          isCurrent
-                            ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-md border border-blue-500/30"
-                            : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700"
-                        }`}
-                        title={`Switch to ${store.name}`}
-                      >
-                        <Store size={14} />
-                        <span className="font-medium">{store.code}</span>
-                        {store.manager && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                        )}
-                        <div className="flex gap-0.5 ml-1">
-                          {permissions.canManage && (
-                            <span className="w-2 h-2 rounded-sm bg-blue-500" title="Can manage"></span>
-                          )}
-                          {permissions.canSell && (
-                            <span className="w-2 h-2 rounded-sm bg-green-500" title="Can sell"></span>
-                          )}
-                          {permissions.canEdit && (
-                            <span className="w-2 h-2 rounded-sm bg-yellow-500" title="Can edit"></span>
-                          )}
-                        </div>
-                      </button>
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover:block z-50">
-                        <div className="bg-gray-900 text-white text-xs rounded-sm py-1.5 px-2.5 whitespace-nowrap shadow-lg">
-                          {store.name}
-                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {/* Store Products button for users with multiple stores */}
-                {(hasPermission("inventory.view") ||
-                  hasPermission("products.view")) && (
-                  <button
-                    className="px-4 py-2 rounded-sm text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2 
-                              bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-sm
-                              hover:from-blue-700 hover:to-indigo-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    onClick={() => navigate("/admin/inventory")}
-                  >
-                    <Store size={14} />
-                    MANAGE STORES
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Product Categories Button */}
-          <button
-            className="px-4 py-2 rounded-sm text-sm font-medium transition-all whitespace-nowrap flex items-center gap-2
-            bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 shadow-sm
-            hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-[2rem]"
-            onClick={() => {
-              dispatch(openCategoriesModal());
-            }}
-          >
-            <span>📦</span>
-            PRODUCT CATEGORIES
-          </button>
-
-          {/* Right: Store Controls (only show for superadmins/admins or users with multiple stores) */}
-          {hasMultipleAccessibleStores && (
-            <StoresControls
-              accessibleStores={accessibleStores}
-              stores={stores}
-              hasMultipleAccessibleStores={hasMultipleAccessibleStores}
-              showStoresMenu={showStoresMenu}
-              toggleStoresMenu={toggleStoresMenu}
-              setShowStoresMenu={setShowStoresMenu}
-              handleQuickSwitch={handleQuickSwitch}
-              isAdmin={isAdmin}
-              isSuperadmin={isSuperadmin}
-              hasPermission={hasPermission}
-              canManageStore={canManageStore}
-              currentStore={currentStore}
-              canAccessStore={canAccessStore}
-              getPermissionsForStore={getPermissionsForStore}
-              filteredStores={accessibleStores}
-              canViewAllStores={canViewAllStores}
-              isAllStores={isAllStores}
-              onSelectAllStores={handleSelectAllStores}
-            />
-          )}
         </div>
       </div>
     </div>

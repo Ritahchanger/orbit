@@ -55,7 +55,6 @@ const AdminEcommerceNavbar = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showStoresMenu, setShowStoresMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -70,21 +69,12 @@ const AdminEcommerceNavbar = () => {
       setOpenDropdown(dropdownName);
       setShowNotifications(false);
       setShowUserMenu(false);
-      setShowStoresMenu(false);
     }
-  };
-
-  // Toggle stores menu
-  const toggleStoresMenu = () => {
-    setShowStoresMenu(!showStoresMenu);
-    setShowUserMenu(false);
-    setShowNotifications(false);
   };
 
   // Handle store switching
   const handleStoreSwitch = (storeId) => {
     switchStore(storeId);
-    setShowStoresMenu(false);
     toast.success("Store switched successfully");
     // Refresh page data based on new store
   };
@@ -332,9 +322,6 @@ const AdminEcommerceNavbar = () => {
           stores={stores}
           currentStore={currentStore}
           handleStoreSwitch={handleStoreSwitch}
-          toggleStoresMenu={toggleStoresMenu}
-          showStoresMenu={showStoresMenu}
-          setShowStoresMenu={setShowStoresMenu}
           userRole={userRole}
         />
 

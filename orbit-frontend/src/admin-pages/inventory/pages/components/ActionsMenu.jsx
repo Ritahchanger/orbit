@@ -1,5 +1,6 @@
-import { Package, Plus } from "lucide-react";
+import { Package, Plus, Tags } from "lucide-react";
 import { openModal } from "../../../products/redux/add-product-modal-slice";
+import { openCategoriesModal } from "../../../../store/features/categoryModalSlice";
 import { useDispatch } from "react-redux";
 
 const ActionsMenu = ({ setShowActionsMenu, setShowQuickAddModal }) => {
@@ -21,6 +22,23 @@ const ActionsMenu = ({ setShowActionsMenu, setShowQuickAddModal }) => {
                 <div>
                     <p className="font-medium text-sm text-gray-900 dark:text-white">Add product to inventory</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">Add product using SKU</p>
+                </div>
+            </button>
+
+            {/* Manage Categories */}
+            <button
+                onClick={() => {
+                    setShowActionsMenu(false);
+                    dispatch(openCategoriesModal());
+                }}
+                className="flex items-center space-x-3 w-full p-3 hover:bg-gray-50 dark:hover:bg-gray-700 text-left transition-colors"
+            >
+                <div className="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-sm flex items-center justify-center">
+                    <Tags size={16} className="text-gray-600 dark:text-gray-300" />
+                </div>
+                <div>
+                    <p className="font-medium text-sm text-gray-900 dark:text-white">Manage categories</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Add, rename or remove product categories</p>
                 </div>
             </button>
 

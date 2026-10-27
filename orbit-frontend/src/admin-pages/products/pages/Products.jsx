@@ -9,6 +9,7 @@ import AdminProductsFooterActions from "../components/AdminProductsFooterActions
 import AdminProductsDeleteConfirmationModal from "../components/AdminProductsDeleteConfirmationModal";
 import AdminProductsSearchFilters from "../components/AdminProductsSearchFilters";
 import AdminProductsHeader from "../components/AdminProductsHeader";
+import ManageCategoriesButton from "../components/ManageCategoriesButton";
 
 // ✅ Import the skeleton loaders
 import {
@@ -491,6 +492,8 @@ const AdminProducts = () => {
                 </span>
               </div>
             </div>
+
+            <ManageCategoriesButton />
 
             {/* Refresh Button */}
             <button
