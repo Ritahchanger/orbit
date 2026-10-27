@@ -1,11 +1,12 @@
 // controllers/bookingController.js
 const bookingService = require('./booking.service');
+const log = require("../utils/log");
 
 exports.createBooking = async (req, res) => {
 
     const { date, timeSlot, consultationType, user } = req.body; // Change from consultationTypeId to consultationType
 
-    console.log('Creating booking:', req.body);
+    log.debug('Creating booking:', req.body);
 
     if (!date || !timeSlot || !consultationType || !user) { // Change from consultationTypeId to consultationType
         return res.status(400).json({

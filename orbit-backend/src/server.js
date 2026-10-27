@@ -35,6 +35,7 @@ const logger = require("./middlewares/logger");
 const cors = require("cors");
 
 const path = require("path");
+const log = require("./utils/log");
 
 app.use(express.json({ limit: "50mb" }));
 
@@ -193,8 +194,8 @@ app.use(errorHandler);
 server.listen(PORT, async () => {
   try {
     await connectDb();
-    console.log(`The application is listening on http://localhost:${PORT}`);
+    log.info(`The application is listening on http://localhost:${PORT}`);
   } catch (error) {
-    console.log(`There was a problem connecting to the server`);
+    log.info(`There was a problem connecting to the server`);
   }
 });

@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 
 require("dotenv").config();
+const log = require("./log");
 
 // ✅ Better environment variable handling with validation
 const BUCKET_NAME = process.env.GCS_BUCKET;
@@ -51,7 +52,7 @@ module.exports = {
    */
   uploadFromBuffer: async (fileBuffer, destFileName, mimetype) => {
     try {
-      console.log(`📤 Uploading buffer to GCS: ${destFileName}`);
+      log.debug(`📤 Uploading buffer to GCS: ${destFileName}`);
 
       const file = bucket.file(destFileName);
 
@@ -63,7 +64,7 @@ module.exports = {
         resumable: false,
       });
 
-      console.log(`✅ File uploaded to GCS: ${destFileName}`);
+      log.debug(`✅ File uploaded to GCS: ${destFileName}`);
 
       return `gs://${BUCKET_NAME}/${destFileName}`;
     } catch (err) {

@@ -1,4 +1,5 @@
 require("dotenv").config();
+const brand = require("../../config/brand");
 const getEmailTemplate = (purpose, data) => {
   const { otp } = data;
   const purposeText = purpose.replace("_", " ");
@@ -95,7 +96,7 @@ const getEmailTemplate = (purpose, data) => {
 <body>
     <div class="container">
         <div class="header">
-            <h1>Mega Gamers</h1>
+            <h1>${brand.name}</h1>
             <p>${purposeText}</p>
         </div>
 
@@ -122,14 +123,14 @@ const getEmailTemplate = (purpose, data) => {
 
             <p>
                 Regards,<br />
-                <strong>Mega Gamers Support Team</strong>
+                <strong>The ${brand.name} team</strong>
             </p>
         </div>
 
         <div class="footer">
-            <p>© ${new Date().getFullYear()} Mega Gamers. All rights reserved.</p>
+            <p>© ${new Date().getFullYear()} ${brand.name}. All rights reserved.</p>
             <p>This is an automated message. Please do not reply.</p>
-            <p>Support: ${process.env.SUPPORT_EMAIL || "support@megagamers.com"}</p>
+            ${brand.supportEmail ? `<p>Support: ${brand.supportEmail}</p>` : ""}
         </div>
     </div>
 </body>

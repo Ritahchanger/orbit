@@ -2,6 +2,7 @@
 const Booking = require('./booking.model');
 const ConsultationType = require("./consultation.model")
 const Availability = require("./availability.model")
+const log = require("../utils/log");
 class BookingService {
     // services/booking.service.js
 
@@ -22,7 +23,7 @@ class BookingService {
         }
 
         // Find consultation type
-        console.log('Looking for consultation type with ID:', typeId);
+        log.debug('Looking for consultation type with ID:', typeId);
         const consultationTypeDoc = await ConsultationType.findOne({
             id: typeId,
             isActive: true
@@ -141,7 +142,7 @@ class BookingService {
             // Mark the slot as available again
             availability.timeSlots[booking.timeSlot] = true;
             await availability.save();
-            console.log(`✅ Time slot ${booking.timeSlot} marked as available for ${bookingDate.toISOString().split('T')[0]}`);
+            log.debug(`✅ Time slot ${booking.timeSlot} marked as available for ${bookingDate.toISOString().split('T')[0]}`);
         } else {
             // If no availability record exists, create one with the slot available
             const newAvailability = new Availability({
@@ -160,7 +161,7 @@ class BookingService {
             // Set the cancelled slot to true, others to default
             newAvailability.timeSlots[booking.timeSlot] = true;
             await newAvailability.save();
-            console.log(`✅ Created availability record and marked ${booking.timeSlot} as available`);
+            log.debug(`✅ Created availability record and marked ${booking.timeSlot} as available`);
         }
 
         return booking.toDisplayFormat();

@@ -11,6 +11,7 @@ const {
   validateGCSImageData,
 } = require("./products.validator");
 const fs = require("fs");
+const log = require("../utils/log");
 // Custom error classes
 class ValidationError extends Error {
   constructor(message, details) {
@@ -46,11 +47,11 @@ const productService = {
     const validation = validateCreateProduct(productData, files);
 
     if (!validation.isValid) {
-      console.log("🔥 PRODUCT VALIDATION ERROR:");
-      console.log(JSON.stringify(validation.product.error?.details, null, 2));
+      log.debug("🔥 PRODUCT VALIDATION ERROR:");
+      log.debug(JSON.stringify(validation.product.error?.details, null, 2));
 
-      console.log("🔥 FILE VALIDATION ERROR:");
-      console.log(JSON.stringify(validation.files, null, 2));
+      log.debug("🔥 FILE VALIDATION ERROR:");
+      log.debug(JSON.stringify(validation.files, null, 2));
 
       throw new ValidationError("Product validation failed", {
         productErrors: validation.product.error?.details || [],
@@ -285,7 +286,7 @@ const productService = {
         }
       } else {
         // No image update provided - KEEP ALL EXISTING IMAGES
-        console.log("No image update provided, keeping all existing images");
+        log.debug("No image update provided, keeping all existing images");
         imagesToDelete = [];
         // Keep existing images as-is
       }
@@ -323,7 +324,7 @@ const productService = {
 
       // Delete removed images from storage (only if we explicitly determined images to delete)
       if (imagesToDelete.length > 0) {
-        console.log(
+        log.debug(
           `Attempting to delete ${imagesToDelete.length} images from storage`,
         );
 
@@ -338,7 +339,7 @@ const productService = {
                 result.error,
               );
             } else {
-              console.log(`Successfully deleted file: ${filename}`);
+              log.debug(`Successfully deleted file: ${filename}`);
             }
           } catch (err) {
             failedStorageDeletions.push({ filename, error: err.message });
@@ -356,7 +357,7 @@ const productService = {
           );
         }
       } else {
-        console.log("No images to delete from storage");
+        log.debug("No images to delete from storage");
       }
 
       // Handle SKU update (this will move images to new folder)
@@ -521,10 +522,10 @@ const productService = {
     }
 
     // Log the paths for debugging
-    console.log("UPLOADS_DIR:", UPLOADS_DIR);
+    log.debug("UPLOADS_DIR:", UPLOADS_DIR);
     const productFolderPath = path.join(UPLOADS_DIR, "products", product.sku);
-    console.log("Product folder path:", productFolderPath);
-    console.log("Attempting to delete folder:", productFolderPath);
+    log.debug("Product folder path:", productFolderPath);
+    log.debug("Attempting to delete folder:", productFolderPath);
 
     let folderDeleted = false;
     let folderError = null;
@@ -537,7 +538,7 @@ const productService = {
 
     try {
       // Try to delete the folder using shell command
-      console.log(`📁 Attempting to delete folder via shell: ${product.sku}`);
+      log.debug(`📁 Attempting to delete folder via shell: ${product.sku}`);
 
       const { stdout, stderr } = await execPromise(
         `rm -rf "${productFolderPath}"`,
@@ -547,7 +548,7 @@ const productService = {
         console.warn(`Shell warning: ${stderr}`);
       }
 
-      console.log(`✅ Successfully deleted folder via shell: ${product.sku}`);
+      log.debug(`✅ Successfully deleted folder via shell: ${product.sku}`);
       folderDeleted = true;
     } catch (error) {
       console.error(`❌ Shell command failed:`, error);
@@ -555,7 +556,7 @@ const productService = {
       folderError = error.message;
 
       // Fallback: try Node.js fs operations
-      console.log(`⚠️ Shell deletion failed, trying Node.js fs operations...`);
+      log.debug(`⚠️ Shell deletion failed, trying Node.js fs operations...`);
 
       try {
         // Try to delete individual images first
@@ -563,7 +564,7 @@ const productService = {
           for (const img of product.images) {
             try {
               await LocalStorage.deleteFile(img.gcsFileName);
-              console.log(`✅ Deleted image: ${img.gcsFileName}`);
+              log.debug(`✅ Deleted image: ${img.gcsFileName}`);
             } catch (imgError) {
               console.error(
                 `❌ Failed to delete image: ${img.gcsFileName}`,
@@ -576,7 +577,7 @@ const productService = {
         // Then try to delete the folder if it's empty
         try {
           await fs.rmdir(productFolderPath);
-          console.log(`✅ Deleted empty folder: ${product.sku}`);
+          log.debug(`✅ Deleted empty folder: ${product.sku}`);
           folderDeleted = true;
           folderError = null;
         } catch (rmdirError) {
@@ -618,9 +619,9 @@ const productService = {
     // Check if folder still exists after deletion attempt
     try {
       await fs.access(productFolderPath);
-      console.log(`⚠️ WARNING: Folder still exists: ${productFolderPath}`);
+      log.debug(`⚠️ WARNING: Folder still exists: ${productFolderPath}`);
     } catch {
-      console.log(`✅ Verified folder is gone: ${productFolderPath}`);
+      log.debug(`✅ Verified folder is gone: ${productFolderPath}`);
     }
 
     return {
@@ -643,7 +644,7 @@ const productService = {
     const fs = require("fs").promises;
     const path = require("path");
 
-    console.log(`Manually deleting folder: ${folderPath}`);
+    log.debug(`Manually deleting folder: ${folderPath}`);
 
     // Read all files/folders in the directory
     const entries = await fs.readdir(folderPath, { withFileTypes: true });
@@ -658,13 +659,13 @@ const productService = {
       } else {
         // Delete file
         await fs.unlink(fullPath);
-        console.log(`Deleted file: ${entry.name}`);
+        log.debug(`Deleted file: ${entry.name}`);
       }
     }
 
     // Delete the now-empty folder
     await fs.rmdir(folderPath);
-    console.log(`Deleted empty folder: ${folderPath}`);
+    log.debug(`Deleted empty folder: ${folderPath}`);
   },
 
   deleteProductImage: async (productId, gcsFileName) => {
@@ -1033,7 +1034,7 @@ const productService = {
 
     // Build query - Exclude discontinued products by default, but DON'T filter by stock
 
-    console.log("Business id", businessId);
+    log.debug("Business id", businessId);
 
     let query = {
       status: { $ne: "discontinued" },
@@ -1272,7 +1273,7 @@ const productService = {
     await productRepository.save(product);
 
     // Log the update for audit purposes
-    console.log(
+    log.debug(
       `Stock update: Product ${product.sku} (${productId}) - ${operation} ${stock} units. New stock: ${newStock}`,
     );
 

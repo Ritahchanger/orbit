@@ -1,9 +1,10 @@
 // services/inventory/inventory-crud.service.js
 const BaseInventoryService = require('./base-inventory.service');
+const log = require("../../utils/log");
 
 class InventoryCRUDService extends BaseInventoryService {
     async addToInventory(storeId, productId, inventoryData = {}, user) {
-        console.log('📦 addToInventory called:', { storeId, productId, inventoryData });
+        log.debug('📦 addToInventory called:', { storeId, productId, inventoryData });
 
         await this.validateStore(storeId);
         await this.validateProduct(productId);
@@ -12,11 +13,11 @@ class InventoryCRUDService extends BaseInventoryService {
         const existingItem = await this.findExistingInventory(storeId, productId);
 
         if (existingItem) {
-            console.log('🔄 Updating existing inventory item');
+            log.debug('🔄 Updating existing inventory item');
             return await this.updateInventoryItem(existingItem._id, inventoryData, user);
         }
 
-        console.log('🆕 Creating new inventory item');
+        log.debug('🆕 Creating new inventory item');
         const product = await this.Product.findById(productId);
         
         const inventoryItem = new this.StockInventory({
@@ -33,7 +34,7 @@ class InventoryCRUDService extends BaseInventoryService {
         await inventoryItem.populate('product', 'name sku price category brand');
         await inventoryItem.populate('store', 'name code');
 
-        console.log('✅ Inventory item saved successfully');
+        log.debug('✅ Inventory item saved successfully');
 
         return {
             success: true,

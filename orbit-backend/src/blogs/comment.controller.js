@@ -1,6 +1,7 @@
 const commentService = require("./comment.service");
 
 const Blog = require("./blogs.model");
+const log = require("../utils/log");
 
 /**
  * @desc    Add a comment to a blog
@@ -55,7 +56,7 @@ const addCommentWithAutoApproval = async (req, res) => {
   const { blogId } = req.params;
   const commentData = req.body;
 
-  console.log(req.body)
+  log.debug(req.body)
 
   const result = await commentService.addCommentWithAutoApproval(
     blogId,

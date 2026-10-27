@@ -2,11 +2,16 @@ const path = require("path");
 const fs = require("fs");
 const { transporter } = require("../utils/transporter");
 const Newsletter = require("../newsletters/newsletters.model");
-const logo = path.join(__dirname, "../public/icons/ampalax.jpg");
+const log = require("./log");
+const brand = require("../config/brand");
+// Optional logo image for the email header (EMAIL_LOGO_PATH, relative to the backend)
+const logo = process.env.EMAIL_LOGO_PATH
+  ? path.join(__dirname, "../..", process.env.EMAIL_LOGO_PATH)
+  : null;
 const sendNewsletterToAllUtil = async ({
   subject,
   message,
-  fromName = "AMPALAX POWER LIMITED",
+  fromName = brand.name,
 }) => {
   try {
     if (!subject || !message) {
@@ -18,7 +23,7 @@ const sendNewsletterToAllUtil = async ({
     }
     let logoBase64 = "";
     try {
-      if (fs.existsSync(logo)) {
+      if (logo && fs.existsSync(logo)) {
         const logoBuffer = fs.readFileSync(logo);
         logoBase64 = `data:image/jpeg;base64,${logoBuffer.toString("base64")}`;
       }
@@ -305,11 +310,10 @@ const sendNewsletterToAllUtil = async ({
               <div class="header">
                 ${
                   logoBase64
-                    ? `<img src="${logoBase64}" alt="Ampalax power limited" class="logo">`
+                    ? `<img src="${logoBase64}" alt="${brand.name}" class="logo">`
                     : ""
                 }
-                <h1 class="company-name">Ampalax Power Limited</h1>
-                <p class="tagline">Pioneering Technology Solutions</p>
+                <h1 class="company-name">${brand.name}</h1>
               </div>
               
               <div class="content">
@@ -321,10 +325,7 @@ const sendNewsletterToAllUtil = async ({
                 
                 <div class="cta-section">
                   <h3 style="color: #1e3a8a; margin-top: 0; font-size: 20px;">Stay Connected with Innovation</h3>
-                  <p style="margin: 12px 0; color: #64748b;">Thank you for being part of the Starlex Innovation Technologies community!</p>
-                  <div class="tech-accent">
-                    <p style="margin: 0; color: #0f172a; font-weight: 500;">Leading the future of technology solutions</p>
-                  </div>
+                  <p style="margin: 12px 0; color: #64748b;">Thank you for being part of the ${brand.name} community!</p>
                   <a href="${baseUrl}" class="cta-button">Explore Our Solutions</a>
                 </div>
               </div>
@@ -349,14 +350,13 @@ const sendNewsletterToAllUtil = async ({
                 </div>
                 
                 <div class="company-info">
-                  <strong>Ampalax power limited</strong><br>
-                  Leading Technology Solutions & Innovation<br>
-                  📧 ${process.env.COMPANY_EMAIL} | 📞 +254 713 457 529<br>
+                  <strong>${brand.name}</strong><br>
+                  ${brand.email ? `📧 ${brand.email}<br>` : ""}
                   🌐 ${baseUrl}
                 </div>
                 
                 <div class="unsubscribe">
-                  <p>You are receiving this because you subscribed to Starlex Innovation Technologies Newsletter.</p>
+                  <p>You are receiving this because you subscribed to the ${brand.name} newsletter.</p>
                   <p>
                     <a href="${baseUrl}/preferences?token=${unsubscribeToken}">Update Preferences</a> | 
                     <a href="${baseUrl}/unsubscribe?token=${unsubscribeToken}">Unsubscribe</a>
@@ -378,7 +378,7 @@ const sendNewsletterToAllUtil = async ({
       const batch = subscribers.slice(i, i + batchSize);
       const batchNumber = Math.floor(i / batchSize) + 1;
       const totalBatches = Math.ceil(subscribers.length / batchSize);
-      console.log(
+      log.debug(
         `📧 Processing batch ${batchNumber}/${totalBatches} (${batch.length} emails)`
       );
       await Promise.allSettled(
@@ -386,7 +386,7 @@ const sendNewsletterToAllUtil = async ({
           try {
             await sendEmail(subscriber.email);
             results.push({ email: subscriber.email, status: "sent" });
-            console.log(
+            log.debug(
               `✅ Newsletter sent successfully to ${subscriber.email}`
             );
           } catch (error) {
@@ -403,7 +403,7 @@ const sendNewsletterToAllUtil = async ({
         })
       );
       if (i + batchSize < subscribers.length) {
-        console.log(`⏳ Waiting ${delayBetweenBatches}ms before next batch...`);
+        log.debug(`⏳ Waiting ${delayBetweenBatches}ms before next batch...`);
         await delay(delayBetweenBatches);
       }
     }
@@ -421,9 +421,9 @@ const sendNewsletterToAllUtil = async ({
       failedEmails: failed.map((f) => ({ email: f.email, error: f.error })),
       timestamp: new Date().toISOString(),
       subject: subject,
-      company: "AMPALAX POWER LIMITED",
+      company: brand.name,
     };
-    console.log("🎯 Ampalax Newsletter sending completed:", {
+    log.debug("🎯 Newsletter sending completed:", {
       total: summary.total,
       success: summary.success,
       failed: summary.failed,
@@ -434,7 +434,7 @@ const sendNewsletterToAllUtil = async ({
     }
     return summary;
   } catch (error) {
-    console.error("💥 Ampalax Newsletter sending failed:", error.message);
+    console.error("💥 Newsletter sending failed:", error.message);
     throw error;
   }
 };

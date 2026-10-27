@@ -1,4 +1,6 @@
 const { transporter }= require("../utils/transporter");
+const log = require("../utils/log");
+const brand = require("../config/brand");
 
 const sendQuotationEmail = async (quote, pdfBuffer, filename) => {
   try {
@@ -12,7 +14,7 @@ const sendQuotationEmail = async (quote, pdfBuffer, filename) => {
   <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Your Quotation from Ampalax</title>
+      <title>Your Quotation from ${brand.name}</title>
       <style>
           body {
               font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -121,7 +123,7 @@ const sendQuotationEmail = async (quote, pdfBuffer, filename) => {
       <div class="container">
           <div class="header">
               <h1>Your Quotation is Ready!</h1>
-              <p>Ampalax - Professional ${serviceNeeded} Services</p>
+              <p>${brand.name} - Professional ${serviceNeeded} Services</p>
           </div>
           
           <div class="content">
@@ -172,18 +174,17 @@ const sendQuotationEmail = async (quote, pdfBuffer, filename) => {
               <p>We're committed to providing you with the highest quality service and look forward to the opportunity to work with you.</p>
               
               <p>Best regards,<br>
-              <strong>The Ampalax Team</strong></p>
+              <strong>The ${brand.name} Team</strong></p>
           </div>
           
           <div class="footer">
-              <div class="logo">AMPALAX</div>
+              <div class="logo">${brand.name}</div>
               <div class="contact-info">
                   <div class="contact-item">📍 ${location}</div>
-                  <div class="contact-item">📞 +254 712 345 678</div>
-                  <div class="contact-item">📧 info@ampalax.com</div>
-                  <div class="contact-item">🌐 www.ampalax.com</div>
+                  ${brand.email ? `<div class="contact-item">📧 ${brand.email}</div>` : ""}
+                  ${brand.website ? `<div class="contact-item">🌐 ${brand.website}</div>` : ""}
               </div>
-              <p>&copy; ${new Date().getFullYear()} Ampalax. All rights reserved.</p>
+              <p>&copy; ${new Date().getFullYear()} ${brand.name}. All rights reserved.</p>
               <p style="font-size: 12px; color: #9ca3af;">
                   This quotation is valid for 30 days from the date of issue.
               </p>
@@ -196,9 +197,9 @@ const sendQuotationEmail = async (quote, pdfBuffer, filename) => {
     const mailOptions = {
       from:
         process.env.EMAIL_FROM ||
-        '"Ampalax Quotations" <quotations@ampalax.com>',
+        `"${brand.name} Quotations" <${brand.email}>`,
       to: email,
-      subject: `Your ${serviceNeeded} Quotation - Ampalax`,
+      subject: `Your ${serviceNeeded} Quotation - ${brand.name}`,
       html: emailTemplate,
       attachments: [
         {
@@ -210,7 +211,7 @@ const sendQuotationEmail = async (quote, pdfBuffer, filename) => {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log(`✅ Quotation email sent successfully to ${email}`);
+    log.debug(`✅ Quotation email sent successfully to ${email}`);
   } catch (error) {
     console.error("❌ Error sending quotation email:", error);
     throw new Error(`Failed to send quotation email: ${error.message}`);

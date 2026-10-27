@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const log = require("../utils/log");
 
 const productValidationSchema = Joi.object({
   name: Joi.string().required().trim().min(1).max(200).messages({
@@ -356,8 +357,8 @@ const validateUpdateProduct = (data) => {
 
 // products.validator.js
 const validateProductId = (id) => {
-  console.log("DEBUG validateProductId - Input:", id);
-  console.log("DEBUG validateProductId - Type:", typeof id);
+  log.debug("DEBUG validateProductId - Input:", id);
+  log.debug("DEBUG validateProductId - Type:", typeof id);
 
   // First handle null/undefined
   if (!id) {

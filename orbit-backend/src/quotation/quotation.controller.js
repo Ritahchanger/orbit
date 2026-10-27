@@ -9,6 +9,7 @@ const { isValidObjectId } = require("mongoose");
 const QuotationRequest = require("./quotation.model");
 
 const quotationEmail = require("./quotation.email")
+const log = require("../utils/log");
 
 // Configuration
 const PUPPETEER_OPTIONS = {
@@ -147,7 +148,7 @@ const generatePdf = async (req, res) => {
     // Sanitize filename
     const safeFilename = sanitizeFilename(filename);
 
-    console.log("Starting PDF generation...");
+    log.debug("Starting PDF generation...");
 
     const quotation = await QuotationRequest.findById(quotationId);
 
@@ -163,7 +164,7 @@ const generatePdf = async (req, res) => {
 
     }
 
-    console.log("✅ Quotation found:", {
+    log.debug("✅ Quotation found:", {
       id: quotation._id,
       email: quotation.email,
       service: quotation.serviceNeeded
@@ -177,7 +178,7 @@ const generatePdf = async (req, res) => {
     await page.setDefaultNavigationTimeout(60000);
 
     // Listen for console messages
-    page.on("console", (msg) => console.log("Puppeteer:", msg.text()));
+    page.on("console", (msg) => log.debug("Puppeteer:", msg.text()));
 
     // Set content and wait for everything to load
     await page.setContent(html, {
@@ -190,17 +191,17 @@ const generatePdf = async (req, res) => {
     // Generate PDF
     const pdf = await page.pdf(PDF_OPTIONS);
 
-    console.log("PDF generated successfully, size:", pdf.length);
+    log.debug("PDF generated successfully, size:", pdf.length);
 
     
     // Send email with PDF attachment
-    console.log("📧 Sending quotation email...");
+    log.debug("📧 Sending quotation email...");
     await quotationEmail.sendQuotationEmail(quotation, pdf, safeFilename);
 
     // Update quotation as responded
     await QuotationRequest.findByIdAndUpdate(quotationId, { responded: true });
 
-    console.log("📤 Sending PDF response...");
+    log.debug("📤 Sending PDF response...");
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(

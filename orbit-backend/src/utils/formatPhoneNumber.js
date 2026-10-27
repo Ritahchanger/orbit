@@ -1,3 +1,4 @@
+const log = require("./log");
 /**
  * Simplified phone number formatter - more lenient for various Kenyan formats
  */
@@ -69,7 +70,7 @@ const formatPhoneNumber = (phone, strict = true) => {
       throw new Error(`Invalid Kenyan number prefix: ${firstDigit}`);
     }
 
-    console.log(`✅ Phone formatted: ${phone} -> ${formattedNumber}`);
+    log.debug(`✅ Phone formatted: ${phone} -> ${formattedNumber}`);
     return formattedNumber;
   } catch (error) {
     if (strict) {

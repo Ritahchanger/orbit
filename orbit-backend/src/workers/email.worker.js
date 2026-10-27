@@ -1,6 +1,7 @@
 const queue = require('../utils/queue');
 const { processSingleEmail, processEmailBatch } = require('../newsletters/newsletter.service');
 const connectDb = require("../config/db.connection");
+const log = require("../utils/log");
 
 class EmailWorker {
     constructor() {
@@ -8,21 +9,21 @@ class EmailWorker {
     }
 
     async start() {
-        console.log('Starting email workers...');
+        log.info('Starting email workers...');
         
         try {
             // 🔥 CRITICAL: Connect to database first!
-            console.log('Connecting to database...');
+            log.info('Connecting to database...');
             await connectDb();
-            console.log('✅ Database connected for email worker');
+            log.info('✅ Database connected for email worker');
 
             // Add debug to check queue state before consuming
-            console.log('🔍 Checking RabbitMQ connection before consuming...');
+            log.info('🔍 Checking RabbitMQ connection before consuming...');
             
             // Try to connect explicitly first
             try {
                 await queue.connect();
-                console.log('✅ RabbitMQ connected successfully');
+                log.info('✅ RabbitMQ connected successfully');
             } catch (connError) {
                 console.error('❌ Failed to connect to RabbitMQ:', connError.message);
                 console.error('Full error:', connError);
@@ -32,30 +33,30 @@ class EmailWorker {
             // Check if queues exist
             try {
                 // You might need to add these methods to your queue class
-                console.log('📋 Checking queues...');
+                log.info('📋 Checking queues...');
                 // This depends on what methods your queue class has
             } catch (queueError) {
                 console.error('❌ Queue check failed:', queueError.message);
             }
 
             // Worker for processing batches
-            console.log('⏳ Setting up batch consumer...');
+            log.info('⏳ Setting up batch consumer...');
             await queue.consumeFromQueue('newsletter_batches', async (message) => {
-                console.log('📦 Processing newsletter batch:', message);
+                log.info('📦 Processing newsletter batch:', message);
                 await processEmailBatch(message);
             });
 
             // Worker for processing individual emails
-            console.log('⏳ Setting up email consumer...');
+            log.info('⏳ Setting up email consumer...');
             await queue.consumeFromQueue('newsletter_emails', async (message) => {
-                console.log('📧 Processing individual email:', message?.email);
+                log.info('📧 Processing individual email:', message?.email);
                 await processSingleEmail(message);
             });
 
-            console.log('✅ Email workers started successfully');
-            console.log('👂 Listening for messages on:');
-            console.log('   - newsletter_batches');
-            console.log('   - newsletter_emails');
+            log.info('✅ Email workers started successfully');
+            log.info('👂 Listening for messages on:');
+            log.info('   - newsletter_batches');
+            log.info('   - newsletter_emails');
             
         } catch (error) {
             console.error('❌ Failed to start email workers:', error);
@@ -65,9 +66,9 @@ class EmailWorker {
     }
 
     async stop() {
-        console.log('🛑 Stopping email workers...');
+        log.info('🛑 Stopping email workers...');
         await queue.close();
-        console.log('✅ Email workers stopped');
+        log.info('✅ Email workers stopped');
     }
 }
 
@@ -91,13 +92,13 @@ if (require.main === module) {
 
     // Graceful shutdown
     process.on('SIGINT', async () => {
-        console.log('🛑 Shutting down email worker...');
+        log.info('🛑 Shutting down email worker...');
         await worker.stop();
         process.exit(0);
     });
 
     process.on('SIGTERM', async () => {
-        console.log('🛑 Shutting down email worker...');
+        log.info('🛑 Shutting down email worker...');
         await worker.stop();
         process.exit(0);
     });

@@ -1,5 +1,6 @@
 // services/websocket.service.js
 const WebSocket = require("ws");
+const log = require("../utils/log");
 
 class WebSocketService {
   constructor() {
@@ -12,11 +13,11 @@ class WebSocketService {
       const clientId = url.searchParams.get("clientId");
       if (clientId) {
         this.clients.set(clientId, ws);
-        console.log(`Client ${clientId} connected`);
+        log.debug(`Client ${clientId} connected`);
       }
       ws.on("close", () => {
         this.clients.delete(clientId);
-        console.log(`Client ${clientId} disconnected`);
+        log.debug(`Client ${clientId} disconnected`);
       });
     });
   }

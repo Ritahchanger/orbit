@@ -8,6 +8,7 @@ const wsService = require("./wsService");
 require("dotenv").config();
 
 const { formatPhoneNumber } = require("../utils/formatPhoneNumber");
+const log = require("../utils/log");
 
 const recordMultipleItemsSale = async (transactionData) => {
   // ============ STEP 1: VALIDATE INPUTS ============
@@ -452,7 +453,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
     notes,
   } = paymentData;
 
-  console.log("M-Pesa Payment Data:", paymentData);
+  log.debug("M-Pesa Payment Data:", paymentData);
 
   // Validate required fields
   if (!phone) throw new Error("Phone number is required");
@@ -464,14 +465,14 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
   try {
     // Generate access token
     const token = await generateMpesaToken();
-    console.log("✅ M-Pesa token generated");
+    log.debug("✅ M-Pesa token generated");
 
     const shortCode = process.env.SHORT_CODE;
     const passKey = process.env.SAFARICOM_PASS_KEY;
     const mpesaUrl = process.env.LIPA_NA_MPESA_URL_TEST;
 
     // Log environment variables (remove in production)
-    console.log("M-Pesa Config:", {
+    log.debug("M-Pesa Config:", {
       shortCode: shortCode ? "Set" : "Missing",
       passKey: passKey ? "Set" : "Missing",
       mpesaUrl: mpesaUrl,
@@ -488,7 +489,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
       String(now.getMinutes()).padStart(2, "0") +
       String(now.getSeconds()).padStart(2, "0");
 
-    console.log("Timestamp:", timestamp);
+    log.debug("Timestamp:", timestamp);
 
     // Generate password
     const password = Buffer.from(shortCode + passKey + timestamp).toString(
@@ -497,7 +498,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
 
     // Format phone number
     const phoneFormatted = formatPhoneNumber(phone);
-    console.log("Phone formatted:", {
+    log.debug("Phone formatted:", {
       input: phone,
       formatted: phoneFormatted,
     });
@@ -529,7 +530,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
     });
 
     await pendingTransaction.save();
-    console.log("✅ Pending transaction saved:", {
+    log.debug("✅ Pending transaction saved:", {
       mongoId: pendingTransaction._id.toString(),
       clientId: clientId,
     });
@@ -560,7 +561,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
       TransactionDesc: `Pay ${customerName}`.substring(0, 13), // Max 13 chars
     };
 
-    console.log("📤 M-Pesa STK Payload:", JSON.stringify(payload, null, 2));
+    log.debug("📤 M-Pesa STK Payload:", JSON.stringify(payload, null, 2));
 
     // Send STK Push request with timeout
     const response = await axios.post(mpesaUrl, payload, {
@@ -571,7 +572,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
       timeout: 30000,
     });
 
-    console.log("📥 M-Pesa Response:", JSON.stringify(response.data, null, 2));
+    log.debug("📥 M-Pesa Response:", JSON.stringify(response.data, null, 2));
 
     if (response.data.ResponseCode === "0") {
       // ============ FIX 3: Store M-Pesa Checkout ID properly ============
@@ -584,7 +585,7 @@ const initiateMpesaPayment = async (paymentData, clientId = null) => {
         },
       });
 
-      console.log(
+      log.debug(
         "✅ Transaction updated with M-Pesa Checkout ID:",
         response.data.CheckoutRequestID,
       );
@@ -677,9 +678,9 @@ const handleMpesaCallback = async (callbackData) => {
       },
     } = callbackData;
 
-    console.log("📞 M-Pesa Callback received for:", CheckoutRequestID);
-    console.log("Result Code:", ResultCode);
-    console.log("Result Desc:", ResultDesc);
+    log.debug("📞 M-Pesa Callback received for:", CheckoutRequestID);
+    log.debug("Result Code:", ResultCode);
+    log.debug("Result Desc:", ResultDesc);
 
     // ============ FIX 4: Find transaction by mpesaCheckoutId ============
     const transaction = await Transaction.findOne({
@@ -701,7 +702,7 @@ const handleMpesaCallback = async (callbackData) => {
     // If we've already processed this checkout, don't re-append notes or
     // re-broadcast the WebSocket event.
     if (transaction.paymentStatus === "paid" || transaction.paymentStatus === "failed") {
-      console.log("↩️ Callback already processed for:", CheckoutRequestID);
+      log.debug("↩️ Callback already processed for:", CheckoutRequestID);
       return {
         success: transaction.paymentStatus === "paid",
         message: "Callback already processed",
@@ -713,7 +714,7 @@ const handleMpesaCallback = async (callbackData) => {
       };
     }
 
-    console.log("✅ Found transaction:", transaction._id.toString());
+    log.debug("✅ Found transaction:", transaction._id.toString());
 
     const clientId = transaction.clientId;
 
@@ -726,7 +727,7 @@ const handleMpesaCallback = async (callbackData) => {
         });
       }
 
-      console.log("💰 Payment metadata:", metadata);
+      log.debug("💰 Payment metadata:", metadata);
 
       // ============ FIX 5: Store all M-Pesa transaction details ============
       transaction.paymentStatus = "paid";
@@ -748,7 +749,7 @@ const handleMpesaCallback = async (callbackData) => {
       - Date: ${metadata.TransactionDate || new Date().toISOString()}`.trim();
 
       await transaction.save();
-      console.log("✅ Transaction updated with payment success");
+      log.debug("✅ Transaction updated with payment success");
 
       // Notify frontend via WebSocket
       if (clientId) {
@@ -762,12 +763,12 @@ const handleMpesaCallback = async (callbackData) => {
           phone: metadata.PhoneNumber || transaction.customerPhone,
           timestamp: new Date().toISOString(),
         });
-        console.log("📱 WebSocket notification sent to client:", clientId);
+        log.debug("📱 WebSocket notification sent to client:", clientId);
       }
 
       // If saleIds are already linked, we could auto-complete
       if (transaction.saleIds && transaction.saleIds.length > 0) {
-        console.log(
+        log.debug(
           `📦 Transaction has ${transaction.saleIds.length} sale IDs linked`,
         );
         // Frontend will call completeMpesaTransaction to finish
@@ -786,7 +787,7 @@ const handleMpesaCallback = async (callbackData) => {
       };
     } else {
       // Payment failed
-      console.log("❌ Payment failed with result:", ResultDesc);
+      log.debug("❌ Payment failed with result:", ResultDesc);
 
       transaction.paymentStatus = "failed";
       transaction.status = "cancelled";
@@ -796,7 +797,7 @@ const handleMpesaCallback = async (callbackData) => {
         `${transaction.notes || ""}\n❌ M-Pesa Payment Failed: ${ResultDesc}`.trim();
 
       await transaction.save();
-      console.log("✅ Transaction updated with payment failure");
+      log.debug("✅ Transaction updated with payment failure");
 
       // Notify frontend via WebSocket
       if (clientId) {
@@ -856,7 +857,7 @@ const completeMpesaTransaction = async (transactionData) => {
       soldBy,
     } = transactionData;
 
-    console.log("🔄 Completing M-Pesa transaction:", {
+    log.debug("🔄 Completing M-Pesa transaction:", {
       transactionId,
       saleIdsCount: saleIds?.length || 0,
       hasItems: !!items,
@@ -887,7 +888,7 @@ const completeMpesaTransaction = async (transactionData) => {
     );
 
     if (!claimed) {
-      console.log("Transaction already completed");
+      log.debug("Transaction already completed");
       return {
         success: true,
         message: "Transaction already completed",
@@ -902,7 +903,7 @@ const completeMpesaTransaction = async (transactionData) => {
 
     // ============ NEW: Record sales if items are provided ============
     if (items && items.length > 0 && (!saleIds || saleIds.length === 0)) {
-      console.log(
+      log.debug(
         "📦 Recording sales for M-Pesa payment:",
         items.length,
         "items",
@@ -924,7 +925,7 @@ const completeMpesaTransaction = async (transactionData) => {
       finalSaleIds = saleResult.data.saleIds;
       salesData = saleResult.data.sales;
 
-      console.log("✅ Sales recorded:", finalSaleIds.length, "sales");
+      log.debug("✅ Sales recorded:", finalSaleIds.length, "sales");
     }
 
     // ============ Update transaction with sale details ============
@@ -950,7 +951,7 @@ const completeMpesaTransaction = async (transactionData) => {
 
     await transaction.save(); // This triggers pre-save hook to generate transactionId
 
-    console.log(
+    log.debug(
       "✅ Transaction completed with ID:",
       transaction.transactionId || transaction._id,
     );
@@ -993,7 +994,7 @@ const completeMpesaTransaction = async (transactionData) => {
  */
 const pollMpesaStatus = async (checkoutRequestId, clientId = null) => {
   try {
-    console.log("🔄 Polling M-Pesa status for:", checkoutRequestId);
+    log.debug("🔄 Polling M-Pesa status for:", checkoutRequestId);
 
     const token = await generateMpesaToken();
 
@@ -1022,7 +1023,7 @@ const pollMpesaStatus = async (checkoutRequestId, clientId = null) => {
       },
     );
 
-    console.log("📥 Poll response:", response.data);
+    log.debug("📥 Poll response:", response.data);
 
     // If we have a result, notify via WebSocket
     if (clientId) {

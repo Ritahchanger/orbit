@@ -5,6 +5,8 @@ const { RedisClient } = require("../../config/redis");
 const { getEmailTemplate } = require("./getEmail");
 
 require("dotenv").config();
+const log = require("../../utils/log");
+const brand = require("../../config/brand");
 
 class OTPService {
     constructor() {
@@ -51,12 +53,8 @@ class OTPService {
         const key = `otp:${purpose}:${email}`;
         const attemptsKey = `otp_attempts:${purpose}:${email}`;
 
-        console.log(email, otp)
-
         // Get stored OTP
         const storedOTP = await RedisClient.get(key);
-
-        console.log(storedOTP)
 
         if (!storedOTP) {
             throw new Error("OTP expired or not found");
@@ -92,20 +90,20 @@ class OTPService {
      */
     async sendOTPEmail(email, otp, purpose = "verification") {
         const subjectMap = {
-            verification: "Verify Your Email - Mega Gamers",
-            password_reset: "Password Reset OTP - Mega Gamers",
-            login: "Login OTP - Mega Gamers",
-            account_creation: "Account Created - Mega Gamers"
+            verification: `Verify your email - ${brand.name}`,
+            password_reset: `Password reset code - ${brand.name}`,
+            login: `Login code - ${brand.name}`,
+            account_creation: `Account created - ${brand.name}`
         };
 
-        const subject = subjectMap[purpose] || "Your OTP - Mega Gamers";
+        const subject = subjectMap[purpose] || `Your code - ${brand.name}`;
 
         // Get email templates based on purpose
         const emailHtml = getEmailTemplate(purpose, { otp });
 
         const mailOptions = {
             from: {
-                name: process.env.COMPANY_NAME || "Mega Gamers",
+                name: brand.name,
                 address: process.env.COMPANY_EMAIL || process.env.GMAIL_USER,
             },
             to: email,
@@ -115,7 +113,7 @@ class OTPService {
 
         try {
             const info = await this.transporter.sendMail(mailOptions);
-            console.log(`📧 OTP email sent to ${email}: ${info.messageId}`);
+            log.debug(`📧 OTP email sent to ${email}: ${info.messageId}`);
             return info;
         } catch (error) {
             console.error("❌ Error sending OTP email:", error);
@@ -171,23 +169,20 @@ class OTPService {
         const attemptsKey = `otp_attempts:${purpose}:${email}`;
 
         // Debug logs
-        console.log(`[OTP Service] Verifying OTP for ${email}, purpose: ${purpose}`);
-        console.log(`[OTP Service] Redis key: ${key}`);
+        log.debug(`[OTP Service] Verifying OTP for ${email}, purpose: ${purpose}`);
+        log.debug(`[OTP Service] Redis key: ${key}`);
 
         // Get stored OTP
         const storedOTP = await RedisClient.get(key);
-        console.log(`[OTP Service] Stored OTP: ${storedOTP ? 'Found' : 'Not found'}`);
+        log.debug(`[OTP Service] Stored OTP: ${storedOTP ? 'Found' : 'Not found'}`);
 
         if (!storedOTP) {
-            // Optional: Log all OTP keys for debugging
-            const allKeys = await RedisClient.keys('otp:*');
-            console.log(`[OTP Service] All OTP keys: ${allKeys.length > 0 ? allKeys.join(', ') : 'None'}`);
             throw new Error("OTP expired or not found");
         }
 
         // Check attempts
         const attempts = parseInt(await RedisClient.get(attemptsKey) || "0");
-        console.log(`[OTP Service] Attempts: ${attempts}/${this.MAX_ATTEMPTS}`);
+        log.debug(`[OTP Service] Attempts: ${attempts}/${this.MAX_ATTEMPTS}`);
 
         if (attempts >= this.MAX_ATTEMPTS) {
             // Delete OTP if max attempts reached
@@ -210,7 +205,7 @@ class OTPService {
         // Keep OTP alive long enough for the reset-password step (15 min)
         await RedisClient.expire(key, 15 * 60);
 
-        console.log(`[OTP Service] OTP verified successfully for ${email}`);
+        log.debug(`[OTP Service] OTP verified successfully for ${email}`);
 
         // Return simple success - This is what verifyLoginOTPAndGenerateToken expects
         return {

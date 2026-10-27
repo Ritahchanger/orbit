@@ -3,6 +3,7 @@
 const User = require("../../user/user.model");
 
 const { generateToken } = require("../../utils/generateToken");
+const log = require("../../utils/log");
 
 class GoogleAuthService {
   async findOrCreateGoogleUser(googleProfile) {
@@ -29,11 +30,11 @@ class GoogleAuthService {
 
       user = await User.findById(newUser._id).select("-password");
 
-      console.log("✅ Created new Google user:", user.email);
+      log.debug("✅ Created new Google user:", user.email);
 
     } else {
 
-      console.log("✅ Google user already exists:", user.email);
+      log.debug("✅ Google user already exists:", user.email);
       
     }
 
@@ -61,9 +62,9 @@ class GoogleAuthService {
   }
 
   processGoogleUser(user) {
-    console.log("=== GOOGLE USER CREDENTIALS ===");
-    console.log("Full user object:", user);
-    console.log("================================");
+    log.debug("=== GOOGLE USER CREDENTIALS ===");
+    log.debug("Full user object:", user);
+    log.debug("================================");
   }
 }
 

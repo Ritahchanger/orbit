@@ -1,6 +1,7 @@
 // config/db.connection.js
 const mongoose = require("mongoose");
 require("dotenv").config();
+const log = require("../utils/log");
 
 let isConnected = false;
 
@@ -8,7 +9,7 @@ const connectDb = async () => {
     try {
         // If already connected, return existing connection
         if (isConnected && mongoose.connection.readyState === 1) {
-            console.log('✅ Using existing database connection');
+            log.info('✅ Using existing database connection');
             return mongoose.connection;
         }
 
@@ -20,7 +21,7 @@ const connectDb = async () => {
 
         isConnected = true;
         
-        console.log(`✅ Database connected successfully: ${connection.connection.host}`);
+        log.info(`✅ Database connected successfully: ${connection.connection.host}`);
 
         // Handle connection events
         mongoose.connection.on('error', (err) => {
@@ -29,12 +30,12 @@ const connectDb = async () => {
         });
 
         mongoose.connection.on('disconnected', () => {
-            console.log('⚠️ MongoDB disconnected');
+            log.info('⚠️ MongoDB disconnected');
             isConnected = false;
         });
 
         mongoose.connection.on('connected', () => {
-            console.log('✅ MongoDB reconnected');
+            log.info('✅ MongoDB reconnected');
             isConnected = true;
         });
 

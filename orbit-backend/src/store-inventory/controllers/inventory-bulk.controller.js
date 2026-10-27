@@ -1,6 +1,7 @@
 // controllers/inventory/inventory-bulk.controller.js
 const BaseInventoryController = require('./base-inventory.controller');
 const inventoryService = require('../services/index');
+const log = require("../../utils/log");
 
 class InventoryBulkController extends BaseInventoryController {
     constructor() {
@@ -41,7 +42,7 @@ class InventoryBulkController extends BaseInventoryController {
      */
     async quickAdd(req, res) {
 
-        console.log('🚀 Quick add request received:', {
+        log.debug('🚀 Quick add request received:', {
             storeId: req.params.storeId,
             itemsCount: req.body.items?.length || 0
         });
@@ -74,7 +75,7 @@ class InventoryBulkController extends BaseInventoryController {
             req.user
         );
 
-        console.log('✅ Quick add completed:', result.message);
+        log.debug('✅ Quick add completed:', result.message);
 
         this.sendSuccess(res, result.data, result.message);
 

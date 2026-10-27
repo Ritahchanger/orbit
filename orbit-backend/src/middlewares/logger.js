@@ -1,3 +1,4 @@
+const log = require("../utils/log");
 // middlewares/logger.js
 
 const logger = (req, res, next) => {
@@ -37,7 +38,7 @@ const logger = (req, res, next) => {
     const duration = Date.now() - start;
     const statusColor = getStatusColor(res.statusCode);
 
-    console.log(
+    log.debug(
       `${color.gray}[${formatTime()}]${color.reset} ` +
         `${color.cyan}${req.method}${color.reset} ` +
         `${color.magenta}${req.originalUrl}${color.reset} | ` +

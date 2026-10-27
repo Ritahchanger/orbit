@@ -3,6 +3,7 @@ const { findProductById, incrementProductFields } = require("../products");
 const Store = require("../stores/store.model");
 const StoreInventory = require("../store-inventory/store-inventory.model");
 const mongoose = require("mongoose");
+const log = require("../utils/log");
 
 // Record a new sale for a specific store (UPDATED for 3-model architecture)
 const recordSale = async (saleData) => {
@@ -153,7 +154,7 @@ const getDailySalesSummary = async (
   storeId = null,
   businessId,
 ) => {
-  console.log("DEBUG - Input date:", date, "Type:", typeof date);
+  log.debug("DEBUG - Input date:", date, "Type:", typeof date);
 
   // Handle date string input
   let queryDate;
@@ -184,7 +185,7 @@ const getDailySalesSummary = async (
     try {
       matchStage.storeId = new mongoose.Types.ObjectId(storeId);
     } catch (error) {
-      console.log("DEBUG - Invalid storeId format, skipping filter:", storeId);
+      log.debug("DEBUG - Invalid storeId format, skipping filter:", storeId);
     }
   }
 

@@ -2,6 +2,7 @@
 const GoogleAuthService = require("./google-auth.service");
 
 require("dotenv").config();
+const log = require("../../utils/log");
 
 class AuthController {
   loginFailed(req, res) {
@@ -42,7 +43,7 @@ class AuthController {
       });
     }
 
-    console.log(req.user);
+    log.debug(req.user);
 
     const responseData = GoogleAuthService.handleLoginSuccess(
       req.user,
@@ -54,14 +55,14 @@ class AuthController {
 
   // controllers/auth.controller.js
   async googleCallback(req, res) {
-    console.log("🔄 Google callback received");
+    log.debug("🔄 Google callback received");
   
     if (!req.user) {
       console.error("❌ No user in Google callback");
       return res.redirect(`${process.env.CLIENT_URL}/auth/login?error=no_user`);
     }
   
-    console.log("📋 Raw Google profile:", {
+    log.debug("📋 Raw Google profile:", {
       id: req.user.id,
       displayName: req.user.displayName,
       emails: req.user.emails,
@@ -70,7 +71,7 @@ class AuthController {
   
     const googleUser = await GoogleAuthService.findOrCreateGoogleUser(req.user);
   
-    console.log("✅ Google user processed:", {
+    log.debug("✅ Google user processed:", {
       userId: googleUser.user._id,
       email: googleUser.user.email,
       firstName: googleUser.user.firstName,
@@ -94,18 +95,18 @@ class AuthController {
       try {
         // Decode the URL-encoded state parameter
         const decodedState = decodeURIComponent(req.query.state);
-        console.log("🎯 Decoded state parameter:", decodedState);
+        log.debug("🎯 Decoded state parameter:", decodedState);
         
         // Check if this is a redirect URL from protected route
         if (decodedState.includes('/auth/login?redirect=')) {
           // Extract the actual destination from redirect parameter
           const urlParams = new URLSearchParams(decodedState.split('?')[1]);
           intendedPath = urlParams.get('redirect') || "/admin";
-          console.log("🎯 Extracted destination from redirect:", intendedPath);
+          log.debug("🎯 Extracted destination from redirect:", intendedPath);
         } else {
           // Use the state directly if it's not a redirect URL
           intendedPath = decodedState;
-          console.log("🎯 Using state as intended path:", intendedPath);
+          log.debug("🎯 Using state as intended path:", intendedPath);
         }
       } catch (error) {
         console.error("❌ Error decoding state parameter:", error);
@@ -114,7 +115,7 @@ class AuthController {
     // 2. Fallback to session
     else if (req.session?.intendedPath) {
       intendedPath = req.session.intendedPath;
-      console.log("🎯 Using intended path from session:", intendedPath);
+      log.debug("🎯 Using intended path from session:", intendedPath);
     }
   
     // Clean up session
@@ -133,7 +134,7 @@ class AuthController {
     // Build the final redirect URL
     const finalUrl = `${process.env.CLIENT_URL}${intendedPath}?token=${googleUser.token}`;
   
-    console.log("🔗 Redirecting to:", finalUrl);
+    log.debug("🔗 Redirecting to:", finalUrl);
   
     return res.redirect(finalUrl);
   }
