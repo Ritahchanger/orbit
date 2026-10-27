@@ -53,7 +53,6 @@ import AdminEcommerceInvoiceDetail from "../admin-ecommerce/invoices/pages/Admin
 import AdminEcommerceCustomers from "../admin-ecommerce/customers/pages/AdminEcommerceCustomers";
 import AdminEcommerceCustomerDetail from "../admin-ecommerce/customers/pages/AdminEcommerceCustomerDetail";
 
-// import AdminCategoriesPage from "../admin-pages/admin-categories/pages/AdminCategories";
 
 // Hook to use role-based route protection
 export const useRouteAccess = () => {
@@ -160,11 +159,6 @@ export const protectedRoutes = withEnabledFeatures([
     element: <AdminWorkers />,
     roles: ["superadmin"],
   },
-  // {
-  //   path: "/admin/categories",
-  //   element: <AdminCategoriesPage />,
-  //   roles: ["superadmin","admin","manager"],
-  // },
   {
     path: "/admin/transactions",
     element: <AdminTransactions />,

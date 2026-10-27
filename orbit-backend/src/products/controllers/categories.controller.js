@@ -5,8 +5,6 @@ class CategoriesController {
   async getAll(req, res) {
     
     const businessId = req.businessId; // Get businessId from request (set by auth middleware)
-
-    console.log("Fetching categories for businessId:", businessId);
     const categories = await CategoryService.getAll(businessId);
     res.status(200).json({ success: true, data: categories });
   }
@@ -14,7 +12,7 @@ class CategoriesController {
   // GET /categories/:id
   async getById(req, res) {
     const { id } = req.params;
-    const category = await CategoryService.getById(id);
+    const category = await CategoryService.getById(id, req.businessId);
     res.status(200).json({ success: true, data: category });
   }
 
@@ -31,14 +29,18 @@ class CategoriesController {
   async update(req, res) {
     const { id } = req.params;
     const data = req.body;
-    const updatedCategory = await CategoryService.update(id, data);
+    const updatedCategory = await CategoryService.update(
+      id,
+      req.businessId,
+      data,
+    );
     res.status(200).json({ success: true, data: updatedCategory });
   }
 
   // DELETE /categories/:id
   async delete(req, res) {
     const { id } = req.params;
-    const result = await CategoryService.delete(id);
+    const result = await CategoryService.delete(id, req.businessId);
     res.status(200).json(result);
   }
 }
