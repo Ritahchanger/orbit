@@ -1,6 +1,19 @@
 // controllers/analysis.controller.js
 const globalAnalysisService = require("../services/global-product-analysis");
 const storeAnalysisService = require("../services/store-inventory-analysis");
+const mongoose = require("mongoose");
+
+// Optional ?storeId= narrows the global analytics to one store. Returns null
+// for "all stores", or sends a 400 and returns false for a malformed id.
+const readStoreFilter = (req, res) => {
+  const { storeId } = req.query;
+  if (!storeId || storeId === "global") return null;
+  if (!mongoose.isValidObjectId(storeId)) {
+    res.status(400).json({ success: false, message: "Invalid storeId" });
+    return false;
+  }
+  return storeId;
+};
 
 class AnalysisController {
   // ─── Global Analysis ──────────────────────────────────────────────────────
@@ -13,30 +26,47 @@ class AnalysisController {
 
   async getGlobalInventorySummary(req, res) {
     const { businessId } = req;
-    const data = await globalAnalysisService.getInventorySummary(businessId);
+    const storeId = readStoreFilter(req, res);
+    if (storeId === false) return;
+    const data = await globalAnalysisService.getInventorySummary(
+      businessId,
+      storeId,
+    );
     res.json({ success: true, data });
   }
 
   async getGlobalLowStockAlerts(req, res) {
     const { businessId } = req;
-    const data =
-      await globalAnalysisService.getGlobalLowStockAlerts(businessId);
+    const storeId = readStoreFilter(req, res);
+    if (storeId === false) return;
+    const data = await globalAnalysisService.getGlobalLowStockAlerts(
+      businessId,
+      storeId,
+    );
     res.json(data);
   }
 
   async getTopProductsGlobal(req, res) {
     const { businessId } = req;
+    const storeId = readStoreFilter(req, res);
+    if (storeId === false) return;
     const limit = parseInt(req.query.limit) || 10;
     const data = await globalAnalysisService.getTopProductsByRevenue(
       limit,
       businessId,
+      storeId,
     );
     res.json({ success: true, data });
   }
 
   async getCategoryPerformance(req, res) {
     const { businessId } = req;
-    const data = await globalAnalysisService.getCategoryPerformance(businessId);
+    const storeId = readStoreFilter(req, res);
+    if (storeId === false) return;
+    const data = await globalAnalysisService.getCategoryPerformance(
+      businessId,
+      storeId,
+    );
     res.json({ success: true, data });
   }
 

@@ -1,4 +1,52 @@
+const mongoose = require("mongoose");
 const Product = require("../../products/products.model");
+const StoreInventory = require("../../store-inventory/store-inventory.model");
+
+// Turns one store's StoreInventory rows into documents shaped like Product,
+// with that store's stock and sales in place of the business-wide totals, so
+// the same aggregations can report on a single store.
+const storeProductStages = (storeId, businessId) => [
+  {
+    $match: {
+      store: new mongoose.Types.ObjectId(String(storeId)),
+      businessId: new mongoose.Types.ObjectId(String(businessId)),
+    },
+  },
+  {
+    $lookup: {
+      from: "products",
+      localField: "product",
+      foreignField: "_id",
+      as: "product",
+    },
+  },
+  { $unwind: "$product" },
+  {
+    $replaceRoot: {
+      newRoot: {
+        $mergeObjects: [
+          "$product",
+          {
+            stock: "$stock",
+            minStock: "$minStock",
+            totalSold: "$storeSold",
+            totalRevenue: "$storeRevenue",
+            status: "$status",
+          },
+        ],
+      },
+    },
+  },
+];
+
+// Product documents for the whole business, or for one store when storeId is set.
+const productSource = (businessId, storeId, stages) =>
+  storeId
+    ? StoreInventory.aggregate([
+        ...storeProductStages(storeId, businessId),
+        ...stages,
+      ])
+    : Product.aggregate([{ $match: { businessId } }, ...stages]);
 
 class GlobalProductAnalysisService {
   async getDashboardOverview(businessId) {
@@ -27,9 +75,8 @@ class GlobalProductAnalysisService {
   }
 
   // ─── Inventory Summary ──────────────────────────────────────────────────────
-  async getInventorySummary(businessId) {
-    const results = await Product.aggregate([
-      { $match: { businessId } },
+  async getInventorySummary(businessId, storeId = null) {
+    const results = await productSource(businessId, storeId, [
       {
         $group: {
           _id: null,
@@ -110,14 +157,24 @@ class GlobalProductAnalysisService {
   // ─── Top Products ───────────────────────────────────────────────────────────
   // Fixed: businessId was missing from signature and body used Product.find
   // inconsistently — unified to .find() with explicit businessId scoping
-  async getTopProductsByRevenue(limit = 10, businessId) {
-    const products = await Product.find({ businessId })
-      .sort({ totalRevenue: -1 })
-      .limit(limit)
-      .select(
-        "name sku price costPrice stock totalSold totalRevenue status category",
-      )
-      .lean();
+  async getTopProductsByRevenue(limit = 10, businessId, storeId = null) {
+    const fields =
+      "name sku price costPrice stock totalSold totalRevenue status category";
+    const products = storeId
+      ? await productSource(businessId, storeId, [
+          { $sort: { totalRevenue: -1 } },
+          { $limit: limit },
+          {
+            $project: Object.fromEntries(
+              ["_id", ...fields.split(" ")].map((f) => [f, 1]),
+            ),
+          },
+        ])
+      : await Product.find({ businessId })
+          .sort({ totalRevenue: -1 })
+          .limit(limit)
+          .select(fields)
+          .lean();
 
     return products.map((p) => ({
       ...p,
@@ -132,9 +189,8 @@ class GlobalProductAnalysisService {
 
   // ─── Category Performance ───────────────────────────────────────────────────
   // Fixed: businessId was missing from signature
-  async getCategoryPerformance(businessId) {
-    return Product.aggregate([
-      { $match: { businessId } },
+  async getCategoryPerformance(businessId, storeId = null) {
+    return productSource(businessId, storeId, [
       {
         $group: {
           _id: "$category",
@@ -180,18 +236,29 @@ class GlobalProductAnalysisService {
 
   // ─── Low Stock Alerts ───────────────────────────────────────────────────────
   // Fixed: businessId was missing from signature
-  async getGlobalLowStockAlerts(businessId) {
-    const lowStockProducts = await Product.find({
-      businessId,
-      $expr: { $lte: ["$stock", "$minStock"] },
-      status: { $in: ["active", "Low Stock", "In Stock"] },
-    })
-      .sort({ stock: 1 })
-      .limit(50)
-      .select(
-        "name sku stock minStock price costPrice category brand totalSold status productType lastRestock",
-      )
-      .lean();
+  async getGlobalLowStockAlerts(businessId, storeId = null) {
+    const fields =
+      "name sku stock minStock price costPrice category brand totalSold status productType lastRestock";
+    const lowStockProducts = storeId
+      ? await productSource(businessId, storeId, [
+          { $match: { $expr: { $lte: ["$stock", "$minStock"] } } },
+          { $sort: { stock: 1 } },
+          { $limit: 50 },
+          {
+            $project: Object.fromEntries(
+              ["_id", ...fields.split(" ")].map((f) => [f, 1]),
+            ),
+          },
+        ])
+      : await Product.find({
+          businessId,
+          $expr: { $lte: ["$stock", "$minStock"] },
+          status: { $in: ["active", "Low Stock", "In Stock"] },
+        })
+          .sort({ stock: 1 })
+          .limit(50)
+          .select(fields)
+          .lean();
 
     const summary = {
       totalAlerts: lowStockProducts.length,
@@ -392,9 +459,6 @@ class GlobalProductAnalysisService {
 
   // ─── Per-Store Inventory Breakdown ─────────────────────────────────────────
   async getStoreInventoryBreakdown(businessId) {
-    const mongoose = require("mongoose");
-    const StoreInventory = require("../../store-inventory/store-inventory.model");
-
     const bizId = new mongoose.Types.ObjectId(businessId);
 
     return StoreInventory.aggregate([
