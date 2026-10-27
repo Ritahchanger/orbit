@@ -805,6 +805,7 @@ class ReportService {
       const {
         startDate,
         endDate,
+        storeId,
         sortBy = "totalRevenue",
         sortOrder = "desc",
       } = filters;
@@ -819,6 +820,10 @@ class ReportService {
           $gte: new Date(startDate),
           $lte: new Date(endDate),
         };
+      }
+
+      if (storeId && mongoose.isValidObjectId(storeId)) {
+        matchStage.storeId = new mongoose.Types.ObjectId(storeId);
       }
 
       const storePerformance = await Sale.aggregate([

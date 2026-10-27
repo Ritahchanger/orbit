@@ -20,8 +20,10 @@ const productAnalysisApi = {
      * 2. Global Inventory Health Summary
      * GET //products-analysis/global/inventory-summary
      */
-    getGlobalInventorySummary: async () => {
-        const response = await api.get("/products-analysis/global/inventory-summary");
+    getGlobalInventorySummary: async (storeId = null) => {
+        const response = await api.get("/products-analysis/global/inventory-summary", {
+            params: storeId ? { storeId } : {}
+        });
         return response.data;
     },
 
@@ -29,9 +31,9 @@ const productAnalysisApi = {
      * 3. Global Top Performing Products
      * GET //products-analysis/global/top-products
      */
-    getGlobalTopProducts: async (limit = 10) => {
+    getGlobalTopProducts: async (limit = 10, storeId = null) => {
         const response = await api.get("/products-analysis/global/top-products", {
-            params: { limit }
+            params: storeId ? { limit, storeId } : { limit }
         });
         return response.data;
     },
@@ -40,8 +42,10 @@ const productAnalysisApi = {
      * 4. Global Category Performance
      * GET //products-analysis/global/category-performance
      */
-    getGlobalCategoryPerformance: async () => {
-        const response = await api.get("/products-analysis/global/category-performance");
+    getGlobalCategoryPerformance: async (storeId = null) => {
+        const response = await api.get("/products-analysis/global/category-performance", {
+            params: storeId ? { storeId } : {}
+        });
         return response.data;
     },
 
@@ -49,8 +53,10 @@ const productAnalysisApi = {
      * 5. Global Low Stock Alerts (Optional)
      * GET //products-analysis/global/low-stock-alerts
      */
-    getGlobalLowStockAlerts: async () => {
-        const response = await api.get("/products-analysis/global/low-stock-alerts");
+    getGlobalLowStockAlerts: async (storeId = null) => {
+        const response = await api.get("/products-analysis/global/low-stock-alerts", {
+            params: storeId ? { storeId } : {}
+        });
         return response.data;
     },
 

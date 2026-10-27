@@ -35,6 +35,10 @@ export const productAnalysisKeys = {
 
 // ============ GLOBAL ANALYSIS QUERIES ============
 
+// The global hooks accept an optional storeId in options to narrow the
+// figures to one store; the key only gains a suffix when one is set.
+const withStore = (key, storeId) => (storeId ? [...key, { storeId }] : key);
+
 /**
  * Global Dashboard Overview
  */
@@ -51,10 +55,10 @@ export const useGlobalDashboard = (options = {}) => {
 /**
  * Global Inventory Health Summary
  */
-export const useGlobalInventorySummary = (options = {}) => {
+export const useGlobalInventorySummary = ({ storeId = null, ...options } = {}) => {
     return useQuery({
-        queryKey: productAnalysisKeys.global.inventorySummary(),
-        queryFn: () => productAnalysisApi.getGlobalInventorySummary(),
+        queryKey: withStore(productAnalysisKeys.global.inventorySummary(), storeId),
+        queryFn: () => productAnalysisApi.getGlobalInventorySummary(storeId),
         staleTime: 5 * 60 * 1000,
         gcTime: 10 * 60 * 1000,
         ...options,
@@ -65,10 +69,10 @@ export const useGlobalInventorySummary = (options = {}) => {
  * Global Top Performing Products
  * @param {number} limit - Number of products to return
  */
-export const useGlobalTopProducts = (limit = 10, options = {}) => {
+export const useGlobalTopProducts = (limit = 10, { storeId = null, ...options } = {}) => {
     return useQuery({
-        queryKey: productAnalysisKeys.global.topProducts(limit),
-        queryFn: () => productAnalysisApi.getGlobalTopProducts(limit),
+        queryKey: withStore(productAnalysisKeys.global.topProducts(limit), storeId),
+        queryFn: () => productAnalysisApi.getGlobalTopProducts(limit, storeId),
         staleTime: 2 * 60 * 1000, // 2 minutes
         gcTime: 5 * 60 * 1000,
         ...options,
@@ -78,10 +82,10 @@ export const useGlobalTopProducts = (limit = 10, options = {}) => {
 /**
  * Global Category Performance
  */
-export const useGlobalCategoryPerformance = (options = {}) => {
+export const useGlobalCategoryPerformance = ({ storeId = null, ...options } = {}) => {
     return useQuery({
-        queryKey: productAnalysisKeys.global.categoryPerformance(),
-        queryFn: () => productAnalysisApi.getGlobalCategoryPerformance(),
+        queryKey: withStore(productAnalysisKeys.global.categoryPerformance(), storeId),
+        queryFn: () => productAnalysisApi.getGlobalCategoryPerformance(storeId),
         staleTime: 15 * 60 * 1000, // 15 minutes
         gcTime: 30 * 60 * 1000,
         ...options,
@@ -91,10 +95,10 @@ export const useGlobalCategoryPerformance = (options = {}) => {
 /**
  * Global Low Stock Alerts (Optional)
  */
-export const useGlobalLowStockAlerts = (options = {}) => {
+export const useGlobalLowStockAlerts = ({ storeId = null, ...options } = {}) => {
     return useQuery({
-        queryKey: productAnalysisKeys.global.lowStockAlerts(),
-        queryFn: () => productAnalysisApi.getGlobalLowStockAlerts(),
+        queryKey: withStore(productAnalysisKeys.global.lowStockAlerts(), storeId),
+        queryFn: () => productAnalysisApi.getGlobalLowStockAlerts(storeId),
         staleTime: 3 * 60 * 1000, // 3 minutes
         gcTime: 5 * 60 * 1000,
         ...options,

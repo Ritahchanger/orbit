@@ -145,6 +145,7 @@ class ReportController {
     const {
       startDate,
       endDate,
+      storeId,
       sortBy = "totalRevenue",
       sortOrder = "desc",
     } = req.query;
@@ -152,6 +153,7 @@ class ReportController {
     const filters = {
       startDate,
       endDate,
+      storeId,
       sortBy,
       sortOrder,
     };

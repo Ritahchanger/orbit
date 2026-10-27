@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import AdminLayout from "../../dashboard/layout/Layout";
 import ChartWrapper from "../components/Charts/ChartWrapper";
@@ -16,6 +17,7 @@ import {
     useStorePerformanceReport,
     usePaymentMethodAnalysis,
 } from "../../hooks/reports.hooks";
+import { useStores } from "../../hooks/store-hook";
 
 import {
     TrendingUp,
@@ -129,21 +131,23 @@ const EmptyState = ({ message = "No data available for this period" }) => (
 // ─────────────────────────────────────────────────────────────────────────────
 // Sales Overview Tab
 // ─────────────────────────────────────────────────────────────────────────────
-const SalesOverviewTab = ({ timeRange, chartType }) => {
+const SalesOverviewTab = ({ timeRange, chartType, storeId, store }) => {
     const dateFilters = useMemo(() => getDateRange(timeRange), [timeRange]);
     const trendPeriod = getTrendPeriod(timeRange);
+    // The report hooks treat "global" as all stores
+    const scope = storeId || "global";
 
-    const { data: dashData, isLoading: dashLoading } = useDashboardStats("global");
+    const { data: dashData, isLoading: dashLoading } = useDashboardStats(scope);
     const { data: trendData, isLoading: trendLoading } = useSalesTrendReport(
         trendPeriod,
-        { storeId: "global", ...dateFilters }
+        { storeId: scope, ...dateFilters }
     );
     const { data: storeData, isLoading: storeLoading } = useStorePerformanceReport({
-        storeId: "global",
+        storeId: scope,
         ...dateFilters,
     });
     const { data: pmData, isLoading: pmLoading } = usePaymentMethodAnalysis({
-        storeId: "global",
+        storeId: scope,
         ...dateFilters,
     });
 
@@ -355,14 +359,24 @@ const SalesOverviewTab = ({ timeRange, chartType }) => {
 
             {/* Secondary KPIs */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <KpiCard
-                    label="Active Stores"
-                    value={fmtNum(overview.totalStores)}
-                    sub="Across this business"
-                    icon={Store}
-                    accent="cyan"
-                    loading={dashLoading}
-                />
+                {store ? (
+                    <KpiCard
+                        label="Store"
+                        value={store.name}
+                        sub={store.code ? `Code ${store.code}` : "Selected store"}
+                        icon={Store}
+                        accent="cyan"
+                    />
+                ) : (
+                    <KpiCard
+                        label="Active Stores"
+                        value={fmtNum(overview.totalStores)}
+                        sub="Across this business"
+                        icon={Store}
+                        accent="cyan"
+                        loading={dashLoading}
+                    />
+                )}
                 <KpiCard
                     label="Monthly Profit"
                     value={fmt(month.profit)}
@@ -403,7 +417,7 @@ const SalesOverviewTab = ({ timeRange, chartType }) => {
                     {trendLoading ? (
                         <div className="h-full bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
                     ) : salesTrendConfig ? (
-                        <ChartWrapper key={`trend-${timeRange}-${chartType}`} {...salesTrendConfig} />
+                        <ChartWrapper key={`trend-${timeRange}-${chartType}-${scope}`} {...salesTrendConfig} />
                     ) : (
                         <EmptyState />
                     )}
@@ -412,6 +426,7 @@ const SalesOverviewTab = ({ timeRange, chartType }) => {
 
             {/* Store Performance + Payment Methods */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {!storeId && (
                 <div className="lg:col-span-2">
                     <SectionShell
                         title="Store Performance"
@@ -433,8 +448,9 @@ const SalesOverviewTab = ({ timeRange, chartType }) => {
                         </div>
                     </SectionShell>
                 </div>
+                )}
 
-                <div className="lg:col-span-1">
+                <div className={storeId ? "lg:col-span-3" : "lg:col-span-1"}>
                     <SectionShell
                         title="Payment Methods"
                         subtitle="Revenue by payment channel"
@@ -443,7 +459,7 @@ const SalesOverviewTab = ({ timeRange, chartType }) => {
                             {pmLoading ? (
                                 <div className="h-full bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
                             ) : pmChartConfig ? (
-                                <ChartWrapper key={`pm-${timeRange}`} {...pmChartConfig} />
+                                <ChartWrapper key={`pm-${timeRange}-${scope}`} {...pmChartConfig} />
                             ) : (
                                 <EmptyState />
                             )}
@@ -481,8 +497,8 @@ const SalesOverviewTab = ({ timeRange, chartType }) => {
             {/* Store Performance Table */}
             {stores.length > 0 && (
                 <SectionShell
-                    title="Store Performance Breakdown"
-                    subtitle="Detailed per-store metrics"
+                    title={store ? "Store Summary" : "Store Performance Breakdown"}
+                    subtitle={store ? `Sales metrics for ${store.name} in the selected period` : "Detailed per-store metrics"}
                 >
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm">
@@ -527,7 +543,7 @@ const SalesOverviewTab = ({ timeRange, chartType }) => {
             {recentSales.length > 0 && (
                 <SectionShell
                     title="Recent Transactions"
-                    subtitle="Latest sales across all stores"
+                    subtitle={store ? `Latest sales at ${store.name}` : "Latest sales across all stores"}
                     action={
                         <span className="text-xs text-gray-500 dark:text-gray-400">
                             {recentSales.length} entries
@@ -578,11 +594,11 @@ const SalesOverviewTab = ({ timeRange, chartType }) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // Inventory Tab (existing logic preserved)
 // ─────────────────────────────────────────────────────────────────────────────
-const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart }) => {
-    const { data: inventorySummary, isLoading: inventoryLoading } = useGlobalInventorySummary();
-    const { data: topProductsData, isLoading: topProductsLoading } = useGlobalTopProducts(10);
-    const { data: categoryData, isLoading: categoryLoading } = useGlobalCategoryPerformance();
-    const { data: lowStockData } = useGlobalLowStockAlerts();
+const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, storeId, store }) => {
+    const { data: inventorySummary, isLoading: inventoryLoading } = useGlobalInventorySummary({ storeId });
+    const { data: topProductsData, isLoading: topProductsLoading } = useGlobalTopProducts(10, { storeId });
+    const { data: categoryData, isLoading: categoryLoading } = useGlobalCategoryPerformance({ storeId });
+    const { data: lowStockData } = useGlobalLowStockAlerts({ storeId });
     const { data: storeInventoryData, isLoading: storeInventoryLoading } = useGlobalStoresInventory();
 
     const inventoryStats = useMemo(() => {
@@ -626,7 +642,10 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart })
 
     const lowStockAlerts = useMemo(() => (lowStockData?.products || []).slice(0, 5), [lowStockData]);
 
-    const storeInventories = storeInventoryData?.data || [];
+    const storeInventories = useMemo(() => {
+        const rows = storeInventoryData?.data || [];
+        return storeId ? rows.filter((s) => String(s.storeId) === storeId) : rows;
+    }, [storeInventoryData, storeId]);
 
     // Per-store inventory bar chart
     const storeInventoryChartConfig = useMemo(() => {
@@ -838,24 +857,28 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart })
 
             {/* ── Global Inventory by Store ──────────────────────────────── */}
             <SectionShell
-                title="Inventory by Store"
-                subtitle="Stock value and unit count per store across the entire business"
+                title={store ? "Store Inventory" : "Inventory by Store"}
+                subtitle={store ? `Stock value and counts for ${store.name}` : "Stock value and unit count per store across the entire business"}
                 action={
-                    <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-1 rounded-sm">
-                        {storeInventories.length} stores
-                    </span>
+                    !store && (
+                        <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-1 rounded-sm">
+                            {storeInventories.length} stores
+                        </span>
+                    )
                 }
             >
                 {storeInventoryLoading ? (
                     <div className="h-64 bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
                 ) : storeInventoryChartConfig ? (
                     <>
-                        <div className="h-64">
-                            <ChartWrapper key={`store-inv-${timeRange}`} {...storeInventoryChartConfig} />
-                        </div>
+                        {!store && (
+                            <div className="h-64 mb-4">
+                                <ChartWrapper key={`store-inv-${timeRange}`} {...storeInventoryChartConfig} />
+                            </div>
+                        )}
 
                         {/* Per-store breakdown table */}
-                        <div className="mt-4 overflow-x-auto">
+                        <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead>
                                     <tr className="border-b border-gray-200 dark:border-gray-700">
@@ -915,7 +938,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart })
                         {categoryLoading ? (
                             <div className="h-full bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
                         ) : categoryStockChartConfig ? (
-                            <ChartWrapper key="cat-stock" {...categoryStockChartConfig} />
+                            <ChartWrapper key={`cat-stock-${storeId || "global"}`} {...categoryStockChartConfig} />
                         ) : (
                             <EmptyState />
                         )}
@@ -960,6 +983,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart })
 
             {/* Top Products + Category */}
             <TopProductsComponent
+                key={storeId || "global"}
                 showFullChart={showFullChart === "topProducts"}
                 topProductsChartConfig={topProductsChartConfig}
                 chartType={chartType}
@@ -973,7 +997,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart })
                 <div className="lg:col-span-1">
                     <SectionShell title="Inventory Status" action={<span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-1 rounded-sm">Stock Levels</span>}>
                         <div className="h-64">
-                            <ChartWrapper key={`inv-health-${timeRange}`} {...inventoryHealthChartConfig} />
+                            <ChartWrapper key={`inv-health-${timeRange}-${storeId || "global"}`} {...inventoryHealthChartConfig} />
                         </div>
                         <div className="grid grid-cols-3 gap-4 mt-4">
                             <div className="text-center">
@@ -1067,6 +1091,28 @@ const AdminAnalytics = () => {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [showFullChart, setShowFullChart] = useState(null);
 
+    // Selected store lives in the URL (?store=<id>) so a filtered view can be
+    // bookmarked or shared. Until the store list loads the requested id is used
+    // as-is; after that, ids that aren't in the user's store list are ignored.
+    const [searchParams, setSearchParams] = useSearchParams();
+    const { data: storesData, isSuccess: storesLoaded } = useStores();
+    const stores = useMemo(() => storesData?.data || [], [storesData]);
+    const requestedStoreId = searchParams.get("store");
+    const selectedStore = stores.find((s) => s._id === requestedStoreId) || null;
+    const storeId = storesLoaded ? selectedStore?._id || null : requestedStoreId;
+
+    const handleStoreChange = (value) => {
+        setSearchParams(
+            (prev) => {
+                const next = new URLSearchParams(prev);
+                if (value) next.set("store", value);
+                else next.delete("store");
+                return next;
+            },
+            { replace: true },
+        );
+    };
+
     const timeRangeOptions = [
         { value: "7d", label: "Last 7 days" },
         { value: "30d", label: "Last 30 days" },
@@ -1099,7 +1145,9 @@ const AdminAnalytics = () => {
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
                         <p className="text-gray-500 dark:text-gray-400 mt-0.5 text-sm">
-                            Global analytics across all stores of this business
+                            {selectedStore
+                                ? `Analytics for ${selectedStore.name}`
+                                : "Global analytics across all stores of this business"}
                         </p>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
@@ -1129,6 +1177,24 @@ const AdminAnalytics = () => {
 
                     {/* Controls */}
                     <div className="flex items-center gap-2 flex-wrap">
+                        {/* Store */}
+                        <div className="relative">
+                            <Store className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+                            <select
+                                value={storeId || ""}
+                                onChange={(e) => handleStoreChange(e.target.value)}
+                                aria-label="Filter by store"
+                                className="appearance-none bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm pl-9 pr-7 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[14rem] truncate"
+                            >
+                                <option value="">All stores</option>
+                                {stores.map((s) => (
+                                    <option key={s._id} value={s._id}>
+                                        {s.name}{s.code ? ` (${s.code})` : ""}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
                         {/* Time range */}
                         <div className="relative">
                             <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -1171,13 +1237,20 @@ const AdminAnalytics = () => {
 
                 {/* Tab content */}
                 {activeTab === "sales" ? (
-                    <SalesOverviewTab timeRange={timeRange} chartType={chartType} />
+                    <SalesOverviewTab
+                        timeRange={timeRange}
+                        chartType={chartType}
+                        storeId={storeId}
+                        store={selectedStore}
+                    />
                 ) : (
                     <InventoryTab
                         timeRange={timeRange}
                         chartType={chartType}
                         showFullChart={showFullChart}
                         setShowFullChart={setShowFullChart}
+                        storeId={storeId}
+                        store={selectedStore}
                     />
                 )}
 
