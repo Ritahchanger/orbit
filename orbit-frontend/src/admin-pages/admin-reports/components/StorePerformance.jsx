@@ -315,7 +315,7 @@ const StorePerformance = () => {
   if (storesLoading) {
     return (
       <div className="flex justify-center py-8">
-        <div className="animate-spin rounded-sm h-8 w-8 border-b-2 border-primary-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
       </div>
     );
   }
@@ -375,7 +375,7 @@ const StorePerformance = () => {
           >
             {analyzeDashboard.isPending || aiAnalysisTriggered ? (
               <>
-                <div className="animate-spin rounded-sm h-4 w-4 border-2 border-white border-t-transparent"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                 <span className="font-semibold text-sm">Analyzing...</span>
               </>
             ) : (

@@ -22,14 +22,15 @@ const App = () => {
             background: '#ffffff',
             color: '#1f2937',
             border: '1px solid #e5e7eb',
-            borderRadius: '0.125rem'
+            borderRadius: 'var(--radius-lg)',
+            padding: '10px 14px'
           },
           success: {
             style: {
               background: '#f0fdf4',
               color: '#166534',
               border: '1px solid #bbf7d0',
-              borderRadius: '0.125rem'
+              borderRadius: 'var(--radius-lg)'
             },
             iconTheme: {
               primary: '#16a34a',
@@ -41,7 +42,7 @@ const App = () => {
               background: '#fef2f2',
               color: '#991b1b',
               border: '1px solid #fecaca',
-              borderRadius: '0.125rem'
+              borderRadius: 'var(--radius-lg)'
             },
             iconTheme: {
               primary: '#dc2626',
@@ -53,7 +54,7 @@ const App = () => {
               background: '#f8fafc',
               color: '#475569',
               border: '1px solid #cbd5e1',
-              borderRadius: '0.125rem'
+              borderRadius: 'var(--radius-lg)'
             },
           },
         }}

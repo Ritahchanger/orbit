@@ -325,7 +325,7 @@ const GamingProductModal = () => {
                         {loading ? (
                             <div className="flex items-center justify-center py-20">
                                 <div className="relative">
-                                    <div className="w-16 h-16 border-4 border-primary/30 rounded-sm animate-spin" />
+                                    <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
                                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                         <Gamepad2 className="text-primary animate-pulse" size={24} />
                                     </div>

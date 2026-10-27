@@ -478,7 +478,7 @@ const MPesaPaymentModal = ({
         return (
           <div className="flex flex-col items-center justify-center py-10">
             <div className="relative">
-              <div className="w-24 h-24 border-4 border-emerald-200 rounded-sm animate-spin mb-6"></div>
+              <div className="w-24 h-24 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mb-6"></div>
               <div className="absolute inset-0 flex items-center justify-center">
                 <Loader className="w-10 h-10 text-emerald-600 animate-pulse" />
               </div>

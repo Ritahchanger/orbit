@@ -310,7 +310,7 @@ const Navbar = () => {
               </div>
 
               {/* <button
-                className="bg-blue-500 px-3 py-1 rounded-[2px]"
+                className="bg-blue-500 px-3 py-1 rounded-sm"
                 onClick={() => {
                   navigate("/admin/dashboard");
                 }}
