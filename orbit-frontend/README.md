@@ -96,7 +96,7 @@ src/
 
 ### Routes and roles
 
-All routes live in `src/config/routes.config.jsx`. Each admin route lists the roles that may open it (`cashier`, `manager`, `admin`, `superadmin`), and `App.jsx` wraps those routes in `ProtectedRoute`. To add a page, add its route there and, if it should appear in the admin menu, an entry in `src/admin-pages/dashboard/layout/data.jsx`.
+All routes live in `src/config/routes.config.jsx`. Each admin route lists the roles that may open it (`cashier`, `manager`, `admin`, `superadmin`), and `App.jsx` wraps those routes in `ProtectedRoute`. Pages that appear in the admin menu take their roles from `src/config/routeRoles.js`, which both the route and the menu read, so the menu only offers pages the user can open. To add a menu page, add its roles to `ROUTE_ROLES`, its route (using `ROUTE_ROLES[path]`), and an entry in `navItems` in `src/admin-pages/dashboard/layout/data.jsx`.
 
 ### Choosing a store
 

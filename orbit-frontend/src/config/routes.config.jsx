@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { withEnabledFeatures } from "./features";
+import { ROUTE_ROLES } from "./routeRoles";
 // routes/appRoutes.js
 import { useSimpleRolePermissionCheck } from "../context/RolePermissionContext";
 // Public Components
@@ -109,14 +110,14 @@ export const protectedRoutes = withEnabledFeatures([
   {
     path: "/admin/dashboard",
     element: <AdminDashboard />,
-    roles: ["manager", "admin", "superadmin", "cashier"],
+    roles: ROUTE_ROLES["/admin/dashboard"],
   },
 
   // Products (manager, admin, superadmin, cashier)
   {
     path: "/admin/products",
     element: <AdminProducts />,
-    roles: ["manager", "admin", "superadmin", "cashier"],
+    roles: ROUTE_ROLES["/admin/products"],
   },
   {
     path: "/admin/products/:productId",
@@ -128,7 +129,7 @@ export const protectedRoutes = withEnabledFeatures([
   {
     path: "/admin/stock-transfers",
     element: <AdminStockTransfers />,
-    roles: ["admin", "superadmin"],
+    roles: ROUTE_ROLES["/admin/stock-transfers"],
   },
   // Old misspelled URL, kept so existing bookmarks still work
   {
@@ -157,12 +158,12 @@ export const protectedRoutes = withEnabledFeatures([
   {
     path: "/admin/workers",
     element: <AdminWorkers />,
-    roles: ["superadmin", "admin"],
+    roles: ROUTE_ROLES["/admin/workers"],
   },
   {
     path: "/admin/transactions",
     element: <AdminTransactions />,
-    roles: ["superadmin", "admin", "manager", "cashier"],
+    roles: ROUTE_ROLES["/admin/transactions"],
   },
   {
     path: "/admin/logs",
@@ -178,7 +179,7 @@ export const protectedRoutes = withEnabledFeatures([
   {
     path: "/admin/newsletter",
     element: <AdminNewsletter />,
-    roles: ["superadmin"],
+    roles: ROUTE_ROLES["/admin/newsletter"],
     feature: "newsletter",
   },
 
@@ -186,14 +187,14 @@ export const protectedRoutes = withEnabledFeatures([
   {
     path: "/admin/analytics",
     element: <AdminAnalytics />,
-    roles: ["superadmin"],
+    roles: ROUTE_ROLES["/admin/analytics"],
   },
 
   // Consultation (superadmin only)
   {
     path: "/admin/consultation-setup",
     element: <AdminConsultation />,
-    roles: ["superadmin"],
+    roles: ROUTE_ROLES["/admin/consultation-setup"],
     feature: "consultations",
   },
   {
@@ -249,12 +250,12 @@ export const protectedRoutes = withEnabledFeatures([
   {
     path: "/admin/inventory",
     element: <AdminInventory />,
-    roles: ["admin", "superadmin", "manager", "cashier"],
+    roles: ROUTE_ROLES["/admin/inventory"],
   },
   {
     path: "/admin/reports",
     element: <AdminReports />,
-    roles: ["admin", "superadmin", "manager"],
+    roles: ROUTE_ROLES["/admin/reports"],
   },
   {
     path: "/admin/profile",

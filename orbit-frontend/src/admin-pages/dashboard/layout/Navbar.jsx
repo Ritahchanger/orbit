@@ -1,23 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import {
-  Search,
-  Menu,
-  X,
-  ChevronDown,
-  Plus,
-  ShoppingBag,
-  FileText,
-  Shield,
-} from "lucide-react";
+import { Search, Menu, X, ChevronDown, Plus, ShoppingBag } from "lucide-react";
 
 import { useAuth } from "../../../context/authentication/AuthenticationContext";
 
 import { useStoreContext } from "../../../context/store/StoreContext";
 
-import { getAllowedNavItems } from "./data";
+import { getAllowedNavItems, isNavItemActive } from "./data";
+
+import NavItemLink from "./NavItemLink";
 
 import { useDispatch } from "react-redux";
 
@@ -58,22 +51,27 @@ const AdminNavbar = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [allowedNavItems, setAllowedNavItems] = useState([]);
-  const [openDropdown, setOpenDropdown] = useState(null);
 
-  // Toggle specific dropdown
-  const toggleDropdown = (dropdownName) => {
-    if (openDropdown === dropdownName) {
-      setOpenDropdown(null);
-    } else {
-      setOpenDropdown(dropdownName);
-      setShowNotifications(false);
-      setShowUserMenu(false);
-    }
-  };
+  const allowedNavItems = useMemo(
+    () => getAllowedNavItems(userRole),
+    [userRole],
+  );
+  const canUsePos = userRole === "superadmin" || userRole === "admin";
+
+  // Escape closes the user menu and the mobile menu
+  useEffect(() => {
+    if (!showUserMenu && !isMobileMenuOpen) return undefined;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setShowUserMenu(false);
+        setIsMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [showUserMenu, isMobileMenuOpen]);
 
   // Handle store switching
   const handleStoreSwitch = (storeId) => {
@@ -81,14 +79,6 @@ const AdminNavbar = () => {
     toast.success("Store switched successfully");
     // Refresh page data based on new store
   };
-
-  // Filter navigation items based on user role
-  useEffect(() => {
-    if (userRole) {
-      const filteredItems = getAllowedNavItems(userRole);
-      setAllowedNavItems(filteredItems);
-    }
-  }, [userRole]);
 
   const handleLogout = async () => {
     try {
@@ -101,10 +91,8 @@ const AdminNavbar = () => {
     }
   };
 
-  // Check if a path is active
-  const isActive = (path) => {
-    return location.pathname === path;
-  };
+  // Active on the item's page and on pages under it
+  const isActive = (path) => isNavItemActive(location.pathname, path);
 
   // Only show navbar if authenticated
   if (!isAuthenticated) {
@@ -113,128 +101,31 @@ const AdminNavbar = () => {
 
   return (
     <>
-      {/* Admin Navbar - Fixed theming */}
-      <nav className="fixed top-0 z-40 w-full bg-linear-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+      <nav className="fixed top-0 z-40 w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
         {/* Top Navbar Row */}
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            {/* Left side - Logo */}
-            <div className="flex items-center space-x-6 md:ml-[0.35rem]">
+          <div className="flex h-16 items-center justify-between gap-4">
+            {/* Left side - Logo and menu */}
+            <div className="flex min-w-0 items-center gap-6">
               <Logo />
 
-              {/* Desktop Navigation */}
-              <div className="hidden lg:flex items-center space-x-1">
-                {allowedNavItems.map((item) => {
-                  const Icon = item.icon;
-
-                  if (item.type === "link") {
-                    const active = isActive(item.path);
-                    return (
-                      <Link
-                        key={item.name}
-                        to={item.path}
-                        className={`px-4 py-2.5 rounded-sm flex items-center space-x-2 transition-all duration-200 text-sm ${
-                          active
-                            ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20"
-                            : "text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50 hover:shadow-md"
-                        }`}
-                      >
-                        <Icon className="h-4 w-4" />
-                        <span className="font-semibold text-sm">
-                          {item.name}
-                        </span>
-                        {item.requiredRole && userRole !== "superadmin" && (
-                          <Shield className="h-3 w-3 text-yellow-500" />
-                        )}
-                      </Link>
-                    );
-                  }
-                  if (item.type === "dropdown") {
-                    const dropdownKey = item.name
-                      .toLowerCase()
-                      .replace(/\s+/g, "-");
-                    const isDropdownOpen = openDropdown === dropdownKey;
-                    const hasActiveChild = item.items.some((subItem) =>
-                      isActive(subItem.path),
-                    );
-
-                    return (
-                      <div key={item.name} className="relative">
-                        <button
-                          onClick={() => toggleDropdown(dropdownKey)}
-                          className={`px-4 py-2.5 rounded-sm flex items-center space-x-2 transition-all duration-200 ${
-                            hasActiveChild || isDropdownOpen
-                              ? "bg-linear-to-r from-blue-600/20 to-indigo-600/20 text-blue-600 dark:text-white border border-blue-300 dark:border-blue-500/30"
-                              : "text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50"
-                          }`}
-                        >
-                          <Icon className="h-4 w-4" />
-                          <span className="font-semibold text-sm">
-                            {item.name}
-                          </span>
-                          <ChevronDown
-                            className={`h-3 w-3 transition-transform duration-200 ${
-                              isDropdownOpen ? "rotate-180" : ""
-                            }`}
-                          />
-                        </button>
-
-                        {/* Dropdown Menu */}
-                        {isDropdownOpen && (
-                          <>
-                            <div
-                              className="fixed inset-0 z-40"
-                              onClick={() => setOpenDropdown(null)}
-                            />
-                            <div className="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-sm shadow-2xl backdrop-blur-xl z-50 overflow-hidden">
-                              {item.items
-                                .filter(
-                                  (subItem) =>
-                                    !subItem.requiredRole ||
-                                    userRole === "superadmin" ||
-                                    userRole === "admin",
-                                )
-                                .map((subItem) => {
-                                  const SubIcon = subItem.icon;
-                                  const active = isActive(subItem.path);
-                                  return (
-                                    <Link
-                                      key={subItem.name}
-                                      to={subItem.path}
-                                      className={`flex items-center px-4 py-3 text-sm transition-colors duration-150 ${
-                                        active
-                                          ? "bg-linear-to-r from-blue-50 to-blue-100 dark:from-blue-600/20 dark:to-indigo-600/20 text-blue-600 dark:text-white border-l-2 border-blue-500"
-                                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white"
-                                      }`}
-                                      onClick={() => setOpenDropdown(null)}
-                                    >
-                                      <SubIcon className="h-4 w-4 mr-3" />
-                                      {subItem.name}
-                                      {subItem.requiredRole &&
-                                        userRole !== "superadmin" && (
-                                          <Shield className="h-3 w-3 ml-auto text-yellow-500" />
-                                        )}
-                                    </Link>
-                                  );
-                                })}
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    );
-                  }
-
-                  return null;
-                })}
+              <div className="hidden min-w-0 items-center gap-1 overflow-x-auto lg:flex">
+                {allowedNavItems.map((item) => (
+                  <NavItemLink
+                    key={item.path}
+                    item={item}
+                    active={isActive(item.path)}
+                  />
+                ))}
               </div>
             </div>
 
             {/* Right side - Actions */}
-            <div className="flex items-center space-x-3">
-              {/* Search Button */}
+            <div className="flex shrink-0 items-center gap-2">
               <button
+                type="button"
                 onClick={() => setShowSearchModal(true)}
-                className="search-btn p-2.5 rounded-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50 transition-all duration-200"
+                className="search-btn rounded-sm p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
                 title="Search"
                 id="admin-search-btn"
                 aria-label="Search"
@@ -244,59 +135,50 @@ const AdminNavbar = () => {
 
               <ThemeButton />
 
-              {/* Add Product Button - Only for superadmin */}
               {userRole === "superadmin" && (
                 <button
+                  type="button"
                   onClick={() => dispatch(openModal())}
-                  className="hidden px-4 py-2.5 rounded-sm bg-linear-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg hover:shadow-blue-500/25 md:flex items-center space-x-2 transition-all duration-200"
+                  className="hidden items-center gap-2 rounded-sm border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 md:flex dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
                 >
                   <Plus className="h-4 w-4" />
-                  <span className="font-semibold text-sm">Add Product</span>
+                  Add product
                 </button>
               )}
 
-              {/* Reports Link - Only for superadmin and admin */}
-              {(userRole === "superadmin" || userRole === "admin") && (
+              {canUsePos && (
                 <button
-                  onClick={() => {
-                    dispatch(openPosModal());
-                  }}
-                  className="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-sm bg-linear-to-r from-emerald-600 to-teal-600 text-white hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-200"
-                  title="Switch to POS"
+                  type="button"
+                  onClick={() => dispatch(openPosModal())}
+                  className="hidden items-center gap-2 rounded-sm bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 md:flex"
+                  title="Open point of sale"
                 >
                   <ShoppingBag size={16} />
-                  <span className="font-semibold text-sm hidden xl:inline">
-                    POS
-                  </span>
+                  POS
                 </button>
-              )}
-              {(userRole === "superadmin" || userRole === "admin") && (
-                <Link
-                  to="/admin/reports"
-                  className="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-sm border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50 transition-all duration-200"
-                >
-                  <FileText size={16} />
-                  <span className="font-semibold text-sm">Reports</span>
-                </Link>
               )}
 
               <div className="relative">
                 <button
+                  type="button"
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-2 p-2 hover:bg-blue-50 dark:hover:bg-gray-800/50 transition-all duration-200 mr-[-1rem] rounded-sm"
+                  aria-haspopup="menu"
+                  aria-expanded={showUserMenu}
+                  aria-label="Account menu"
+                  className="flex items-center gap-1 rounded-sm p-1.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   <CustomerAvatar
-                    name={`${user?.firstName.charAt(0) || ""} ${user?.lastName.charAt(0) || ""}`.trim()}
+                    name={[user?.firstName?.charAt(0), user?.lastName?.charAt(0)]
+    .filter(Boolean)
+    .join(" ")}
                     size="sm"
-                    className="shrink-0 mr-[-0.5rem]"
+                    className="shrink-0"
                   />
-                  <div className="hidden lg:block text-left"></div>
                   <ChevronDown
-                    className={`h-4 w-4 text-gray-600 dark:text-gray-400 transition-transform duration-200 ${showUserMenu ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-gray-600 transition-transform duration-200 dark:text-gray-400 ${showUserMenu ? "rotate-180" : ""}`}
                   />
                 </button>
 
-                {/* Profile Dropdown Menu */}
                 {showUserMenu && (
                   <ShowUserMenu
                     setShowUserMenu={setShowUserMenu}
@@ -307,12 +189,14 @@ const AdminNavbar = () => {
                 )}
               </div>
 
-              {/* Mobile menu button */}
               <button
+                type="button"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="mr-[-0.93rem] lg:hidden p-2.5 rounded-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50 transition-all duration-200"
+                aria-expanded={isMobileMenuOpen}
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                className="rounded-sm p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
           </div>
