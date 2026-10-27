@@ -8,8 +8,8 @@ export const useUserModal = () => {
 
     const modalState = useSelector((state) => state.userModal);
 
-    const handleOpenModal = ({ title, content, size, position, userData, onClose }) => {
-        dispatch(openModal({ title, content, size, position, userData, onClose }));
+    const handleOpenModal = ({ title, content, size, position, userData }) => {
+        dispatch(openModal({ title, content, size, position, userData }));
     };
 
 
