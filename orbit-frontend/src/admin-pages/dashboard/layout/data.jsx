@@ -1,4 +1,5 @@
 import { withEnabledFeatures } from "../../../config/features";
+import { canOpenRoute } from "../../../config/routeRoles";
 import {
   Keyboard,
   ShoppingCart,
@@ -23,96 +24,43 @@ import {
   ArrowRightLeft,
 } from "lucide-react";
 
-export const hasPermission = (userRole, requiredRole) => {
-  const roleHierarchy = {
-    cashier: ["cashier"],
-    manager: ["cashier", "manager"],
-    admin: ["cashier", "manager", "admin"],
-    superadmin: ["cashier", "manager", "admin", "superadmin"],
-  };
-
-  if (!userRole || !requiredRole) return false;
-  if (userRole === "superadmin") return true;
-
-  const userRoles = roleHierarchy[userRole] || [];
-  return userRoles.includes(requiredRole);
-};
+// Admin menu. Who sees an item comes from ROUTE_ROLES, the same map the routes
+// use, so the menu never offers a page the user would be bounced from.
 export const navItems = [
+  { name: "Dashboard", path: "/admin/dashboard", icon: Home },
+  { name: "Products", path: "/admin/products", icon: Package },
+  { name: "Transactions", path: "/admin/transactions", icon: Receipt },
+  { name: "Reports", path: "/admin/reports", icon: FileText },
+  { name: "Analytics", path: "/admin/analytics", icon: BarChart3 },
+  { name: "Workers", path: "/admin/workers", icon: Users },
   {
-    name: "Dashboard",
-    path: "/admin/dashboard",
-    icon: Home,
-    type: "link",
-  },
-  {
-    name: "Products",
-    icon: Package,
-    type: "dropdown",
-    items: [{ name: "All Products", path: "/admin/products", icon: Package }],
-  },
-  {
-    name: "Transactions",
-    path: "/admin/transactions",
-    icon: Package,
-    type: "link",
-    requiredRole: "cashier",
-  },
-  {
-    name: "Workers",
-    path: "/admin/workers",
-    icon: Users,
-    type: "link",
-    requiredRole: "admin",
+    name: "Stock Transfers",
+    path: "/admin/stock-transfers",
+    icon: ArrowRightLeft,
   },
   {
     name: "Newsletter",
     path: "/admin/newsletter",
     icon: Mail,
-    type: "link",
-    requiredRole: "admin",
     feature: "newsletter",
   },
   {
-    name: "Analytics",
-    path: "/admin/analytics",
-    icon: BarChart3,
-    type: "link",
-    requiredRole: "admin",
-  },
-  {
-    name: "Consultation ",
+    name: "Consultation",
     path: "/admin/consultation-setup",
     icon: BarChart3,
-    type: "link",
-    requiredRole: "superadmin",
     feature: "consultations",
   },
-  {
-    name: "Stock Transfers",
-    path: "/admin/stock-transfers",
-    icon: ArrowRightLeft,
-    type: "link",
-    requiredRole: "superadmin",
-  },
 ];
-export const getAllowedNavItems = (userRole) => {
-  return withEnabledFeatures(navItems).filter((item) => {
-    if (userRole === "superadmin") return true;
-    if (item.requiredRole) {
-      return hasPermission(userRole, item.requiredRole);
-    }
-    if (item.type === "dropdown") {
-      const accessibleSubItems = item.items.filter((subItem) => {
-        if (subItem.requiredRole) {
-          return hasPermission(userRole, subItem.requiredRole);
-        }
-        return true;
-      });
-      return accessibleSubItems.length > 0;
-    }
-    return true;
-  });
-};
+
+export const getAllowedNavItems = (userRole) =>
+  withEnabledFeatures(navItems).filter((item) =>
+    canOpenRoute(item.path, userRole),
+  );
+
+// An item is active on its own page and on pages under it
+// (/admin/products/123 highlights Products).
+export const isNavItemActive = (pathname, path) =>
+  pathname === path || pathname.startsWith(`${path}/`);
 
 export const notifications = [
   {
