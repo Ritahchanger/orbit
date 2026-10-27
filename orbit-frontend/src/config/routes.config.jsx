@@ -158,7 +158,7 @@ export const protectedRoutes = withEnabledFeatures([
   {
     path: "/admin/workers",
     element: <AdminWorkers />,
-    roles: ["superadmin"],
+    roles: ["superadmin", "admin"],
   },
   // {
   //   path: "/admin/categories",

@@ -77,7 +77,7 @@ Router.get(
   "/:id",
   tokenValidator,
   adminValidator,
-  asyncWrapper(userController.getUserWithPermissions),
+  asyncWrapper(userController.getUserById),
 );
 
 Router.delete(

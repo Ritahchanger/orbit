@@ -5,11 +5,12 @@ import { useStoreContext } from "../../../context/store/StoreContext";
 import {
   Users,
   Shield,
-  Mail,
   Building,
   Crown,
   User as UserIcon,
 } from "lucide-react";
+import { useAuth } from "../../../context/authentication/AuthenticationContext";
+import UserApi from "../../services/user-api";
 // Import hooks
 import { useUserMutations } from "../../hooks/users.hook";
 import { useGetAllUsers, useGetUserStats } from "../../hooks/users.hook";
@@ -20,7 +21,7 @@ import { openRegistrationModal } from "../../slices/userRegistrationSlice";
 import ListView from "../components/ListView";
 import GridView from "../components/GridView";
 import ShowRoleModal from "../components/ShowRoleModal";
-import { exportToCSV, exportToPDF } from "../utils/exportUtils";
+import { exportToCSV, exportToPDF, printUsers } from "../utils/exportUtils";
 import { useDebounce } from "../../../globals/hooks/useDebounce";
 import StatsOverview from "../components/StatsOverview";
 import ExportMenu from "../components/ExportMenu";
@@ -37,21 +38,26 @@ import {
   usePermissionCheck,
 } from "../../../context/RolePermissionContext";
 import Header from "../components/Header";
+import RoleTabs from "../components/RoleTabs";
+
+// Roles an admin may give out; superadmins may assign any role (matches the API)
+const ADMIN_ASSIGNABLE_ROLES = ["manager", "cashier", "staff"];
+const PRIVILEGED_ROLES = ["admin", "superadmin"];
 
 const AdminWorkers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  const [selectedRole, setSelectedRole] = useState("all");
   const [selectedUser, setSelectedUser] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [showAssignStoreModal, setShowAssignStoreModal] = useState(false);
   const [newRole, setNewRole] = useState("");
-  const [newPassword, setNewPassword] = useState("");
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
   const { hasPermission, hasAnyPermission } = usePermissionCheck();
   const { userRole } = useSimpleRolePermissionCheck();
+  const { user: currentUser } = useAuth();
+  const isSuperadmin = userRole === "superadmin";
 
   const { suspendUserMutation, unsuspendUserMutation } = useUserMutations();
 
@@ -95,6 +101,24 @@ const AdminWorkers = () => {
     hasPermission("users.change_role") || hasAnyPermission(["users.manage"]);
   const canAssignStores =
     hasPermission("users.assign_store") || hasAnyPermission(["users.manage"]);
+  const canDeleteUsers =
+    hasPermission("users.delete") || hasAnyPermission(["users.manage"]);
+
+  // Which actions to offer for a user. Mirrors the API: users can't act on
+  // themselves, and only superadmins can act on admins and superadmins.
+  const getAllowedActions = (target) => {
+    const isSelf =
+      currentUser?._id && String(target._id) === String(currentUser._id);
+    const canTouch =
+      isSuperadmin || !PRIVILEGED_ROLES.includes(target.role);
+    return {
+      changeRole: canChangeRoles && canTouch && !isSelf,
+      assignStore: canAssignStores && canTouch,
+      suspend:
+        canManageUsers && canTouch && !isSelf && target.role !== "superadmin",
+      delete: canDeleteUsers && canTouch && !isSelf,
+    };
+  };
 
   const [storeData, setStoreData] = useState({
     storeId: "",
@@ -111,11 +135,22 @@ const AdminWorkers = () => {
   const [viewMode, setViewMode] = useState("list");
   const [activeTab, setActiveTab] = useState("all");
 
-  const {
-    stores = [],
-    isLoading: storesLoading,
-    isError: storesError,
-  } = useStoreContext();
+  // Any change to the filters starts again from the first page
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+    setPage(1);
+  };
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    setPage(1);
+  };
+
+  const listFilters = {
+    search: debouncedSearchQuery.trim() || undefined,
+    role: activeTab !== "all" ? activeTab : undefined,
+  };
+
+  const { stores = [] } = useStoreContext();
 
   const handleExportCSV = () => {
     if (filteredUsers.length === 0) {
@@ -166,111 +201,25 @@ const AdminWorkers = () => {
   };
 
   const handlePrintView = () => {
-    const printContent = document.querySelector(
-      ".bg-gray-50.dark\\:bg-gray-900",
-    );
-    if (!printContent) {
-      toast.error("Cannot find content to print");
+    if (filteredUsers.length === 0) {
+      toast.error("No users to print");
       return;
     }
-
-    const originalContents = document.body.innerHTML;
-    const printContents = printContent.innerHTML;
-
-    document.body.innerHTML = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Users Report - ${new Date().toLocaleDateString()}</title>
-                <style>
-                    body { 
-                        font-family: Arial, sans-serif; 
-                        margin: 20px; 
-                        background: white; 
-                        color: black;
-                    }
-                    table { 
-                        width: 100%; 
-                        border-collapse: collapse; 
-                        margin: 20px 0;
-                    }
-                    th, td { 
-                        border: 1px solid #ddd; 
-                        padding: 8px; 
-                        text-align: left;
-                    }
-                    th { 
-                        background-color: #f2f2f2; 
-                        font-weight: bold;
-                    }
-                    tr:nth-child(even) { 
-                        background-color: #f9f9f9;
-                    }
-                    .print-header {
-                        text-align: center;
-                        margin-bottom: 30px;
-                        border-bottom: 2px solid #333;
-                        padding-bottom: 10px;
-                    }
-                    .print-header h1 {
-                        margin: 0;
-                        color: #333;
-                    }
-                    .print-header p {
-                        margin: 5px 0;
-                        color: #666;
-                    }
-                    .print-summary {
-                        display: flex;
-                        justify-content: space-between;
-                        margin-bottom: 20px;
-                        padding: 10px;
-                        background: #f5f5f5;
-                        border-radius: 4px;
-                    }
-                    @media print {
-                        @page { 
-                            margin: 0.5in;
-                            size: landscape;
-                        }
-                        body { 
-                            margin: 0;
-                        }
-                        .no-print { 
-                            display: none !important;
-                        }
-                        .print-break { 
-                            page-break-before: always;
-                        }
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="print-header">
-                    <h1>Users Report</h1>
-                    <p>Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
-                    <p>Total Users: ${filteredUsers.length}</p>
-                </div>
-                ${printContents}
-                <script>
-                    window.onload = function() {
-                        window.print();
-                        setTimeout(function() {
-                            document.body.innerHTML = \`${originalContents}\`;
-                            window.location.reload();
-                        }, 1000);
-                    }
-                </script>
-            </body>
-            </html>
-        `;
+    if (!printUsers(filteredUsers)) {
+      toast.error("Allow pop-ups for this site to print");
+    }
+    setShowExportMenu(false);
   };
 
   const handleExportAllUsers = async (format = "csv") => {
     setExportLoading(true);
     try {
-      // You'll need to implement fetchAllUsers function
-      const allUsersResponse = await fetchAllUsersData();
+      // Every user matching the current search and role tab, not just this page
+      const allUsersResponse = await UserApi.getAllUsers({
+        ...listFilters,
+        page: 1,
+        limit: Math.max(pagination.totalUsers || 0, 1),
+      });
       const allUsers = allUsersResponse?.data?.users || [];
 
       if (allUsers.length === 0) {
@@ -308,12 +257,8 @@ const AdminWorkers = () => {
     }
   };
 
-  const {
-    deleteUserMutation,
-    updateUserRoleMutation,
-    changeUserPasswordMutation,
-    assignStoreToUserMutation,
-  } = useUserMutations();
+  const { deleteUserMutation, updateUserRoleMutation, assignStoreToUserMutation } =
+    useUserMutations();
 
   // Get users data
   const {
@@ -321,12 +266,7 @@ const AdminWorkers = () => {
     isLoading: usersLoading,
     isError: usersError,
     refetch: refetchUsers,
-  } = useGetAllUsers({
-    page,
-    limit,
-    search: debouncedSearchQuery.trim() ? debouncedSearchQuery : undefined,
-    role: selectedRole !== "all" ? selectedRole : undefined,
-  });
+  } = useGetAllUsers({ page, limit, ...listFilters });
 
   // Get user stats
   const {
@@ -454,11 +394,8 @@ const AdminWorkers = () => {
     }
   };
 
-  // Filter users based on active tab
-  const filteredUsers = users.filter((user) => {
-    if (activeTab === "all") return true;
-    return user.role === activeTab;
-  });
+  // The role tab is applied by the API, so this is already the filtered list
+  const filteredUsers = users;
 
   // Get role badge - FIXED WITH SAFETY CHECKS
   const getRoleBadge = (role) => {
@@ -495,15 +432,6 @@ const AdminWorkers = () => {
       return "Invalid date";
     }
   };
-
-  // Newsletter badge
-  const NewsletterBadge = ({ subscribed }) =>
-    subscribed ? (
-      <span className="inline-flex items-center px-2 py-1 bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400 text-xs rounded-sm">
-        <Mail size={10} className="mr-1" />
-        Subscribed
-      </span>
-    ) : null;
 
   if (!canViewUsers && !canManageUsers && userRole !== "superadmin") {
     return (
@@ -548,45 +476,18 @@ const AdminWorkers = () => {
         {/* Stats Overview */}
         <StatsOverview statsLoading={statsLoading} stats={stats} />
 
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-2 mb-2">
-          {tabs.map((tab) => {
-            const Icon = tab?.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-sm transition-colors ${
-                  activeTab === tab.id
-                    ? "bg-blue-600 dark:bg-blue-500 text-white"
-                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                }`}
-              >
-                <Icon size={18} />
-                <span className="text-sm md:text-base">{tab.name}</span>
-                <span
-                  className={`px-2 py-1 text-xs rounded-full ${
-                    activeTab === tab.id
-                      ? "bg-white/20"
-                      : "bg-gray-100 dark:bg-gray-700"
-                  }`}
-                >
-                  {tab.count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <RoleTabs
+          tabs={tabs}
+          activeTab={activeTab}
+          onChange={handleTabChange}
+        />
 
         {/* Search and Filters */}
         <SearchAndFilters
           searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          selectedRole={selectedRole}
-          setSelectedRole={setSelectedRole}
+          setSearchQuery={handleSearchChange}
           viewMode={viewMode}
           setViewMode={setViewMode}
-          roles={roles}
         />
 
         {/* Users Table/Grid */}
@@ -638,8 +539,9 @@ const AdminWorkers = () => {
             onSuspendUser={handleSuspendUser}
             onUnsuspendUser={handleUnsuspendUser}
             isSuspending={
-              suspendUserMutation.isLoading || unsuspendUserMutation.isLoading
+              suspendUserMutation.isPending || unsuspendUserMutation.isPending
             }
+            getAllowedActions={getAllowedActions}
           />
         ) : (
           // List View (Table)
@@ -655,8 +557,9 @@ const AdminWorkers = () => {
             onSuspendUser={handleSuspendUser}
             onUnsuspendUser={handleUnsuspendUser}
             isSuspending={
-              suspendUserMutation.isLoading || unsuspendUserMutation.isLoading
+              suspendUserMutation.isPending || unsuspendUserMutation.isPending
             }
+            getAllowedActions={getAllowedActions}
           />
         )}
 
@@ -677,7 +580,7 @@ const AdminWorkers = () => {
       </div>
 
       {/* Delete Confirmation Modal */}
-      {showDeleteModal && selectedUser && (
+      {canDeleteUsers && showDeleteModal && selectedUser && (
         <DeleteModal
           setShowDeleteModal={setShowDeleteModal}
           selectedUser={selectedUser}
@@ -695,7 +598,11 @@ const AdminWorkers = () => {
           handleUpdateRole={handleUpdateRole}
           newRole={newRole}
           updateUserRoleMutation={updateUserRoleMutation}
-          roles={roles}
+          roles={
+            isSuperadmin
+              ? roles
+              : roles.filter((r) => ADMIN_ASSIGNABLE_ROLES.includes(r.id))
+          }
         />
       )}
 
