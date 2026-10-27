@@ -1,4 +1,5 @@
 // src/everyone-pages/products/pages/Products.jsx
+import FeatureGate from "../../../components/common/FeatureGate";
 import { useState, useEffect } from "react";
 
 import Layout from "../../../layout/everyone-layout/Layout";
@@ -339,12 +340,14 @@ const Products = () => {
                     </li>
                   ))}
                 </ul>
-                <button
-                  className="w-full border border-secondary text-secondary hover:bg-secondary/10 py-3 rounded-sm font-medium transition"
-                  onClick={handleNavigateSetup}
-                >
-                  Book Consultation
-                </button>
+                <FeatureGate feature="consultations">
+                  <button
+                    className="w-full border border-secondary text-secondary hover:bg-secondary/10 py-3 rounded-sm font-medium transition"
+                    onClick={handleNavigateSetup}
+                  >
+                    Book Consultation
+                  </button>
+                </FeatureGate>
               </div>
             </div>
           </div>

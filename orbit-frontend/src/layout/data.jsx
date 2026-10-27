@@ -96,6 +96,7 @@ export const mainNavLinks = [
   {
     to: "/setup-consultation",
     label: "Setup Consultation",
+    feature: "consultations",
     icon: "🛠️",
     badge: { text: "FREE", color: "bg-[#00FF88]/20 text-[#00FF88]" },
     activeColor: "text-[#00FF88]",

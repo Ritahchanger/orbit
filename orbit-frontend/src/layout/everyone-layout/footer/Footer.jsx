@@ -30,6 +30,7 @@ import SocialMedia from "./components/SocialMedia";
 import ShopLinks from "./components/ShopLinks";
 import SupportLinks from "./components/SupportLinks";
 import NewsletterSubscription from "./components/NewsletterSubscription";
+import FeatureGate from "../../../components/common/FeatureGate";
 
 const Footer = () => {
   const { user, isAuthenticated } = useAuth();
@@ -224,18 +225,20 @@ const Footer = () => {
           </p>
 
           {/* Newsletter - Mobile Optimized */}
-          <div className="mb-6">
-            <NewsletterSubscription
-              showNewsletter={showNewsletter}
-              handleSubscribe={handleSubscribe}
-              email={email}
-              setEmail={setEmail}
-              isAuthenticated={isAuthenticated}
-              loading={loading}
-              subscribed={subscribed}
-              user={user}
-            />
-          </div>
+          <FeatureGate feature="newsletter">
+            <div className="mb-6">
+              <NewsletterSubscription
+                showNewsletter={showNewsletter}
+                handleSubscribe={handleSubscribe}
+                email={email}
+                setEmail={setEmail}
+                isAuthenticated={isAuthenticated}
+                loading={loading}
+                subscribed={subscribed}
+                user={user}
+              />
+            </div>
+          </FeatureGate>
         </div>
 
         {/* Accordion Sections */}

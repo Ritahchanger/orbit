@@ -1,4 +1,5 @@
 import { Navigate } from "react-router-dom";
+import { withEnabledFeatures } from "./features";
 // routes/appRoutes.js
 import { useSimpleRolePermissionCheck } from "../context/RolePermissionContext";
 // Public Components
@@ -66,13 +67,17 @@ export const useRouteAccess = () => {
 };
 
 // Route definitions
-export const publicRoutes = [
+export const publicRoutes = withEnabledFeatures([
   // Domain-aware: renders that business's storefront when the hostname (or a
   // ?store= override) resolves to a tenant, otherwise falls back to the
   // platform's own marketing pages. See useStoreSlug for resolution order.
   { path: "/", element: <RootHome /> },
   { path: "/community", element: <Community /> },
-  { path: "/setup-consultation", element: <SetUpConsultation /> },
+  {
+    path: "/setup-consultation",
+    element: <SetUpConsultation />,
+    feature: "consultations",
+  },
   { path: "/products", element: <RootProducts /> },
   { path: "/products/category/:category", element: <RootProducts /> },
   { path: "/products/:id", element: <RootProductDetail /> },
@@ -98,9 +103,9 @@ export const publicRoutes = [
   },
 
   { path: "*", element: <PageNotFound /> },
-];
+]);
 
-export const protectedRoutes = [
+export const protectedRoutes = withEnabledFeatures([
   // Dashboard (manager, admin, superadmin, cashier)
   {
     path: "/admin/dashboard",
@@ -180,6 +185,7 @@ export const protectedRoutes = [
     path: "/admin/newsletter",
     element: <AdminNewsletter />,
     roles: ["superadmin"],
+    feature: "newsletter",
   },
 
   // Analytics (superadmin only)
@@ -194,11 +200,13 @@ export const protectedRoutes = [
     path: "/admin/consultation-setup",
     element: <AdminConsultation />,
     roles: ["superadmin"],
+    feature: "consultations",
   },
   {
     path: "/admin/consultation/types",
     element: <AdminConsultationTypes />,
     roles: ["superadmin"],
+    feature: "consultations",
   },
 
   // System Routes (superadmin only)
@@ -300,4 +308,4 @@ export const protectedRoutes = [
     element: <AdminEcommerceCustomerDetail />,
     roles: ["admin", "superadmin", "manager"],
   },
-];
+]);

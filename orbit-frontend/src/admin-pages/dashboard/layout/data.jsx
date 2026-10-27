@@ -1,3 +1,4 @@
+import { withEnabledFeatures } from "../../../config/features";
 import {
   Keyboard,
   ShoppingCart,
@@ -69,6 +70,7 @@ export const navItems = [
     icon: Mail,
     type: "link",
     requiredRole: "admin",
+    feature: "newsletter",
   },
   {
     name: "Analytics",
@@ -83,6 +85,7 @@ export const navItems = [
     icon: BarChart3,
     type: "link",
     requiredRole: "superadmin",
+    feature: "consultations",
   },
   {
     name: "Stock Transfers",
@@ -93,7 +96,7 @@ export const navItems = [
   },
 ];
 export const getAllowedNavItems = (userRole) => {
-  return navItems.filter((item) => {
+  return withEnabledFeatures(navItems).filter((item) => {
     if (userRole === "superadmin") return true;
     if (item.requiredRole) {
       return hasPermission(userRole, item.requiredRole);

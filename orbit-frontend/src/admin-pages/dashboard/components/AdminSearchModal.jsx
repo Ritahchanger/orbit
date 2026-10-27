@@ -18,6 +18,7 @@ import { useSearchProducts } from "../../hooks/product.hooks"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../../context/authentication/AuthenticationContext"
 import { adminPages } from "./data/AdminPages"
+import { withEnabledFeatures } from "../../../config/features"
 const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, setSearchQuery }) => {
     const navigate = useNavigate()
     const modalRef = useRef(null)
@@ -36,7 +37,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
 
 
     // Filter pages based on user role
-    const filteredPages = adminPages.filter(page =>
+    const filteredPages = withEnabledFeatures(adminPages).filter(page =>
         page.roles.includes(userRole)
     )
 
