@@ -1,8 +1,8 @@
 const reportService = require("../reports/reports.service");
 const { renderReportPdf } = require("../reports/reports.pdf");
-const salesService = require("./sales.services");
+const salesService = require("./sales.service");
 
-const posSalesService = require("./pos-service");
+const posSalesService = require("./pos.service");
 const log = require("../utils/log");
 
 // Record a new sale (global - storeId in body)

@@ -1,5 +1,5 @@
 const ResetPasswordService = require("./resetPassword.service");
-const OTPService = require("../otp/otp.service");
+const OTPService = require("./otp.service");
 const log = require("../../utils/log");
 
 class ResetPasswordController {

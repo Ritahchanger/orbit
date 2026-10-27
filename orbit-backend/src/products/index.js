@@ -1,6 +1,6 @@
 // src/products/index.js
 // Public API of the products module. Other modules should require THIS file
-// only — never reach into products.model.js or products/repositories directly.
+// only — never reach into products/models or products/repositories directly.
 const productRepository = require("./repositories/product.repository");
 
 /**
@@ -13,7 +13,7 @@ const findProductById = (id, { session, select } = {}) => {
 
 /**
  * SKU lookup. Pass businessId to scope it (matches the handful of call
- * sites — pos-service.js, stock-inventory's quickAddBySku — that already
+ * sites — pos.service.js, stock-inventory's quickAddBySku — that already
  * scoped this before the refactor); omit it to preserve the unscoped
  * behavior every other current call site relies on.
  */
@@ -55,8 +55,8 @@ const upsertProductBySku = (sku, data) => {
 };
 
 /**
- * The dominant counter-mutation pattern across pos-service.js,
- * sales.services.js, refund.service.js, and stock-inventory.controller.js's
+ * The dominant counter-mutation pattern across pos.service.js,
+ * sales.service.js, refund.service.js, and store-inventory.controller.js's
  * recordSale: an atomic $inc on stock/totalSold/totalRevenue. Pass negative
  * values to decrement (used by the sale-void/refund-reversal path).
  */
@@ -86,11 +86,11 @@ const decrementStockIfAvailable = (productId, quantity, revenueDelta, { session 
 };
 
 /**
- * Preserves stock-inventory.controller.js's existing restockProduct
+ * Preserves store-inventory.controller.js's existing restockProduct
  * sequence verbatim: decrements the product's global stock (this "restocks"
  * a specific STORE by moving units out of the shared global pool into that
  * store's own inventory — the store-side increment happens separately, in
- * stock-inventory.controller.js itself, not here), then recomputes status
+ * store-inventory.controller.js itself, not here), then recomputes status
  * with the exact same conditional the original inline code used (note:
  * unlike the Product model's own `restock()` instance method, this does
  * NOT reset status to "In Stock" when stock rises above minStock — that
@@ -120,7 +120,7 @@ const deleteProductsByFilter = (filter = {}) => {
 };
 
 /**
- * Preserves stock-inventory.controller.js's quickAddBySku sequence: decrements
+ * Preserves store-inventory.controller.js's quickAddBySku sequence: decrements
  * the product's global stock by quantity and recomputes status, but — unlike
  * restockProductDirect — resets status back to "In Stock" when stock rises
  * back above minStock. Kept as a separate function rather than unifying the

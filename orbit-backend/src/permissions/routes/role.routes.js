@@ -5,7 +5,7 @@ const asyncHandler = require("../../middlewares/asyncMiddleware");
 const tokenValidator = require("../../middlewares/refreshTokenValidator");
 const permissionValidator = require("../../middlewares/permissionValidator");
 
-const recordAdminLog = require("../../custom-logs/middleware/record-admin.middleware");
+const recordAdminLog = require("../../custom-logs/record-admin.middleware");
 
 // ==================== ROLE MANAGEMENT ROUTES ====================
 

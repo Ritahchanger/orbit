@@ -1,4 +1,4 @@
-const businessService = require("../business/services/business.service");
+const businessService = require("../business/business.service");
 const orderService = require("../orders/order.service");
 const { findProducts, countProducts, findProductById } = require("../products");
 

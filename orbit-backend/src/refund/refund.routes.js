@@ -11,7 +11,7 @@ const tokenValidator = require("../middlewares/refreshTokenValidator");
 
 const permissionValidator = require("../middlewares/permissionValidator");
 
-const recordAdminLog = require("../custom-logs/middleware/record-admin.middleware");
+const recordAdminLog = require("../custom-logs/record-admin.middleware");
 
 // All refund routes require authentication
 router.use(tokenValidator);

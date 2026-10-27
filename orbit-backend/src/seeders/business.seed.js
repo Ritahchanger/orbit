@@ -8,11 +8,11 @@ const connectDb = require("../config/db.connection");
 // ✅ Register ALL models first — fixes "Schema hasn't been registered for model Role"
 const { countRoles, findAllRoles, deleteAllRoles, insertRoles } = require("../permissions");
 const User = require("../user/user.model");
-const Business = require("../business/models/business.model");
+const Business = require("../business/business.model");
 const {
   PlanTemplate,
   Subscription,
-} = require("../subscription/models/subscription.model");
+} = require("../subscription/subscription.model");
 
 // ── Plan Seed Data ────────────────────────────────────────────────────────────
 

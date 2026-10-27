@@ -2,7 +2,7 @@ const { transporter } = require("../../utils/transporter");
 const crypto = require("crypto");
 const { RedisClient } = require("../../config/redis");
 
-const { getEmailTemplate } = require("./getEmail");
+const { getEmailTemplate } = require("./otp.email");
 
 require("dotenv").config();
 const log = require("../../utils/log");

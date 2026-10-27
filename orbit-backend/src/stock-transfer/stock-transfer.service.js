@@ -1,7 +1,7 @@
 // services/stockTransfer.service.js
 const StoreInventory = require("../store-inventory/store-inventory.model");
 const { findProductById, findProducts } = require("../products");
-const StockTransfer = require("../stock-transfer/stock-transfer.model");
+const StockTransfer = require("./stock-transfer.model");
 
 const mongoose = require("mongoose");
 

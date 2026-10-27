@@ -14,7 +14,7 @@ const { writeToBuffer } = require("fast-csv");
 
 const { renderReportPdf } = require("./reports.pdf");
 
-const Business = require("../business/models/business.model");
+const Business = require("../business/business.model");
 
 class ReportService {
   /**

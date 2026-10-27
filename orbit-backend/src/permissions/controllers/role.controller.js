@@ -1,5 +1,5 @@
 // controllers/role.controller.js
-const roleService = require("../services/role.services");
+const roleService = require("../services/role.service");
 
 /**
  * Get all roles

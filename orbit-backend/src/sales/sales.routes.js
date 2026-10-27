@@ -8,7 +8,7 @@ const {
   storeAccess,
   canManageStore,
 } = require("../middlewares/store-access.middleware");
-const recordAdminLog = require("../custom-logs/middleware/record-admin.middleware");
+const recordAdminLog = require("../custom-logs/record-admin.middleware");
 
 // ============ PUBLIC/GLOBAL ROUTES ============
 

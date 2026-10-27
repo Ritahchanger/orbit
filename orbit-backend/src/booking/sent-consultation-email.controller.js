@@ -1,5 +1,5 @@
 const ConsultationEmailLog = require("./sent-consultation-email.model");
-const { sendConsultationEmail } = require("./utils/sent-consultation-email");
+const { sendConsultationEmail } = require("./consultation.email");
 const Booking = require("./booking.model");
 const sendEmail = async (req, res) => {
   const {

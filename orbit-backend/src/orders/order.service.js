@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Order = require("./order.model");
-const businessService = require("../business/services/business.service");
+const businessService = require("../business/business.service");
 const invoiceService = require("../invoices/invoice.service");
 const { findProducts, decrementStockIfAvailable } = require("../products");
 
