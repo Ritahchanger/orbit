@@ -202,6 +202,7 @@ const registerUser = async (userData) => {
       userData.canAccessAllStores || userData.role === "superadmin",
     storePermissions: processedStorePermissions,
     storeRoles: processedStoreRoles,
+    businessId: userData.businessId,
   });
 
   const userWithoutPassword = user.toObject();

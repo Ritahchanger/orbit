@@ -5,6 +5,15 @@ import { closeRegistrationModal } from "../slices/userRegistrationSlice";
 import { X, User, Mail, Phone, Store, Shield, UserPlus } from "lucide-react";
 import { useStores } from "../hooks/store-hook";
 import { useRegisterMutation } from "../hooks/users.hook";
+import { useAuth } from "../../context/authentication/AuthenticationContext";
+
+const ROLE_OPTIONS = [
+  { value: "staff", label: "Staff" },
+  { value: "cashier", label: "Cashier" },
+  { value: "manager", label: "Manager" },
+  { value: "admin", label: "Admin", superadminOnly: true },
+  { value: "superadmin", label: "Super Admin", superadminOnly: true },
+];
 
 const UserRegistrationModal = () => {
   const dispatch = useDispatch();
@@ -13,6 +22,13 @@ const UserRegistrationModal = () => {
 
   // Use the TanStack Query mutation
   const registerMutation = useRegisterMutation();
+
+  // The new user joins the business of whoever is signed in (the API sets it).
+  // Only superadmins may create admins and superadmins.
+  const { userRole } = useAuth();
+  const roleOptions = ROLE_OPTIONS.filter(
+    (option) => !option.superadminOnly || userRole === "superadmin",
+  );
 
   const { isModalOpen } = useSelector((state) => state.userRegistration);
 
@@ -328,37 +344,15 @@ const UserRegistrationModal = () => {
                   disabled={registerMutation.isPending}
                   className="w-full px-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
                 >
-                  {/* <option value="normal-user">Normal User</option> */}
-                  <option
-                    value="staff"
-                    className="text-gray-900 dark:text-white"
-                  >
-                    Staff
-                  </option>
-                  <option
-                    value="cashier"
-                    className="text-gray-900 dark:text-white"
-                  >
-                    Cashier
-                  </option>
-                  <option
-                    value="manager"
-                    className="text-gray-900 dark:text-white"
-                  >
-                    Manager
-                  </option>
-                  <option
-                    value="admin"
-                    className="text-gray-900 dark:text-white"
-                  >
-                    Admin
-                  </option>
-                  <option
-                    value="superadmin"
-                    className="text-gray-900 dark:text-white"
-                  >
-                    Super Admin
-                  </option>
+                  {roleOptions.map((option) => (
+                    <option
+                      key={option.value}
+                      value={option.value}
+                      className="text-gray-900 dark:text-white"
+                    >
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 

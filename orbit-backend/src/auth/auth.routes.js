@@ -14,6 +14,8 @@ const refreshTokenValidator = require("../middlewares/refreshTokenValidator");
 
 const permissionValidator = require("../middlewares/permissionValidator");
 
+const adminValidator = require("../middlewares/adminValidator");
+
 const recordAdminLog = require("../custom-logs/middleware/record-admin.middleware");
 
 /**
@@ -49,7 +51,14 @@ const recordAdminLog = require("../custom-logs/middleware/record-admin.middlewar
  *       201:
  *         description: User registered successfully
  */
-Router.post("/register", asyncWrapper(NormalUserAuthController.signUp));
+// Admins add workers to their own business (the "Add user" form on
+// /admin/workers). The new user always joins the caller's business.
+Router.post(
+  "/register",
+  tokenValidator,
+  adminValidator,
+  asyncWrapper(NormalUserAuthController.signUp),
+);
 
 /**
  * @swagger
