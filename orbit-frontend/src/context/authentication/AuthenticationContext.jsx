@@ -132,87 +132,35 @@ export const AuthProvider = ({ children }) => {
     setAuthError(null);
 
     try {
-      console.log("🔐 Attempting OTP login with:", {
-        email: otpData.email,
-        hasOtp: !!otpData.otp,
-      });
-
-      // First, verify the OTP using the OTP API
+      // otpApi already unwraps the axios response, so this is the body
       const otpResponse = await otpApi.verifyLoginOTP({
         email: otpData.email,
         otp: otpData.otp,
       });
 
-      console.log("✅ OTP verification response:", otpResponse.data);
-
-      // Check if OTP verification was successful
-      if (!otpResponse.data.success) {
-        throw new Error(otpResponse.data.message || "OTP verification failed");
+      if (!otpResponse?.success) {
+        throw new Error(otpResponse?.message || "OTP verification failed");
       }
 
-      // If OTP verification returns a token directly (Option B from earlier)
-      if (otpResponse.data.token) {
-        console.log("✅ OTP verification returned token directly");
-
-        // Store the token
-        localStorage.setItem("authToken", otpResponse.data.token);
-        authApiService.setAuthToken(otpResponse.data.token);
-
-        // Set user data if provided
-        if (otpResponse.data.user) {
-          setUser(otpResponse.data.user);
-          setUserRole(otpResponse.data.user.role);
-        }
-
-        setIsAuthenticated(true);
-        sessionStorage.setItem("isAuthenticated", "true");
-
-        return otpResponse.data.user?.role || "user";
+      if (otpResponse.token) {
+        localStorage.setItem("authToken", otpResponse.token);
+        authApiService.setAuthToken(otpResponse.token);
       }
-
-      // If OTP verification doesn't return token, we need to get user data
-      console.log("🔄 OTP verified, fetching user data...");
-
-      // Fetch user data after OTP verification
-      const userResponse = await authApiService.getCurrentUser();
-      const userData = userResponse.data.user || userResponse.data.data;
-
-      if (!userData) {
-        throw new Error("Failed to fetch user data after OTP verification");
-      }
-
-      console.log("✅ User data fetched:", userData);
-
-      // Set user data
-      setUser(userData);
-      setUserRole(userData.role);
-      setIsAuthenticated(true);
-      sessionStorage.setItem("isAuthenticated", "true");
-
-      // If we have a token from cookies, store it
-      const cookieToken = getCookie("token");
-      if (cookieToken) {
-        localStorage.setItem("authToken", cookieToken);
-        authApiService.setAuthToken(cookieToken);
-      }
-
-      return userData.role || "user";
+      localStorage.setItem("last_activity", Date.now().toString());
     } catch (error) {
-      console.error("❌ OTP login failed:", error);
-
-      let errorMessage = "OTP login failed. Please try again.";
-
-      if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "OTP login failed. Please try again.";
       setAuthError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
       setAuthLoading(false);
+      throw new Error(errorMessage);
     }
+
+    // The verify endpoint only returns a minimal user, so load the full
+    // profile and permissions the same way a page refresh does.
+    const userData = await fetchUser();
+    return userData.role || "user";
   };
 
   const fetchUser = async () => {

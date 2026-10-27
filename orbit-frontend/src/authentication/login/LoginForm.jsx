@@ -43,6 +43,7 @@ const LoginForm = ({
   otpMode,
   otpSent,
   otpResendCooldown,
+  toggleLoginMode,
   handleSendOTP,
   handleResendOTP,
   // New props for business search
@@ -59,6 +60,45 @@ const LoginForm = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Sign-in method */}
+      <div
+        role="tablist"
+        aria-label="Sign-in method"
+        className="grid grid-cols-2 gap-1 rounded-lg bg-gray-100 p-1 dark:bg-gray-900"
+      >
+        {[
+          {
+            key: "password",
+            label: "Password",
+            icon: <Lock className="h-4 w-4" />,
+            active: !otpMode,
+          },
+          {
+            key: "otp",
+            label: "Email code",
+            icon: <Mail className="h-4 w-4" />,
+            active: otpMode,
+          },
+        ].map(({ key, label, icon, active }) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => !active && toggleLoginMode()}
+            disabled={busy}
+            className={`inline-flex h-9 items-center justify-center gap-2 rounded-md text-base font-semibold transition-colors disabled:cursor-not-allowed ${
+              active
+                ? "bg-white text-gray-900 shadow-sm dark:bg-gray-800 dark:text-white"
+                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            }`}
+          >
+            {icon}
+            {label}
+          </button>
+        ))}
+      </div>
+
       {/* Business */}
       <div>
         <label htmlFor="businessSearch" className={authLabel}>
@@ -217,7 +257,7 @@ const LoginForm = ({
             className={authPrimaryButton}
           >
             <Shield className="h-4 w-4" />
-            {loading ? "Sending code…" : "Send login code"}
+            {loading ? "Sending code…" : "Email me a login code"}
           </button>
         ) : (
           <div>
@@ -326,32 +366,30 @@ const LoginForm = ({
         </>
       )}
 
-      <button
-        type="submit"
-        disabled={busy || (otpMode && !otpSent) || !selectedBusiness}
-        className={`${authPrimaryButton} mt-2`}
-      >
-        {busy ? (
-          <>
-            <RefreshCw className="h-4 w-4 animate-spin" />
-            {authLoading ? "Authenticating…" : "Signing in…"}
-          </>
-        ) : otpMode ? (
-          otpSent ? (
+      {(!otpMode || otpSent) && (
+        <button
+          type="submit"
+          disabled={busy || !selectedBusiness}
+          className={`${authPrimaryButton} mt-2`}
+        >
+          {busy ? (
+            <>
+              <RefreshCw className="h-4 w-4 animate-spin" />
+              {authLoading ? "Authenticating…" : "Signing in…"}
+            </>
+          ) : otpMode ? (
             <>
               <Shield className="h-4 w-4" />
               Verify and sign in
             </>
           ) : (
-            "Send the code first"
-          )
-        ) : (
-          <>
-            <LogIn className="h-4 w-4" />
-            Sign in
-          </>
-        )}
-      </button>
+            <>
+              <LogIn className="h-4 w-4" />
+              Sign in
+            </>
+          )}
+        </button>
+      )}
     </form>
   );
 };

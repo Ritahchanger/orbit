@@ -294,13 +294,8 @@ const AdminLogin = () => {
 
       if (otpMode) {
         // OTP-based login
-        const otpResponse = await otpApi.verifyLoginOTP(loginPayload);
-        if (otpResponse.success) {
-          await login(loginPayload, otpResponse.token);
-          toast.success(`Welcome to ${selectedBusiness.businessName}!`);
-        } else {
-          throw new Error(otpResponse.message || "OTP verification failed");
-        }
+        await loginWithOtp({ email: loginPayload.email, otp: formData.otp });
+        toast.success(`Welcome to ${selectedBusiness.businessName}!`);
       } else {
         // Password-based login
         await login(loginPayload);
@@ -374,9 +369,18 @@ const AdminLogin = () => {
   };
 
   const highlights = [
-    { icon: Store, text: "Inventory and POS across every store" },
-    { icon: BarChart3, text: "Real-time sales and performance reports" },
-    { icon: ShieldCheck, text: "Secure, role-based access for your team" },
+    {
+      icon: <Store className="h-4 w-4 text-blue-400" />,
+      text: "Inventory and POS across every store",
+    },
+    {
+      icon: <BarChart3 className="h-4 w-4 text-blue-400" />,
+      text: "Real-time sales and performance reports",
+    },
+    {
+      icon: <ShieldCheck className="h-4 w-4 text-blue-400" />,
+      text: "Secure, role-based access for your team",
+    },
   ];
 
   return (
@@ -391,10 +395,10 @@ const AdminLogin = () => {
             Sign in to manage sales, stock and staff for your business.
           </p>
           <ul className="space-y-4">
-            {highlights.map(({ icon: Icon, text }) => (
+            {highlights.map(({ icon, text }) => (
               <li key={text} className="flex items-center gap-3">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5">
-                  <Icon className="h-4 w-4 text-blue-400" />
+                  {icon}
                 </span>
                 <span className="text-lg text-gray-300">{text}</span>
               </li>
