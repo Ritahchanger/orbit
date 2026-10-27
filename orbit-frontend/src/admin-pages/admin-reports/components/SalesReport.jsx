@@ -24,7 +24,7 @@ import {
 } from "../../hooks/reports.hooks";
 import { format, subDays, subMonths } from "date-fns";
 import SalesTrend from "./SalesTrend";
-import { useStoreContext } from "../../../context/store/StoreContext";
+import { useStoreScope } from "../../../context/store/StoreContext";
 
 // Helper function to format currency
 const formatCurrency = (amount) => {
@@ -62,15 +62,10 @@ const SalesReport = () => {
   });
 
   // Get current store from global context
-  const { currentStore } = useStoreContext();
+  const { storeId: scopedStoreId, store: currentStore } = useStoreScope();
 
-  // Determine storeId based on global selection
-  const storeId = useMemo(() => {
-    if (!currentStore || currentStore === "global") {
-      return undefined; // All stores
-    }
-    return currentStore._id; // Specific store
-  }, [currentStore]);
+  // Store chosen in the store strip; undefined means all stores
+  const storeId = scopedStoreId || undefined;
 
   // Fetch sales data with pagination
   const {
@@ -317,7 +312,7 @@ const SalesReport = () => {
 
   // Get current store display name
   const getCurrentStoreDisplay = () => {
-    if (!currentStore || currentStore === "global") {
+    if (!currentStore) {
       return "All Stores";
     }
     return currentStore.name;

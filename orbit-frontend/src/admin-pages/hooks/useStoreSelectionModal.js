@@ -19,7 +19,13 @@ export const useStoreSelectionModal = () => {
 
     const dispatch = useDispatch();
 
-    const { stores, isLoading: loadingStores, switchStore } = useStoreContext();
+    const {
+        stores,
+        isLoading: loadingStores,
+        switchStore,
+        selectAllStores,
+        currentStore,
+    } = useStoreContext();
 
     const modalState = useSelector((state) => state.storeSelectionModal);
 
@@ -74,24 +80,20 @@ export const useStoreSelectionModal = () => {
         }
     };
 
+    // Global View is the store strip's "All stores". Single-store pages still
+    // need a store, so make sure one is remembered without leaving All stores.
     const handleGlobalSelect = () => {
-        // Store global view selection
-        localStorage.setItem('selectedStoreId', 'global');
-        localStorage.setItem('selectedStoreName', 'Global View');
-        localStorage.removeItem('selectedStore');
+        if (!currentStore && stores?.length > 0) {
+            switchStore(stores[0]._id, { keepView: true });
+        }
+        selectAllStores();
 
         // Dispatch confirmation action
         dispatch(confirmStoreSelection());
 
-        toast.success('Global View selected successfully!', {
+        toast.success('Showing all stores', {
             duration: 3000,
-            icon: '🌍'
         });
-
-        // Refresh to update the layout
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000);
     };
 
     return {

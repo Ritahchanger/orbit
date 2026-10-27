@@ -385,7 +385,7 @@ export const AuthProvider = ({ children }) => {
       if (rolesWithStores.includes(userData.role) && userData.assignedStore) {
         try {
           if (switchStore && typeof switchStore === "function") {
-            switchStore(userData.assignedStore);
+            switchStore(userData.assignedStore, { keepView: true });
 
             // Also store in session for persistence
             sessionStorage.setItem(

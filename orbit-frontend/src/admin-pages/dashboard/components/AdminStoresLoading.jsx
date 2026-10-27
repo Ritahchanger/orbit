@@ -1,10 +1,13 @@
 import { useEffect, useCallback, useMemo, useRef } from "react";
-import { Store, Lock, AlertCircle, RefreshCw } from "lucide-react";
+import { Store, Lock, AlertCircle, RefreshCw, Layers } from "lucide-react";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { usePermissions } from "../../../context/permissions/permissions-context";
 import { useAuth } from "../../../context/authentication/AuthenticationContext";
 import { useQueryClient } from "@tanstack/react-query";
 import StoresControls from "./StoresControls";
+import AllStoresOption from "./AllStoresOption";
+import { useStoreContext } from "../../../context/store/StoreContext";
 import { useRole } from "../../../context/authentication/RoleContext";
 import { useDispatch } from "react-redux";
 import { openCategoriesModal } from "../../../store/features/categoryModalSlice";
@@ -30,6 +33,8 @@ const AdminStoresLoading = ({
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { isAllStores, isViewResolved, selectAllStores, setDefaultView } =
+    useStoreContext();
 
   // Debug log only once
   const hasLogged = useRef(false);
@@ -89,6 +94,36 @@ const AdminStoresLoading = ({
 
   // Derived values
   const hasMultipleAccessibleStores = accessibleStores.length > 1;
+  // "All stores" is offered to admins and superadmins who can see several stores
+  const canViewAllStores =
+    (user?.role === "superadmin" || user?.role === "admin") &&
+    hasMultipleAccessibleStores;
+
+  // Apply the default view once per session (admins start on "All stores"),
+  // and drop "All stores" for anyone not allowed to use it.
+  useEffect(() => {
+    if (!user || storesLoading || !stores?.length) return;
+    if (!isViewResolved) {
+      setDefaultView(canViewAllStores);
+    } else if (isAllStores && !canViewAllStores) {
+      setDefaultView(false);
+    }
+  }, [
+    user,
+    storesLoading,
+    stores,
+    isViewResolved,
+    isAllStores,
+    canViewAllStores,
+    setDefaultView,
+  ]);
+
+  const handleSelectAllStores = useCallback(() => {
+    if (!canViewAllStores) return;
+    selectAllStores();
+    setShowStoresMenu(false);
+    toast.success("Showing all stores");
+  }, [canViewAllStores, selectAllStores, setShowStoresMenu]);
   const isCurrentStoreAccessible =
     currentStore && canAccessStore(currentStore._id);
   const hasStoreAccess = accessibleStores.length > 0;
@@ -266,6 +301,11 @@ const AdminStoresLoading = ({
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 shrink-0">
                   {isSingleStoreUser ? "Your Store:" : "Current:"}
                 </span>
+                {isAllStores ? (
+                  <span className="text-sm font-semibold block truncate text-blue-700 dark:text-blue-400">
+                    All stores
+                  </span>
+                ) : (
                 <span className="relative group min-w-0 flex-1">
                   <span
                     className={`text-sm font-semibold block truncate ${
@@ -285,9 +325,14 @@ const AdminStoresLoading = ({
                     </div>
                   )}
                 </span>
+                )}
               </div>
               <span className="text-xs text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 px-1.5 py-0.5 rounded shrink-0">
-                {currentStore?.code || "N/A"}
+                {isAllStores ? (
+                  <Layers size={12} className="inline" />
+                ) : (
+                  currentStore?.code || "N/A"
+                )}
               </span>
               {!isCurrentStoreAccessible && currentStore && (
                 <AlertCircle
@@ -316,8 +361,15 @@ const AdminStoresLoading = ({
           {hasMultipleAccessibleStores && (
             <div className="hidden lg:flex flex-1 mx-6 ml-0 relative">
               <div className="flex items-center gap-2 overflow-x-auto py-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+                {canViewAllStores && (
+                  <AllStoresOption
+                    active={isAllStores}
+                    onSelect={handleSelectAllStores}
+                  />
+                )}
                 {accessibleStores.map((store) => {
-                  const isCurrent = currentStore?._id === store._id;
+                  const isCurrent =
+                    !isAllStores && currentStore?._id === store._id;
                   const permissions = getPermissionsForStore(store._id);
 
                   return (
@@ -411,6 +463,9 @@ const AdminStoresLoading = ({
               canAccessStore={canAccessStore}
               getPermissionsForStore={getPermissionsForStore}
               filteredStores={accessibleStores}
+              canViewAllStores={canViewAllStores}
+              isAllStores={isAllStores}
+              onSelectAllStores={handleSelectAllStores}
             />
           )}
         </div>

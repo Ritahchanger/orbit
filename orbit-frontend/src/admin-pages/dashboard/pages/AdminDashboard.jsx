@@ -14,8 +14,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 
     useStoreContext,
 
-    useStoreId,
-    
+    useStoreScope,
   } from "../../../context/store/StoreContext";
 
   import SummaryCards from "../components/SummaryCards";
@@ -48,13 +47,12 @@ import { useState, useEffect, useRef, useMemo } from "react";
       format(new Date(), "yyyy-MM-dd"),
     );
 
-    const [selectedStoreId, setSelectedStoreId] = useState("");
-
     const { user, userRole } = useAuth();
 
-    const { stores, isLoading: storesLoading } = useStoreContext();
+    const { stores } = useStoreContext();
 
-    const storeId = useStoreId();
+    // Which store to show comes from the store strip under the navbar
+    const { isAllStores, storeId: scopedStoreId } = useStoreScope();
 
     const {
       canAccessStore,
@@ -120,36 +118,21 @@ import { useState, useEffect, useRef, useMemo } from "react";
     }, [user?.assignedStore, stores, accessibleStores]);
 
     const effectiveStoreId = useMemo(() => {
-      if (!isAdmin && !isSuperadmin && !canAccessAllStores) {
-        if (selectedStoreId && selectedStoreId !== "all") {
-          if (canAccessStore(selectedStoreId)) {
-            return selectedStoreId;
-          }
-        }
-
-        return primaryStore?._id || null;
-      }
-
-      if (selectedStoreId === "all") {
+      // "All stores" is only offered to admins and superadmins in the strip
+      if (isAllStores && (isAdmin || isSuperadmin)) {
         return "all";
       }
-
-      if (selectedStoreId && selectedStoreId !== "all") {
-        return selectedStoreId;
-      }
-
-      if (storeId && canAccessStore(storeId)) {
-        return storeId;
+      if (scopedStoreId && canAccessStore(scopedStoreId)) {
+        return scopedStoreId;
       }
       return primaryStore?._id || null;
     }, [
-      selectedStoreId,
-      storeId,
+      isAllStores,
+      scopedStoreId,
       canAccessStore,
       primaryStore,
       isAdmin,
       isSuperadmin,
-      canAccessAllStores,
     ]);
 
     const isViewingAllStores = useMemo(() => {
@@ -172,44 +155,6 @@ import { useState, useEffect, useRef, useMemo } from "react";
         accessibleStores.length > 1
       );
     }, [isAdmin, isSuperadmin, canAccessAllStores, accessibleStores]);
-
-    useEffect(() => {
-      if (!storesLoading && stores && stores.length > 0 && !selectedStoreId) {
-        if (!isAdmin && !isSuperadmin && !canAccessAllStores) {
-          if (primaryStore) {
-            console.log(
-              "Setting selected store to primary store for non-admin:",
-              primaryStore.name,
-            );
-            setSelectedStoreId(primaryStore._id);
-          } else if (accessibleStores.length > 0) {
-            console.log(
-              "Setting selected store to first accessible store:",
-              accessibleStores[0].name,
-            );
-            setSelectedStoreId(accessibleStores[0]._id);
-          }
-        } else if ((isAdmin || isSuperadmin) && canAccessAllStores) {
-          console.log('Admin user - defaulting to "all" stores');
-          setSelectedStoreId("all");
-        } else if (accessibleStores.length > 0) {
-          console.log(
-            "Setting selected store to first accessible store:",
-            accessibleStores[0].name,
-          );
-          setSelectedStoreId(accessibleStores[0]._id);
-        }
-      }
-    }, [
-      storesLoading,
-      stores,
-      selectedStoreId,
-      primaryStore,
-      accessibleStores,
-      isAdmin,
-      isSuperadmin,
-      canAccessAllStores,
-    ]);
 
     const formatCurrency = (amount) => {
       if (!amount && amount !== 0) return "KSh 0";
@@ -269,11 +214,6 @@ import { useState, useEffect, useRef, useMemo } from "react";
       setDateString(format(today, "yyyy-MM-dd"));
     };
 
-    const handleStoreChange = (e) => {
-      const value = e.target.value;
-      setSelectedStoreId(value);
-    };
-
     const handleExportCSV = () => {
       if (!dailyData?.data?.itemsSold) return;
 
@@ -330,41 +270,12 @@ import { useState, useEffect, useRef, useMemo } from "react";
       a.click();
     };
 
-    const getSelectValue = () => {
-      if (selectedStoreId) return selectedStoreId;
-      if (primaryStore) return primaryStore._id;
-      return accessibleStores.length > 0 ? accessibleStores[0]._id : "all";
-    };
-
     const navigateToAllProducts = () => {
       if (!isAdmin && !isSuperadmin && !isManager) {
         toast.error("You don't have permission to view all products");
         return;
       }
       navigate("/admin/products");
-    };
-
-    const getStoreOptions = () => {
-      const options = [];
-
-      if (isAdmin || isSuperadmin) {
-        options.push({
-          value: "all",
-          label: "All Stores",
-          description: "View all stores",
-        });
-      } else {
-      }
-
-      accessibleStores.forEach((store) => {
-        options.push({
-          value: store._id,
-          label: `${store.name} (${store.code})`,
-          description: store.address?.street || "Store",
-        });
-      });
-
-      return options;
     };
 
     const isLoading = dailyLoading;
@@ -381,7 +292,6 @@ import { useState, useEffect, useRef, useMemo } from "react";
 
     const summary = dailyData?.data;
     const itemsSold = summary?.itemsSold || [];
-    const storeOptions = getStoreOptions();
 
     return (
       <AdminLayout>
@@ -391,11 +301,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
             isAdmin={isAdmin}
             isSuperadmin={isSuperadmin}
             primaryStore={primaryStore}
-            storeOptions={storeOptions}
-            isViewingAllStores={isViewingAllStores}
-            getSelectValue={getSelectValue}
             dateString={dateString}
-            handleStoreChange={handleStoreChange}
             handleTodayClick={handleTodayClick}
             itemsSold={itemsSold}
             handleExportCSV={handleExportCSV}
@@ -503,7 +409,6 @@ import { useState, useEffect, useRef, useMemo } from "react";
           <AdminStoreComparison
             hasMultipleStoresAccess={hasMultipleStoresAccess}
             effectiveStoreId={effectiveStoreId}
-            setSelectedStoreId={setSelectedStoreId}
             isAdmin={isAdmin}
             isSuperadmin={isSuperadmin}
           />

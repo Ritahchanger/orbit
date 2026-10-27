@@ -57,21 +57,8 @@ const StoreSelectionModal = () => {
         }
     };
 
-    // Enhanced global select that properly saves to sessionStorage
+    // Global View is the store strip's "All stores"; the store context keeps it
     const handleGlobalSelection = () => {
-        // For global view
-        sessionStorage.setItem('current_store_id', 'global');
-        localStorage.setItem('selectedStoreId', 'global');
-
-        // Only log in development
-        if (process.env.NODE_ENV !== 'production') {
-            console.log('Global view selected:', {
-                sessionStorage: sessionStorage.getItem('current_store_id'),
-                localStorage: localStorage.getItem('selectedStoreId')
-            });
-        }
-
-        // Call the original handleGlobalSelect
         handleGlobalSelect();
     };
 

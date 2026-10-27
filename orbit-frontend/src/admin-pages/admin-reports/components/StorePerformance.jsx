@@ -16,7 +16,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useStorePerformanceReport } from "../../hooks/reports.hooks";
-import { useStoreContext } from "../../../context/store/StoreContext";
+import { useStoreScope } from "../../../context/store/StoreContext";
 import { useAnalyzeDashboard, useAIHealth } from "../../hooks/useAi.mutations";
 
 import { useDispatch } from "react-redux";
@@ -48,7 +48,7 @@ const StorePerformance = () => {
   const [aiAnalysisTriggered, setAiAnalysisTriggered] = useState(false);
 
   // Get current store from context
-  const { currentStore } = useStoreContext();
+  const { storeId: scopedStoreId, store: currentStore } = useStoreScope();
 
   // AI Mutations
   const analyzeDashboard = useAnalyzeDashboard({
@@ -79,13 +79,8 @@ const StorePerformance = () => {
     refetchInterval: 60000, // Check every minute
   });
 
-  // Determine storeId for API call
-  const storeId = useMemo(() => {
-    if (!currentStore || currentStore === "global") {
-      return undefined; // All stores
-    }
-    return currentStore._id; // Specific store
-  }, [currentStore]);
+  // Store chosen in the store strip; undefined means all stores
+  const storeId = scopedStoreId || undefined;
 
   // Fetch store performance data
   const {
@@ -306,7 +301,7 @@ const StorePerformance = () => {
 
   // Get current store display
   const getCurrentStoreDisplay = () => {
-    if (!currentStore || currentStore === "global") {
+    if (!currentStore) {
       return "All Stores";
     }
     return currentStore.name;
