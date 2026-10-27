@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
-  Rocket,
+  ArrowLeft,
   Building2,
   Mail,
   Phone,
@@ -11,6 +11,7 @@ import {
   Globe,
   Users,
   FileText,
+  Check,
   CheckCircle,
   ArrowRight,
   Briefcase,
@@ -27,8 +28,15 @@ import { useRegisterBusiness } from "../../admin-pages/hooks/business.mutations"
 
 import Step2 from "./components/Step2";
 
-import { IconInput, SelectInput, labelClass } from "./components/Components";
+import { IconInput, SelectInput } from "./components/Components";
 import Step4 from "./components/Step4";
+
+import AuthLayout from "../AuthLayout";
+import {
+  authLink,
+  authPrimaryButton,
+  authSecondaryButton,
+} from "../authStyles";
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -200,517 +208,343 @@ const AdminSignup = () => {
   };
 
   const steps = [
-    { num: 1, label: "Business Info" },
-    { num: 2, label: "Admin Account" },
-    { num: 3, label: "Details" },
-    { num: 4, label: "Choose Plan" },
+    {
+      num: 1,
+      label: "Business info",
+      title: "Business information",
+      description:
+        "Tell us about your business so we can set up your account correctly.",
+    },
+    {
+      num: 2,
+      label: "Admin account",
+      title: "Admin account",
+      description:
+        "Create the administrator login you will use to manage Orbit.",
+    },
+    {
+      num: 3,
+      label: "Details",
+      title: "Business details",
+      description: "A few more details to tailor Orbit to your business.",
+    },
+    {
+      num: 4,
+      label: "Choose plan",
+      title: "Choose your plan",
+      description: "Pick the plan that fits your business size and goals.",
+    },
   ];
+  const activeStep = steps[currentStep - 1];
 
   // Shared props passed to every IconInput / SelectInput
   const fieldProps = { errors, formData, onChange: handleInputChange };
 
-  return (
-    <div
-      className="h-screen overflow-hidden grid grid-rows-[auto_1fr] relative"
-      style={{
-        background:
-          "linear-gradient(135deg, #1e1040 0%, #2d1b69 40%, #1a0533 100%)",
-      }}
-    >
-      {/* Background blobs */}
-      <div className="fixed inset-0 opacity-15 pointer-events-none">
-        <div
-          className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl"
-          style={{ background: "#a855f7" }}
-        />
-        <div
-          className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full blur-3xl"
-          style={{ background: "#ec4899" }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-20"
-          style={{ background: "#7c3aed" }}
-        />
-      </div>
-
-      {/* Top Bar */}
-      <div
-        className="relative z-10 flex items-center justify-between px-8 py-4 border-b"
-        style={{
-          borderColor: "rgba(168,85,247,0.2)",
-          background: "rgba(255,255,255,0.03)",
-          backdropFilter: "blur(12px)",
-        }}
-      >
-        <Link to="/" className="inline-flex items-center gap-2.5 group">
-          <div
-            className="p-2 rounded-sm border transition-colors"
-            style={{
-              background: "rgba(168,85,247,0.15)",
-              borderColor: "rgba(168,85,247,0.3)",
-            }}
-          >
-            <Rocket className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-bold text-white">Orbit</span>
-        </Link>
-
-        {/* Step Indicators */}
-        <div className="flex items-center gap-2">
-          {steps.map((step, i) => (
-            <div key={step.num} className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
-                <div
-                  className={`flex items-center justify-center w-7 h-7 rounded-full border-2 text-xs font-bold transition-all`}
-                  style={
-                    currentStep >= step.num
-                      ? {
-                          background:
-                            "linear-gradient(135deg, #a855f7, #ec4899)",
-                          borderColor: "#a855f7",
-                          color: "white",
-                        }
-                      : {
-                          borderColor: "rgba(168,85,247,0.35)",
-                          color: "#c084fc",
-                        }
-                  }
-                >
-                  {currentStep > step.num ? (
-                    <CheckCircle className="w-4 h-4" />
-                  ) : (
-                    step.num
-                  )}
-                </div>
+  const stepper = (
+    <>
+      <h2 className="mb-4 text-5xl leading-tight font-semibold text-white">
+        Set up your business on Orbit.
+      </h2>
+      <p className="mb-10 text-lg leading-relaxed text-gray-400">
+        Four short steps and your stores, stock and team are ready to go.
+      </p>
+      <ol className="space-y-1">
+        {steps.map((step, i) => {
+          const done = currentStep > step.num;
+          const active = currentStep === step.num;
+          return (
+            <li key={step.num} className="flex gap-4">
+              <div className="flex flex-col items-center">
                 <span
-                  className="text-xs font-medium hidden sm:block"
-                  style={{
-                    color: currentStep >= step.num ? "white" : "#c084fc",
-                  }}
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-base font-semibold transition-colors ${
+                    done
+                      ? "border-blue-500 bg-blue-500 text-white"
+                      : active
+                        ? "border-blue-400 bg-blue-500/15 text-blue-300"
+                        : "border-white/15 text-gray-500"
+                  }`}
                 >
-                  {step.label}
+                  {done ? <Check className="h-4 w-4" /> : step.num}
                 </span>
+                {i < steps.length - 1 && (
+                  <span
+                    className={`my-1 h-6 w-px ${done ? "bg-blue-500" : "bg-white/15"}`}
+                  />
+                )}
               </div>
-              {i < steps.length - 1 && (
-                <div
-                  className="w-8 h-0.5 mx-1"
-                  style={{
-                    background:
-                      currentStep > step.num
-                        ? "linear-gradient(90deg, #a855f7, #ec4899)"
-                        : "rgba(168,85,247,0.2)",
-                  }}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-
-        <p className="text-sm hidden md:block" style={{ color: "#c084fc" }}>
-          Have an account?{" "}
-          <Link
-            to="/admin/login"
-            className="font-semibold hover:underline"
-            style={{ color: "#e879f9" }}
-          >
-            Sign in
-          </Link>
-        </p>
-      </div>
-
-      {/* Main Content */}
-      <div className="relative z-10 overflow-hidden grid grid-cols-1 lg:grid-cols-[1fr_2fr] h-full justify-center items-center">
-        {/* Left Panel */}
-        <div
-          className="hidden lg:flex flex-col justify-center px-10 py-8 border-r"
-          style={{ borderColor: "rgba(168,85,247,0.15)" }}
-        >
-          <div className="mb-8">
-            <div
-              className="text-xs font-bold uppercase tracking-widest mb-3"
-              style={{ color: "#c084fc" }}
-            >
-              Step {currentStep} of 4
-            </div>
-            <h2 className="text-3xl font-extrabold text-white mb-3 leading-tight">
-              {currentStep === 1 && (
-                <>
-                  <span>Business</span>
-                  <br />
-                  <span>Information</span>
-                </>
-              )}
-              {currentStep === 2 && (
-                <>
-                  <span>Admin</span>
-                  <br />
-                  <span>Account Setup</span>
-                </>
-              )}
-              {currentStep === 3 && (
-                <>
-                  <span>Business</span>
-                  <br />
-                  <span>Details</span>
-                </>
-              )}
-              {currentStep === 4 && (
-                <>
-                  <span>Choose</span>
-                  <br />
-                  <span>Your Plan</span>
-                </>
-              )}
-            </h2>
-            <p className="text-sm leading-relaxed" style={{ color: "#c084fc" }}>
-              {currentStep === 1 &&
-                "Tell us about your business. This helps us set up your account correctly."}
-              {currentStep === 2 &&
-                "Create your administrator credentials to access the Orbit platform."}
-              {currentStep === 3 &&
-                "Additional details to help us tailor Orbit to your needs."}
-              {currentStep === 4 &&
-                "Choose a subscription plan that fits your business size and goals."}
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {steps.map((step) => (
-              <div
-                key={step.num}
-                className="flex items-center gap-3 p-3 rounded-sm transition-all"
-                style={
-                  currentStep === step.num
-                    ? {
-                        background: "rgba(168,85,247,0.15)",
-                        border: "1px solid rgba(168,85,247,0.35)",
-                      }
-                    : { opacity: 0.45 }
-                }
+              <span
+                className={`pt-1.5 text-lg font-medium ${
+                  active
+                    ? "text-white"
+                    : done
+                      ? "text-gray-300"
+                      : "text-gray-500"
+                }`}
               >
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                  style={
-                    currentStep > step.num
-                      ? {
-                          background:
-                            "linear-gradient(135deg, #a855f7, #ec4899)",
-                        }
-                      : currentStep === step.num
-                        ? {
-                            background:
-                              "linear-gradient(135deg, #7c3aed, #a855f7)",
-                          }
-                        : { background: "rgba(255,255,255,0.08)" }
-                  }
-                >
-                  {currentStep > step.num ? (
-                    <CheckCircle className="w-4 h-4 text-white" />
-                  ) : (
-                    <span className="text-white">{step.num}</span>
-                  )}
-                </div>
-                <span className="text-sm font-medium text-white">
-                  {step.label}
-                </span>
-              </div>
+                {step.label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </>
+  );
+
+  return (
+    <AuthLayout aside={stepper} contentClassName="items-start lg:pt-6">
+      <form
+        onSubmit={handleSubmit}
+        className="flex w-full max-w-2xl flex-col"
+        noValidate
+      >
+        {/* Step header */}
+        <div className="mb-8">
+          <p className="mb-3 text-base font-semibold tracking-wide text-blue-600 uppercase dark:text-blue-400">
+            Step {currentStep} of {steps.length}
+          </p>
+          <div className="mb-5 flex gap-1.5 lg:hidden">
+            {steps.map((step) => (
+              <span
+                key={step.num}
+                className={`h-1 flex-1 rounded-full ${
+                  currentStep >= step.num
+                    ? "bg-blue-600"
+                    : "bg-gray-200 dark:bg-gray-800"
+                }`}
+              />
             ))}
           </div>
+          <h1 className="mb-2 text-4xl font-semibold text-gray-900 dark:text-white">
+            {activeStep.title}
+          </h1>
+          <p className="mb-0 text-lg text-gray-500 dark:text-gray-400">
+            {activeStep.description}
+          </p>
         </div>
 
-        {/* Right Panel — Form */}
-        <div className="flex flex-col h-full overflow-hidden">
-          <form onSubmit={handleSubmit} className="flex flex-col h-full">
-            {/* Scrollable form body */}
-            <div className="flex-1 overflow-y-auto px-6 lg:px-10 py-6">
-              {/* ── Step 1: Business Information ── */}
-              {currentStep === 1 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <IconInput
-                    icon={Building2}
-                    field="businessName"
-                    label="Business Name"
-                    placeholder="Orbit Technologies"
-                    required
-                    {...fieldProps}
-                  />
-                  <SelectInput
-                    icon={Briefcase}
-                    field="businessType"
-                    label="Business Type"
-                    required
-                    {...fieldProps}
-                  >
-                    <option value="" className="bg-gray-900">
-                      Select type
-                    </option>
-                    {businessTypes.map((t) => (
-                      <option key={t} value={t} className="bg-gray-900">
-                        {t}
-                      </option>
-                    ))}
-                  </SelectInput>
-                  <IconInput
-                    icon={Hash}
-                    field="registrationNumber"
-                    label="Registration Number"
-                    placeholder="BRN-2024-001"
-                    required
-                    {...fieldProps}
-                  />
-                  <IconInput
-                    icon={FileText}
-                    field="taxId"
-                    label="Tax ID / PIN"
-                    placeholder="PIN-12345678"
-                    {...fieldProps}
-                  />
-                  <IconInput
-                    icon={Mail}
-                    field="businessEmail"
-                    label="Business Email"
-                    type="email"
-                    placeholder="info@business.com"
-                    required
-                    {...fieldProps}
-                  />
-                  <IconInput
-                    icon={Phone}
-                    field="businessPhone"
-                    label="Business Phone"
-                    type="tel"
-                    placeholder="+254 700 000 000"
-                    required
-                    {...fieldProps}
-                  />
-                  <div className="md:col-span-2">
-                    <IconInput
-                      icon={MapPin}
-                      field="businessAddress"
-                      label="Business Address"
-                      placeholder="Street address, building"
-                      required
-                      {...fieldProps}
-                    />
-                  </div>
-                  <IconInput
-                    icon={MapPin}
-                    field="city"
-                    label="City"
-                    placeholder="Nairobi"
-                    required
-                    {...fieldProps}
-                  />
-                  <SelectInput
-                    icon={Globe}
-                    field="country"
-                    label="Country"
-                    required
-                    {...fieldProps}
-                  >
-                    {countries.map((c) => (
-                      <option key={c} value={c} className="bg-gray-900">
-                        {c}
-                      </option>
-                    ))}
-                  </SelectInput>
-                  <div>
-                    <label className={labelClass}>Postal Code</label>
-                    <input
-                      name="postalCode"
-                      value={formData.postalCode}
-                      onChange={handleInputChange}
-                      placeholder="00100"
-                      className="w-full px-4 py-2.5 rounded-sm text-white text-sm focus:outline-none focus:ring-2"
-                      style={{
-                        background: "rgba(168,85,247,0.08)",
-                        border: "1px solid rgba(168,85,247,0.25)",
-                        "--tw-ring-color": "#a855f7",
-                        "::placeholder": { color: "#c084fc" },
-                      }}
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className={labelClass}>Website</label>
-                    <div className="relative">
-                      <Globe
-                        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
-                        style={{ color: "#c084fc" }}
-                      />
-                      <input
-                        name="website"
-                        value={formData.website}
-                        onChange={handleInputChange}
-                        type="url"
-                        placeholder="https://yourbusiness.com"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-sm text-white text-sm focus:outline-none focus:ring-2"
-                        style={{
-                          background: "rgba(168,85,247,0.08)",
-                          border: "1px solid rgba(168,85,247,0.25)",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="md:col-span-2">
-                    <SelectInput
-                      icon={Users}
-                      field="employeeCount"
-                      label="Number of Employees"
-                      {...fieldProps}
-                    >
-                      <option value="" className="bg-gray-900">
-                        Select range
-                      </option>
-                      {["1-10", "11-50", "51-200", "201-500", "500+"].map(
-                        (v) => (
-                          <option key={v} value={v} className="bg-gray-900">
-                            {v}
-                          </option>
-                        ),
-                      )}
-                    </SelectInput>
-                  </div>
-
-                  <IconInput
-                    icon={Calendar}
-                    field="yearEstablished"
-                    label="Year Established"
-                    type="number"
-                    placeholder="2020"
-                    min="1900"
-                    max={new Date().getFullYear()}
-                    {...fieldProps}
-                  />
-                </div>
-              )}
-
-              {/* ── Step 2: Admin Account ── */}
-              {currentStep === 2 && (
-                <Step2
-                  fieldProps={fieldProps}
-                  User={User}
-                  Mail={Mail}
-                  Phone={Phone}
-                  showPassword={showPassword}
-                  formData={formData}
-                  handleInputChange={handleInputChange}
-                  errors={errors}
-                  setShowPassword={setShowPassword}
-                  showConfirmPassword={showConfirmPassword}
-                  setShowConfirmPassword={setShowConfirmPassword}
-                />
-              )}
-
-              {/* ── Step 3: Business Details ── */}
-              {currentStep === 3 && (
-                <Step3
-                  logoPreview={logoPreview}
-                  handleInputChange={handleInputChange}
-                  formData={formData}
-                  errors={errors}
-                />
-              )}
-
-              {/* ── Step 4: Choose Plan ── */}
-              <Step4
-                currentStep={currentStep}
-                subscriptionPlans={subscriptionPlans}
-                formData={formData}
-                acceptTerms={acceptTerms}
-                setAcceptTerms={setAcceptTerms}
-                errors={errors}
-                handleInputChange={handleInputChange}
+        {/* ── Step 1: Business Information ── */}
+        {currentStep === 1 && (
+          <div className="grid grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-2">
+            <IconInput
+              icon={Building2}
+              field="businessName"
+              label="Business name"
+              placeholder="Orbit Technologies"
+              autoComplete="organization"
+              required
+              {...fieldProps}
+            />
+            <SelectInput
+              icon={Briefcase}
+              field="businessType"
+              label="Business type"
+              required
+              {...fieldProps}
+            >
+              <option value="">Select type</option>
+              {businessTypes.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </SelectInput>
+            <IconInput
+              icon={Hash}
+              field="registrationNumber"
+              label="Registration number"
+              placeholder="BRN-2024-001"
+              required
+              {...fieldProps}
+            />
+            <IconInput
+              icon={FileText}
+              field="taxId"
+              label="Tax ID / PIN"
+              placeholder="PIN-12345678"
+              {...fieldProps}
+            />
+            <IconInput
+              icon={Mail}
+              field="businessEmail"
+              label="Business email"
+              type="email"
+              placeholder="info@business.com"
+              required
+              {...fieldProps}
+            />
+            <IconInput
+              icon={Phone}
+              field="businessPhone"
+              label="Business phone"
+              type="tel"
+              placeholder="+254 700 000 000"
+              required
+              {...fieldProps}
+            />
+            <div className="md:col-span-2">
+              <IconInput
+                icon={MapPin}
+                field="businessAddress"
+                label="Business address"
+                placeholder="Street address, building"
+                autoComplete="street-address"
+                required
+                {...fieldProps}
               />
             </div>
-
-            {/* ── Footer Nav ── */}
-            <div
-              className="flex-shrink-0 flex items-center justify-between px-6 lg:px-10 py-4 border-t"
-              style={{
-                borderColor: "rgba(168,85,247,0.2)",
-                background: "rgba(168,85,247,0.05)",
-                backdropFilter: "blur(12px)",
-              }}
+            <IconInput
+              icon={MapPin}
+              field="city"
+              label="City"
+              placeholder="Nairobi"
+              required
+              {...fieldProps}
+            />
+            <SelectInput
+              icon={Globe}
+              field="country"
+              label="Country"
+              required
+              {...fieldProps}
             >
-              {/* <button
-                type="button"
-                onClick={() => navigate(-1)}
-                className="px-6 py-2.5 text-white rounded-sm font-semibold transition-all flex items-center gap-2 text-sm"
-                style={{
-                  background: "rgba(168,85,247,0.2)",
-                  border: "1px solid rgba(168,85,247,0.3)",
-                }}
-              >
-                Sign In <ArrowLeft className="w-4 h-4" />
-              </button> */}
-              <div>
-                {currentStep > 1 && (
-                  <button
-                    type="button"
-                    onClick={handlePrevious}
-                    className="px-5 py-2.5 text-white rounded-sm font-semibold transition-all text-sm"
-                    style={{
-                      background: "rgba(255,255,255,0.08)",
-                      border: "1px solid rgba(168,85,247,0.25)",
-                    }}
-                  >
-                    ← Previous
-                  </button>
-                )}
-              </div>
-              <div className="flex items-center gap-3">
-                <span
-                  className="text-xs hidden sm:block"
-                  style={{ color: "#c084fc" }}
-                >
-                  Step {currentStep} of 4
-                </span>
-                {currentStep < 4 ? (
-                  <button
-                    type="button"
-                    onClick={handleNext}
-                    className="px-6 py-2.5 text-white rounded-sm font-semibold transition-all flex items-center gap-2 text-sm"
-                    style={{
-                      background: "linear-gradient(135deg, #a855f7, #ec4899)",
-                      boxShadow: "0 4px 15px rgba(168,85,247,0.3)",
-                    }}
-                  >
-                    Next Step <ArrowRight className="w-4 h-4" />
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    disabled={isPending || !acceptTerms}
-                    className="px-6 py-2.5 text-white rounded-sm font-semibold transition-all flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={
-                      isPending || !acceptTerms
-                        ? { background: "rgba(255,255,255,0.1)" }
-                        : {
-                            background:
-                              "linear-gradient(135deg, #7c3aed, #a855f7, #ec4899)",
-                            boxShadow: "0 4px 15px rgba(168,85,247,0.4)",
-                          }
-                    }
-                  >
-                    {isPending ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Processing...</span>
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle className="w-4 h-4" />
-                        <span>Complete Registration</span>
-                      </>
-                    )}
-                  </button>
-                )}
-              </div>
-            </div>
-          </form>
+              {countries.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </SelectInput>
+            <IconInput
+              icon={Hash}
+              field="postalCode"
+              label="Postal code"
+              placeholder="00100"
+              autoComplete="postal-code"
+              {...fieldProps}
+            />
+            <IconInput
+              icon={Calendar}
+              field="yearEstablished"
+              label="Year established"
+              type="number"
+              placeholder="2020"
+              min="1900"
+              max={new Date().getFullYear()}
+              {...fieldProps}
+            />
+            <IconInput
+              icon={Globe}
+              field="website"
+              label="Website"
+              type="url"
+              placeholder="https://yourbusiness.com"
+              {...fieldProps}
+            />
+            <SelectInput
+              icon={Users}
+              field="employeeCount"
+              label="Number of employees"
+              {...fieldProps}
+            >
+              <option value="">Select range</option>
+              {["1-10", "11-50", "51-200", "201-500", "500+"].map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </SelectInput>
+          </div>
+        )}
+
+        {/* ── Step 2: Admin Account ── */}
+        {currentStep === 2 && (
+          <Step2
+            fieldProps={fieldProps}
+            User={User}
+            Mail={Mail}
+            Phone={Phone}
+            showPassword={showPassword}
+            formData={formData}
+            handleInputChange={handleInputChange}
+            errors={errors}
+            setShowPassword={setShowPassword}
+            showConfirmPassword={showConfirmPassword}
+            setShowConfirmPassword={setShowConfirmPassword}
+          />
+        )}
+
+        {/* ── Step 3: Business Details ── */}
+        {currentStep === 3 && (
+          <Step3
+            logoPreview={logoPreview}
+            handleInputChange={handleInputChange}
+            formData={formData}
+            errors={errors}
+          />
+        )}
+
+        {/* ── Step 4: Choose Plan ── */}
+        <Step4
+          currentStep={currentStep}
+          subscriptionPlans={subscriptionPlans}
+          formData={formData}
+          setFormData={setFormData}
+          acceptTerms={acceptTerms}
+          setAcceptTerms={setAcceptTerms}
+          errors={errors}
+          handleInputChange={handleInputChange}
+        />
+
+        {/* ── Footer Nav ── */}
+        <div className="mt-10 flex items-center justify-between gap-3 border-t border-gray-200 pt-6 dark:border-gray-800">
+          {currentStep > 1 ? (
+            <button
+              type="button"
+              onClick={handlePrevious}
+              className={`${authSecondaryButton} w-auto`}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </button>
+          ) : (
+            <p className="mb-0 text-lg text-gray-500 dark:text-gray-400">
+              Have an account?{" "}
+              <Link to="/admin/login" className={authLink}>
+                Sign in
+              </Link>
+            </p>
+          )}
+
+          {currentStep < steps.length ? (
+            <button
+              type="button"
+              onClick={handleNext}
+              className={`${authPrimaryButton} w-auto px-6`}
+            >
+              Continue
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={isPending || !acceptTerms}
+              className={`${authPrimaryButton} w-auto px-6`}
+            >
+              {isPending ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Creating account…
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="h-4 w-4" />
+                  Complete registration
+                </>
+              )}
+            </button>
+          )}
         </div>
-      </div>
-    </div>
+      </form>
+    </AuthLayout>
   );
 };
 

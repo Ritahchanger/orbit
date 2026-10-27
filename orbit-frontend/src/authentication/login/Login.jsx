@@ -10,9 +10,13 @@ import ResetPassword from "../reset-password/ResetPassword";
 
 import LoginForm from "./LoginForm";
 
-import ThemeButton from "../../admin-pages/dashboard/layout/ThemeButton";
+import AuthLayout from "../AuthLayout";
+
+import { authLink } from "../authStyles";
 
 import { Link } from "react-router-dom";
+
+import { BarChart3, ShieldCheck, Store } from "lucide-react";
 
 import { useDebounce } from "../../globals/hooks/useDebounce";
 
@@ -369,86 +373,98 @@ const AdminLogin = () => {
     }
   };
 
+  const highlights = [
+    { icon: Store, text: "Inventory and POS across every store" },
+    { icon: BarChart3, text: "Real-time sales and performance reports" },
+    { icon: ShieldCheck, text: "Secure, role-based access for your team" },
+  ];
+
   return (
-    <>
-      <div className="flex h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 py-12 px-4 sm:px-6 lg:px-8">
-        {/* Theme Toggle Button */}
-        <div className="absolute top-2 right-2 p-2">
-          <ThemeButton />
-        </div>
-
-        <div className="max-w-md w-full">
-          {/* Logo & Header */}
-          <div className="text-center mb-2">
-            <div className="flex justify-center mb-2">
-              <div className="flex items-center justify-center">
-                <div className="flex flex-col mb-[1rem]">
-                  <span className="text-3xl md:text-3xl font-heading font-black tracking-wide">
-                    <span className="bg-linear-to-r from-primary via-[#00D4FF] to-primary bg-clip-text text-transparent animate-gradient">
-                      ORBIT
-                    </span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Reset Password Form */}
-          {showResetPassword ? (
-            <ResetPassword
-              resetSent={resetSent}
-              resetEmail={resetEmail}
-              setShowResetPassword={setShowResetPassword}
-              setResetEmail={setResetEmail}
-              setResetSent={setResetSent}
-              loading={loading}
-              authLoading={authLoading}
-              handleForgotPassword={handleForgotPassword}
-              selectedBusiness={selectedBusiness}
-            />
-          ) : (
-            /* Main Login Form */
-            <LoginForm
-              handleSubmit={handleSubmit}
-              formData={formData}
-              handleChange={handleChange}
-              errors={errors}
-              loading={loading}
-              authLoading={authLoading}
-              setShowResetPassword={setShowResetPassword}
-              showPassword={showPassword}
-              setShowPassword={setShowPassword}
-              // OTP Props
-              otpMode={otpMode}
-              otpSent={otpSent}
-              otpResendCooldown={otpResendCooldown}
-              toggleLoginMode={toggleLoginMode}
-              handleSendOTP={handleSendOTP}
-              handleResendOTP={handleResendOTP}
-              // Business Search Props
-              businesses={searchResults?.data || []} // Use searchResults from hook
-              searchBusinesses={searchBusinesses} // This will trigger refetch
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              selectedBusiness={selectedBusiness}
-              setSelectedBusiness={handleBusinessSelect}
-              isSearching={isSearching} // Use loading state from hook
-            />
-          )}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Don't have a business account?{" "}
-              <Link
-                to="/admin/signup"
-                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors hover:underline"
-              >
-                Register your business
-              </Link>
+    <AuthLayout
+      contentClassName="items-center"
+      aside={
+        <>
+          <h2 className="mb-4 text-5xl leading-tight font-semibold text-white">
+            Run every store from one place.
+          </h2>
+          <p className="mb-10 text-lg leading-relaxed text-gray-400">
+            Sign in to manage sales, stock and staff for your business.
+          </p>
+          <ul className="space-y-4">
+            {highlights.map(({ icon: Icon, text }) => (
+              <li key={text} className="flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5">
+                  <Icon className="h-4 w-4 text-blue-400" />
+                </span>
+                <span className="text-lg text-gray-300">{text}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      }
+    >
+      <div className="w-full max-w-md">
+        {!showResetPassword && (
+          <div className="mb-8">
+            <h1 className="mb-2 text-4xl font-semibold text-gray-900 dark:text-white">
+              Sign in to your account
+            </h1>
+            <p className="mb-0 text-lg text-gray-500 dark:text-gray-400">
+              Find your business, then enter your credentials.
             </p>
           </div>
-        </div>
+        )}
+
+        {/* Reset Password Form */}
+        {showResetPassword ? (
+          <ResetPassword
+            resetSent={resetSent}
+            resetEmail={resetEmail}
+            setShowResetPassword={setShowResetPassword}
+            setResetEmail={setResetEmail}
+            setResetSent={setResetSent}
+            loading={loading}
+            authLoading={authLoading}
+            handleForgotPassword={handleForgotPassword}
+            selectedBusiness={selectedBusiness}
+          />
+        ) : (
+          /* Main Login Form */
+          <LoginForm
+            handleSubmit={handleSubmit}
+            formData={formData}
+            handleChange={handleChange}
+            errors={errors}
+            loading={loading}
+            authLoading={authLoading}
+            setShowResetPassword={setShowResetPassword}
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+            // OTP Props
+            otpMode={otpMode}
+            otpSent={otpSent}
+            otpResendCooldown={otpResendCooldown}
+            toggleLoginMode={toggleLoginMode}
+            handleSendOTP={handleSendOTP}
+            handleResendOTP={handleResendOTP}
+            // Business Search Props
+            businesses={searchResults?.data || []} // Use searchResults from hook
+            searchBusinesses={searchBusinesses} // This will trigger refetch
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedBusiness={selectedBusiness}
+            setSelectedBusiness={handleBusinessSelect}
+            isSearching={isSearching} // Use loading state from hook
+          />
+        )}
+        <p className="mt-8 mb-0 text-center text-lg text-gray-500 dark:text-gray-400">
+          Don't have a business account?{" "}
+          <Link to="/admin/signup" className={authLink}>
+            Register your business
+          </Link>
+        </p>
       </div>
-    </>
+    </AuthLayout>
   );
 };
 

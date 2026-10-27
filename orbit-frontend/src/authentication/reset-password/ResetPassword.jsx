@@ -11,6 +11,14 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import otpApi from "../../admin-pages/services/otp-api";
+import {
+  authError,
+  authInput,
+  authInputIcon,
+  authLabel,
+  authPrimaryButton,
+  authSecondaryButton,
+} from "../authStyles";
 
 const ResetPassword = ({
   resetSent,
@@ -155,16 +163,11 @@ const ResetPassword = ({
         return (
           <>
             <div className="mb-6">
-              <label
-                htmlFor="resetEmail"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <label htmlFor="resetEmail" className={authLabel}>
                 Email Address
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400 dark:text-gray-500" />
-                </div>
+                <Mail className={authInputIcon} />
                 <input
                   id="resetEmail"
                   type="email"
@@ -173,21 +176,22 @@ const ResetPassword = ({
                     setResetEmail(e.target.value);
                     if (errors.email) setErrors({ ...errors, email: "" });
                   }}
-                  className="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
+                  className={authInput(!!errors.email, "pl-10")}
                   placeholder="Enter your registered email"
                   disabled={loading || authLoading}
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center">
-                  <AlertCircle className="h-4 w-4 mr-1" /> {errors.email}
+                <p className={authError}>
+                  <AlertCircle className="h-3.5 w-3.5 shrink-0" />{" "}
+                  {errors.email}
                 </p>
               )}
             </div>
-            <div className="flex space-x-3">
+            <div className="flex gap-3">
               <button
                 onClick={() => setShowResetPassword(false)}
-                className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-sm transition-colors shadow-sm"
+                className={authSecondaryButton}
                 disabled={loading || authLoading}
               >
                 Cancel
@@ -195,7 +199,7 @@ const ResetPassword = ({
               <button
                 onClick={handleForgotPasswordSubmit}
                 disabled={loading || authLoading || !resetEmail}
-                className="flex-1 py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-600 dark:to-purple-600 hover:from-blue-600 hover:to-purple-600 dark:hover:from-blue-700 dark:hover:to-purple-700 text-white font-medium rounded-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                className={authPrimaryButton}
               >
                 {loading || authLoading ? "Sending..." : "Send Reset OTP"}
               </button>
@@ -208,22 +212,19 @@ const ResetPassword = ({
           <>
             <button
               onClick={() => setResetStep("request")}
-              className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 mb-4"
+              className="mb-4 flex items-center gap-1 text-base text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
               disabled={isVerifying}
             >
               <ArrowLeft className="h-4 w-4 mr-1" /> Change Email
             </button>
             <div className="mb-6">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+              <div className="text-base text-gray-600 dark:text-gray-400 mb-3">
                 Enter the 6-digit OTP sent to
                 <span className="text-blue-600 dark:text-blue-400 font-medium ml-1">
                   {resetEmail}
                 </span>
               </div>
-              <label
-                htmlFor="otp"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <label htmlFor="otp" className={authLabel}>
                 Verification Code
               </label>
               <input
@@ -236,23 +237,26 @@ const ResetPassword = ({
                   setOtp(e.target.value.replace(/\D/g, "").slice(0, 6));
                   if (errors.otp) setErrors({ ...errors, otp: "" });
                 }}
-                className="w-full py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-sm font-semibold text-3xl text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 focus:border-transparent text-center tracking-widest"
-                placeholder="123456"
+                className={authInput(
+                  !!errors.otp,
+                  "h-12 text-center text-2xl font-semibold tracking-[0.5em]",
+                )}
+                placeholder="000000"
                 disabled={isVerifying}
               />
               {errors.otp && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center">
-                  <AlertCircle className="h-4 w-4 mr-1" /> {errors.otp}
+                <p className={authError}>
+                  <AlertCircle className="h-3.5 w-3.5 shrink-0" /> {errors.otp}
                 </p>
               )}
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-sm text-gray-500 dark:text-gray-500">
+                <span className="text-base text-gray-500 dark:text-gray-500">
                   Didn't receive the code?
                 </span>
                 <button
                   onClick={handleResendOTP}
                   disabled={otpResendCooldown > 0 || isVerifying}
-                  className={`text-sm ${otpResendCooldown > 0 ? "text-gray-400 dark:text-gray-500 cursor-not-allowed" : "text-green-600 dark:text-green-400 hover:text-green-700"} transition-colors`}
+                  className="text-base font-medium text-blue-600 transition-colors hover:text-blue-700 disabled:cursor-not-allowed disabled:text-gray-400 dark:text-blue-400"
                 >
                   {otpResendCooldown > 0
                     ? `Resend in ${otpResendCooldown}s`
@@ -260,10 +264,10 @@ const ResetPassword = ({
                 </button>
               </div>
             </div>
-            <div className="flex space-x-3">
+            <div className="flex gap-3">
               <button
                 onClick={() => setResetStep("request")}
-                className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-sm transition-colors shadow-sm"
+                className={authSecondaryButton}
                 disabled={isVerifying}
               >
                 Back
@@ -271,7 +275,7 @@ const ResetPassword = ({
               <button
                 onClick={handleVerifyOTP}
                 disabled={isVerifying || otp.length !== 6}
-                className="flex-1 py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-500 dark:from-green-600 dark:to-emerald-600 hover:from-green-600 hover:to-emerald-600 text-white font-medium rounded-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                className={authPrimaryButton}
               >
                 {isVerifying ? "Verifying..." : "Verify OTP"}
               </button>
@@ -285,26 +289,21 @@ const ResetPassword = ({
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
                 <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 mr-2" />
-                <span className="text-sm text-green-600 dark:text-green-400">
+                <span className="text-base text-green-600 dark:text-green-400">
                   OTP Verified
                 </span>
               </div>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span className="text-base text-gray-500 dark:text-gray-400">
                 Step 2 of 2
               </span>
             </div>
             <div className="space-y-4">
               <div>
-                <label
-                  htmlFor="newPassword"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                >
+                <label htmlFor="newPassword" className={authLabel}>
                   New Password
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400 dark:text-gray-500" />
-                  </div>
+                  <Lock className={authInputIcon} />
                   <input
                     id="newPassword"
                     type={showPassword ? "text" : "password"}
@@ -314,25 +313,25 @@ const ResetPassword = ({
                       if (errors.newPassword)
                         setErrors({ ...errors, newPassword: "" });
                     }}
-                    className="w-full pl-10 pr-10 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
+                    className={authInput(false, "pl-10 pr-11")}
                     placeholder="Enter new password"
                     disabled={isResetting}
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1.5 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-500" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-5 w-5 text-gray-500" />
+                      <Eye className="h-4 w-4" />
                     )}
                   </button>
                 </div>
                 {errors.newPassword && (
-                  <p className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center">
-                    <AlertCircle className="h-4 w-4 mr-1" />{" "}
+                  <p className={authError}>
+                    <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                     {errors.newPassword}
                   </p>
                 )}
@@ -342,16 +341,11 @@ const ResetPassword = ({
                 </p>
               </div>
               <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                >
+                <label htmlFor="confirmPassword" className={authLabel}>
                   Confirm New Password
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <KeyRound className="h-5 w-5 text-gray-400 dark:text-gray-500" />
-                  </div>
+                  <KeyRound className={authInputIcon} />
                   <input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
@@ -361,41 +355,41 @@ const ResetPassword = ({
                       if (errors.confirmPassword)
                         setErrors({ ...errors, confirmPassword: "" });
                     }}
-                    className="w-full pl-10 pr-10 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
+                    className={authInput(false, "pl-10 pr-11")}
                     placeholder="Confirm new password"
                     disabled={isResetting}
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1.5 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-500" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-5 w-5 text-gray-500" />
+                      <Eye className="h-4 w-4" />
                     )}
                   </button>
                 </div>
                 {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center">
-                    <AlertCircle className="h-4 w-4 mr-1" />{" "}
+                  <p className={authError}>
+                    <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                     {errors.confirmPassword}
                   </p>
                 )}
               </div>
               {errors.submit && (
-                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-sm">
-                  <p className="text-sm text-red-600 dark:text-red-400 flex items-center">
+                <div className="rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-900/20">
+                  <p className="text-base text-red-600 dark:text-red-400 flex items-center">
                     <AlertCircle className="h-4 w-4 mr-2" /> {errors.submit}
                   </p>
                 </div>
               )}
             </div>
-            <div className="flex space-x-3 mt-6">
+            <div className="mt-6 flex gap-3">
               <button
                 onClick={() => setResetStep("verify")}
-                className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-sm transition-colors shadow-sm"
+                className={authSecondaryButton}
                 disabled={isResetting}
               >
                 Back
@@ -408,7 +402,7 @@ const ResetPassword = ({
                   !confirmPassword ||
                   newPassword !== confirmPassword
                 }
-                className="flex-1 py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-600 dark:to-purple-600 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                className={authPrimaryButton}
               >
                 {isResetting ? "Resetting..." : "Reset Password"}
               </button>
@@ -423,11 +417,13 @@ const ResetPassword = ({
 
   if (resetSent && resetStep === "request") {
     return (
-      <div className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-lg p-8 border border-gray-200 dark:border-gray-700 shadow-xl">
+      <div className="w-full">
         <div className="text-center">
-          <CheckCircle className="h-16 w-16 text-green-500 dark:text-green-400 mx-auto mb-4" />
-          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            Check Your Email!
+          <span className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-green-600/10 text-green-600 dark:text-green-400">
+            <CheckCircle className="h-5 w-5" />
+          </span>
+          <h4 className="mb-2 text-4xl font-semibold text-gray-900 dark:text-white">
+            Check your email
           </h4>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             We've sent a 6-digit OTP to
@@ -435,10 +431,10 @@ const ResetPassword = ({
           <p className="text-blue-600 dark:text-blue-400 font-medium text-lg mb-6">
             {resetEmail}
           </p>
-          <div className="p-4 bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-sm mb-6">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="mb-6 rounded-lg border border-gray-200 bg-gray-50 p-4 text-left dark:border-gray-700 dark:bg-gray-900">
+            <p className="text-base text-gray-600 dark:text-gray-400">
               <span className="text-green-600 dark:text-green-400 font-medium">
-                📧 OTP Sent:{" "}
+                Code sent.{" "}
               </span>
               Enter the verification code in the next step. The code expires in
               10 minutes.
@@ -449,7 +445,7 @@ const ResetPassword = ({
               setResetStep("verify");
               setResetSent(false);
             }}
-            className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-500 dark:from-green-600 dark:to-emerald-600 text-white font-medium rounded-sm transition-all mb-3 shadow-sm"
+            className={`${authPrimaryButton} mb-3`}
           >
             Enter Verification Code
           </button>
@@ -459,7 +455,7 @@ const ResetPassword = ({
               setResetEmail("");
               setResetSent(false);
             }}
-            className="w-full py-3 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium rounded-sm transition-colors shadow-sm"
+            className={authSecondaryButton}
           >
             Back to Login
           </button>
@@ -469,17 +465,19 @@ const ResetPassword = ({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-lg p-8 border border-gray-200 dark:border-gray-700 shadow-xl">
-      <div className="text-center mb-6">
-        <Lock className="h-12 w-12 text-blue-500 dark:text-blue-400 mx-auto mb-4" />
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+    <div className="w-full">
+      <div className="mb-8 text-center">
+        <span className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400">
+          <Lock className="h-5 w-5" />
+        </span>
+        <h3 className="mb-2 text-4xl font-semibold text-gray-900 dark:text-white">
           {resetStep === "verify"
             ? "Verify OTP"
             : resetStep === "new-password"
               ? "Set New Password"
               : "Reset Password"}
         </h3>
-        <p className="text-gray-600 dark:text-gray-400 text-sm">
+        <p className="mb-0 text-lg text-gray-500 dark:text-gray-400">
           {resetStep === "verify"
             ? "Enter the 6-digit code from your email"
             : resetStep === "new-password"
