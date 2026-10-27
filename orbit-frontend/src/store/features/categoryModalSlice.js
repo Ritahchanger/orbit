@@ -18,9 +18,9 @@ const categoryModalSlice = createSlice({
     openCategoriesModal: (state) => {
       state.categoriesModal = true;
     },
-    closeCategoriesModal: (state) => {
-      state.categoriesModal = false;
-    },
+    // Closing the manager also closes any dialog opened from it, so nothing
+    // reappears the next time it opens.
+    closeCategoriesModal: () => initialState,
     openCreateModal: (state) => {
       state.isCreateModalOpen = true;
     },

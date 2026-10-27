@@ -25,7 +25,12 @@ const productSchema = new mongoose.Schema(
       validate: {
         validator: async function (value) {
           const Category = mongoose.model("Category");
-          const exists = await Category.findOne({ name: value });
+          const filter = { name: value };
+          // On document saves, only accept a category from the same business
+          if (this instanceof mongoose.Document && this.businessId) {
+            filter.businessId = this.businessId;
+          }
+          const exists = await Category.exists(filter);
           return !!exists;
         },
         message: "Invalid category",
