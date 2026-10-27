@@ -1,6 +1,7 @@
 import { Search } from "lucide-react"
 
-const SearchAndFilters = ({ searchQuery, setSearchQuery, selectedRole, setSelectedRole, viewMode, setViewMode, roles }) => {
+// Search box and list/grid toggle. Role filtering lives in RoleTabs.
+const SearchAndFilters = ({ searchQuery, setSearchQuery, viewMode, setViewMode }) => {
     return (
         <div className="flex flex-col md:flex-row gap-4 mb-2">
             {/* Search Input */}
@@ -19,20 +20,6 @@ const SearchAndFilters = ({ searchQuery, setSearchQuery, selectedRole, setSelect
 
             {/* Filters */}
             <div className="flex items-center space-x-4">
-                {/* Role Filter */}
-                <select
-                    value={selectedRole}
-                    onChange={(e) => setSelectedRole(e.target.value)}
-                    className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors text-sm md:text-base min-w-[120px]"
-                >
-                    <option value="all">All Roles</option>
-                    {roles.map(role => (
-                        <option key={role.id} value={role.id}>
-                            {role.name}
-                        </option>
-                    ))}
-                </select>
-
                 {/* View Mode Filter */}
                 <select
                     value={viewMode}

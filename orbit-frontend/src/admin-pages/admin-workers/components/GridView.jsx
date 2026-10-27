@@ -1,4 +1,5 @@
 // GridView.jsx (updated)
+import FeatureGate from "../../../components/common/FeatureGate";
 import {
   Phone,
   Calendar,
@@ -14,11 +15,11 @@ import {
   Eye,
   AlertCircle,
 } from "lucide-react";
-import { useRole } from "../../../context/authentication/RoleContext";
 import { useUserModal } from "../../../globals/hooks/useUserModal";
 import { useState } from "react";
 
 import SuspendUserModal from "./SuspendUserModal";
+import UserActions from "./UserActions";
 
 const GridView = ({
   filteredUsers,
@@ -32,8 +33,8 @@ const GridView = ({
   onSuspendUser, // New prop
   onUnsuspendUser, // New prop
   isSuspending = false, // New prop for loading state
+  getAllowedActions,
 }) => {
-  const { isAdmin, isSuperadmin } = useRole();
   const { openModal } = useUserModal();
 
   // New state for suspension modal
@@ -170,7 +171,9 @@ const GridView = ({
               <div className="flex flex-col items-end space-y-2">
                 {getRoleBadge(user.role)}
                 <div className="flex gap-1">
-                  <NewsletterBadge subscribed={user.newsletter} />
+                  <FeatureGate feature="newsletter">
+                    <NewsletterBadge subscribed={user.newsletter} />
+                  </FeatureGate>
                   <SuspensionBadge user={user} />
                 </div>
               </div>
@@ -343,90 +346,25 @@ const GridView = ({
                   ID: {user._id.substring(0, 8)}...
                 </div>
                 <div className="flex space-x-1">
-                  {/* View Details Button */}
-                  <button
-                    onClick={() => handleViewUser(user)}
-                    className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded transition-all hover:scale-110 duration-200 group relative"
-                    title="View Details"
-                  >
-                    <Eye
-                      size={16}
-                      className="text-gray-600 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-                    />
-                    <span className="absolute -top-2 -right-2 w-2 h-2 bg-blue-500 rounded-full animate-pulse group-hover:animate-none"></span>
-                  </button>
-
-                  {/* Role Change Button */}
-                  <button
-                    onClick={() => {
-                      setSelectedUser(user);
+                  <UserActions
+                    user={user}
+                    allowed={getAllowedActions(user)}
+                    onView={handleViewUser}
+                    onChangeRole={(u) => {
+                      setSelectedUser(u);
                       setShowRoleModal(true);
                     }}
-                    className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                    title="Change Role"
-                  >
-                    <Shield
-                      size={16}
-                      className="text-blue-600 dark:text-blue-400"
-                    />
-                  </button>
-
-                  {/* Store Assignment Button - only for admins */}
-                  {(isAdmin || isSuperadmin) && (
-                    <button
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setShowAssignStoreModal(true);
-                      }}
-                      className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                      title={
-                        user.assignedStore ? "Change Store" : "Assign Store"
-                      }
-                    >
-                      <Store
-                        size={16}
-                        className={
-                          user.assignedStore
-                            ? "text-green-600 dark:text-green-400"
-                            : "text-gray-500 dark:text-gray-400"
-                        }
-                      />
-                    </button>
-                  )}
-
-                  {/* Suspend/Unsuspend Button - only for admins */}
-                  {(isAdmin || isSuperadmin) &&
-                    (user.isSuspended ? (
-                      <button
-                        onClick={() => handleUnsuspendClick(user)}
-                        className="p-1.5 hover:bg-green-100 dark:hover:bg-green-500/20 text-green-600 dark:text-green-400 rounded transition-colors"
-                        title="Unsuspend User"
-                      >
-                        <Unlock size={16} />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleSuspendClick(user)}
-                        className="p-1.5 hover:bg-amber-100 dark:hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded transition-colors"
-                        title="Suspend User"
-                      >
-                        <Lock size={16} />
-                      </button>
-                    ))}
-
-                  {/* Delete Button - only for admins/superadmins */}
-                  {(isAdmin || isSuperadmin) && (
-                    <button
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setShowDeleteModal(true);
-                      }}
-                      className="p-1.5 hover:bg-red-100 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded transition-colors"
-                      title="Delete User"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  )}
+                    onAssignStore={(u) => {
+                      setSelectedUser(u);
+                      setShowAssignStoreModal(true);
+                    }}
+                    onSuspend={handleSuspendClick}
+                    onUnsuspend={handleUnsuspendClick}
+                    onDelete={(u) => {
+                      setSelectedUser(u);
+                      setShowDeleteModal(true);
+                    }}
+                  />
                 </div>
               </div>
             </div>

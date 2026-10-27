@@ -189,3 +189,59 @@ export const exportAllUsers = async (fetchAllUsers, format = 'csv') => {
         return false;
     }
 };
+
+const escapeHtml = (value) =>
+    String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
+// Prints a users report from a separate window, so the app page is left as it is.
+export const printUsers = (users) => {
+    const win = window.open('', '_blank', 'width=1000,height=700');
+    if (!win) return false; // blocked by a pop-up blocker
+
+    const rows = users
+        .map((user) => {
+            const name = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.name || '';
+            return `<tr>
+                <td>${escapeHtml(name)}</td>
+                <td>${escapeHtml(user.email)}</td>
+                <td>${escapeHtml(user.role)}</td>
+                <td>${escapeHtml(user.phoneNo || user.phone || '')}</td>
+                <td>${escapeHtml(user.assignedStore?.name || '')}</td>
+                <td>${user.isSuspended ? 'Suspended' : 'Active'}</td>
+            </tr>`;
+        })
+        .join('');
+
+    win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+    <title>Users Report - ${new Date().toLocaleDateString()}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 24px; color: #111; }
+        h1 { margin: 0 0 4px; font-size: 20px; }
+        p { margin: 0 0 16px; color: #555; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+        th { background: #f3f4f6; }
+        tr:nth-child(even) td { background: #fafafa; }
+        @page { size: landscape; margin: 0.5in; }
+    </style>
+</head>
+<body>
+    <h1>Users Report</h1>
+    <p>Generated ${new Date().toLocaleString()} &middot; ${users.length} users</p>
+    <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Phone</th><th>Store</th><th>Status</th></tr></thead>
+        <tbody>${rows}</tbody>
+    </table>
+</body>
+</html>`);
+    win.document.close();
+    win.focus();
+    win.print();
+    return true;
+};

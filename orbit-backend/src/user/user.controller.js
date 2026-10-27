@@ -33,7 +33,7 @@ const getAdminById = async (req, res) => {
 
 const deleteAdmin = async (req, res) => {
   const { id } = req.params;
-  const result = await userService.deleteAdminById(id);
+  const result = await userService.deleteAdminById(id, req.user);
 
   res.status(200).json(result);
 };
@@ -78,6 +78,21 @@ const getUserStatistics = async (req, res) => {
 // Get user with detailed permissions
 const getUserWithPermissions = async (req, res) => {
   const { id } = req.params;
+  const user = await userService.getUserWithPermissions(id);
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+};
+
+// Get another user of this business (admin route GET /users/:id)
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  await userService.findManageableUser(req.user, id, {
+    allowSelf: true,
+    readOnly: true,
+  });
   const user = await userService.getUserWithPermissions(id);
 
   res.status(200).json({
@@ -209,7 +224,7 @@ const updateUserRole = async (req, res) => {
     });
   }
 
-  const user = await userService.updateUserRole(id, role, req.user?.role);
+  const user = await userService.updateUserRole(id, role, req.user);
 
   res.status(200).json({
     success: true,
@@ -235,6 +250,7 @@ const assignStoreToUser = async (req, res) => {
     userId,
     storeId,
     permissions,
+    req.user,
   );
 
   res.status(200).json({
@@ -256,7 +272,11 @@ const removeStoreFromUser = async (req, res) => {
     });
   }
 
-  const user = await userService.removeStoreFromUser(userId, storeId);
+  const user = await userService.removeStoreFromUser(
+    userId,
+    storeId,
+    req.user,
+  );
 
   res.status(200).json({
     success: true,
@@ -297,13 +317,12 @@ const setPrimaryStore = async (req, res) => {
 
 // Get user's store permissions
 const getUserStorePermissions = async (req, res) => {
-  const { storeId } = req.params;
-
-  const userId = req.user?._id;
+  const { userId, storeId } = req.params;
 
   const permissions = await userService.getUserStorePermissions(
     userId,
     storeId,
+    req.user,
   );
 
   res.status(200).json({
@@ -353,8 +372,6 @@ const suspendUserController = async (req, res) => {
     const { id: userId } = req.params;
     const { reason } = req.body;
 
-    // Logged-in admin
-    const adminId = req.user.id;
     const adminRole = req.user.role;
 
     // Authorization check
@@ -365,7 +382,7 @@ const suspendUserController = async (req, res) => {
       });
     }
 
-    const result = await userService.suspendUser(userId, adminId, reason);
+    const result = await userService.suspendUser(userId, req.user, reason);
 
     return res.status(200).json(result);
   } catch (error) {
@@ -385,11 +402,12 @@ const unsuspendUserController = async (req, res) => {
       message: "You are not authorized to unsuspend users",
     });
   }
-  const result = await userService.unsuspendUser(userId);
+  const result = await userService.unsuspendUser(userId, req.user);
   return res.status(200).json(result);
 };
 
 module.exports = {
+  getUserById,
   // Original controllers
   getAllAdmins,
   getAdminById,

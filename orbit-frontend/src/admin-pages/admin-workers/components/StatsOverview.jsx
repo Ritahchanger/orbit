@@ -1,3 +1,4 @@
+import FeatureGate from "../../../components/common/FeatureGate";
 import { StatsSkeletonLoader } from "../preloaders/UsersPreloader"
 import {
     Users,
@@ -62,6 +63,7 @@ const StatsOverview = ({statsLoading,stats}) => {
                     </div>
 
                     {/* Newsletter Card */}
+                    <FeatureGate feature="newsletter">
                     <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
                         <div className="flex items-center justify-between">
                             <div>
@@ -76,6 +78,7 @@ const StatsOverview = ({statsLoading,stats}) => {
                             Subscribed users
                         </div>
                     </div>
+                    </FeatureGate>
                 </>
             )}
         </div>

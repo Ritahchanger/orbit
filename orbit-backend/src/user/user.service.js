@@ -1,6 +1,51 @@
 const User = require("./user.model");
+const Store = require("../stores/store.model");
+const CustomError = require("../errors/CustomError");
 const generateToken = require("../utils/generateToken");
 const bcrypt = require("bcryptjs");
+
+const isObjectId = (id) => typeof id === "string" && /^[0-9a-fA-F]{24}$/.test(id);
+const PRIVILEGED_ROLES = ["admin", "superadmin"];
+// Roles an admin may hand out; superadmins may assign any role
+const ADMIN_ASSIGNABLE_ROLES = ["manager", "cashier", "staff"];
+
+/**
+ * Finds a user that `actor` (req.user) is allowed to act on from the workers
+ * page: the user must belong to the actor's business, may not be the actor
+ * (unless allowSelf), and only a superadmin may act on admins or superadmins
+ * (unless readOnly).
+ */
+const findManageableUser = async (
+  actor,
+  targetId,
+  { allowSelf = false, readOnly = false } = {},
+) => {
+  if (!isObjectId(targetId)) {
+    throw CustomError.badRequest("Invalid user ID format");
+  }
+
+  const user = await User.findOne({
+    _id: targetId,
+    businessId: actor.businessId,
+  });
+  if (!user) throw CustomError.notFound("User not found");
+
+  if (!allowSelf && user._id.toString() === actor._id.toString()) {
+    throw CustomError.forbidden("You can't do this to your own account");
+  }
+
+  if (
+    !readOnly &&
+    actor.role !== "superadmin" &&
+    PRIVILEGED_ROLES.includes(user.role)
+  ) {
+    throw CustomError.forbidden(
+      "Only a superadmin can manage admins and superadmins",
+    );
+  }
+
+  return user;
+};
 
 // ============ KEEP THESE UNCHANGED ============
 const registerUser = async (userData) => {
@@ -183,31 +228,24 @@ const changePassword = async (id, currentPassword, newPassword) => {
 };
 
 // Update user role (admin only)
-const updateUserRole = async (id, newRole, requesterRole) => {
-  if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid user ID format");
-  }
-
+const updateUserRole = async (id, newRole, actor) => {
   if (
     !["admin", "superadmin", "cashier", "manager", "staff"].includes(newRole)
   ) {
-    throw new Error("Invalid role specified");
+    throw CustomError.badRequest("Invalid role specified");
   }
 
-  // Only superadmin can assign superadmin role
-  if (newRole === "superadmin" && requesterRole !== "superadmin") {
-    throw new Error("Only superadmin can assign superadmin role");
+  // Admins can only hand out roles below their own
+  if (
+    actor.role !== "superadmin" &&
+    !ADMIN_ASSIGNABLE_ROLES.includes(newRole)
+  ) {
+    throw CustomError.forbidden(
+      "Only a superadmin can make someone an admin or superadmin",
+    );
   }
 
-  const user = await User.findById(id);
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  // Prevent modifying protected user
-  if (user.email === "codewithmunyao@gmail.com") {
-    throw new Error("This user's role cannot be modified");
-  }
+  const user = await findManageableUser(actor, id);
 
   user.role = newRole;
   await user.save();
@@ -218,19 +256,24 @@ const updateUserRole = async (id, newRole, requesterRole) => {
   return userResponse;
 };
 
-// Assign store to user
-const assignStoreToUser = async (userId, storeId, permissions = {}) => {
-  if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid user ID format");
+// Assign store to user. For managers, cashiers and staff this also becomes
+// their assigned store, which is what the store switcher and the store access
+// checks use for non-admins.
+const assignStoreToUser = async (userId, storeId, permissions = {}, actor) => {
+  if (!isObjectId(storeId)) {
+    throw CustomError.badRequest("Invalid store ID format");
   }
 
-  if (!storeId || !storeId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid store ID format");
-  }
+  const user = await findManageableUser(actor, userId, { allowSelf: true });
 
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new Error("User not found");
+  const storeExists = await Store.exists({
+    _id: storeId,
+    businessId: actor.businessId,
+  });
+  if (!storeExists) throw CustomError.notFound("Store not found");
+
+  if (!PRIVILEGED_ROLES.includes(user.role)) {
+    user.assignedStore = storeId;
   }
 
   // If user already has this store in permissions, update it
@@ -266,19 +309,12 @@ const assignStoreToUser = async (userId, storeId, permissions = {}) => {
 };
 
 // Remove store from user
-const removeStoreFromUser = async (userId, storeId) => {
-  if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid user ID format");
+const removeStoreFromUser = async (userId, storeId, actor) => {
+  if (!isObjectId(storeId)) {
+    throw CustomError.badRequest("Invalid store ID format");
   }
 
-  if (!storeId || !storeId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid store ID format");
-  }
-
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new Error("User not found");
-  }
+  const user = await findManageableUser(actor, userId, { allowSelf: true });
 
   // Remove from storePermissions
   user.storePermissions = user.storePermissions.filter(
@@ -332,23 +368,12 @@ const setPrimaryStore = async (userId, storeId) => {
 };
 
 // Suspend user (admin / superadmin)
-const suspendUser = async (userId, adminId, reason = "") => {
-  if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid user ID format");
-  }
+const suspendUser = async (userId, actor, reason = "") => {
+  const user = await findManageableUser(actor, userId);
 
-  if (!adminId || !adminId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid admin ID format");
-  }
-
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  // Protect superadmin from being suspended
+  // Superadmins can't be suspended, even by another superadmin
   if (user.role === "superadmin") {
-    throw new Error("Superadmin account cannot be suspended");
+    throw CustomError.forbidden("Superadmin account cannot be suspended");
   }
 
   if (user.isSuspended) {
@@ -358,7 +383,7 @@ const suspendUser = async (userId, adminId, reason = "") => {
   user.isSuspended = true;
   user.suspendedAt = new Date();
   user.suspensionReason = reason;
-  user.suspendedBy = adminId;
+  user.suspendedBy = actor._id;
 
   await user.save();
 
@@ -373,15 +398,8 @@ const suspendUser = async (userId, adminId, reason = "") => {
 };
 
 // Unsuspend user (admin / superadmin)
-const unsuspendUser = async (userId) => {
-  if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid user ID format");
-  }
-
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new Error("User not found");
-  }
+const unsuspendUser = async (userId, actor) => {
+  const user = await findManageableUser(actor, userId);
 
   if (!user.isSuspended) {
     throw new Error("User is not suspended");
@@ -405,21 +423,10 @@ const unsuspendUser = async (userId) => {
 };
 
 // Delete user by ID - IMPROVED VERSION
-const deleteAdminById = async (id) => {
-  if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid user ID format");
-  }
+const deleteAdminById = async (id, actor) => {
+  const user = await findManageableUser(actor, id);
 
-  const user = await User.findById(id);
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  if (user.email === "superadmin@example.com") {
-    throw new Error("This user account cannot be deleted");
-  }
-
-  const deletedUser = await User.findByIdAndDelete(id);
+  const deletedUser = await User.findByIdAndDelete(user._id);
 
   return {
     success: true,
@@ -430,19 +437,15 @@ const deleteAdminById = async (id) => {
 };
 
 // Get user's store permissions
-const getUserStorePermissions = async (userId, storeId) => {
-  if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid user ID format");
+const getUserStorePermissions = async (userId, storeId, actor) => {
+  if (!isObjectId(storeId)) {
+    throw CustomError.badRequest("Invalid store ID format");
   }
 
-  if (!storeId || !storeId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error("Invalid store ID format");
-  }
-
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new Error("User not found");
-  }
+  const user = await findManageableUser(actor, userId, {
+    allowSelf: true,
+    readOnly: true,
+  });
 
   return user.getStorePermissions(storeId);
 };
@@ -666,6 +669,7 @@ module.exports = {
   // Improved and new functions
   fetchAdminById,
   deleteAdminById,
+  findManageableUser,
   getAllUsers,
   getUserStats,
   fetchAllAdmins,

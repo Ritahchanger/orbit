@@ -1,3 +1,4 @@
+import FeatureGate from "../../../components/common/FeatureGate";
 import {
   Phone,
   Mail,
@@ -13,10 +14,10 @@ import {
   Unlock,
   Eye,
 } from "lucide-react";
-import { useRole } from "../../../context/authentication/RoleContext";
 import { useUserModal } from "../../../globals/hooks/useUserModal";
 import CustomerAvatar from "../../customers/CustomerAvatar";
 import SuspendUserModal from "./SuspendUserModal";
+import UserActions from "./UserActions";
 import { useState } from "react";
 const ListView = ({
   filteredUsers = [],
@@ -31,8 +32,8 @@ const ListView = ({
   onSuspendUser,
   onUnsuspendUser,
   isSuspending = false,
+  getAllowedActions,
 }) => {
-  const { isAdmin, isSuperadmin } = useRole();
 
   const { openModal } = useUserModal();
 
@@ -378,7 +379,9 @@ const ListView = ({
                           </div>
                         )}
 
-                        <NewsletterBadge subscribed={user.newsletter} />
+                        <FeatureGate feature="newsletter">
+                          <NewsletterBadge subscribed={user.newsletter} />
+                        </FeatureGate>
                         <div className="text-xs flex items-center gap-1">
                           {user.profileImage ? (
                             <>
@@ -419,91 +422,25 @@ const ListView = ({
                     {/* Actions */}
                     <td className="py-3 px-4">
                       <div className="flex items-center space-x-2">
-                        <button
-                          onClick={() => handleViewUser(user)}
-                          className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded transition-all hover:scale-110 duration-200 group relative"
-                          title="View Details"
-                        >
-                          <Eye
-                            size={16}
-                            className="text-gray-600 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-                          />
-                          <span className="absolute -top-2 -right-2 w-2 h-2 bg-blue-500 rounded-full animate-pulse group-hover:animate-none"></span>
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setSelectedUser(user);
+                        <UserActions
+                          user={user}
+                          allowed={getAllowedActions(user)}
+                          onView={handleViewUser}
+                          onChangeRole={(u) => {
+                            setSelectedUser(u);
                             setShowRoleModal?.(true);
                           }}
-                          className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                          title="Change Role"
-                        >
-                          <Shield
-                            size={16}
-                            className="text-blue-600 dark:text-blue-400"
-                          />
-                        </button>
-
-                        {/* Store Assignment Button - only for admins/managers */}
-                        {(isAdmin || isSuperadmin) && (
-                          <button
-                            onClick={() => {
-                              setSelectedUser(user);
-                              setShowAssignStoreModal?.(true);
-                            }}
-                            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                            title={
-                              user.assignedStore
-                                ? "Change Store Assignment"
-                                : "Assign Store"
-                            }
-                          >
-                            <Store
-                              size={16}
-                              className={
-                                user.assignedStore
-                                  ? "text-green-600 dark:text-green-400"
-                                  : "text-gray-500 dark:text-gray-400"
-                              }
-                            />
-                          </button>
-                        )}
-
-                        {/* ADD THESE SUSPEND/UNSUSPEND BUTTONS HERE */}
-                        {/* Suspend/Unsuspend Button - only for admins */}
-                        {(isAdmin || isSuperadmin) &&
-                          (user.isSuspended ? (
-                            <button
-                              onClick={() => handleUnsuspendClick(user)}
-                              className="p-1.5 hover:bg-green-100 dark:hover:bg-green-500/20 text-green-600 dark:text-green-400 rounded transition-colors"
-                              title="Unsuspend User"
-                            >
-                              <Unlock size={16} />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => handleSuspendClick(user)}
-                              className="p-1.5 hover:bg-amber-100 dark:hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded transition-colors"
-                              title="Suspend User"
-                            >
-                              <Lock size={16} />
-                            </button>
-                          ))}
-
-                        {/* Delete Button - only for admins/superadmins */}
-                        {(isAdmin || isSuperadmin) && (
-                          <button
-                            onClick={() => {
-                              setSelectedUser(user);
-                              setShowDeleteModal?.(true);
-                            }}
-                            className="p-1.5 hover:bg-red-100 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded transition-colors"
-                            title="Delete User"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        )}
+                          onAssignStore={(u) => {
+                            setSelectedUser(u);
+                            setShowAssignStoreModal?.(true);
+                          }}
+                          onSuspend={handleSuspendClick}
+                          onUnsuspend={handleUnsuspendClick}
+                          onDelete={(u) => {
+                            setSelectedUser(u);
+                            setShowDeleteModal?.(true);
+                          }}
+                        />
                       </div>
                     </td>
                   </tr>
