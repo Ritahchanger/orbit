@@ -1,82 +1,92 @@
-import { labelClass } from "./Components";
+import { Upload, Store } from "lucide-react";
 
-import { AlertCircle, Upload, Store } from "lucide-react";
+import { FieldError, RequiredMark } from "./Components";
+import { getInputClass, labelClass } from "./fieldStyles";
+import { authInputIcon } from "../../authStyles";
 
-const Step3 = ({logoPreview,handleInputChange,formData,errors}) => {
+const Step3 = ({ logoPreview, handleInputChange, formData, errors }) => {
   return (
-    <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="md:col-span-2">
-          <label className={labelClass}>Business Logo</label>
-          <div className="flex items-center gap-4 p-4 bg-white/5 border border-white/15 rounded-sm">
-            <div className="w-16 h-16 bg-white/10 rounded-sm border-2 border-dashed border-white/30 flex items-center justify-center overflow-hidden flex-shrink-0">
-              {logoPreview ? (
-                <img
-                  src={logoPreview}
-                  alt="Logo"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <Upload className="w-6 h-6 text-blue-300" />
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <input
-                type="file"
-                name="businessLogo"
-                onChange={handleInputChange}
-                accept="image/*"
-                className="w-full text-xs text-blue-200 file:mr-3 file:py-2 file:px-3 file:rounded-sm file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+    <div className="grid grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-2">
+      <div className="md:col-span-2">
+        <span className={labelClass}>Business logo</span>
+        <label
+          htmlFor="businessLogo"
+          className="flex cursor-pointer items-center gap-4 rounded-lg border border-dashed border-gray-300 p-4 transition-colors hover:border-blue-500 hover:bg-gray-50 dark:border-gray-700 dark:hover:border-blue-500 dark:hover:bg-gray-900"
+        >
+          <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900">
+            {logoPreview ? (
+              <img
+                src={logoPreview}
+                alt="Logo preview"
+                className="h-full w-full object-cover"
               />
-              <p className="text-xs text-blue-300 mt-1">
-                Square image, min 200×200px
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="md:col-span-2">
-          <label className={labelClass}>
-            Business Description <span className="text-red-300">*</span>
-          </label>
-          <textarea
-            name="businessDescription"
-            value={formData.businessDescription}
+            ) : (
+              <Upload className="h-5 w-5 text-gray-400" />
+            )}
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-lg font-medium text-gray-900 dark:text-white">
+              {formData.businessLogo
+                ? formData.businessLogo.name
+                : "Upload your logo"}
+            </span>
+            <span className="block text-base text-gray-500 dark:text-gray-400">
+              Square PNG or JPG, at least 200×200px
+            </span>
+          </span>
+          <span className="shrink-0 rounded-md border border-gray-300 px-3 py-1.5 text-base font-medium text-gray-700 dark:border-gray-700 dark:text-gray-200">
+            Browse
+          </span>
+          <input
+            id="businessLogo"
+            type="file"
+            name="businessLogo"
             onChange={handleInputChange}
-            rows="4"
-            placeholder="Tell us about your business, products, services..."
-            className={`w-full px-4 py-2.5 bg-white/10 border ${errors.businessDescription ? "border-red-400" : "border-white/20"} rounded-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none text-sm`}
+            accept="image/*"
+            className="sr-only"
           />
-          {errors.businessDescription && (
-            <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" />
-              {errors.businessDescription}
-            </p>
-          )}
-        </div>
+        </label>
+      </div>
 
-        <div>
-          <label className={labelClass}>
-            Number of Stores <span className="text-red-300">*</span>
-          </label>
-          <div className="relative">
-            <Store className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
-            <input
-              type="number"
-              name="numberOfStores"
-              value={formData.numberOfStores}
-              onChange={handleInputChange}
-              min="1"
-              className={`w-full pl-10 pr-4 py-2.5 bg-white/10 border ${errors.numberOfStores ? "border-red-400" : "border-white/20"} rounded-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm`}
-            />
-          </div>
-          {errors.numberOfStores && (
-            <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" />
-              {errors.numberOfStores}
-            </p>
+      <div className="md:col-span-2">
+        <label htmlFor="businessDescription" className={labelClass}>
+          Business description
+          <RequiredMark />
+        </label>
+        <textarea
+          id="businessDescription"
+          name="businessDescription"
+          value={formData.businessDescription}
+          onChange={handleInputChange}
+          rows="4"
+          placeholder="What does your business sell or offer?"
+          className={getInputClass(
+            "businessDescription",
+            errors,
+            "h-auto! resize-none py-2.5",
           )}
+        />
+        <FieldError message={errors.businessDescription} />
+      </div>
+
+      <div>
+        <label htmlFor="numberOfStores" className={labelClass}>
+          Number of stores
+          <RequiredMark />
+        </label>
+        <div className="relative">
+          <Store className={authInputIcon} />
+          <input
+            id="numberOfStores"
+            type="number"
+            name="numberOfStores"
+            value={formData.numberOfStores}
+            onChange={handleInputChange}
+            min="1"
+            className={getInputClass("numberOfStores", errors)}
+          />
         </div>
+        <FieldError message={errors.numberOfStores} />
       </div>
     </div>
   );

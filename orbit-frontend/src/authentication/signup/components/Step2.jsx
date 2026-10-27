@@ -1,6 +1,49 @@
-import { IconInput } from "./Components";
-import { Lock, AlertCircle, Eye, EyeOff } from "lucide-react";
-import { labelClass } from "./Components";
+import { Lock, Eye, EyeOff } from "lucide-react";
+
+import { IconInput, FieldError, RequiredMark } from "./Components";
+import { getInputClass, labelClass } from "./fieldStyles";
+import { authInputIcon } from "../../authStyles";
+
+const PasswordInput = ({
+  field,
+  label,
+  value,
+  onChange,
+  visible,
+  setVisible,
+  errors,
+  autoComplete,
+}) => (
+  <div>
+    <label htmlFor={field} className={labelClass}>
+      {label}
+      <RequiredMark />
+    </label>
+    <div className="relative">
+      <Lock className={authInputIcon} />
+      <input
+        id={field}
+        type={visible ? "text" : "password"}
+        name={field}
+        value={value}
+        onChange={onChange}
+        autoComplete={autoComplete}
+        placeholder="At least 8 characters"
+        className={getInputClass(field, errors, "pl-10 pr-11")}
+      />
+      <button
+        type="button"
+        aria-label={visible ? "Hide password" : "Show password"}
+        onClick={() => setVisible(!visible)}
+        className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1.5 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
+      >
+        {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+      </button>
+    </div>
+    <FieldError message={errors[field]} />
+  </div>
+);
+
 const Step2 = ({
   fieldProps,
   User,
@@ -15,38 +58,42 @@ const Step2 = ({
   setShowConfirmPassword,
 }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-2">
       <IconInput
         icon={User}
         field="adminFirstName"
-        label="First Name"
+        label="First name"
         placeholder="John"
+        autoComplete="given-name"
         required
         {...fieldProps}
       />
       <IconInput
         icon={User}
         field="adminLastName"
-        label="Last Name"
+        label="Last name"
         placeholder="Doe"
+        autoComplete="family-name"
         required
         {...fieldProps}
       />
       <IconInput
         icon={Mail}
         field="adminEmail"
-        label="Email Address"
+        label="Email address"
         type="email"
-        placeholder="john@example.com"
+        placeholder="john@company.com"
+        autoComplete="email"
         required
         {...fieldProps}
       />
       <IconInput
         icon={Phone}
         field="adminPhone"
-        label="Phone Number"
+        label="Phone number"
         type="tel"
         placeholder="+254 700 000 000"
+        autoComplete="tel"
         required
         {...fieldProps}
       />
@@ -56,80 +103,32 @@ const Step2 = ({
           field="adminUsername"
           label="Username"
           placeholder="johndoe"
+          autoComplete="username"
           required
           {...fieldProps}
         />
       </div>
 
-      {/* Password */}
-      <div>
-        <label className={labelClass}>
-          Password <span className="text-red-300">*</span>
-        </label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
-          <input
-            type={showPassword ? "text" : "password"}
-            name="adminPassword"
-            value={formData.adminPassword}
-            onChange={handleInputChange}
-            placeholder="••••••••"
-            className={`w-full pl-10 pr-10 py-2.5 bg-white/10 border ${errors.adminPassword ? "border-red-400" : "border-white/20"} rounded-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm`}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white"
-          >
-            {showPassword ? (
-              <EyeOff className="w-4 h-4" />
-            ) : (
-              <Eye className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-        {errors.adminPassword && (
-          <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-            <AlertCircle className="w-3 h-3" />
-            {errors.adminPassword}
-          </p>
-        )}
-      </div>
-
-      {/* Confirm Password */}
-      <div>
-        <label className={labelClass}>
-          Confirm Password <span className="text-red-300">*</span>
-        </label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
-          <input
-            type={showConfirmPassword ? "text" : "password"}
-            name="adminConfirmPassword"
-            value={formData.adminConfirmPassword}
-            onChange={handleInputChange}
-            placeholder="••••••••"
-            className={`w-full pl-10 pr-10 py-2.5 bg-white/10 border ${errors.adminConfirmPassword ? "border-red-400" : "border-white/20"} rounded-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm`}
-          />
-          <button
-            type="button"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white"
-          >
-            {showConfirmPassword ? (
-              <EyeOff className="w-4 h-4" />
-            ) : (
-              <Eye className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-        {errors.adminConfirmPassword && (
-          <p className="mt-1 text-xs text-red-300 flex items-center gap-1">
-            <AlertCircle className="w-3 h-3" />
-            {errors.adminConfirmPassword}
-          </p>
-        )}
-      </div>
+      <PasswordInput
+        field="adminPassword"
+        label="Password"
+        value={formData.adminPassword}
+        onChange={handleInputChange}
+        visible={showPassword}
+        setVisible={setShowPassword}
+        errors={errors}
+        autoComplete="new-password"
+      />
+      <PasswordInput
+        field="adminConfirmPassword"
+        label="Confirm password"
+        value={formData.adminConfirmPassword}
+        onChange={handleInputChange}
+        visible={showConfirmPassword}
+        setVisible={setShowConfirmPassword}
+        errors={errors}
+        autoComplete="new-password"
+      />
     </div>
   );
 };
