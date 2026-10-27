@@ -13,9 +13,10 @@ const Store = require("../../stores/store.model");
 
 require("dotenv").config();
 
-const signUp = async (req, res) => {
-  console.log(req.body);
+// Roles an admin may create; superadmins may create any role
+const ADMIN_CREATABLE_ROLES = ["manager", "cashier", "staff"];
 
+const signUp = async (req, res) => {
   const { error, value: validatedData } = userSignupValidator.validate(
     req.body,
   );
@@ -25,6 +26,45 @@ const signUp = async (req, res) => {
       success: false,
       message: error.details[0].message,
     });
+  }
+
+  const businessId = req.businessId;
+  if (!businessId) {
+    return res.status(403).json({
+      success: false,
+      message: "Your account isn't linked to a business",
+    });
+  }
+
+  const role = validatedData.role || "staff";
+  if (req.user.role !== "superadmin" && !ADMIN_CREATABLE_ROLES.includes(role)) {
+    return res.status(403).json({
+      success: false,
+      message: "Only a superadmin can create admins and superadmins",
+    });
+  }
+
+  // Every store referenced must belong to the caller's business
+  const storeIds = [
+    ...new Set(
+      [
+        validatedData.assignedStore,
+        ...(validatedData.storePermissions || []).map((p) => p.store),
+        ...(validatedData.storeRoles || []).map((r) => r.store),
+      ].filter(Boolean),
+    ),
+  ];
+  if (storeIds.length > 0) {
+    const ownStores = await Store.countDocuments({
+      _id: { $in: storeIds },
+      businessId,
+    });
+    if (ownStores !== storeIds.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Store not found in your business",
+      });
+    }
   }
 
   const { email, firstName, lastName, profileImage } = validatedData;
@@ -54,8 +94,11 @@ const signUp = async (req, res) => {
 
   const userDataWithPassword = {
     ...validatedData,
+    role,
     profileImage: finalProfileImage,
     password: randomPassword,
+    // Never taken from the request body
+    businessId,
   };
 
   const newUser =
