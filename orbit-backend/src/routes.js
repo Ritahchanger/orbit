@@ -1,6 +1,10 @@
+const { isFeatureEnabled } = require("./config/features");
+
 // Every API route, mounted in this order by server.js. Order matters where
-// paths overlap: /products/related must come before /products.
-module.exports = [
+// paths overlap: /products/related must come before /products. An optional
+// third entry names a feature (config/features.js); the route is only
+// mounted while that feature is on.
+const routes = [
   ["/api/v1/quotes", require("./quotation/quotation.routes")],
   ["/api/v1/newsletters", require("./newsletters/newsletters.routes")],
   ["/api/v1/products/related", require("./products/routes/related-products.routes")],
@@ -14,7 +18,7 @@ module.exports = [
   ["/api/v1/sales", require("./sales/sales.routes")],
   ["/api/v1/stores-inventory", require("./store-inventory/store-inventory.routes")],
   ["/api/v1/otp", require("./auth/otp/otp.routes")],
-  ["/api/v1/bookings", require("./booking/booking.routes")],
+  ["/api/v1/bookings", require("./booking/booking.routes"), "consultations"],
   ["/api/v1/permissions", require("./permissions/routes/permission.routes")],
   ["/api/v1/roles", require("./permissions/routes/role.routes")],
   ["/api/v1/reports", require("./reports/reports.routes")],
@@ -27,9 +31,17 @@ module.exports = [
   ["/api/v1/business", require("./business/business.routes")],
   ["/api/v1/subscription", require("./subscription/subscription.routes")],
   ["/api/v1/logs", require("./custom-logs/logs.routes")],
-  ["/api/v1/consultations", require("./booking/sent-consultation-email.routes")],
+  [
+    "/api/v1/consultations",
+    require("./booking/sent-consultation-email.routes"),
+    "consultations",
+  ],
   ["/api/v1/stock-transfers", require("./stock-transfer/stock-transfer.routes")],
   ["/api/v1/orders", require("./orders/order.routes")],
   ["/api/v1/invoices", require("./invoices/invoice.routes")],
   ["/api/v1/storefront", require("./storefront/storefront.routes")],
 ];
+
+module.exports = routes
+  .filter(([, , feature]) => !feature || isFeatureEnabled(feature))
+  .map(([routePath, router]) => [routePath, router]);

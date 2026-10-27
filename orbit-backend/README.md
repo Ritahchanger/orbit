@@ -53,6 +53,10 @@ A module that other modules depend on exposes an `index.js` as its public API (s
 
 Use `src/utils/log.js`: `log.debug` for development detail (silent in production unless `LOG_LEVEL=debug`), `log.info` for startup and connection messages, `log.warn` / `log.error` for problems. Never log passwords, tokens or one-time codes.
 
+## Feature switches
+
+`src/config/features.js` switches whole features off. The consultations feature (bookings, consultation types, availability, consultation emails) is off unless `FEATURE_CONSULTATIONS=true`; its routes aren't mounted. Routes opt in by naming the feature as the third entry in `src/routes.js`.
+
 ## Known gaps
 
 - `store-inventory/controllers/` and `store-inventory/services/` are an unfinished split of `store-inventory.controller.js`; nothing loads them yet.

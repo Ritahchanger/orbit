@@ -170,8 +170,8 @@ class BookingService {
         const query = {};
 
         if (startDate && endDate) {
-            $gte: new Date(startDate),
             query.date = {
+                $gte: new Date(startDate),
                 $lte: new Date(endDate)
             };
         }

@@ -6,7 +6,8 @@
 //   consultation types are shared by every business.
 //
 // Set a flag to true to bring the feature back: its routes, menu entries
-// and links on the public site reappear.
+// and links on the public site reappear. Consultations is also switched off
+// in the backend (FEATURE_CONSULTATIONS in orbit-backend/src/config/features.js).
 export const FEATURES = {
   newsletter: false,
   consultations: false,
