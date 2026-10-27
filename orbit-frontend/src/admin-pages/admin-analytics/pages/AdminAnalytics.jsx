@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import AdminLayout from "../../dashboard/layout/Layout";
 import ChartWrapper from "../components/Charts/ChartWrapper";
@@ -17,7 +16,7 @@ import {
     useStorePerformanceReport,
     usePaymentMethodAnalysis,
 } from "../../hooks/reports.hooks";
-import { useStores } from "../../hooks/store-hook";
+import { useStoreScope } from "../../../context/store/StoreContext";
 
 import {
     TrendingUp,
@@ -1091,27 +1090,8 @@ const AdminAnalytics = () => {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [showFullChart, setShowFullChart] = useState(null);
 
-    // Selected store lives in the URL (?store=<id>) so a filtered view can be
-    // bookmarked or shared. Until the store list loads the requested id is used
-    // as-is; after that, ids that aren't in the user's store list are ignored.
-    const [searchParams, setSearchParams] = useSearchParams();
-    const { data: storesData, isSuccess: storesLoaded } = useStores();
-    const stores = useMemo(() => storesData?.data || [], [storesData]);
-    const requestedStoreId = searchParams.get("store");
-    const selectedStore = stores.find((s) => s._id === requestedStoreId) || null;
-    const storeId = storesLoaded ? selectedStore?._id || null : requestedStoreId;
-
-    const handleStoreChange = (value) => {
-        setSearchParams(
-            (prev) => {
-                const next = new URLSearchParams(prev);
-                if (value) next.set("store", value);
-                else next.delete("store");
-                return next;
-            },
-            { replace: true },
-        );
-    };
+    // Which store to show comes from the store strip under the navbar
+    const { storeId, store: selectedStore } = useStoreScope();
 
     const timeRangeOptions = [
         { value: "7d", label: "Last 7 days" },
@@ -1177,24 +1157,6 @@ const AdminAnalytics = () => {
 
                     {/* Controls */}
                     <div className="flex items-center gap-2 flex-wrap">
-                        {/* Store */}
-                        <div className="relative">
-                            <Store className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
-                            <select
-                                value={storeId || ""}
-                                onChange={(e) => handleStoreChange(e.target.value)}
-                                aria-label="Filter by store"
-                                className="appearance-none bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm pl-9 pr-7 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[14rem] truncate"
-                            >
-                                <option value="">All stores</option>
-                                {stores.map((s) => (
-                                    <option key={s._id} value={s._id}>
-                                        {s.name}{s.code ? ` (${s.code})` : ""}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
                         {/* Time range */}
                         <div className="relative">
                             <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />

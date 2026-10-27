@@ -1,5 +1,6 @@
 import { Store, Building2, ChevronRight, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
+import AllStoresOption from "./AllStoresOption";
 
 const StoresControls = ({
     accessibleStores,
@@ -15,7 +16,10 @@ const StoresControls = ({
     canManageStore,
     currentStore,
     canAccessStore,
-    getPermissionsForStore
+    getPermissionsForStore,
+    canViewAllStores,
+    isAllStores,
+    onSelectAllStores
 }) => {
     return (
         <div className="flex items-center gap-2">
@@ -56,9 +60,17 @@ const StoresControls = ({
                                 </div>
 
                                 <div className="max-h-60 overflow-y-auto">
+                                    {canViewAllStores && (
+                                        <AllStoresOption
+                                            variant="menu"
+                                            active={isAllStores}
+                                            onSelect={onSelectAllStores}
+                                            storeCount={accessibleStores.length}
+                                        />
+                                    )}
                                     {stores.map(store => {
                                         const isAccessible = canAccessStore(store._id);
-                                        const isCurrent = currentStore?._id === store._id;
+                                        const isCurrent = !isAllStores && currentStore?._id === store._id;
                                         const permissions = getPermissionsForStore(store._id);
 
                                         return (

@@ -1,4 +1,5 @@
 import { statusClass } from "../../../components/common/status/statusStyles";
+import StoreScopeNote from "../../dashboard/components/StoreScopeNote";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -315,6 +316,8 @@ const InventoryPage = () => {
             </button>
           </div>
         </div>
+
+        <StoreScopeNote className="mb-3" />
 
         {/* Stats Cards */}
         <StatsCards statsLoading={statsLoading} stats={stats} />

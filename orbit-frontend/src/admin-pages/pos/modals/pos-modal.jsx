@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import StoreScopeNote from "../../dashboard/components/StoreScopeNote";
 import { useSelector, useDispatch } from "react-redux";
 import CashPaymentModal from "./CashpaymentModal";
 import { X, ShoppingCart, Building, Plus, Users } from "lucide-react";
@@ -866,6 +867,8 @@ const POSPaymentModal = () => {
               searchResultsRef={searchResultsRef}
             />
           </div>
+
+          <StoreScopeNote className="mx-5 mt-2 rounded-sm" />
 
           {/* Main Content */}
           <div className="flex-1 overflow-hidden flex">

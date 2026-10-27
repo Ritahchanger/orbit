@@ -1,13 +1,9 @@
 import { Store, AlertCircle, ShoppingCart, Package, Download, RefreshCw, Calendar } from "lucide-react"
 
 const AdminHeader = ({
-    handleStoreChange,
     isAdmin,
     isSuperadmin,
     primaryStore,
-    storeOptions,
-    isViewingAllStores,
-    getSelectValue,
     dateString,
     handleDateChange,
     handleTodayClick,
@@ -67,29 +63,6 @@ const AdminHeader = ({
             </div>
 
             <div className="flex flex-col md:flex-row gap-2">
-                {/* Store Selector - Only for admins and superadmins */}
-                {canSelectStore && storeOptions.length > 0 && (
-                    <div className="relative">
-                        <Store className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
-                        <select
-                            value={getSelectValue()}
-                            onChange={handleStoreChange}
-                            className="pl-9 pr-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 min-w-[180px]"
-                        >
-                            {storeOptions.map(option => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                            {isViewingAllStores && !isAdmin && !isSuperadmin && (
-                                <AlertCircle size={12} className="text-blue-500 dark:text-blue-400" title="Showing data from your assigned store" />
-                            )}
-                        </div>
-                    </div>
-                )}
-
                 {/* Store Info Badge - For non-admins */}
                 {/* {!canSelectStore && renderStoreInfo()} */}
 

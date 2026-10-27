@@ -9,7 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { useProductPerformanceReport } from "../../hooks/reports.hooks";
-import { useStoreContext } from "../../../context/store/StoreContext";
+import { useStoreScope } from "../../../context/store/StoreContext";
 import AdminProductsPerformanceError from "./errors/AdminProductsPerformance";
 import SortingControls from "./products/SortingControls";
 import { useDebounce } from "../../../globals/hooks/useDebounce";
@@ -62,15 +62,10 @@ const AdminProductReports = ({ handleExport }) => {
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
   // Get current store from context
-  const { currentStore } = useStoreContext();
+  const { storeId: scopedStoreId, store: currentStore } = useStoreScope();
 
-  // Determine storeId for API call
-  const storeId = useMemo(() => {
-    if (!currentStore || currentStore === "global") {
-      return undefined; // All stores
-    }
-    return currentStore._id; // Specific store
-  }, [currentStore]);
+  // Store chosen in the store strip; undefined means all stores
+  const storeId = scopedStoreId || undefined;
 
   // Fetch product performance data
   const {

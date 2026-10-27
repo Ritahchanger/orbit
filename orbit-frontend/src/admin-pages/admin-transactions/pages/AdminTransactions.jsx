@@ -27,7 +27,7 @@ import transactionsApi from "../../services/transaction-api";
 import { downloadPdf, pdfErrorMessage } from "../components/pdfFile";
 import { toast } from "react-hot-toast";
 
-import { useStoreContext } from "../../../context/store/StoreContext";
+import { useStoreScope } from "../../../context/store/StoreContext";
 
 const AdminTransactions = () => {
   const [page, setPage] = useState(1);
@@ -43,13 +43,16 @@ const AdminTransactions = () => {
     ...(status && { status }),
   };
 
+  // Which store to show comes from the store strip under the navbar
+  const { store: currentStore, scopeKey } = useStoreScope();
+
   // Fetch today's summary
   const {
     data: todayData,
     isLoading: todayLoading,
     error: todayError,
     refetch: refetchToday,
-  } = useTodaySummary();
+  } = useTodaySummary(scopeKey);
 
   // Fetch transactions with pagination
   const {
@@ -57,7 +60,12 @@ const AdminTransactions = () => {
     isLoading: transactionsLoading,
     error: transactionsError,
     refetch: refetchTransactions,
-  } = useTransactions({ page, limit, ...listFilters });
+  } = useTransactions({
+    page,
+    limit,
+    ...listFilters,
+    storeId: currentStore?._id || "all",
+  });
 
   // Extract data
   const todaySummary = todayData?.data || {};
@@ -72,7 +80,6 @@ const AdminTransactions = () => {
     refetchTransactions();
   };
 
-  const { currentStore } = useStoreContext();
 
   // Clear filters
   const clearFilters = () => {

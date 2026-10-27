@@ -15,7 +15,10 @@ import { format } from "date-fns";
 import colorClasses from "../components/ColorClass";
 import PageContainer from "../../components/ui/PageContainer";
 import StatCard from "../../components/ui/StatCard";
-import { useStoreContext } from "../../../context/store/StoreContext";
+import {
+  useStoreContext,
+  useStoreScope,
+} from "../../../context/store/StoreContext";
 import MainReportContent from "../components/MainReportContent";
 import { reportTypes } from "../components/ReportsTypes";
 import { useRoleContext } from "../../../context/RolePermissionContext";
@@ -76,16 +79,13 @@ const AdminReports = () => {
     loading: rolesLoading,
   } = useRoleContext();
 
-  const {
-    stores: contextStores,
-    loading: storesLoading,
-    currentStore,
-  } = useStoreContext();
+  const { stores: contextStores, isLoading: storesLoading } =
+    useStoreContext();
 
-  // The global store switcher is the single source of truth, so the summary,
-  // exports and every report tab always show the same store.
-  const selectedStore =
-    currentStore && currentStore !== "global" ? currentStore._id : "all";
+  // The store strip under the navbar is the single source of truth, so the
+  // summary, exports and every report tab always show the same store.
+  const { storeId: scopedStoreId } = useStoreScope();
+  const selectedStore = scopedStoreId || "all";
 
   // Check if user has access to reports at all
   const canViewReports =

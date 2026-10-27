@@ -8,6 +8,9 @@ import {
     ChevronRight
 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import AllStoresOption from './AllStoresOption';
+import { useStoreContext } from '../../../context/store/StoreContext';
 
 const MobileMenuOpen = ({
     allowedNavItems,
@@ -20,6 +23,10 @@ const MobileMenuOpen = ({
     handleLogout
 }) => {
     const [showStoreMenu, setShowStoreMenu] = useState(false);
+    const { isAllStores, selectAllStores } = useStoreContext();
+    // Same rule as the desktop strip: admins and superadmins with several stores
+    const canViewAllStores =
+        (userRole === 'superadmin' || userRole === 'admin') && stores?.length > 1;
 
     return (
         <div className="lg:hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
@@ -36,10 +43,12 @@ const MobileMenuOpen = ({
                             </div>
                             <div className="text-left">
                                 <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                    {currentStore?.name || 'Select Store'}
+                                    {isAllStores ? 'All stores' : currentStore?.name || 'Select Store'}
                                 </p>
                                 <p className="text-xs text-gray-600 dark:text-gray-400">
-                                    {currentStore?.code || 'No store selected'}
+                                    {isAllStores
+                                        ? `${stores?.length || 0} stores combined`
+                                        : currentStore?.code || 'No store selected'}
                                 </p>
                             </div>
                         </div>
@@ -52,6 +61,19 @@ const MobileMenuOpen = ({
                     {/* Store List */}
                     {showStoreMenu && stores && stores.length > 0 && (
                         <div className="mt-2 bg-gray-50 dark:bg-gray-700/50 rounded-sm border border-gray-200 dark:border-gray-600 overflow-hidden">
+                            {canViewAllStores && (
+                                <AllStoresOption
+                                    variant="mobile"
+                                    active={isAllStores}
+                                    storeCount={stores.length}
+                                    onSelect={() => {
+                                        selectAllStores();
+                                        setShowStoreMenu(false);
+                                        setIsMobileMenuOpen(false);
+                                        toast.success('Showing all stores');
+                                    }}
+                                />
+                            )}
                             {stores.map(store => (
                                 <button
                                     key={store._id}
@@ -60,10 +82,10 @@ const MobileMenuOpen = ({
                                         setShowStoreMenu(false);
                                         setIsMobileMenuOpen(false);
                                     }}
-                                    className={`w-full text-left px-4 py-3 border-b border-gray-200 dark:border-gray-600 last:border-b-0 flex items-center justify-between transition-colors ${currentStore?._id === store._id ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+                                    className={`w-full text-left px-4 py-3 border-b border-gray-200 dark:border-gray-600 last:border-b-0 flex items-center justify-between transition-colors ${!isAllStores && currentStore?._id === store._id ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
                                 >
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-8 h-8 flex items-center justify-center rounded-sm ${currentStore?._id === store._id ? 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400' : 'bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400'}`}>
+                                        <div className={`w-8 h-8 flex items-center justify-center rounded-sm ${!isAllStores && currentStore?._id === store._id ? 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400' : 'bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400'}`}>
                                             <Store size={14} />
                                         </div>
                                         <div className="text-left">
@@ -75,7 +97,7 @@ const MobileMenuOpen = ({
                                             </p>
                                         </div>
                                     </div>
-                                    {currentStore?._id === store._id && (
+                                    {!isAllStores && currentStore?._id === store._id && (
                                         <div className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400"></div>
                                     )}
                                 </button>

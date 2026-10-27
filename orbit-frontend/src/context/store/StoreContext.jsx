@@ -7,7 +7,27 @@ const StoreContext = createContext();
 // Session storage keys
 const STORAGE_KEYS = {
     CURRENT_STORE: 'current_store_id',
-    IS_INITIALIZED: 'store_context_initialized'
+    IS_INITIALIZED: 'store_context_initialized',
+    VIEW_ALL: 'store_view_all'
+};
+
+// "All stores" view: true/false once chosen, null until the store strip has
+// applied the default for the user's role.
+const readViewAll = () => {
+    try {
+        const saved = sessionStorage.getItem(STORAGE_KEYS.VIEW_ALL);
+        return saved === null ? null : saved === 'true';
+    } catch {
+        return null;
+    }
+};
+
+const saveViewAll = (value) => {
+    try {
+        sessionStorage.setItem(STORAGE_KEYS.VIEW_ALL, String(value));
+    } catch (error) {
+        console.error('Failed to save store view to sessionStorage:', error);
+    }
 };
 
 export const StoreProvider = ({ children }) => {
@@ -23,6 +43,7 @@ export const StoreProvider = ({ children }) => {
 
     const [currentStore, setCurrentStore] = useState(null);
     const [isInitialized, setIsInitialized] = useState(false);
+    const [isAllStores, setIsAllStores] = useState(readViewAll);
 
     // Use memo to avoid unnecessary recalculations
     const stores = useMemo(() => {
@@ -113,7 +134,9 @@ export const StoreProvider = ({ children }) => {
     }, [stores, isInitialized, currentStore]);
 
     // Switch store function (with sessionStorage caching)
-    const switchStore = (storeId) => {
+    // keepView: change the remembered store without leaving "All stores"
+    // (used when restoring the user's assigned store on login/refresh).
+    const switchStore = (storeId, { keepView = false } = {}) => {
         if (!storeId || !stores || stores.length === 0) {
             console.error('Cannot switch store: invalid storeId or no stores available');
             return;
@@ -123,6 +146,10 @@ export const StoreProvider = ({ children }) => {
         if (store) {
             console.log('Switching store to:', store.name);
             setCurrentStore(store);
+            if (!keepView) {
+                setIsAllStores(false);
+                saveViewAll(false);
+            }
 
             try {
                 sessionStorage.setItem(STORAGE_KEYS.CURRENT_STORE, store._id);
@@ -135,12 +162,27 @@ export const StoreProvider = ({ children }) => {
         }
     };
     
+    // Show every store on pages that support it. Single-store pages (POS,
+    // inventory) keep using currentStore, the last store that was picked.
+    const selectAllStores = () => {
+        setIsAllStores(true);
+        saveViewAll(true);
+    };
+
+    // Used by the store strip to apply the role-based default once.
+    const setDefaultView = (viewAll) => {
+        setIsAllStores(viewAll);
+        saveViewAll(viewAll);
+    };
+
     const clearStore = () => {
         console.log('Clearing store selection');
         setCurrentStore(null);
+        setIsAllStores(null);
         try {
             sessionStorage.removeItem(STORAGE_KEYS.CURRENT_STORE);
             sessionStorage.removeItem(STORAGE_KEYS.IS_INITIALIZED);
+            sessionStorage.removeItem(STORAGE_KEYS.VIEW_ALL);
         } catch (error) {
             console.error('Failed to clear store from sessionStorage:', error);
         }
@@ -157,10 +199,15 @@ export const StoreProvider = ({ children }) => {
         switchStore,
         hasStore: !!currentStore,
         clearStore,
-        isCurrentStore: (storeId) => currentStore?._id === storeId
+        isCurrentStore: (storeId) => currentStore?._id === storeId,
+        isAllStores: isAllStores === true,
+        isViewResolved: isAllStores !== null,
+        selectAllStores,
+        setDefaultView,
     }), [
         stores,
         currentStore,
+        isAllStores,
         isLoading,
         isFetching,
         isError,
@@ -185,4 +232,21 @@ export const useStoreContext = () => {
 export const useStoreId = () => {
     const context = useStoreContext();
     return context.storeId;
+};
+
+/**
+ * What a page that can show several stores should display, as chosen in the
+ * store strip. storeId is null and store is null when "All stores" is
+ * selected; scopeKey is the store id or "global" (what the report hooks take).
+ */
+export const useStoreScope = () => {
+    const { currentStore, isAllStores, isViewResolved } = useStoreContext();
+    const store = isAllStores ? null : currentStore;
+    return {
+        isAllStores,
+        isReady: isViewResolved && (isAllStores || !!currentStore),
+        store,
+        storeId: store?._id || null,
+        scopeKey: store?._id || 'global',
+    };
 };
