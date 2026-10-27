@@ -1,3 +1,4 @@
+import FeatureGate from "../../../components/common/FeatureGate";
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import {
@@ -119,12 +120,14 @@ const Home = () => {
                             Join Nairobi's largest gaming community. Visit our store or join online for exclusive benefits.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <button
-                                onClick={scrollToNewsletter}
-                                className="rounded-sm bg-linear-to-r from-primary to-[#00D4FF] px-10 py-4 text-sm md:text-lg font-bold text-white transition-all hover:scale-105 hover:shadow-glow-blue flex items-center justify-center gap-2"
-                            >
-                                <Gift size={20} /> JOIN FOR EXCLUSIVE DEALS
-                            </button>
+                            <FeatureGate feature="newsletter">
+                                <button
+                                    onClick={scrollToNewsletter}
+                                    className="rounded-sm bg-linear-to-r from-primary to-[#00D4FF] px-10 py-4 text-sm md:text-lg font-bold text-white transition-all hover:scale-105 hover:shadow-glow-blue flex items-center justify-center gap-2"
+                                >
+                                    <Gift size={20} /> JOIN FOR EXCLUSIVE DEALS
+                                </button>
+                            </FeatureGate>
                             <Link
                                 to="/products"
                                 className="rounded-sm text-sm  border-2 border-white/30 bg-white/5 px-10 py-4 md:text-lg font-bold text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:scale-105 flex items-center justify-center gap-2"

@@ -1,3 +1,4 @@
+import FeatureGate from "../../../components/common/FeatureGate";
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -976,13 +977,15 @@ const ProductDetails = () => {
                   <MapPin size={20} />
                   Get Directions
                 </a>
-                <Link
-                  to="/setup-consultation"
-                  className="px-8 py-4 border-2 border-white/30 bg-white/5 text-white rounded-sm text-lg font-bold hover:bg-white/10 transition flex items-center justify-center gap-3"
-                >
-                  <Calendar size={20} />
-                  Book Free Consultation
-                </Link>
+                <FeatureGate feature="consultations">
+                  <Link
+                    to="/setup-consultation"
+                    className="px-8 py-4 border-2 border-white/30 bg-white/5 text-white rounded-sm text-lg font-bold hover:bg-white/10 transition flex items-center justify-center gap-3"
+                  >
+                    <Calendar size={20} />
+                    Book Free Consultation
+                  </Link>
+                </FeatureGate>
                 <a
                   href="tel:+254700000000"
                   className="px-8 py-4 bg-[#00FF88] hover:bg-[#00DD77] text-black rounded-sm text-lg font-bold transition flex items-center justify-center gap-3"

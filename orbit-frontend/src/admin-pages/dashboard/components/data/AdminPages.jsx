@@ -26,9 +26,9 @@ export const adminPages = [
     { id: 'stores', name: 'Stores', path: '/admin/stores', icon: Store, roles: ['admin', 'superadmin'], category: 'Management' },
 
     // Consultation
-    { id: 'consultation', name: 'Consultation', path: '/admin/consultation-setup', icon: Calendar, roles: ['superadmin'], category: 'Services' },
+    { id: 'consultation', name: 'Consultation', path: '/admin/consultation-setup', icon: Calendar, roles: ['superadmin'], category: 'Services', feature: 'consultations' },
 
-    { id: 'consultation-types', name: 'Consultation Types', path: '/admin/consultation/types', icon: Calendar, roles: ['superadmin'], category: 'Services' },
+    { id: 'consultation-types', name: 'Consultation Types', path: '/admin/consultation/types', icon: Calendar, roles: ['superadmin'], category: 'Services', feature: 'consultations' },
 
     // Reports & Analytics
     { id: 'reports', name: 'Reports', path: '/admin/reports', icon: FileText, roles: ['admin', 'superadmin', 'manager'], category: 'Analytics' },
@@ -52,5 +52,5 @@ export const adminPages = [
 
     { id: 'api-keys', name: 'API Keys', path: '/admin/system/api-keys', icon: Shield, roles: ['superadmin'], category: 'System' },
 
-    { id: 'newsletter', name: 'Newsletter', path: '/admin/newsletter', icon: FileText, roles: ['superadmin'], category: 'System' },
+    { id: 'newsletter', name: 'Newsletter', path: '/admin/newsletter', icon: FileText, roles: ['superadmin'], category: 'System', feature: 'newsletter' },
 ]

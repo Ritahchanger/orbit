@@ -1,3 +1,4 @@
+import FeatureGate from "../../../components/common/FeatureGate";
 import { Monitor, Trophy, Check, Gamepad2 } from "lucide-react"
 
 import { useNavigate } from "react-router-dom"
@@ -67,12 +68,14 @@ const ProductShowcaseTabs = ({ activeTab, storeBenefits, setActiveTab }) => {
                                     </li>
                                 ))}
                             </ul>
-                            <button
-                                onClick={() => { handleNavigateSetup() }}
-                                className="w-full bg-primary/20 hover:bg-primary/30 text-primary py-3 rounded-sm font-medium transition"
-                            >
-                                BOOK SETUP CONSULTATION
-                            </button>
+                            <FeatureGate feature="consultations">
+                                <button
+                                    onClick={() => { handleNavigateSetup() }}
+                                    className="w-full bg-primary/20 hover:bg-primary/30 text-primary py-3 rounded-sm font-medium transition"
+                                >
+                                    BOOK SETUP CONSULTATION
+                                </button>
+                            </FeatureGate>
                         </div>
                     ))}
                 </div>

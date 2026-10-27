@@ -25,6 +25,7 @@ import {
 
 // import { mainNavLinks, categories, storeEvents, initialSearchSuggestions } from '../../data'
 import SearchBar from "./SearchBar";
+import { withEnabledFeatures } from "../../../config/features";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -256,7 +257,7 @@ const Navbar = () => {
               </div>
 
               {/* Main Navigation Links */}
-              {mainNavLinks.map((link) => (
+              {withEnabledFeatures(mainNavLinks).map((link) => (
                 <NavLink
                   key={link.to}
                   to={link.to}
@@ -412,7 +413,7 @@ const Navbar = () => {
 
               {/* Mobile Navigation Links */}
               <div className="space-y-2 mb-6">
-                {mainNavLinks.map((link) => (
+                {withEnabledFeatures(mainNavLinks).map((link) => (
                   <Link
                     key={link.to}
                     to={link.to}
