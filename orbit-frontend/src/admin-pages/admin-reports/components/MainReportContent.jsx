@@ -18,7 +18,7 @@ const MainReportContent = ({
     <div className="bg-white dark:bg-gray-800 rounded-sm shadow-sm border border-gray-200 dark:border-gray-700 p-4">
       {dashboardLoading ? (
         <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-sm h-8 w-8 border-b-2 border-primary-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
         </div>
       ) : (
         <>
@@ -172,7 +172,7 @@ const MainReportContent = ({
               </div>
               {inventoryLoading ? (
                 <div className="flex justify-center py-8">
-                  <div className="animate-spin rounded-sm h-6 w-6 border-b-2 border-primary-500"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-500"></div>
                 </div>
               ) : (
                 <div>

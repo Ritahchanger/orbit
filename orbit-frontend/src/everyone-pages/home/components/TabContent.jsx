@@ -426,7 +426,7 @@ const TabContent = () => {
         })}
       </div>
       <button
-        className="bg-blue-500 px-3 py-3 rounded-[2px] mx-auto block text-sm hover:bg-blue-600 transition-colors duration-200 flex items-center gap-2"
+        className="bg-blue-500 px-3 py-3 rounded-sm mx-auto block text-sm hover:bg-blue-600 transition-colors duration-200 flex items-center gap-2"
         onClick={() => {
           navigate("/products");
         }}

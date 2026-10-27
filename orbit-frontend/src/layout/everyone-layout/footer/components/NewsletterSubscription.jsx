@@ -52,7 +52,7 @@ const NewsletterSubscription = ({
               >
                 {loading ? (
                   <>
-                    <span className="animate-spin rounded-sm h-4 w-4 border-2 border-white border-t-transparent"></span>
+                    <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
                     <span className="hidden sm:inline">Subscribing...</span>
                   </>
                 ) : subscribed ? (
