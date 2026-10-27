@@ -2,6 +2,7 @@
 const Transaction = require("./transaction.model");
 const Sale = require("./sales.model");
 const mongoose = require("mongoose");
+const log = require("../utils/log");
 
 /**
  * Transaction Delete Service
@@ -145,7 +146,7 @@ const transactionDeleteService = {
 
     // Log deletion for audit (if you have an audit log)
     if (deletedBy) {
-      console.log(
+      log.debug(
         `User ${deletedBy} permanently deleted ${deleteResult.deletedCount} transactions:`,
         {
           transactionIds: existingIds,

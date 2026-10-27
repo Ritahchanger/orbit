@@ -1,5 +1,6 @@
 const userService = require("./user.service");
 require("dotenv").config();
+const log = require("../utils/log");
 
 // ============ EXISTING CONTROLLERS ============
 
@@ -168,7 +169,7 @@ const changePassword = async (req, res) => {
       currentPassword,
       newPassword,
     );
-    console.log(`Password changed successfully for user: ${userId}`);
+    log.debug(`Password changed successfully for user: ${userId}`);
     if (result.invalidatedSessions) {
       return res.status(200).json({
         success: true,

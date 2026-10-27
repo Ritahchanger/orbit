@@ -1,6 +1,6 @@
 // repositories/store-inventory.repository.js
 // The ONLY file in the products module allowed to require the StoreInventory
-// model. Narrow wrapper around the small set of queries product.service.js
+// model. Narrow wrapper around the small set of queries products.service.js
 // makes on its own behalf (linking products into a store's inventory). This
 // is NOT a conversion of the separate store-inventory backend module — that
 // module's own internals are a future, separate pass.

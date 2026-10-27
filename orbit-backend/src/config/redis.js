@@ -1,5 +1,6 @@
 const Redis = require("ioredis");
 require("dotenv").config();
+const log = require("../utils/log");
 
 class RedisClient {
     constructor() {
@@ -32,11 +33,11 @@ class RedisClient {
 
             // Event listeners
             this.client.on("connect", () => {
-                console.log("🟢 Redis: Connecting to Redis server...");
+                log.info("🟢 Redis: Connecting to Redis server...");
             });
 
             this.client.on("ready", () => {
-                console.log("✅ Redis: Successfully connected to Redis server");
+                log.info("✅ Redis: Successfully connected to Redis server");
             });
 
             this.client.on("error", (error) => {
@@ -44,11 +45,11 @@ class RedisClient {
             });
 
             this.client.on("close", () => {
-                console.log("🔴 Redis: Connection closed");
+                log.info("🔴 Redis: Connection closed");
             });
 
             this.client.on("reconnecting", () => {
-                console.log("🔄 Redis: Reconnecting...");
+                log.info("🔄 Redis: Reconnecting...");
             });
 
         } catch (error) {
@@ -163,7 +164,7 @@ class RedisClient {
     async quit() {
         try {
             await this.client.quit();
-            console.log("🛑 Redis: Connection closed gracefully");
+            log.info("🛑 Redis: Connection closed gracefully");
         } catch (error) {
             console.error("Redis QUIT error:", error);
             throw error;

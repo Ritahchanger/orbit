@@ -5,6 +5,7 @@ const Sale = require("../sales/sales.model");
 const { findProductBySku, incrementProductFields } = require("../products");
 const StoreInventory = require("../store-inventory/store-inventory.model");
 const mongoose = require("mongoose");
+const log = require("../utils/log");
 
 /**
  * REFUND SERVICE
@@ -18,7 +19,7 @@ class RefundService {
    * Process a refund - COMPLETE REFUND LOGIC
    */
   async processRefund(refundData) {
-    console.log(refundData);
+    log.debug(refundData);
 
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -258,7 +259,7 @@ class RefundService {
       await session.commitTransaction();
       session.endSession();
 
-      console.log("✅ Refund processed successfully:", {
+      log.debug("✅ Refund processed successfully:", {
         refundId: refund.refundId,
         transactionId: transaction.transactionId || transaction._id,
         amount: refundAmount,

@@ -1,8 +1,9 @@
 const reportService = require("../reports/reports.service");
 const { renderReportPdf } = require("../reports/reports.pdf");
-const salesService = require("./sales.services");
+const salesService = require("./sales.service");
 
-const posSalesService = require("./pos-service");
+const posSalesService = require("./pos.service");
+const log = require("../utils/log");
 
 // Record a new sale (global - storeId in body)
 
@@ -38,7 +39,7 @@ const getDailySummary = async (req, res) => {
 
   const { date, storeId } = req.query;
    
-  console.log("Business ID in getDailySummary:", req.businessId);
+  log.debug("Business ID in getDailySummary:", req.businessId);
 
   const businessId = req.businessId;
 

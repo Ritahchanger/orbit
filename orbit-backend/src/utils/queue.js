@@ -1,4 +1,5 @@
 const amqp = require("amqplib");
+const log = require("./log");
 
 class RabbitMQ {
   constructor() {
@@ -20,7 +21,7 @@ class RabbitMQ {
           const url =
             process.env.RABBITMQ_URL ||
             "amqp://orbitmq:strongpass123@localhost:5672";
-          console.log("🔍 Strategy 1: Connecting with URL");
+          log.debug("🔍 Strategy 1: Connecting with URL");
           return await amqp.connect(url);
         },
 
@@ -29,13 +30,13 @@ class RabbitMQ {
           const url =
             process.env.RABBITMQ_URL ||
             "amqp://orbitmq:strongpass123@localhost:5672/%2F";
-          console.log("🔍 Strategy 2: Connecting with URL + encoded vhost");
+          log.debug("🔍 Strategy 2: Connecting with URL + encoded vhost");
           return await amqp.connect(url);
         },
 
         // Strategy 3: Connection options object (most reliable)
         async () => {
-          console.log("🔍 Strategy 3: Connecting with options object");
+          log.debug("🔍 Strategy 3: Connecting with options object");
           return await amqp.connect({
             protocol: "amqp",
             hostname: process.env.RABBITMQ_HOST || "localhost",
@@ -50,7 +51,7 @@ class RabbitMQ {
 
         // Strategy 4: Try localhost with default guest (for testing)
         async () => {
-          console.log("🔍 Strategy 4: Testing with guest account");
+          log.debug("🔍 Strategy 4: Testing with guest account");
           return await amqp.connect("amqp://guest:guest@localhost:5672");
         },
       ];
@@ -61,11 +62,11 @@ class RabbitMQ {
       for (let i = 0; i < connectionStrategies.length; i++) {
         try {
           this.connection = await connectionStrategies[i]();
-          console.log(`✅ Connected with strategy ${i + 1}`);
+          log.debug(`✅ Connected with strategy ${i + 1}`);
           break;
         } catch (err) {
           lastError = err;
-          console.log(`❌ Strategy ${i + 1} failed: ${err.message}`);
+          log.debug(`❌ Strategy ${i + 1} failed: ${err.message}`);
 
           // If this is the last strategy, throw the error
           if (i === connectionStrategies.length - 1) {
@@ -82,7 +83,7 @@ class RabbitMQ {
       });
 
       this.connection.on("close", () => {
-        console.log("RabbitMQ connection closed");
+        log.debug("RabbitMQ connection closed");
         this.isConnected = false;
         this.attemptReconnect();
       });
@@ -96,8 +97,8 @@ class RabbitMQ {
       await this.channel.assertQueue("newsletter_emails", { durable: true });
       await this.channel.assertQueue("newsletter_batches", { durable: true });
 
-      console.log("✅ Connected to RabbitMQ successfully");
-      console.log("📨 Queues ready: newsletter_emails, newsletter_batches");
+      log.debug("✅ Connected to RabbitMQ successfully");
+      log.debug("📨 Queues ready: newsletter_emails, newsletter_batches");
 
       return this.channel;
     } catch (error) {
@@ -132,7 +133,7 @@ class RabbitMQ {
     this.reconnectAttempts++;
     const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
 
-    console.log(
+    log.debug(
       `🔄 Reconnecting in ${delay / 1000}s... (Attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`,
     );
 
@@ -153,7 +154,7 @@ class RabbitMQ {
         { persistent: true },
       );
 
-      console.log(`📤 Published message to ${queueName}:`, result);
+      log.debug(`📤 Published message to ${queueName}:`, result);
       return result;
     } catch (error) {
       console.error(
@@ -176,12 +177,12 @@ class RabbitMQ {
         if (msg !== null) {
           try {
             const content = JSON.parse(msg.content.toString());
-            console.log(`📥 Received message from ${queue}`);
+            log.debug(`📥 Received message from ${queue}`);
 
             await callback(content);
 
             this.channel.ack(msg);
-            console.log(`✅ Message processed and acknowledged`);
+            log.debug(`✅ Message processed and acknowledged`);
           } catch (error) {
             console.error(
               `❌ Error processing message from ${queue}:`,
@@ -193,7 +194,7 @@ class RabbitMQ {
         }
       });
 
-      console.log(`👂 Listening on queue: ${queue}`);
+      log.debug(`👂 Listening on queue: ${queue}`);
       return consumer;
     } catch (error) {
       console.error(`❌ Failed to consume from queue ${queue}:`, error.message);
@@ -205,12 +206,12 @@ class RabbitMQ {
     try {
       if (this.channel) {
         await this.channel.close();
-        console.log("✅ Channel closed");
+        log.debug("✅ Channel closed");
       }
 
       if (this.connection) {
         await this.connection.close();
-        console.log("✅ Connection closed");
+        log.debug("✅ Connection closed");
       }
 
       this.isConnected = false;
@@ -226,7 +227,7 @@ class RabbitMQ {
       }
 
       const queueInfo = await this.channel.checkQueue(queueName);
-      console.log(`📊 Queue ${queueName} status:`, {
+      log.debug(`📊 Queue ${queueName} status:`, {
         messageCount: queueInfo.messageCount,
         consumerCount: queueInfo.consumerCount,
       });

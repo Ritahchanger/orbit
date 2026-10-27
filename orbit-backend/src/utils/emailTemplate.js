@@ -1,3 +1,5 @@
+const brand = require("../config/brand");
+
 // Email Templates Utility
 const getWelcomeEmailTemplate = ({
     firstName,
@@ -12,7 +14,7 @@ const getWelcomeEmailTemplate = ({
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to Mega Gamers</title>
+    <title>Welcome to ${brand.name}</title>
     <style>
         body {
             margin: 0;
@@ -148,7 +150,7 @@ const getWelcomeEmailTemplate = ({
 <body>
     <div class="container">
         <div class="header">
-            <h1>Mega Gamers</h1>
+            <h1>${brand.name}</h1>
             <p>Administrator Account Created</p>
         </div>
 
@@ -157,7 +159,7 @@ const getWelcomeEmailTemplate = ({
 
             <p>
                 Your administrator account has been successfully created.
-                You can now access the Mega Gamers management system using the credentials below.
+                You can now access the ${brand.name} management system using the credentials below.
             </p>
 
             <div class="credentials">
@@ -190,12 +192,12 @@ const getWelcomeEmailTemplate = ({
 
             <p>
                 Regards,<br />
-                <strong>Mega Gamers Support Team</strong>
+                <strong>The ${brand.name} team</strong>
             </p>
         </div>
 
         <div class="footer">
-            <p>© ${new Date().getFullYear()} Mega Gamers. All rights reserved.</p>
+            <p>© ${new Date().getFullYear()} ${brand.name}. All rights reserved.</p>
             <p>This is an automated message. Please do not reply.</p>
         </div>
     </div>

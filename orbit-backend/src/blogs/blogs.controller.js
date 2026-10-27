@@ -1,11 +1,12 @@
 const blogService = require("./blogs.service");
+const brand = require("../config/brand");
 
 class BlogController {
   // Create a new blog
   async createBlog(req, res) {
     const blogData = {
       ...req.body,
-      author: req.body.author || "AMPALAX LIMITED",
+      author: req.body.author || brand.name,
     };
 
     const blog = await blogService.createBlog(blogData);

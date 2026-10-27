@@ -1,7 +1,7 @@
 // src/permissions/index.js
 // Public API of the permissions module. Other modules should require THIS file
 // only — never reach into permissions/models or permissions/services directly.
-const roleService = require("./services/role.services");
+const roleService = require("./services/role.service");
 const permissionService = require("./services/permission.service");
 
 module.exports = {

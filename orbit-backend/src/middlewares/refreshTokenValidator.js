@@ -1,7 +1,7 @@
 // middlewares/refreshTokenValidator.js
 const jwt = require("jsonwebtoken");
 const User = require("../user/user.model");
-const RefreshToken = require("../auth/models/refreshTokenSchema"); // Create this model
+const RefreshToken = require("../auth/models/refresh-token.model"); // Create this model
 require("dotenv").config();
 
 const refreshTokenValidator = async (req, res, next) => {

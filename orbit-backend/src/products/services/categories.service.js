@@ -1,5 +1,5 @@
 const Category = require("../models/category.model");
-const Product = require("../products.model");
+const Product = require("../models/products.model");
 const CustomError = require("../../errors/CustomError");
 
 const toSlug = (name) => name.toLowerCase().trim().replace(/\s+/g, "-");

@@ -2,7 +2,7 @@ const User = require("../../user/user.model");
 
 const bcrypt = require("bcryptjs");
 
-const RefreshToken = require("../models/refreshTokenSchema");
+const RefreshToken = require("../models/refresh-token.model");
 
 const {
   generateToken,
@@ -11,7 +11,7 @@ const {
 
 const passwordGeneration = require("../../utils/generateStrongPassword");
 
-const Business = require("../../business/models/business.model");
+const Business = require("../../business/business.model");
 
 const {
   resolveUserPermissions,

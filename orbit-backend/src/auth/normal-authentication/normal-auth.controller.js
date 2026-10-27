@@ -10,6 +10,7 @@ const { transporter } = require("../../utils/transporter");
 const { getWelcomeEmailTemplate } = require("../../utils/emailTemplate");
 
 const Store = require("../../stores/store.model");
+const brand = require("../../config/brand");
 
 require("dotenv").config();
 
@@ -119,7 +120,7 @@ const signUp = async (req, res) => {
   await transporter.sendMail({
     from: process.env.COMPANY_EMAIL,
     to: email,
-    subject: "Your Mega Gamers Account Has Been Created",
+    subject: `Your ${brand.name} account has been created`,
     html: emailHtml,
   });
 

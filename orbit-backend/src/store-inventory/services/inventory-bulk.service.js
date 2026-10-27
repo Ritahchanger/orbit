@@ -1,8 +1,9 @@
+const log = require("../../utils/log");
 // services/inventory/inventory-bulk.service.js
 class InventoryBulkService {
 
     async quickAdd(storeId, items = [], user) {
-        console.log('🚀 [SERVICE] quickAdd called!', {
+        log.debug('🚀 [SERVICE] quickAdd called!', {
             storeId,
             itemsCount: items.length,
             userId: user?.id,
@@ -19,7 +20,7 @@ class InventoryBulkService {
                 throw new Error("No items provided");
             }
 
-            console.log('🔍 [SERVICE] Starting transaction for quick add');
+            log.debug('🔍 [SERVICE] Starting transaction for quick add');
             const session = await mongoose.startSession();
             session.startTransaction();
 
@@ -27,14 +28,14 @@ class InventoryBulkService {
                 const results = [];
                 const productIds = items.map(item => item.sku);
 
-                console.log('🔍 [SERVICE] Processing SKUs:', productIds);
+                log.debug('🔍 [SERVICE] Processing SKUs:', productIds);
 
                 // STEP 1: Get all products at once
                 const products = await this.Product.find({
                     _id: { $in: productIds }
                 }).session(session);
 
-                console.log('🔍 [SERVICE] Found products:', products.length);
+                log.debug('🔍 [SERVICE] Found products:', products.length);
 
                 // Create product map
                 const productMap = {};
@@ -48,7 +49,7 @@ class InventoryBulkService {
                     product: { $in: productIds }
                 }).session(session);
 
-                console.log('🔍 [SERVICE] Existing inventory items:', existingInventory.length);
+                log.debug('🔍 [SERVICE] Existing inventory items:', existingInventory.length);
 
                 // Create inventory map
                 const inventoryMap = {};
@@ -59,7 +60,7 @@ class InventoryBulkService {
                 // STEP 3: Process each item
                 for (const item of items) {
                     try {
-                        console.log('🔍 [SERVICE] Processing item:', item);
+                        log.debug('🔍 [SERVICE] Processing item:', item);
 
                         const product = productMap[item.sku];
                         if (!product) {
@@ -73,7 +74,7 @@ class InventoryBulkService {
 
                         if (inventoryItem) {
                             // ✅ UPDATE EXISTING INVENTORY ITEM
-                            console.log('🔄 [SERVICE] Updating existing inventory item');
+                            log.debug('🔄 [SERVICE] Updating existing inventory item');
 
                             inventoryItem.stock += quantity;
                             inventoryItem.lastRestock = new Date();
@@ -94,7 +95,7 @@ class InventoryBulkService {
                             });
                         } else {
                             // ✅ CREATE NEW INVENTORY ITEM
-                            console.log('🆕 [SERVICE] Creating new inventory item');
+                            log.debug('🆕 [SERVICE] Creating new inventory item');
 
                             inventoryItem = new this.StockInventory({
                                 store: storeId,
@@ -118,7 +119,7 @@ class InventoryBulkService {
                             });
                         }
 
-                        console.log('✅ [SERVICE] Item processed successfully');
+                        log.debug('✅ [SERVICE] Item processed successfully');
 
                     } catch (itemError) {
                         console.error('❌ [SERVICE] Error processing item:', itemError.message);
@@ -132,7 +133,7 @@ class InventoryBulkService {
                     }
                 }
 
-                console.log('🔍 [SERVICE] Committing transaction');
+                log.debug('🔍 [SERVICE] Committing transaction');
                 await session.commitTransaction();
                 session.endSession();
 
@@ -142,7 +143,7 @@ class InventoryBulkService {
                 const addedCount = results.filter(r => r.action === 'added').length;
                 const updatedCount = results.filter(r => r.action === 'updated').length;
 
-                console.log('✅ [SERVICE] Quick add completed:', {
+                log.debug('✅ [SERVICE] Quick add completed:', {
                     successCount,
                     failCount,
                     addedCount,
@@ -185,7 +186,7 @@ class InventoryBulkService {
      * Bulk update inventory items
      */
     async bulkUpdate(storeId, updates = [], user) {
-        console.log('📦 [SERVICE] bulkUpdate called:', {
+        log.debug('📦 [SERVICE] bulkUpdate called:', {
             storeId,
             updatesCount: updates.length,
             timestamp: new Date().toISOString()

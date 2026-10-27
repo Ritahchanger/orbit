@@ -1,12 +1,13 @@
 const ResetPasswordService = require("./resetPassword.service");
-const OTPService = require("../otp/otp.service");
+const OTPService = require("./otp.service");
+const log = require("../../utils/log");
 
 class ResetPasswordController {
   async resetPassword(req, res) {
     try {
       const { email, newPassword, otp } = req.body;
 
-      console.log(req.body)
+      log.debug(req.body)
 
       if (!email || !newPassword || !otp) {
         return res

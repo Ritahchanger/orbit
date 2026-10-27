@@ -3,6 +3,7 @@ const Store = require("./store.model");
 const User = require("../user/user.model");
 const { findProducts } = require("../products");
 const StoreInventory = require("../store-inventory/store-inventory.model");
+const log = require("../utils/log");
 
 class StoreService {
   /**
@@ -84,10 +85,10 @@ class StoreService {
    * Update store with access control
    */
   async updateStore(storeId, updateData, user) {
-    console.log("🔍 updateStore called with:");
-    console.log("storeId:", storeId);
-    console.log("updateData:", JSON.stringify(updateData, null, 2));
-    console.log("updateData keys:", Object.keys(updateData));
+    log.debug("🔍 updateStore called with:");
+    log.debug("storeId:", storeId);
+    log.debug("updateData:", JSON.stringify(updateData, null, 2));
+    log.debug("updateData keys:", Object.keys(updateData));
     const store = await Store.findById(storeId);
 
     if (!store) {

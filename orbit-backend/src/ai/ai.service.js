@@ -3,6 +3,7 @@ require("dotenv").config();
 const { GoogleGenAI } = require("@google/genai");
 
 const { GEMINI_MODELS } = require("./ai.constants");
+const log = require("../utils/log");
 
 class AIService {
   constructor() {
@@ -121,13 +122,13 @@ Return ONLY the JSON inside \`\`\`json\`\`\` tags.
   }
 
   async analyzeDashboard(data) {
-    console.log("📊 analyzeDashboard called");
-    console.log("🔑 API Key exists:", !!this.apiKey);
-    console.log("🤖 Model:", this.modelName);
+    log.debug("📊 analyzeDashboard called");
+    log.debug("🔑 API Key exists:", !!this.apiKey);
+    log.debug("🤖 Model:", this.modelName);
 
     try {
       const result = await this.analyzeData(data, { context: "dashboard" });
-      console.log("✅ analyzeDashboard success:", result);
+      log.debug("✅ analyzeDashboard success:", result);
       return result;
     } catch (error) {
       console.error("❌ analyzeDashboard error:", error);

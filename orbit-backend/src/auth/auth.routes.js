@@ -16,7 +16,7 @@ const permissionValidator = require("../middlewares/permissionValidator");
 
 const adminValidator = require("../middlewares/adminValidator");
 
-const recordAdminLog = require("../custom-logs/middleware/record-admin.middleware");
+const recordAdminLog = require("../custom-logs/record-admin.middleware");
 
 /**
  * @swagger

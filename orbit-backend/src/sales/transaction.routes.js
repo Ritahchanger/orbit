@@ -7,7 +7,7 @@ const asyncWrapper = require("../middlewares/asyncMiddleware");
 
 const tokenValidator = require("../middlewares/refreshTokenValidator");
 
-const recordAdminLog = require("../custom-logs/middleware/record-admin.middleware");
+const recordAdminLog = require("../custom-logs/record-admin.middleware");
 
 // ============ TRANSACTION ROUTES ============
 

@@ -1,6 +1,6 @@
 // repositories/product.repository.js
 // Only file (besides the model itself) allowed to query the Product collection directly.
-const Product = require("../products.model");
+const Product = require("../models/products.model");
 
 const findById = (id, { lean = true, session, select } = {}) => {
   let q = Product.findById(id);
