@@ -17,7 +17,6 @@ A multi-tenant platform where each **business** manages its own stores, inventor
 | `orbit-backend/` | Express + MongoDB REST API |
 | `orbit-frontend/` | React/Vite app: admin dashboard, marketing site, business storefronts |
 | `orbit-admin/` | Electron desktop shell that loads the admin dashboard |
-| `universal-main-frontend/` | Experimental scaffold, not wired into the rest of the system |
 
 ## Architecture
 
