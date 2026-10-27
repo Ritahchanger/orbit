@@ -141,6 +141,7 @@ const getUserWithPermissions = async (id) => {
     .populate("assignedStore", "name location status")
     .populate("storePermissions.store", "name location status")
     .populate("storeRoles.store", "name")
+    .populate("suspendedBy", "firstName lastName email")
     .lean();
 
   if (!user) {
@@ -527,7 +528,8 @@ const getAllUsers = async (options = {}, businessId) => {
     .limit(parseInt(limit))
     .lean();
 
-  const totalUsers = await User.countDocuments(query);
+  // Same filter as the page of users above, so totals cover this business only
+  const totalUsers = await User.countDocuments({ ...query, businessId });
   const totalPages = Math.ceil(totalUsers / limit);
 
   return {

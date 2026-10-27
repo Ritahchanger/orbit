@@ -7,7 +7,6 @@ const initialState = {
     size: 'md', // sm, md, lg, xl
     position: 'right', // right, left, center
     userData: null,
-    onClose: null,
 };
 
 const userSlice = createSlice({
@@ -15,7 +14,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         openModal: (state, action) => {
-            const { title = '', content, size = 'md', position = 'right', userData = null, onClose = null } = action.payload;
+            const { title = '', content, size = 'md', position = 'right', userData = null } = action.payload;
 
             state.isOpen = true;
             state.title = title;
@@ -23,17 +22,10 @@ const userSlice = createSlice({
             state.size = size;
             state.position = position;
             state.userData = userData;
-            state.onClose = onClose;
         },
 
-        closeModal: (state) => {
-            if (state.onClose) {
-                // Execute onClose callback if provided
-                state.onClose();
-            }
-
-            return initialState;
-        },
+        // Reducers must stay pure, so no close callback is stored or run here
+        closeModal: () => initialState,
 
         updateModalContent: (state, action) => {
             const { title, content, userData } = action.payload;
