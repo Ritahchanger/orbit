@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { LogOut, Menu, Moon, Search, Sun } from "lucide-react";
@@ -44,7 +45,9 @@ const SearchTrigger = () => {
           {isMac ? "⌘K" : "Ctrl K"}
         </kbd>
       </button>
-      {open && <SearchPalette onClose={() => setOpen(false)} />}
+      {/* Portalled to <body>: the navbar's backdrop-blur would otherwise
+          become the containing block for the palette's fixed overlay */}
+      {open && createPortal(<SearchPalette onClose={() => setOpen(false)} />, document.body)}
     </>
   );
 };
