@@ -14,8 +14,8 @@ const BusinessActivityCard = ({ businessId }) => {
 
   return (
     <Card
-      title="Status history"
-      description="Changes made from the console"
+      title="Console history"
+      description="Status and billing changes made from the console"
       bodyClassName="p-0"
       action={
         data?.pagination.total > entries.length && (
@@ -34,7 +34,7 @@ const BusinessActivityCard = ({ businessId }) => {
           <Skeleton className="h-4 w-1/2" />
         </div>
       ) : entries.length === 0 ? (
-        <EmptyState>No status changes yet.</EmptyState>
+        <EmptyState>No changes made from the console yet.</EmptyState>
       ) : (
         <ol className="divide-y divide-zinc-100 dark:divide-zinc-800">
           {entries.map((entry) => (

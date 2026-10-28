@@ -15,6 +15,14 @@ const platformApi = {
   // params: { search, status, plan, verified, sort, page, limit }
   businesses: (params) => platformClient.get("/businesses", { params }).then(data),
   business: (id) => platformClient.get(`/businesses/${id}`).then(data),
+  // Billing
+  subscriptions: (params) => platformClient.get("/billing/subscriptions", { params }).then(data),
+  payments: (params) => platformClient.get("/billing/payments", { params }).then(data),
+  plans: () => platformClient.get("/billing/plans").then(data),
+  extendTrial: (id, body) => platformClient.post(`/businesses/${id}/subscription/trial-extension`, body).then(data),
+  changePlan: (id, body) => platformClient.post(`/businesses/${id}/subscription/plan-change`, body).then(data),
+  recordPayment: (id, body) => platformClient.post(`/businesses/${id}/payments`, body).then(data),
+
   changeBusinessStatus: (id, status, reason) =>
     platformClient.patch(`/businesses/${id}/status`, { status, reason }).then(data),
 };

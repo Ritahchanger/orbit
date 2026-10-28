@@ -7,6 +7,9 @@ export const platformKeys = {
   overview: () => ["platform", "overview"],
   search: (q) => ["platform", "search", q],
   activity: (params) => ["platform", "activity", params],
+  subscriptions: (params) => ["platform", "billing", "subscriptions", params],
+  payments: (params) => ["platform", "billing", "payments", params],
+  plans: () => ["platform", "billing", "plans"],
   businesses: (params) => ["platform", "businesses", params],
   business: (id) => ["platform", "business", id],
 };

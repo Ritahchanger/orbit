@@ -14,6 +14,7 @@ import { tableClass, tbodyClass, tdClass, thClass, theadRowClass } from "../comp
 import BusinessActions from "../components/BusinessActions";
 import ChangeStatusDialog from "../components/ChangeStatusDialog";
 import BusinessActivityCard from "../components/BusinessActivityCard";
+import SubscriptionActions from "../components/billing/SubscriptionActions";
 import {
   capitalise,
   formatCompact,
@@ -162,7 +163,27 @@ const PlatformBusinessDetail = () => {
           </div>
         </Card>
 
-        <Card title="Subscription" bodyClassName="p-0">
+        <Card
+          title="Subscription"
+          bodyClassName="p-0"
+          action={
+            subscription && (
+              <SubscriptionActions
+                subscription={{
+                  businessId: business._id,
+                  businessName: business.businessName,
+                  planSlug: subscription.planSlug,
+                  billingCycle: subscription.billingCycle,
+                  status: subscription.status,
+                  pricePaid: subscription.pricePaid,
+                  currency: subscription.currency,
+                  trialEndDate: subscription.trialEndDate,
+                  currentPeriodEnd: subscription.currentPeriodEnd,
+                }}
+              />
+            )
+          }
+        >
           {subscription ? (
             <Details
               rows={[

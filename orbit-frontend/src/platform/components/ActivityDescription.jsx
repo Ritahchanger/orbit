@@ -1,6 +1,6 @@
 // One-line description of an activity log entry
 import { Link } from "react-router-dom";
-import { capitalise } from "../utils/format";
+import { capitalise, formatDate, formatMoney } from "../utils/format";
 
 const BusinessLink = ({ target }) =>
   target?.id ? (
@@ -25,6 +25,38 @@ const ActivityDescription = ({ entry, withTarget = true }) => {
           {withTarget ? " from " : "status from "}
           <span className="font-medium">{capitalise(entry.details?.from || "")}</span> to{" "}
           <span className="font-medium">{capitalise(entry.details?.to || "")}</span>
+        </>
+      );
+    case "payment.recorded":
+      return (
+        <>
+          Recorded a {formatMoney(entry.details?.amount, entry.details?.currency)} payment
+          {withTarget && (
+            <>
+              {" "}from <BusinessLink target={entry.target} />
+            </>
+          )}
+          {entry.details?.reference && <span className="font-mono text-xs"> ({entry.details.reference})</span>}
+        </>
+      );
+    case "subscription.trial_extended":
+      return (
+        <>
+          Extended {withTarget ? <><BusinessLink target={entry.target} />'s</> : "the"} trial by{" "}
+          <span className="font-medium">{entry.details?.days} days</span> to {formatDate(entry.details?.to)}
+        </>
+      );
+    case "subscription.plan_changed":
+      return (
+        <>
+          Changed {withTarget ? <><BusinessLink target={entry.target} />'s</> : "the"} plan from{" "}
+          <span className="font-medium">
+            {capitalise(entry.details?.from?.plan || "")} ({entry.details?.from?.billingCycle})
+          </span>{" "}
+          to{" "}
+          <span className="font-medium">
+            {capitalise(entry.details?.to?.plan || "")} ({entry.details?.to?.billingCycle})
+          </span>
         </>
       );
     case "auth.login":

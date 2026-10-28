@@ -9,6 +9,7 @@ import PlatformOverview from "./pages/PlatformOverview";
 import PlatformBusinesses from "./pages/PlatformBusinesses";
 import PlatformBusinessDetail from "./pages/PlatformBusinessDetail";
 import PlatformActivity from "./pages/PlatformActivity";
+import PlatformBilling from "./pages/PlatformBilling";
 import { EmptyState } from "./components/ui/States";
 
 const PlatformApp = () => (
@@ -19,6 +20,7 @@ const PlatformApp = () => (
         <Route index element={<PlatformOverview />} />
         <Route path="businesses" element={<PlatformBusinesses />} />
         <Route path="businesses/:id" element={<PlatformBusinessDetail />} />
+        <Route path="billing" element={<PlatformBilling />} />
         <Route path="activity" element={<PlatformActivity />} />
         <Route path="*" element={<EmptyState title="Page not found">This page doesn't exist in the console.</EmptyState>} />
       </Route>
