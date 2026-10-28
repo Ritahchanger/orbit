@@ -9,6 +9,14 @@ export const usePlatformOverview = () =>
     staleTime: 60 * 1000,
   });
 
+export const usePlatformActivity = (params) =>
+  useQuery({
+    queryKey: platformKeys.activity(params),
+    queryFn: () => platformApi.activity(params),
+    placeholderData: keepPreviousData,
+    staleTime: 15 * 1000,
+  });
+
 // Quick search; only runs from 2 characters, matching the server's minimum
 export const usePlatformSearch = (query) =>
   useQuery({
@@ -43,6 +51,7 @@ export const useChangeBusinessStatus = (id) => {
       queryClient.invalidateQueries({ queryKey: platformKeys.business(id) });
       queryClient.invalidateQueries({ queryKey: ["platform", "businesses"] });
       queryClient.invalidateQueries({ queryKey: platformKeys.overview() });
+      queryClient.invalidateQueries({ queryKey: ["platform", "activity"] });
     },
   });
 };

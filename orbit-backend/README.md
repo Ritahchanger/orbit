@@ -73,7 +73,11 @@ Platform admins (role `platform_admin`) are kept apart from businesses:
 - The platform module reads other modules only through their `index.js`.
 - Search (`GET /api/v1/platform/search`, and the business list's `search`) covers business name, email, registration number and city, store names and codes, and business owners' names. Owners are matched by name only and returned as name + business, with no contact details; staff and customers aren't searchable.
 
-Suspending or cancelling a business locks its users out: login refuses them and `tokenValidator` / `refreshTokenValidator` answer `403` with `code: "BUSINESS_BLOCKED"`. The check (`business-access.service.js`) is cached for 30 seconds per process, so other processes pick up a change within that time. The storefront only serves active businesses, so theirs goes offline too. Pending businesses aren't blocked.
+Console activity (sign-ins, failed sign-ins with the email tried, sign-outs and business status changes with the reason, and billing actions) is stored in `PlatformActivity` and listed at `GET /api/v1/platform/activity`. A failure to write an entry is logged but never blocks the action.
+
+Billing (`/api/v1/platform/billing/*` and `/api/v1/platform/businesses/:id/{subscription/trial-extension,subscription/plan-change,payments}`, in `subscription-admin.service.js`) lists subscriptions and payments across businesses, extends trials (1–90 days, from today if the trial already ended), changes plans (limits apply at once, the new price from the next payment) and records payments taken outside the app (M-Pesa, bank transfer, cash). A recorded payment activates the subscription for one billing period, following on from a still-running paid period, and a reference can only be recorded once. Nothing changes subscription statuses on a schedule yet, so "trial ended" and "overdue" are worked out from the dates. Business users can only read plans and their own subscription (`/api/v1/subscription/plans`, `/my`).
+
+Suspending or cancelling a business locks its users out: login refuses them and `tokenValidator` / `refreshTokenValidator` answer `403` with `code: "BUSINESS_BLOCKED"` (and `SUPPORT_EMAIL` as `supportEmail`); the business app then shows `/business-suspended`. The check (`business-access.service.js`) is cached for 30 seconds per process, so other processes pick up a change within that time. The storefront only serves active businesses, so theirs goes offline too. Pending businesses aren't blocked.
 
 ## Feature switches
 

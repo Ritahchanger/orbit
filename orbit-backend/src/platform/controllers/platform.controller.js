@@ -2,6 +2,7 @@
 const overviewService = require("../services/platform-overview.service");
 const businessService = require("../services/platform-business.service");
 const searchService = require("../services/platform-search.service");
+const activityService = require("../services/platform-activity.service");
 const log = require("../../utils/log");
 
 const getOverview = async (req, res) => {
@@ -23,6 +24,17 @@ const changeBusinessStatus = async (req, res) => {
   const { status, reason } = req.body || {};
   const business = await businessService.changeStatus(req.params.id, status, reason);
 
+  await activityService.record(req, {
+    action: "business.status_changed",
+    admin: req.platformAdmin,
+    target: { type: "business", id: business._id, name: business.businessName },
+    details: {
+      from: business.previousStatus,
+      to: business.status,
+      reason: String(reason || "").trim(),
+    },
+  });
+
   log.info(
     `Platform admin ${req.platformAdmin.email} set business ${business._id} to ${business.status}` +
       (reason ? ` (${reason})` : ""),
@@ -35,9 +47,21 @@ const changeBusinessStatus = async (req, res) => {
   });
 };
 
+const listActivity = async (req, res) => {
+  const { entries, pagination } = await activityService.list(req.query);
+  res.status(200).json({ success: true, data: entries, pagination });
+};
+
 const search = async (req, res) => {
   const data = await searchService.search(req.query.q);
   res.status(200).json({ success: true, data });
 };
 
-module.exports = { getOverview, listBusinesses, getBusiness, changeBusinessStatus, search };
+module.exports = {
+  getOverview,
+  listBusinesses,
+  getBusiness,
+  changeBusinessStatus,
+  listActivity,
+  search,
+};
