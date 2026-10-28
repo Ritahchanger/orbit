@@ -56,7 +56,7 @@
     "seed:roles": "node ./src/seeders/roles.seed.js",
     "seed:orbit": "node ./src/seeders/orbit-test.seed.js",
     "seed:orbit:force": "node ./src/seeders/orbit-test.seed.js --force",
-    "platform:create-admin": "node ./src/seeders/platform-admin.seed.js"
+    "seed:platform-admin": "node ./src/seeders/platform-admin.seed.js"
   },
   "keywords": [],
   "author": "codewithmunyao",
