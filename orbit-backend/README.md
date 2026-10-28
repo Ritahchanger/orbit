@@ -66,12 +66,7 @@ The `platform` module (`/api/v1/platform`) is Orbit's own staff dashboard: every
 
 Platform admins (role `platform_admin`) are kept apart from businesses:
 
-- They belong to no business and can only be created from the command line, never through the API:
-
-  ```bash
-  npm run platform:create-admin -- --email you@orbit.com --password '<at least 12 characters>'
-  npm run platform:create-admin -- --email you@orbit.com --password '<new password>' --reset
-  ```
+- They belong to no business and can only be created by the seeder, never through the API. Set `PLATFORM_ADMIN_EMAIL` and `PLATFORM_ADMIN_PASSWORD` (12+ characters) in `.env`, then run `npm run seed:platform-admin`. Running it again resets the password to the one in `.env`.
 
 - They sign in at `POST /api/v1/platform/auth/login` and get their own 8-hour `platformToken` cookie, scoped to `/api/v1/platform`. Five failed attempts per email and IP lock that login for 15 minutes.
 - `tokenValidator` and `refreshTokenValidator` reject them, so business routes never run without a business, and platform routes reject business users.
