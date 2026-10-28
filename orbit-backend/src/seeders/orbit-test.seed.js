@@ -8,12 +8,12 @@ const connectDb = require("../config/db.connection");
 
 // Register all models upfront
 const { countRoles } = require("../permissions");
-const User = require("../user/user.model");
-const Business = require("../business/business.model");
-const Store = require("../stores/store.model");
+const User = require("../user/models/user.model");
+const Business = require("../business/models/business.model");
+const Store = require("../stores/models/store.model");
 const Category = require("../products/models/category.model");
 const { createProduct, deleteProductsByFilter } = require("../products");
-const { PlanTemplate, Subscription } = require("../subscription/subscription.model");
+const { PlanTemplate, Subscription } = require("../subscription/models/subscription.model");
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SEED DATA

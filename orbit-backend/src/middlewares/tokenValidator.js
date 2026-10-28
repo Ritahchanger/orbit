@@ -1,6 +1,6 @@
 // middlewares/tokenValidator.js
 const jwt = require("jsonwebtoken");
-const User = require("../user/user.model");
+const { findUserById } = require("../user");
 require("dotenv").config();
 
 const tokenValidator = async (req, res, next) => {
@@ -15,7 +15,7 @@ const tokenValidator = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id)
+    const user = await findUserById(decoded.id)
       .select("-password")
       .populate("assignedStore", "name code address")
       .populate("storePermissions.store", "name code");

@@ -22,17 +22,23 @@ src/
 ├── middlewares/     Auth, roles/permissions, logging, error handler
 ├── errors/          CustomError and its helpers (badRequest, notFound, ...)
 ├── utils/           Shared helpers (log, email transport, tokens, uploads)
-├── validators/      Joi schemas shared across modules
 ├── seeders/         Command-line seed scripts (npm run seed:*)
 └── <module>/        One folder per feature: user, sales, stores, reports, ...
 ```
 
 ### Modules
 
-A module owns one feature. Files are named `<name>.<role>.js`, where role is one of `routes`, `controller`, `service`, `model`, `validator`, `middleware`, `repository` or `email`:
+A module owns one feature. Every module splits by layer, with each file inside the folder for its role and named `<name>.<role>.js`:
 
-- **Small modules are flat**, e.g. `business/business.routes.js`, `business.controller.js`, `business.service.js`, `business.model.js`.
-- **Large modules split by layer**, with every file inside a layer folder, e.g. `products/routes/`, `controllers/`, `services/`, `models/`, `validators/`, `repositories/`.
+```
+business/
+├── routes/business.routes.js
+├── controllers/business.controller.js
+├── services/business.service.js
+└── models/business.model.js
+```
+
+A module only has the folders it needs. The layer folders are `routes/`, `controllers/`, `services/`, `models/`, `validators/`, `repositories/`, `middlewares/`, `emails/` (email templates), `pdf/` (PDF rendering) and `constants/`. The only file at a module root is an optional `index.js`.
 
 Responsibilities:
 
@@ -40,8 +46,9 @@ Responsibilities:
 - **controllers** read the request, call a service and send the response.
 - **services** hold the business logic and talk to models or repositories.
 - **models** define Mongoose schemas.
+- **repositories** are the only code that queries a model on behalf of other modules.
 
-A module that other modules depend on exposes an `index.js` as its public API (see `products/index.js`, `permissions/index.js`); require that instead of reaching into its folders.
+A module that other modules depend on exposes an `index.js` as its public API: `products`, `permissions`, `store-inventory`, `stores`, `user` and `sales`. Require that instead of reaching into its folders; never require another module's model. Most finders in these APIs return Mongoose queries, so callers can chain `.select()`, `.populate()`, `.session()` or `.lean()`. Stock changes go through named operations (`decrementStockIfAvailable` in products, `sellFromInventory` and `recordInventorySale` in store-inventory) so each rule lives in one place.
 
 ### Adding an endpoint
 

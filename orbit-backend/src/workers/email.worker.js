@@ -1,5 +1,5 @@
 const queue = require('../utils/queue');
-const { processSingleEmail, processEmailBatch } = require('../newsletters/newsletter.service');
+const { processSingleEmail, processEmailBatch } = require('../newsletters/services/newsletter.service');
 const connectDb = require("../config/db.connection");
 const log = require("../utils/log");
 

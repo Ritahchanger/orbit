@@ -1,7 +1,7 @@
 // services/inventory/base-inventory.service.js
-const StockInventory = require("../store-inventory.model");
+const StockInventory = require("../models/store-inventory.model");
 const Product = require("../../products/models/products.model");
-const Store = require("../../stores/store.model");
+const Store = require("../../stores/models/store.model");
 const { findProductById } = require("../../products");
 
 class BaseInventoryService {

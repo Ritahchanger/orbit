@@ -1,7 +1,7 @@
 // scripts/seedConsultationTypes.js
 const mongoose = require('mongoose');
 
-const ConsultationType = require('../booking/consultation.model');
+const ConsultationType = require('../booking/models/consultation.model');
 
 const connectDb = require("../config/db.connection")
 

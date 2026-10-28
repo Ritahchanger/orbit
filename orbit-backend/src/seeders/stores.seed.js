@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // Import Store model
-const Store = require('../stores/store.model');
+const Store = require('../stores/models/store.model');
 
 // Gaming stores in Nairobi
 const gamingStores = [

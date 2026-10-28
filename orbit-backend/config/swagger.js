@@ -60,45 +60,8 @@ const options = {
     ],
   },
 
-  // IMPORTANT: Include all possible route file locations
-  apis: [
-    // Product-related routes
-    path.join(__dirname, "../src/products/*.routes.js"),
-    path.join(__dirname, "../src/products/*.route.js"),
-
-    // Sales-related routes
-    path.join(__dirname, "../src/sales/*.routes.js"),
-    path.join(__dirname, "../src/sales/*.route.js"),
-
-    // Store-related routes
-    path.join(__dirname, "../src/stores/*.routes.js"),
-    path.join(__dirname, "../src/stores/*.route.js"),
-
-    // Auth-related routes
-    path.join(__dirname, "../src/auth/*.routes.js"),
-    path.join(__dirname, "../src/auth/*.route.js"),
-
-    // User-related routes
-    path.join(__dirname, "../src/user/*.routes.js"),
-    path.join(__dirname, "../src/user/*.route.js"),
-
-    // Report-related routes
-    path.join(__dirname, "../src/reports/*.routes.js"),
-    path.join(__dirname, "../src/reports/*.route.js"),
-
-    // M-Pesa routes specifically
-    path.join(__dirname, "../src/sales/mpesa-routes.js"),
-    path.join(__dirname, "../src/sales/mpesa.routes.js"),
-
-    // Generic catch-all
-    path.join(__dirname, "../src/**/*.routes.js"),
-    path.join(__dirname, "../src/**/*.route.js"),
-    path.join(__dirname, "../src/**/routes/*.js"),
-
-    // Root level routes
-    path.join(__dirname, "../routes/*.js"),
-    path.join(__dirname, "../routes/**/*.js"),
-  ],
+  // Every module keeps its routers in <module>/routes/
+  apis: [path.join(__dirname, "../src/**/routes/*.js")],
 };
 
 module.exports = swaggerJSDoc(options);

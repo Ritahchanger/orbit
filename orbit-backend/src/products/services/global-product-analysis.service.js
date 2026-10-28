@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Product = require("../models/products.model");
-const StoreInventory = require("../../store-inventory/store-inventory.model");
+const { aggregateInventory } = require("../../store-inventory");
 
 // Turns one store's StoreInventory rows into documents shaped like Product,
 // with that store's stock and sales in place of the business-wide totals, so
@@ -42,7 +42,7 @@ const storeProductStages = (storeId, businessId) => [
 // Product documents for the whole business, or for one store when storeId is set.
 const productSource = (businessId, storeId, stages) =>
   storeId
-    ? StoreInventory.aggregate([
+    ? aggregateInventory([
         ...storeProductStages(storeId, businessId),
         ...stages,
       ])
@@ -461,7 +461,7 @@ class GlobalProductAnalysisService {
   async getStoreInventoryBreakdown(businessId) {
     const bizId = new mongoose.Types.ObjectId(businessId);
 
-    return StoreInventory.aggregate([
+    return aggregateInventory([
       { $match: { businessId: bizId } },
       {
         $lookup: {

@@ -1,4 +1,6 @@
 // middlewares/storeAccess.js - UPDATED
+const { findInventoryItemById } = require("../store-inventory");
+
 const storeAccess = (source = "params", storeIdParam = "storeId") => {
     return async (req, res, next) => {
         try {
@@ -121,8 +123,7 @@ const canManageInventoryItem = (paramName = "inventoryId") => {
                 });
             }
 
-            const StoreInventory = require("../store-inventory/store-inventory.model");
-            const inventoryItem = await StoreInventory.findById(inventoryId).select("store");
+            const inventoryItem = await findInventoryItemById(inventoryId).select("store");
             if (!inventoryItem) {
                 return res.status(404).json({
                     success: false,

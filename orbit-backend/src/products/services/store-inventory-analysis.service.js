@@ -1,6 +1,10 @@
+const {
+  aggregateInventory,
+  countInventoryItems,
+  findInventoryItems,
+} = require("../../store-inventory");
+const { findStoreById } = require("../../stores");
 // services/storeInventoryAnalysis.service.js
-const StoreInventory = require("../../store-inventory/store-inventory.model");
-const Store = require("../../stores/store.model");
 
 class StoreInventoryAnalysisService {
     /**
@@ -38,7 +42,7 @@ class StoreInventoryAnalysisService {
      * 2. Store inventory summary
      */
     async getStoreInventorySummary(storeId) {
-        const results = await StoreInventory.aggregate([
+        const results = await aggregateInventory([
             { $match: { store: storeId } },
             {
                 $lookup: {
@@ -127,7 +131,7 @@ class StoreInventoryAnalysisService {
      * 3. Store-specific low stock analysis
      */
     async getStoreLowStockAnalysis(storeId) {
-        const lowStockItems = await StoreInventory.find({
+        const lowStockItems = await findInventoryItems({
             store: storeId,
             $expr: { $lte: ["$stock", "$minStock"] }
         })
@@ -174,7 +178,7 @@ class StoreInventoryAnalysisService {
      * 4. Store top performing products
      */
     async getStoreTopProducts(storeId, limit = 10) {
-        const topProducts = await StoreInventory.find({ store: storeId })
+        const topProducts = await findInventoryItems({ store: storeId })
             .populate({
                 path: 'product',
                 select: 'name sku price costPrice category'
@@ -200,7 +204,7 @@ class StoreInventoryAnalysisService {
      * Bonus: Store category analysis
      */
     async getStoreCategoryAnalysis(storeId) {
-        const categoryData = await StoreInventory.aggregate([
+        const categoryData = await aggregateInventory([
             { $match: { store: storeId } },
             {
                 $lookup: {
@@ -262,7 +266,7 @@ class StoreInventoryAnalysisService {
         const recommendations = [];
 
         // Check for critical items
-        const criticalItems = await StoreInventory.countDocuments({
+        const criticalItems = await countInventoryItems({
             store: storeId,
             stock: 0
         });
@@ -277,7 +281,7 @@ class StoreInventoryAnalysisService {
         }
 
         // Check for slow-moving items
-        const slowMovers = await StoreInventory.find({
+        const slowMovers = await findInventoryItems({
             store: storeId,
             storeSold: 0,
             stock: { $gt: 5 },
@@ -304,7 +308,7 @@ class StoreInventoryAnalysisService {
      * Helper: Validate and get store
      */
     async validateAndGetStore(storeId) {
-        const store = await Store.findById(storeId).select('name code address status').lean();
+        const store = await findStoreById(storeId).select('name code address status').lean();
         if (!store) {
             throw new Error(`Store with ID ${storeId} not found`);
         }
