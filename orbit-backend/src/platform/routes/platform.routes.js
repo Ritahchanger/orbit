@@ -8,6 +8,7 @@ const { platformAuth } = require("../middlewares/platform-auth.middleware");
 const loginThrottle = require("../middlewares/login-throttle.middleware");
 const authCtrl = require("../controllers/platform-auth.controller");
 const platformCtrl = require("../controllers/platform.controller");
+const billingCtrl = require("../controllers/billing.controller");
 
 router.post("/auth/login", loginThrottle, asyncWrapper(authCtrl.login));
 router.post("/auth/logout", asyncWrapper(authCtrl.logout));
@@ -21,6 +22,13 @@ router.get("/overview", asyncWrapper(platformCtrl.getOverview));
 router.get("/search", asyncWrapper(platformCtrl.search));
 
 router.get("/activity", asyncWrapper(platformCtrl.listActivity));
+
+router.get("/billing/subscriptions", asyncWrapper(billingCtrl.listSubscriptions));
+router.get("/billing/payments", asyncWrapper(billingCtrl.listPayments));
+router.get("/billing/plans", asyncWrapper(billingCtrl.listPlans));
+router.post("/businesses/:id/subscription/trial-extension", asyncWrapper(billingCtrl.extendTrial));
+router.post("/businesses/:id/subscription/plan-change", asyncWrapper(billingCtrl.changePlan));
+router.post("/businesses/:id/payments", asyncWrapper(billingCtrl.recordPayment));
 
 router.get("/businesses", asyncWrapper(platformCtrl.listBusinesses));
 router.get("/businesses/:id", asyncWrapper(platformCtrl.getBusiness));

@@ -1,6 +1,7 @@
 // models/platform-activity.model.js
 // What platform admins did in the console, kept for accountability: sign-ins
-// (and failed attempts), sign-outs and business status changes.
+// (and failed attempts), sign-outs, business status changes and billing
+// actions.
 const mongoose = require("mongoose");
 
 const ACTIONS = [
@@ -8,6 +9,9 @@ const ACTIONS = [
   "auth.login_failed",
   "auth.logout",
   "business.status_changed",
+  "subscription.trial_extended",
+  "subscription.plan_changed",
+  "payment.recorded",
 ];
 
 const platformActivitySchema = new mongoose.Schema(
