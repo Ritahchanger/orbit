@@ -7,11 +7,7 @@ const {
 } = require("../../subscription/models/subscription.model");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-const {
-  createUser,
-  deleteUser,
-  findUser,
-} = require("../../user");
+const { createUser, findUser } = require("../../user");
 
 class BusinessService {
   // ── Register new business + superadmin + subscription ──────────────────────
@@ -169,61 +165,6 @@ class BusinessService {
     }
   }
 
-  // ── Get all businesses ──────────────────────────────────────────────────────
-  async getAll(filters = {}) {
-    const {
-      status,
-      isVerified,
-      subscriptionPlan,
-      search,
-      page = 1,
-      limit = 10,
-      sortBy = "createdAt",
-      order = "desc",
-    } = filters;
-
-    const query = {};
-
-    if (status) query.status = status;
-    if (isVerified !== undefined) query.isVerified = isVerified;
-    if (subscriptionPlan) query.subscriptionPlan = subscriptionPlan;
-
-    if (search) {
-      query.$or = [
-        { businessName: { $regex: search, $options: "i" } },
-        { businessEmail: { $regex: search, $options: "i" } },
-        { registrationNumber: { $regex: search, $options: "i" } },
-        { city: { $regex: search, $options: "i" } },
-      ];
-    }
-
-    const skip = (page - 1) * limit;
-    const sortOrder = order === "asc" ? 1 : -1;
-
-    const [businesses, total] = await Promise.all([
-      Business.find(query)
-        .populate("owner", "firstName lastName email phoneNo role")
-        .populate(
-          "subscription",
-          "status planSlug billingCycle currentPeriodEnd daysUntilExpiry",
-        )
-        .sort({ [sortBy]: sortOrder })
-        .skip(skip)
-        .limit(Number(limit)),
-      Business.countDocuments(query),
-    ]);
-
-    return {
-      businesses,
-      pagination: {
-        total,
-        page: Number(page),
-        limit: Number(limit),
-        totalPages: Math.ceil(total / limit),
-      },
-    };
-  }
-
   // ── Get single business by ID ───────────────────────────────────────────────
   async getById(id) {
     const business = await Business.findById(id)
@@ -354,34 +295,6 @@ class BusinessService {
 
     await business.save();
     return business;
-  }
-
-  // ── Delete business ─────────────────────────────────────────────────────────
-  async delete(id) {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
-    try {
-      const business = await Business.findById(id).session(session);
-      if (!business) throw new Error("Business not found");
-
-      // Also clean up subscription and owner user
-      await Subscription.deleteOne({ business: id }).session(session);
-      await deleteUser({ _id: business.owner }).session(session);
-      await business.deleteOne({ session });
-
-      await session.commitTransaction();
-      session.endSession();
-
-      return {
-        success: true,
-        message: "Business and associated data deleted successfully",
-      };
-    } catch (error) {
-      await session.abortTransaction();
-      session.endSession();
-      throw error;
-    }
   }
 
   // ── Ecommerce Settings ────────────────────────────────────────────────────────

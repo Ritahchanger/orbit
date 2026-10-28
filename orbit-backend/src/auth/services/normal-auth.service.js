@@ -20,6 +20,7 @@ const {
   createUser,
   findUser,
   findUserById,
+  recordUserLogin,
 } = require("../../user");
 
 const registerUser = async (userData) => {
@@ -247,6 +248,8 @@ const loginAdmin = async (email, password, businessId) => {
     if (!isMatch) {
       throw new Error("Invalid credentials for this business");
     }
+
+    await recordUserLogin(user._id);
 
     const accessToken = generateToken({
       user,

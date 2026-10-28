@@ -125,7 +125,10 @@ const UserSchema = new mongoose.Schema(
     businessId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Business",
-      required: true,
+      // Platform admins are Orbit's own staff and belong to no business
+      required: function () {
+        return this.role !== "platform_admin";
+      },
       index: true,
     },
   },

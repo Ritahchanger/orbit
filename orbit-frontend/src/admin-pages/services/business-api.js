@@ -16,12 +16,6 @@ const businessApi = {
     return response.data;
   },
 
-  // ── Protected: get all with filters/pagination ───────────────────────────
-  getAll: async (params = {}) => {
-    const response = await api.get("/business", { params });
-    return response.data;
-  },
-
   // ── Protected: get logged-in owner's business ────────────────────────────
   getMyBusiness: async () => {
     const response = await api.get("/business/my-business");
@@ -40,21 +34,8 @@ const businessApi = {
     return response.data;
   },
 
-  // ── Protected: update business status (verify/suspend/activate) ──────────
-  updateStatus: async (id, status, reason = "") => {
-    const response = await api.patch(`/business/${id}/status`, {
-      status,
-      reason,
-    });
-    return response.data;
-  },
   login: async (credentials) => {
     const response = await api.post("/auth/login", credentials);
-    return response.data;
-  },
-  // ── Protected: delete business ───────────────────────────────────────────
-  delete: async (id) => {
-    const response = await api.delete(`/business/${id}`);
     return response.data;
   },
 };

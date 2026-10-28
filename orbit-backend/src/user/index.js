@@ -23,6 +23,10 @@ const createUser = (...args) => userRepository.create(...args);
 
 const deleteUser = (filter) => userRepository.deleteOne(filter);
 
+/** Stamps lastLoginAt; called on every successful login. */
+const recordUserLogin = (id) =>
+  userRepository.updateOne({ _id: id }, { $set: { lastLoginAt: new Date() } });
+
 module.exports = {
   findUserById,
   findUser,
@@ -31,4 +35,5 @@ module.exports = {
   aggregateUsers,
   createUser,
   deleteUser,
+  recordUserLogin,
 };

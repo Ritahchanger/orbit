@@ -30,6 +30,7 @@ const routes = [
   ["/api/v1/refunds", require("./refund/routes/refund.routes")],
   ["/api/v1/business", require("./business/routes/business.routes")],
   ["/api/v1/subscription", require("./subscription/routes/subscription.routes")],
+  ["/api/v1/platform", require("./platform/routes/platform.routes")],
   ["/api/v1/logs", require("./custom-logs/routes/logs.routes")],
   [
     "/api/v1/consultations",

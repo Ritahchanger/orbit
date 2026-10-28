@@ -18,6 +18,8 @@ const create = (...args) => User.create(...args);
 
 const deleteOne = (...args) => User.deleteOne(...args);
 
+const updateOne = (...args) => User.updateOne(...args);
+
 module.exports = {
   find,
   findOne,
@@ -26,4 +28,5 @@ module.exports = {
   aggregate,
   create,
   deleteOne,
+  updateOne,
 };

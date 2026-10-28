@@ -48,7 +48,7 @@ Responsibilities:
 - **models** define Mongoose schemas.
 - **repositories** are the only code that queries a model on behalf of other modules.
 
-A module that other modules depend on exposes an `index.js` as its public API: `products`, `permissions`, `store-inventory`, `stores`, `user` and `sales`. Require that instead of reaching into its folders; never require another module's model. Most finders in these APIs return Mongoose queries, so callers can chain `.select()`, `.populate()`, `.session()` or `.lean()`. Stock changes go through named operations (`decrementStockIfAvailable` in products, `sellFromInventory` and `recordInventorySale` in store-inventory) so each rule lives in one place.
+A module that other modules depend on exposes an `index.js` as its public API: `products`, `permissions`, `store-inventory`, `stores`, `user`, `sales`, `business` and `subscription`. Require that instead of reaching into its folders; never require another module's model. Most finders in these APIs return Mongoose queries, so callers can chain `.select()`, `.populate()`, `.session()` or `.lean()`. Stock changes go through named operations (`decrementStockIfAvailable` in products, `sellFromInventory` and `recordInventorySale` in store-inventory) so each rule lives in one place.
 
 ### Adding an endpoint
 
@@ -60,12 +60,30 @@ A module that other modules depend on exposes an `index.js` as its public API: `
 
 Use `src/utils/log.js`: `log.debug` for development detail (silent in production unless `LOG_LEVEL=debug`), `log.info` for startup and connection messages, `log.warn` / `log.error` for problems. Never log passwords, tokens or one-time codes.
 
+## Platform dashboard
+
+The `platform` module (`/api/v1/platform`) is Orbit's own staff dashboard: every business on the platform, its subscription and activity, and verifying, suspending or cancelling a business. The frontend lives in `orbit-frontend/src/platform/` and is served at `/platform`.
+
+Platform admins (role `platform_admin`) are kept apart from businesses:
+
+- They belong to no business and can only be created from the command line, never through the API:
+
+  ```bash
+  npm run platform:create-admin -- --email you@orbit.com --password '<at least 12 characters>'
+  npm run platform:create-admin -- --email you@orbit.com --password '<new password>' --reset
+  ```
+
+- They sign in at `POST /api/v1/platform/auth/login` and get their own 8-hour `platformToken` cookie, scoped to `/api/v1/platform`. Five failed attempts per email and IP lock that login for 15 minutes.
+- `tokenValidator` and `refreshTokenValidator` reject them, so business routes never run without a business, and platform routes reject business users.
+- The platform module reads other modules only through their `index.js`.
+
 ## Feature switches
 
 `src/config/features.js` switches whole features off. The consultations feature (bookings, consultation types, availability, consultation emails) is off unless `FEATURE_CONSULTATIONS=true`; its routes aren't mounted. Routes opt in by naming the feature as the third entry in `src/routes.js`.
 
 ## Known gaps
 
+- Suspending or cancelling a business only records its status; its users can still sign in and use the app.
 - `store-inventory/controllers/` and `store-inventory/services/` are an unfinished split of `store-inventory.controller.js`; nothing loads them yet.
 - Some controllers still query models directly and some services are very large (`reports`, `products`, `sales`); moving that logic into services is planned.
 - Error handling and response shapes aren't uniform yet, and most routes authenticate with the refresh-token cookie (`refreshTokenValidator`).
