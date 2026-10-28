@@ -598,10 +598,10 @@ const getUserStats = async (businessId) => {
   };
 };
 
-const fetchAllAdmins = async (options = {}) => {
+const fetchAllAdmins = async (businessId, options = {}) => {
   const { page = 1, limit = 10, search = "", sortBy = "-createdAt" } = options;
 
-  const query = { role: { $in: ["admin", "superadmin"] } };
+  const query = { role: { $in: ["admin", "superadmin"] }, businessId };
 
   if (search) {
     query.$or = [
