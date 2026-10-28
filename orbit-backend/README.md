@@ -73,7 +73,9 @@ Platform admins (role `platform_admin`) are kept apart from businesses:
 - The platform module reads other modules only through their `index.js`.
 - Search (`GET /api/v1/platform/search`, and the business list's `search`) covers business name, email, registration number and city, store names and codes, and business owners' names. Owners are matched by name only and returned as name + business, with no contact details; staff and customers aren't searchable.
 
-Suspending or cancelling a business locks its users out: login refuses them and `tokenValidator` / `refreshTokenValidator` answer `403` with `code: "BUSINESS_BLOCKED"`. The check (`business-access.service.js`) is cached for 30 seconds per process, so other processes pick up a change within that time. The storefront only serves active businesses, so theirs goes offline too. Pending businesses aren't blocked.
+Console activity (sign-ins, failed sign-ins with the email tried, sign-outs and business status changes with the reason) is stored in `PlatformActivity` and listed at `GET /api/v1/platform/activity`. A failure to write an entry is logged but never blocks the action.
+
+Suspending or cancelling a business locks its users out: login refuses them and `tokenValidator` / `refreshTokenValidator` answer `403` with `code: "BUSINESS_BLOCKED"` (and `SUPPORT_EMAIL` as `supportEmail`); the business app then shows `/business-suspended`. The check (`business-access.service.js`) is cached for 30 seconds per process, so other processes pick up a change within that time. The storefront only serves active businesses, so theirs goes offline too. Pending businesses aren't blocked.
 
 ## Feature switches
 

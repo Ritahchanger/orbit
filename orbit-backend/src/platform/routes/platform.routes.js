@@ -10,7 +10,7 @@ const authCtrl = require("../controllers/platform-auth.controller");
 const platformCtrl = require("../controllers/platform.controller");
 
 router.post("/auth/login", loginThrottle, asyncWrapper(authCtrl.login));
-router.post("/auth/logout", authCtrl.logout);
+router.post("/auth/logout", asyncWrapper(authCtrl.logout));
 
 router.use(platformAuth);
 
@@ -19,6 +19,8 @@ router.get("/auth/me", authCtrl.me);
 router.get("/overview", asyncWrapper(platformCtrl.getOverview));
 
 router.get("/search", asyncWrapper(platformCtrl.search));
+
+router.get("/activity", asyncWrapper(platformCtrl.listActivity));
 
 router.get("/businesses", asyncWrapper(platformCtrl.listBusinesses));
 router.get("/businesses/:id", asyncWrapper(platformCtrl.getBusiness));

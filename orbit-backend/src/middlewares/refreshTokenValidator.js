@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const RefreshToken = require("../auth/models/refresh-token.model"); // Create this model
 const { findUserById } = require("../user");
 const { checkBusinessAccess } = require("../business");
+const brand = require("../config/brand");
 require("dotenv").config();
 
 const refreshTokenValidator = async (req, res, next) => {
@@ -63,6 +64,7 @@ const refreshTokenValidator = async (req, res, next) => {
         code: "BUSINESS_BLOCKED",
         businessStatus: blocked.status,
         message: blocked.message,
+        supportEmail: brand.supportEmail,
       });
     }
 

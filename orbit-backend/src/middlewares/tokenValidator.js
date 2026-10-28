@@ -2,6 +2,7 @@
 const jwt = require("jsonwebtoken");
 const { findUserById } = require("../user");
 const { checkBusinessAccess } = require("../business");
+const brand = require("../config/brand");
 require("dotenv").config();
 
 const tokenValidator = async (req, res, next) => {
@@ -44,6 +45,7 @@ const tokenValidator = async (req, res, next) => {
         code: "BUSINESS_BLOCKED",
         businessStatus: blocked.status,
         message: blocked.message,
+        supportEmail: brand.supportEmail,
       });
     }
 

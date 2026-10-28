@@ -245,7 +245,7 @@ const changeStatus = async (id, status, reason = "") => {
     throw CustomError.badRequest("A reason is required to suspend a business");
   }
 
-  const existing = await findBusinessById(businessId).select("isDeleted").lean();
+  const existing = await findBusinessById(businessId).select("isDeleted status businessName").lean();
   if (!existing || existing.isDeleted) {
     throw CustomError.notFound("Business not found");
   }
@@ -254,6 +254,8 @@ const changeStatus = async (id, status, reason = "") => {
     const business = await updateBusinessStatus(businessId, status, String(reason).trim());
     return {
       _id: business._id,
+      businessName: existing.businessName,
+      previousStatus: existing.status,
       status: business.status,
       isVerified: business.isVerified,
       isSuspended: business.isSuspended,
