@@ -71,6 +71,7 @@ Platform admins (role `platform_admin`) are kept apart from businesses:
 - They sign in at `POST /api/v1/platform/auth/login` and get their own 8-hour `platformToken` cookie, scoped to `/api/v1/platform`. Five failed attempts per email and IP lock that login for 15 minutes.
 - `tokenValidator` and `refreshTokenValidator` reject them, so business routes never run without a business, and platform routes reject business users.
 - The platform module reads other modules only through their `index.js`.
+- Search (`GET /api/v1/platform/search`, and the business list's `search`) covers business name, email, registration number and city, store names and codes, and business owners' names. Owners are matched by name only and returned as name + business, with no contact details; staff and customers aren't searchable.
 
 Suspending or cancelling a business locks its users out: login refuses them and `tokenValidator` / `refreshTokenValidator` answer `403` with `code: "BUSINESS_BLOCKED"`. The check (`business-access.service.js`) is cached for 30 seconds per process, so other processes pick up a change within that time. The storefront only serves active businesses, so theirs goes offline too. Pending businesses aren't blocked.
 

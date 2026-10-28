@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { LogOut, Menu, Moon, Search, Sun } from "lucide-react";
@@ -7,55 +7,45 @@ import { usePlatformAdmin, usePlatformLogout } from "../hooks/use-platform-auth"
 import Avatar from "./ui/Avatar";
 import BrandMark from "./ui/BrandMark";
 import Button from "./ui/Button";
-import { focusRing, inputClass } from "./ui/styles";
+import SearchPalette from "./SearchPalette";
+import { focusRing } from "./ui/styles";
 
 const isTyping = (target) =>
   ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || target.isContentEditable;
 
-// Search across every business; "/" focuses it from anywhere in the console
-const BusinessSearch = () => {
-  const navigate = useNavigate();
-  const inputRef = useRef(null);
-  const [query, setQuery] = useState("");
+const isMac = typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
+
+// Opens the search palette; "/" or Ctrl/⌘+K open it from anywhere
+const SearchTrigger = () => {
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === "/" && !isTyping(e.target)) {
+      const shortcut = (e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey);
+      if (shortcut || (e.key === "/" && !isTyping(e.target))) {
         e.preventDefault();
-        inputRef.current?.focus();
+        setOpen(true);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const submit = (event) => {
-    event.preventDefault();
-    const q = query.trim();
-    navigate(q ? `/platform/businesses?search=${encodeURIComponent(q)}` : "/platform/businesses");
-    setQuery("");
-    inputRef.current?.blur();
-  };
-
   return (
-    <form onSubmit={submit} role="search" className="relative w-full max-w-md">
-      <label htmlFor="platform-search" className="sr-only">
-        Search businesses
-      </label>
-      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" aria-hidden />
-      <input
-        ref={inputRef}
-        id="platform-search"
-        type="search"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search businesses…"
-        className={`${inputClass} bg-zinc-50 pl-9 pr-10 dark:bg-zinc-950`}
-      />
-      <kbd className="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-zinc-200 bg-white px-1.5 font-mono text-[11px] text-zinc-400 sm:block dark:border-zinc-700 dark:bg-zinc-900">
-        /
-      </kbd>
-    </form>
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={`flex h-9 w-full max-w-md items-center gap-2 rounded-md border border-zinc-200 bg-zinc-50 px-3 text-sm text-zinc-400 shadow-xs transition-colors hover:border-zinc-300 hover:bg-white dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 ${focusRing}`}
+      >
+        <Search className="h-4 w-4 shrink-0" aria-hidden />
+        <span className="flex-1 truncate text-left">Search businesses, stores, owners…</span>
+        <kbd className="hidden shrink-0 rounded border border-zinc-200 bg-white px-1.5 font-mono text-[11px] sm:block dark:border-zinc-700 dark:bg-zinc-900">
+          {isMac ? "⌘K" : "Ctrl K"}
+        </kbd>
+      </button>
+      {open && <SearchPalette onClose={() => setOpen(false)} />}
+    </>
   );
 };
 
@@ -119,7 +109,7 @@ const PlatformNavbar = ({ onOpenMenu, actions }) => {
       </div>
 
       <div className="flex min-w-0 flex-1">
-        <BusinessSearch />
+        <SearchTrigger />
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5">

@@ -10,11 +10,12 @@ const {
   updateBusinessStatus,
 } = require("../../business");
 const { findSubscriptions, findPayments } = require("../../subscription");
-const { aggregateUsers, countUsers } = require("../../user");
+const { aggregateUsers, countUsers, findUsers } = require("../../user");
 const { aggregateStores, countStores, findStores } = require("../../stores");
 const { aggregateSales } = require("../../sales");
 const { countProducts } = require("../../products");
 const { lastMonths, startOfMonthsAgo } = require("./platform-overview.service");
+const { containsRegex, nameFilter } = require("./search-helpers");
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const STATUSES = ["pending", "active", "suspended", "cancelled"];
@@ -25,8 +26,6 @@ const SORTS = {
   name: { businessName: 1 },
 };
 const MAX_LIMIT = 100;
-
-const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const toObjectId = (id) => {
   if (!mongoose.isValidObjectId(id)) {
@@ -48,14 +47,22 @@ const listBusinesses = async (filters = {}) => {
   if (filters.verified === "true") query.isVerified = true;
   if (filters.verified === "false") query.isVerified = false;
 
-  const search = String(filters.search || "").trim();
+  // Matches the business's own fields, its owner's name, or one of its
+  // stores' names or codes
+  const search = String(filters.search || "").trim().slice(0, 80);
   if (search) {
-    const regex = new RegExp(escapeRegex(search), "i");
+    const regex = containsRegex(search);
+    const [owners, stores] = await Promise.all([
+      findUsers({ ...nameFilter(search), role: { $ne: "platform_admin" } }).select("_id").limit(200).lean(),
+      findStores({ $or: [{ name: regex }, { code: regex }] }).select("businessId").limit(200).lean(),
+    ]);
     query.$or = [
       { businessName: regex },
       { businessEmail: regex },
       { registrationNumber: regex },
       { city: regex },
+      { owner: { $in: owners.map((o) => o._id) } },
+      { _id: { $in: stores.map((s) => s.businessId) } },
     ];
   }
 
