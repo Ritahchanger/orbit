@@ -12,7 +12,7 @@ const getAllAdmins = async (req, res) => {
     sortBy = "-createdAt",
   } = req.query;
 
-  const result = await userService.fetchAllAdmins({
+  const result = await userService.fetchAllAdmins(req.businessId, {
     page: parseInt(page),
     limit: parseInt(limit),
     search,

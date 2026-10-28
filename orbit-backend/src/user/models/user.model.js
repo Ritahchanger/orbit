@@ -45,7 +45,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: "staff",
-      enum: ["superadmin", "admin", "manager", "cashier", "staff"],
+      // platform_admin is Orbit's own staff; it is never assignable through the API
+      enum: ["superadmin", "admin", "manager", "cashier", "staff", "platform_admin"],
     },
     profileImage: {
       type: String,
