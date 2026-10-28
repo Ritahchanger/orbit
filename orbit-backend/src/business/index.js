@@ -6,6 +6,7 @@
 // .lean() etc. exactly as they did on the model.
 const businessRepository = require("./repositories/business.repository");
 const businessService = require("./services/business.service");
+const { checkBusinessAccess } = require("./services/business-access.service");
 
 const findBusinesses = (filter = {}) => businessRepository.find(filter);
 
@@ -25,6 +26,7 @@ const updateBusinessStatus = (id, status, reason) =>
   businessService.updateStatus(id, status, reason);
 
 module.exports = {
+  checkBusinessAccess,
   findBusinesses,
   findBusinessById,
   countBusinesses,

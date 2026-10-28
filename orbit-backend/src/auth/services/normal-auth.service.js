@@ -22,6 +22,7 @@ const {
   findUserById,
   recordUserLogin,
 } = require("../../user");
+const { checkBusinessAccess } = require("../../business");
 
 const registerUser = async (userData) => {
   const requiredFields = ["email", "firstName", "lastName"];
@@ -248,6 +249,9 @@ const loginAdmin = async (email, password, businessId) => {
     if (!isMatch) {
       throw new Error("Invalid credentials for this business");
     }
+
+    const blocked = await checkBusinessAccess(user.businessId);
+    if (blocked) throw new Error(blocked.message);
 
     await recordUserLogin(user._id);
 

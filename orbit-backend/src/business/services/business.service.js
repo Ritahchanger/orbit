@@ -8,6 +8,7 @@ const {
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const { createUser, findUser } = require("../../user");
+const { clearBusinessAccess } = require("./business-access.service");
 
 class BusinessService {
   // ── Register new business + superadmin + subscription ──────────────────────
@@ -262,7 +263,7 @@ class BusinessService {
     if (!business) throw new Error("Business not found");
 
     const validTransitions = {
-      pending: ["active", "cancelled"],
+      pending: ["active", "suspended", "cancelled"],
       active: ["suspended", "cancelled"],
       suspended: ["active", "cancelled"],
       cancelled: [],
@@ -294,6 +295,8 @@ class BusinessService {
     }
 
     await business.save();
+    // Lock out (or let back in) the business's users straight away
+    clearBusinessAccess(business._id);
     return business;
   }
 

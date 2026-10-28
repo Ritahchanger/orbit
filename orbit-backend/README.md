@@ -72,13 +72,14 @@ Platform admins (role `platform_admin`) are kept apart from businesses:
 - `tokenValidator` and `refreshTokenValidator` reject them, so business routes never run without a business, and platform routes reject business users.
 - The platform module reads other modules only through their `index.js`.
 
+Suspending or cancelling a business locks its users out: login refuses them and `tokenValidator` / `refreshTokenValidator` answer `403` with `code: "BUSINESS_BLOCKED"`. The check (`business-access.service.js`) is cached for 30 seconds per process, so other processes pick up a change within that time. The storefront only serves active businesses, so theirs goes offline too. Pending businesses aren't blocked.
+
 ## Feature switches
 
 `src/config/features.js` switches whole features off. The consultations feature (bookings, consultation types, availability, consultation emails) is off unless `FEATURE_CONSULTATIONS=true`; its routes aren't mounted. Routes opt in by naming the feature as the third entry in `src/routes.js`.
 
 ## Known gaps
 
-- Suspending or cancelling a business only records its status; its users can still sign in and use the app.
 - `store-inventory/controllers/` and `store-inventory/services/` are an unfinished split of `store-inventory.controller.js`; nothing loads them yet.
 - Some controllers still query models directly and some services are very large (`reports`, `products`, `sales`); moving that logic into services is planned.
 - Error handling and response shapes aren't uniform yet, and most routes authenticate with the refresh-token cookie (`refreshTokenValidator`).
