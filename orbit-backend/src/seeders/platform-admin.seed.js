@@ -9,6 +9,9 @@ const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const connectDb = require("../config/db.connection");
 const User = require("../user/models/user.model");
+// Saving a user looks up its Role (user.model's pre-save hook), so the Role
+// model must be registered even though this script doesn't use it directly.
+require("../permissions/models/role.model");
 
 const seed = async () => {
   const email = process.env.PLATFORM_ADMIN_EMAIL?.toLowerCase().trim();
