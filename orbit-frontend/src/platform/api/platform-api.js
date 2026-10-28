@@ -8,6 +8,8 @@ const platformApi = {
   me: () => platformClient.get("/auth/me").then(data),
 
   overview: () => platformClient.get("/overview").then(data),
+  // params: { action, businessId, page, limit }
+  activity: (params) => platformClient.get("/activity", { params }).then(data),
   search: (q) => platformClient.get("/search", { params: { q } }).then(data),
 
   // params: { search, status, plan, verified, sort, page, limit }

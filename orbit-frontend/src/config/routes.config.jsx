@@ -7,6 +7,7 @@ import { useSimpleRolePermissionCheck } from "../context/RolePermissionContext";
 import Community from "../everyone-pages/community/pages/Community";
 import SetUpConsultation from "../everyone-pages/consultation/pages/SetUpConsultation";
 import AdminLogin from "../authentication/login/Login";
+import BusinessBlocked from "../authentication/business-blocked/BusinessBlocked";
 import PageNotFound from "../components/common/PageNotFound";
 import RootHome from "../everyone-pages/storefront/pages/RootHome";
 import RootProducts from "../everyone-pages/storefront/pages/RootProducts";
@@ -84,6 +85,7 @@ export const publicRoutes = withEnabledFeatures([
   { path: "/category/:category", element: <RootProducts /> },
   { path: "/brand/:brand", element: <RootProducts /> },
   { path: "/admin/login", element: <AdminLogin /> },
+  { path: "/business-suspended", element: <BusinessBlocked /> },
   { path: "/admin/signup", element: <AdminSignup /> },
 
   // Domain-scoped cart/checkout (no :slug in the path — the tenant is

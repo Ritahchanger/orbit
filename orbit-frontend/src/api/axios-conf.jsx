@@ -76,6 +76,12 @@ api.interceptors.response.use(
       logErrorByStatus(status, message); // see helper below
     }
 
+    // ── Business suspended or cancelled by Orbit ─────────────────────────
+    if (status === 403 && data?.code === "BUSINESS_BLOCKED") {
+      showBusinessBlocked(data);
+      return Promise.reject(new Error(message));
+    }
+
     // ── Refresh token flow (only on 401) ────────────────────────────────
     const isRefreshEndpoint = originalRequest.url?.includes(
       "/auth/refresh-token",
@@ -130,6 +136,29 @@ api.interceptors.response.use(
 );
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
+
+export const BUSINESS_BLOCKED_KEY = "businessBlocked";
+export const BUSINESS_BLOCKED_PATH = "/business-suspended";
+
+// Remember why the business is blocked and show the explanation page. A full
+// navigation (not a router push) also drops every cached query.
+function showBusinessBlocked(data) {
+  try {
+    sessionStorage.setItem(
+      BUSINESS_BLOCKED_KEY,
+      JSON.stringify({
+        status: data.businessStatus,
+        message: data.message,
+        supportEmail: data.supportEmail || "",
+      }),
+    );
+  } catch {
+    // The page falls back to a generic explanation
+  }
+  if (window.location.pathname !== BUSINESS_BLOCKED_PATH) {
+    window.location.replace(BUSINESS_BLOCKED_PATH);
+  }
+}
 
 // Dev-only console logging by status
 function logErrorByStatus(status, message) {

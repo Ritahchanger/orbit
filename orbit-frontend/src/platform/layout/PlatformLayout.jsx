@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Building2, LayoutGrid, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import { Building2, History, LayoutGrid, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import BrandMark, { BrandGlyph } from "../components/ui/BrandMark";
 import Button from "../components/ui/Button";
 import PlatformNavbar from "../components/PlatformNavbar";
@@ -9,6 +9,7 @@ import { focusRing } from "../components/ui/styles";
 const NAV = [
   { to: "/platform", label: "Overview", icon: <LayoutGrid className="h-4 w-4 shrink-0" />, end: true },
   { to: "/platform/businesses", label: "Businesses", icon: <Building2 className="h-4 w-4 shrink-0" /> },
+  { to: "/platform/activity", label: "Activity", icon: <History className="h-4 w-4 shrink-0" /> },
 ];
 
 const COLLAPSED_KEY = "platform.sidebarCollapsed";
