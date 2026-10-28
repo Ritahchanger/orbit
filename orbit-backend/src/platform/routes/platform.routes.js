@@ -18,6 +18,8 @@ router.get("/auth/me", authCtrl.me);
 
 router.get("/overview", asyncWrapper(platformCtrl.getOverview));
 
+router.get("/search", asyncWrapper(platformCtrl.search));
+
 router.get("/businesses", asyncWrapper(platformCtrl.listBusinesses));
 router.get("/businesses/:id", asyncWrapper(platformCtrl.getBusiness));
 router.patch(

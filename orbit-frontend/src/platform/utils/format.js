@@ -41,3 +41,24 @@ export const formatMonth = (key) => {
 
 export const capitalise = (text = "") =>
   text.charAt(0).toUpperCase() + text.slice(1).replace(/_/g, " ");
+
+// "Acme Hardware Ltd" -> "AH"
+export const initials = (name = "") =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join("") || "?";
+
+// Percentage change from `previous` to `current`, rounded; null when there's
+// no baseline to compare against
+export const percentChange = (current, previous) =>
+  previous ? Math.round(((current - previous) / previous) * 100) : null;
+
+export const formatPercent = (part, whole) =>
+  whole ? `${Math.round((part / whole) * 100)}%` : "0%";
+
+// 1234567 -> "1.2M", for chart axes
+export const formatCompact = (value) =>
+  new Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 1 }).format(value || 0);

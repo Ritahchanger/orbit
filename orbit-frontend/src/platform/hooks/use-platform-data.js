@@ -9,6 +9,16 @@ export const usePlatformOverview = () =>
     staleTime: 60 * 1000,
   });
 
+// Quick search; only runs from 2 characters, matching the server's minimum
+export const usePlatformSearch = (query) =>
+  useQuery({
+    queryKey: platformKeys.search(query),
+    queryFn: () => platformApi.search(query).then((r) => r.data),
+    enabled: query.length >= 2,
+    placeholderData: keepPreviousData,
+    staleTime: 30 * 1000,
+  });
+
 export const usePlatformBusinesses = (params) =>
   useQuery({
     queryKey: platformKeys.businesses(params),

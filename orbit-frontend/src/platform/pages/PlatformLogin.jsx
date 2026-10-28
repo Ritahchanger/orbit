@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { AlertCircle, Eye, EyeOff, Lock } from "lucide-react";
 import { usePlatformAdmin, usePlatformLogin } from "../hooks/use-platform-auth";
-
-const input =
-  "mt-1 w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500";
+import BrandMark from "../components/ui/BrandMark";
+import Button from "../components/ui/Button";
+import { inputClass, labelClass } from "../components/ui/styles";
 
 const PlatformLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [form, setForm] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const { data: admin } = usePlatformAdmin();
   const { mutate: login, isPending, error } = usePlatformLogin();
 
@@ -23,60 +25,113 @@ const PlatformLogin = () => {
   const update = (field) => (event) => setForm((f) => ({ ...f, [field]: event.target.value }));
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50 dark:bg-gray-900">
-      <form
-        onSubmit={submit}
-        className="w-full max-w-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6 space-y-4"
-      >
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-gray-900 dark:text-white">Orbit</span>
-            <span className="px-1.5 py-0.5 text-[11px] font-medium uppercase tracking-wide rounded-sm bg-gray-900 text-white dark:bg-white dark:text-gray-900">
-              Platform
-            </span>
-          </div>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Sign in with your Orbit staff account.
+    <div className="grid min-h-screen bg-white antialiased lg:grid-cols-2 dark:bg-zinc-950">
+      {/* Brand panel */}
+      <div className="relative hidden overflow-hidden bg-zinc-950 p-10 text-white lg:flex lg:flex-col">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.15]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgb(255 255 255 / 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / 0.12) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+            maskImage: "radial-gradient(ellipse at 30% 40%, black 20%, transparent 75%)",
+            WebkitMaskImage: "radial-gradient(ellipse at 30% 40%, black 20%, transparent 75%)",
+          }}
+          aria-hidden
+        />
+        <div className="relative">
+          <BrandMark inverted />
+        </div>
+        <div className="relative mt-auto max-w-md">
+          <h2 className="text-3xl font-semibold leading-tight tracking-tight">
+            Every business on Orbit, in one place.
+          </h2>
+          <p className="mt-4 text-[15px] leading-relaxed text-zinc-400">
+            Monitor sign-ups, subscriptions and activity across the platform, and verify or
+            suspend businesses when they need it.
           </p>
         </div>
+        <p className="relative mt-16 text-xs text-zinc-500">© {new Date().getFullYear()} Orbit</p>
+      </div>
 
-        <label className="block">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</span>
-          <input
-            type="email"
-            autoComplete="username"
-            required
-            value={form.email}
-            onChange={update("email")}
-            className={input}
-          />
-        </label>
-        <label className="block">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Password</span>
-          <input
-            type="password"
-            autoComplete="current-password"
-            required
-            value={form.password}
-            onChange={update("password")}
-            className={input}
-          />
-        </label>
+      {/* Sign-in form */}
+      <div className="flex items-center justify-center px-4 py-12 sm:px-8">
+        <div className="w-full max-w-sm">
+          <div className="text-zinc-900 lg:hidden dark:text-zinc-50">
+            <BrandMark />
+          </div>
 
-        {error && (
-          <p role="alert" className="text-sm text-red-600 dark:text-red-400">
-            {error.message}
+          <h1 className="mt-8 text-2xl font-semibold tracking-tight text-zinc-900 lg:mt-0 dark:text-zinc-50">
+            Sign in to the console
+          </h1>
+          <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+            Use your Orbit staff account. Business accounts sign in at the main app.
           </p>
-        )}
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="w-full py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-sm disabled:opacity-50"
-        >
-          {isPending ? "Signing in…" : "Sign in"}
-        </button>
-      </form>
+          <form onSubmit={submit} className="mt-8 space-y-5">
+            {error && (
+              <div
+                role="alert"
+                className="flex items-start gap-2.5 rounded-md border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300"
+              >
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                {error.message}
+              </div>
+            )}
+
+            <div className="space-y-1.5">
+              <label htmlFor="platform-email" className={labelClass}>
+                Email
+              </label>
+              <input
+                id="platform-email"
+                type="email"
+                autoComplete="username"
+                autoFocus
+                required
+                value={form.email}
+                onChange={update("email")}
+                placeholder="name@orbit.com"
+                className={`${inputClass} h-10`}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="platform-password" className={labelClass}>
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="platform-password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  value={form.password}
+                  onChange={update("password")}
+                  className={`${inputClass} h-10 pr-10`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
+                  className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+
+            <Button type="submit" variant="primary" className="h-10 w-full justify-center" disabled={isPending}>
+              {isPending ? "Signing in…" : "Sign in"}
+            </Button>
+          </form>
+
+          <p className="mt-8 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+            <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
+            Restricted to authorised Orbit staff. Sign-ins are logged.
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

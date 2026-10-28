@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { ArrowLeft, Package, Receipt, Store, Users } from "lucide-react";
+import { AlertTriangle, BadgeCheck, ChevronRight } from "lucide-react";
 import { usePlatformBusiness } from "../hooks/use-platform-data";
-import StatCard from "../components/StatCard";
-import Panel from "../components/Panel";
+import PageHeader from "../components/ui/PageHeader";
+import Card from "../components/ui/Card";
+import Avatar from "../components/ui/Avatar";
+import ChartTooltip from "../components/ui/ChartTooltip";
+import { Metric, MetricGroup } from "../components/ui/Metric";
+import { BusinessStatus, StatusDot, SubscriptionStatus } from "../components/ui/StatusDot";
+import { EmptyState, ErrorState, Skeleton } from "../components/ui/States";
+import { tableClass, tbodyClass, tdClass, thClass, theadRowClass } from "../components/ui/table";
+import BusinessActions from "../components/BusinessActions";
 import ChangeStatusDialog from "../components/ChangeStatusDialog";
-import { STATUS_ACTIONS, actionLabel } from "../utils/business-status";
-import {
-  BusinessStatusBadge,
-  PlanBadge,
-  SubscriptionStatusBadge,
-  VerifiedBadge,
-} from "../components/Badges";
-import { EmptyState, ErrorState, LoadingState } from "../components/PageState";
 import {
   capitalise,
+  formatCompact,
   formatDate,
   formatMoney,
   formatMonth,
@@ -23,10 +23,29 @@ import {
   formatRelative,
 } from "../utils/format";
 
-const Field = ({ label, children }) => (
-  <div>
-    <dt className="text-xs text-gray-500 dark:text-gray-400">{label}</dt>
-    <dd className="text-sm text-gray-900 dark:text-white break-words">{children || "—"}</dd>
+// Label / value rows
+const Details = ({ rows }) => (
+  <dl className="divide-y divide-zinc-100 dark:divide-zinc-800">
+    {rows.map(([label, value]) => (
+      <div key={label} className="grid grid-cols-5 gap-4 px-5 py-3">
+        <dt className="col-span-2 text-[13px] text-zinc-500 dark:text-zinc-400">{label}</dt>
+        <dd className="col-span-3 break-words text-[13px] text-zinc-900 dark:text-zinc-100">
+          {value || <span className="text-zinc-400">—</span>}
+        </dd>
+      </div>
+    ))}
+  </dl>
+);
+
+const DetailSkeleton = () => (
+  <div className="space-y-6">
+    <Skeleton className="h-4 w-40" />
+    <div className="flex items-center gap-4">
+      <Skeleton className="h-12 w-12 rounded-md" />
+      <Skeleton className="h-8 w-64" />
+    </div>
+    <Skeleton className="h-28 w-full rounded-lg" />
+    <Skeleton className="h-72 w-full rounded-lg" />
   </div>
 );
 
@@ -35,207 +54,230 @@ const PlatformBusinessDetail = () => {
   const { data, isLoading, error, refetch } = usePlatformBusiness(id);
   const [targetStatus, setTargetStatus] = useState(null);
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <DetailSkeleton />;
   if (error) return <ErrorState error={error} onRetry={error.status === 404 ? undefined : refetch} />;
 
   const { business, stats, sales, stores, payments } = data;
   const { owner, subscription } = business;
-  const actions = STATUS_ACTIONS[business.status] || [];
+  const roles = Object.entries(stats.usersByRole)
+    .map(([role, count]) => `${count} ${role}`)
+    .join(" · ");
 
   return (
-    <div className="space-y-4">
-      <Link
-        to="/platform/businesses"
-        className="inline-flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-      >
-        <ArrowLeft className="h-4 w-4" /> All businesses
-      </Link>
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow={
+          <nav className="mb-3 flex items-center gap-1 text-[13px] text-zinc-500 dark:text-zinc-400" aria-label="Breadcrumb">
+            <Link to="/platform/businesses" className="hover:text-zinc-900 dark:hover:text-zinc-100">
+              Businesses
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
+            <span className="truncate text-zinc-900 dark:text-zinc-100">{business.businessName}</span>
+          </nav>
+        }
+        title={
+          <span className="flex items-center gap-4">
+            <Avatar name={business.businessName} size="lg" />
+            <span className="min-w-0">
+              <span className="block truncate">{business.businessName}</span>
+              <span className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-normal tracking-normal">
+                <BusinessStatus status={business.status} />
+                {business.isVerified ? (
+                  <span className="inline-flex items-center gap-1 text-[13px] text-zinc-600 dark:text-zinc-400">
+                    <BadgeCheck className="h-4 w-4 text-sky-500" aria-hidden />
+                    Verified
+                  </span>
+                ) : (
+                  <StatusDot tone="amber">Unverified</StatusDot>
+                )}
+                <span className="text-[13px] text-zinc-500 dark:text-zinc-400">
+                  Joined {formatDate(business.createdAt)}
+                </span>
+              </span>
+            </span>
+          </span>
+        }
+        actions={<BusinessActions status={business.status} onSelect={setTargetStatus} />}
+      />
 
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-white">{business.businessName}</h1>
-            <BusinessStatusBadge status={business.status} />
-            <VerifiedBadge verified={business.isVerified} />
-          </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {[business.businessType, business.city, business.country].filter(Boolean).join(" · ")} · joined{" "}
-            {formatDate(business.createdAt)}
-          </p>
-          {business.status === "suspended" && business.suspensionReason && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-              Suspended {formatDate(business.suspendedAt)}: {business.suspensionReason}
+      {business.status === "suspended" && (
+        <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-900/60 dark:bg-red-950/30">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" aria-hidden />
+          <div className="text-sm">
+            <p className="font-medium text-red-800 dark:text-red-300">
+              Suspended {business.suspendedAt ? formatRelative(business.suspendedAt).toLowerCase() : ""}
             </p>
-          )}
-        </div>
-        {actions.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {actions.map((status) => (
-              <button
-                key={status}
-                type="button"
-                onClick={() => setTargetStatus(status)}
-                className={`px-3 py-1.5 text-sm font-medium rounded-sm ${
-                  status === "active"
-                    ? "text-white bg-blue-600 hover:bg-blue-700"
-                    : "border border-red-300 dark:border-red-500/40 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10"
-                }`}
-              >
-                {actionLabel(business.status, status)}
-              </button>
-            ))}
+            {business.suspensionReason && (
+              <p className="mt-0.5 text-red-700 dark:text-red-400">{business.suspensionReason}</p>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
-        <StatCard title="Stores" value={formatNumber(stats.stores)} icon={<Store className="h-5 w-5" />} />
-        <StatCard
-          title="Users"
-          value={formatNumber(stats.users)}
-          icon={<Users className="h-5 w-5" />}
-          tone="indigo"
-          hint={Object.entries(stats.usersByRole)
-            .map(([role, count]) => `${count} ${role}`)
-            .join(" · ")}
+      <MetricGroup>
+        <Metric label="Sales · 30d" value={formatMoney(sales.last30d.total)} footer={`${formatNumber(sales.last30d.count)} completed sales`} />
+        <Metric
+          label="Sales · all time"
+          value={formatMoney(sales.allTime.total)}
+          footer={`Last sale ${formatRelative(sales.lastSaleAt).toLowerCase()}`}
         />
-        <StatCard title="Products" value={formatNumber(stats.products)} icon={<Package className="h-5 w-5" />} tone="purple" />
-        <StatCard
-          title="Sales (30 days)"
-          value={formatMoney(sales.last30d.total)}
-          icon={<Receipt className="h-5 w-5" />}
-          tone="green"
-          hint={`${formatNumber(sales.last30d.count)} sales · last ${formatRelative(sales.lastSaleAt).toLowerCase()}`}
-        />
-      </div>
+        <Metric label="Stores · products" value={`${formatNumber(stats.stores)} · ${formatNumber(stats.products)}`} footer="Stores and products listed" />
+        <Metric label="Users" value={formatNumber(stats.users)} footer={roles || "No users"} />
+      </MetricGroup>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <Panel title="Sales, last 6 months" className="xl:col-span-2">
-          <div className="h-60">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <Card className="xl:col-span-2" title="Sales" description="Completed sales value, last 6 months">
+          <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={sales.monthly} margin={{ top: 4, right: 4, bottom: 0, left: 8 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-gray-200 dark:stroke-gray-700" />
-                <XAxis dataKey="month" tickFormatter={formatMonth} tick={{ fontSize: 12 }} stroke="currentColor" className="text-gray-500" />
+              <BarChart data={sales.monthly} margin={{ top: 8, right: 8, bottom: 0, left: -8 }}>
+                <CartesianGrid vertical={false} className="stroke-zinc-100 dark:stroke-zinc-800" />
+                <XAxis
+                  dataKey="month"
+                  tickFormatter={formatMonth}
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  tick={{ fontSize: 12, fill: "#a1a1aa" }}
+                />
                 <YAxis
-                  tick={{ fontSize: 12 }}
-                  stroke="currentColor"
-                  className="text-gray-500"
-                  tickFormatter={(v) => (v >= 1000 ? `${Math.round(v / 1000)}k` : v)}
+                  tickFormatter={formatCompact}
+                  tickLine={false}
+                  axisLine={false}
+                  width={48}
+                  tick={{ fontSize: 12, fill: "#a1a1aa" }}
                 />
                 <Tooltip
-                  labelFormatter={formatMonth}
-                  formatter={(value, _name, item) => [
-                    `${formatMoney(value)} (${formatNumber(item.payload.count)} sales)`,
-                    "Sales",
-                  ]}
-                  cursor={{ fillOpacity: 0.1 }}
+                  cursor={{ fill: "rgb(161 161 170 / 0.12)" }}
+                  content={
+                    <ChartTooltip
+                      labelFormatter={(m) => formatMonth(m) + " " + m.slice(0, 4)}
+                      valueFormatter={(v, row) => `${formatMoney(v)} · ${formatNumber(row.count)} sales`}
+                    />
+                  }
                 />
-                <Bar dataKey="total" fill="#16a34a" radius={[2, 2, 0, 0]} maxBarSize={40} />
+                <Bar dataKey="total" fill="#6366f1" radius={[3, 3, 0, 0]} maxBarSize={44} />
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-            All time: {formatMoney(sales.allTime.total)} from {formatNumber(sales.allTime.count)} completed sales.
-          </p>
-        </Panel>
+        </Card>
 
-        <Panel title="Subscription">
+        <Card title="Subscription" bodyClassName="p-0">
           {subscription ? (
-            <dl className="grid grid-cols-2 gap-3">
-              <Field label="Plan"><PlanBadge plan={subscription.planSlug} /></Field>
-              <Field label="Status"><SubscriptionStatusBadge status={subscription.status} /></Field>
-              <Field label="Billing">{capitalise(subscription.billingCycle)}</Field>
-              <Field label="Price paid">
-                {subscription.pricePaid != null ? formatMoney(subscription.pricePaid, subscription.currency) : null}
-              </Field>
-              {subscription.status === "trialing" ? (
-                <Field label="Trial ends">
-                  {formatDate(subscription.trialEndDate)} ({formatRelative(subscription.trialEndDate)})
-                </Field>
-              ) : (
-                <Field label="Current period ends">{formatDate(subscription.currentPeriodEnd)}</Field>
-              )}
-              <Field label="Auto-renew">{subscription.autoRenew ? "Yes" : "No"}</Field>
-              <Field label="Store limit">{subscription.limits?.maxStores ?? subscription.plan?.maxStores}</Field>
-              <Field label="User limit">{subscription.limits?.maxUsers ?? subscription.plan?.maxUsers}</Field>
-            </dl>
+            <Details
+              rows={[
+                ["Plan", capitalise(subscription.planSlug)],
+                ["Status", <SubscriptionStatus key="s" status={subscription.status} />],
+                ["Billing", capitalise(subscription.billingCycle)],
+                [
+                  "Price",
+                  subscription.pricePaid != null ? formatMoney(subscription.pricePaid, subscription.currency) : null,
+                ],
+                subscription.status === "trialing"
+                  ? ["Trial ends", `${formatDate(subscription.trialEndDate)} (${formatRelative(subscription.trialEndDate).toLowerCase()})`]
+                  : ["Renews", formatDate(subscription.currentPeriodEnd)],
+                ["Auto-renew", subscription.autoRenew ? "On" : "Off"],
+                [
+                  "Limits",
+                  `${subscription.limits?.maxStores ?? subscription.plan?.maxStores ?? "—"} stores · ${
+                    subscription.limits?.maxUsers ?? subscription.plan?.maxUsers ?? "—"
+                  } users`,
+                ],
+              ]}
+            />
           ) : (
             <EmptyState>No subscription on record.</EmptyState>
           )}
-        </Panel>
+        </Card>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <Panel title="Business details">
-          <dl className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
-            <Field label="Email">{business.businessEmail}</Field>
-            <Field label="Phone">{business.businessPhone}</Field>
-            <Field label="Registration number">{business.registrationNumber}</Field>
-            <Field label="Tax ID">{business.taxId}</Field>
-            <Field label="Address">
-              {[business.businessAddress, business.city, business.postalCode, business.country]
-                .filter(Boolean)
-                .join(", ")}
-            </Field>
-            <Field label="Website">{business.website}</Field>
-            <Field label="Employees">{business.employeeCount}</Field>
-          </dl>
-        </Panel>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card title="Business" bodyClassName="p-0">
+          <Details
+            rows={[
+              ["Email", business.businessEmail],
+              ["Phone", business.businessPhone],
+              ["Type", business.businessType],
+              ["Registration no.", business.registrationNumber],
+              ["Tax ID", business.taxId],
+              [
+                "Address",
+                [business.businessAddress, business.city, business.postalCode, business.country]
+                  .filter(Boolean)
+                  .join(", "),
+              ],
+              ["Website", business.website],
+              ["Employees", business.employeeCount],
+            ]}
+          />
+        </Card>
 
-        <Panel title="Owner">
-          {owner ? (
-            <dl className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
-              <Field label="Name">{`${owner.firstName} ${owner.lastName}`}</Field>
-              <Field label="Email">{owner.email}</Field>
-              <Field label="Phone">{owner.phoneNo}</Field>
-              <Field label="Last login">{formatRelative(owner.lastLoginAt)}</Field>
-            </dl>
-          ) : (
-            <EmptyState>Owner account not found.</EmptyState>
-          )}
-        </Panel>
+        <div className="space-y-6">
+          <Card title="Owner" bodyClassName="p-0">
+            {owner ? (
+              <Details
+                rows={[
+                  ["Name", `${owner.firstName} ${owner.lastName}`],
+                  ["Email", owner.email],
+                  ["Phone", owner.phoneNo],
+                  ["Last login", formatRelative(owner.lastLoginAt)],
+                ]}
+              />
+            ) : (
+              <EmptyState>Owner account not found.</EmptyState>
+            )}
+          </Card>
 
-        <Panel title={`Stores (${stores.length})`}>
-          {stores.length === 0 ? (
-            <EmptyState>No stores yet.</EmptyState>
-          ) : (
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-              {stores.map((s) => (
-                <li key={s._id} className="flex items-center justify-between gap-3 py-2 text-sm">
-                  <span className="text-gray-900 dark:text-white truncate">
-                    {s.name} <span className="text-gray-500 dark:text-gray-400">({s.code})</span>
-                  </span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">{capitalise(s.status)}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Panel>
+          <Card title="Stores" description={`${stores.length} ${stores.length === 1 ? "store" : "stores"}`} bodyClassName="p-0">
+            {stores.length === 0 ? (
+              <EmptyState>No stores yet.</EmptyState>
+            ) : (
+              <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                {stores.map((s) => (
+                  <li key={s._id} className="flex items-center justify-between gap-3 px-5 py-3 text-[13px]">
+                    <span className="min-w-0 truncate">
+                      <span className="font-medium text-zinc-900 dark:text-zinc-100">{s.name}</span>
+                      <span className="ml-2 font-mono text-xs text-zinc-500 dark:text-zinc-400">{s.code}</span>
+                    </span>
+                    <StatusDot tone={s.status === "active" ? "green" : "gray"}>{capitalise(s.status)}</StatusDot>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+        </div>
       </div>
 
-      <Panel title="Subscription payments">
+      <Card title="Subscription payments" description="The 10 most recent" bodyClassName="p-0">
         {payments.length === 0 ? (
           <EmptyState>No payments yet.</EmptyState>
         ) : (
-          <div className="overflow-x-auto -mx-4">
-            <table className="min-w-full text-sm">
+          <div className="overflow-x-auto">
+            <table className={tableClass}>
               <thead>
-                <tr className="text-left text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-                  <th className="px-4 py-2 font-medium">Date</th>
-                  <th className="px-4 py-2 font-medium">Description</th>
-                  <th className="px-4 py-2 font-medium">Method</th>
-                  <th className="px-4 py-2 font-medium">Status</th>
-                  <th className="px-4 py-2 font-medium text-right">Amount</th>
+                <tr className={theadRowClass}>
+                  <th className={thClass}>Date</th>
+                  <th className={thClass}>Description</th>
+                  <th className={thClass}>Method</th>
+                  <th className={thClass}>Status</th>
+                  <th className={`${thClass} text-right`}>Amount</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className={tbodyClass}>
                 {payments.map((p) => (
                   <tr key={p._id}>
-                    <td className="px-4 py-2 whitespace-nowrap text-gray-700 dark:text-gray-300">{formatDate(p.createdAt)}</td>
-                    <td className="px-4 py-2 text-gray-900 dark:text-white">{p.description || "—"}</td>
-                    <td className="px-4 py-2 text-gray-700 dark:text-gray-300">{capitalise(p.paymentMethod)}</td>
-                    <td className="px-4 py-2 text-gray-700 dark:text-gray-300">{capitalise(p.status)}</td>
-                    <td className="px-4 py-2 text-right tabular-nums text-gray-900 dark:text-white">
+                    <td className={`${tdClass} whitespace-nowrap text-zinc-600 tabular-nums dark:text-zinc-400`}>
+                      {formatDate(p.createdAt)}
+                    </td>
+                    <td className={tdClass}>{p.description || "—"}</td>
+                    <td className={`${tdClass} text-zinc-600 dark:text-zinc-400`}>{capitalise(p.paymentMethod)}</td>
+                    <td className={tdClass}>
+                      <StatusDot
+                        tone={{ successful: "green", pending: "amber", failed: "red", refunded: "gray" }[p.status]}
+                      >
+                        {capitalise(p.status)}
+                      </StatusDot>
+                    </td>
+                    <td className={`${tdClass} text-right font-medium tabular-nums`}>
                       {formatMoney(p.amount, p.currency)}
                     </td>
                   </tr>
@@ -244,7 +286,7 @@ const PlatformBusinessDetail = () => {
             </table>
           </div>
         )}
-      </Panel>
+      </Card>
 
       {targetStatus && (
         <ChangeStatusDialog

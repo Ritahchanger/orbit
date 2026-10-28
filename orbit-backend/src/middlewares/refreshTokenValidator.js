@@ -2,6 +2,7 @@
 const jwt = require("jsonwebtoken");
 const RefreshToken = require("../auth/models/refresh-token.model"); // Create this model
 const { findUserById } = require("../user");
+const { checkBusinessAccess } = require("../business");
 require("dotenv").config();
 
 const refreshTokenValidator = async (req, res, next) => {
@@ -51,6 +52,17 @@ const refreshTokenValidator = async (req, res, next) => {
       return res.status(403).json({
         success: false,
         message: "Platform accounts can't use business routes",
+      });
+    }
+
+    // Users of a suspended or cancelled business are locked out
+    const blocked = await checkBusinessAccess(user.businessId);
+    if (blocked) {
+      return res.status(403).json({
+        success: false,
+        code: "BUSINESS_BLOCKED",
+        businessStatus: blocked.status,
+        message: blocked.message,
       });
     }
 
