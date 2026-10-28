@@ -1,7 +1,7 @@
 // What each business status can move to, mirroring the server's allowed
 // transitions (business.service updateStatus)
 export const STATUS_ACTIONS = {
-  pending: ["active", "cancelled"],
+  pending: ["active", "suspended", "cancelled"],
   active: ["suspended", "cancelled"],
   suspended: ["active", "cancelled"],
   cancelled: [],

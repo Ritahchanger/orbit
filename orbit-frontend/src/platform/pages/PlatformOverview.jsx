@@ -1,11 +1,17 @@
-import { Link } from "react-router-dom";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { Building2, CreditCard, Receipt, Store, Users } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { ArrowRight, RefreshCw } from "lucide-react";
 import { usePlatformOverview } from "../hooks/use-platform-data";
-import StatCard from "../components/StatCard";
-import Panel from "../components/Panel";
-import { BusinessStatusBadge, PlanBadge } from "../components/Badges";
-import { EmptyState, ErrorState, LoadingState } from "../components/PageState";
+import PageHeader from "../components/ui/PageHeader";
+import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
+import Avatar from "../components/ui/Avatar";
+import ChartTooltip from "../components/ui/ChartTooltip";
+import { Delta, Metric, MetricGroup } from "../components/ui/Metric";
+import { BusinessStatus } from "../components/ui/StatusDot";
+import { EmptyState, ErrorState, Skeleton } from "../components/ui/States";
+import { rowLinkClass, tableClass, tbodyClass, tdClass, thClass, theadRowClass } from "../components/ui/table";
+import DistributionCard from "../components/DistributionCard";
 import {
   capitalise,
   formatDate,
@@ -13,175 +19,279 @@ import {
   formatMonth,
   formatNumber,
   formatRelative,
+  percentChange,
 } from "../utils/format";
 
 // "KSh 12,000 · USD 300", or "—" when there's nothing
 const moneyList = (rows) =>
   rows?.length ? rows.map((r) => formatMoney(r.amount, r.currency)).join(" · ") : "—";
 
-const CountRows = ({ counts, render }) => (
-  <dl className="space-y-2">
-    {Object.entries(counts).map(([key, count]) => (
-      <div key={key} className="flex items-center justify-between text-sm">
-        <dt>{render(key)}</dt>
-        <dd className="font-medium text-gray-900 dark:text-white tabular-nums">{formatNumber(count)}</dd>
-      </div>
-    ))}
-  </dl>
+const OverviewSkeleton = () => (
+  <div className="space-y-6">
+    <Skeleton className="h-8 w-48" />
+    <Skeleton className="h-28 w-full rounded-lg" />
+    <div className="grid gap-6 xl:grid-cols-3">
+      <Skeleton className="h-80 rounded-lg xl:col-span-2" />
+      <Skeleton className="h-80 rounded-lg" />
+    </div>
+  </div>
 );
 
 const PlatformOverview = () => {
-  const { data, isLoading, error, refetch } = usePlatformOverview();
+  const navigate = useNavigate();
+  const { data, isLoading, error, refetch, isFetching, dataUpdatedAt } = usePlatformOverview();
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <OverviewSkeleton />;
   if (error) return <ErrorState error={error} onRetry={refetch} />;
 
   const { businesses, signups, subscriptions, activity, recentBusinesses } = data;
-  const growth = businesses.newThisMonth - businesses.newLastMonth;
+  const signupsThisYear = signups.reduce((sum, m) => sum + m.count, 0);
+  const paymentsCount = subscriptions.payments30d.reduce((n, r) => n + r.count, 0);
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Overview</h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400">Every business on Orbit at a glance.</p>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="Overview"
+        description="Health of the Orbit platform across every registered business."
+        actions={
+          <>
+            <span className="hidden text-xs text-zinc-500 sm:inline dark:text-zinc-400">
+              Updated {new Date(dataUpdatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+            </span>
+            <Button size="sm" onClick={() => refetch()} disabled={isFetching}>
+              <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`} aria-hidden />
+              Refresh
+            </Button>
+          </>
+        }
+      />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-        <StatCard
-          title="Businesses"
+      <MetricGroup>
+        <Metric
+          label="Businesses"
           value={formatNumber(businesses.total)}
-          icon={<Building2 className="h-5 w-5" />}
-          hint={`${formatNumber(businesses.byStatus.active)} active · ${formatNumber(businesses.verified)} verified`}
+          footer={`${formatNumber(businesses.byStatus.active)} active · ${formatNumber(businesses.verified)} verified`}
         />
-        <StatCard
-          title="New this month"
+        <Metric
+          label="New this month"
           value={formatNumber(businesses.newThisMonth)}
-          icon={<Building2 className="h-5 w-5" />}
-          tone="green"
-          hint={`${growth >= 0 ? "+" : ""}${growth} vs last month (${businesses.newLastMonth})`}
+          footer={
+            <Delta
+              value={percentChange(businesses.newThisMonth, businesses.newLastMonth)}
+              suffix="%"
+              label={`vs ${businesses.newLastMonth} last month`}
+            />
+          }
         />
-        <StatCard
-          title="Monthly recurring revenue"
+        <Metric
+          label="Monthly recurring revenue"
           value={moneyList(subscriptions.monthlyRecurringRevenue)}
-          icon={<CreditCard className="h-5 w-5" />}
-          tone="purple"
-          hint={`${formatNumber(subscriptions.byStatus.active)} paying · ${formatNumber(subscriptions.byStatus.trialing)} on trial`}
+          footer={`${formatNumber(subscriptions.byStatus.active)} paying · ${formatNumber(subscriptions.byStatus.trialing)} trialing`}
         />
-        <StatCard
-          title="Subscription payments (30 days)"
+        <Metric
+          label="Subscription payments · 30d"
           value={moneyList(subscriptions.payments30d)}
-          icon={<Receipt className="h-5 w-5" />}
-          tone="orange"
-          hint={`${formatNumber(subscriptions.payments30d.reduce((n, r) => n + r.count, 0))} successful payments`}
+          footer={`${formatNumber(paymentsCount)} successful payments`}
         />
-      </div>
+      </MetricGroup>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <StatCard title="Users across businesses" value={formatNumber(activity.users)} icon={<Users className="h-5 w-5" />} tone="indigo" />
-        <StatCard title="Stores" value={formatNumber(activity.stores)} icon={<Store className="h-5 w-5" />} tone="indigo" />
-        <StatCard
-          title="Sales recorded (30 days)"
-          value={formatMoney(activity.sales30d.total)}
-          icon={<Receipt className="h-5 w-5" />}
-          tone="indigo"
-          hint={`${formatNumber(activity.sales30d.count)} sales across all businesses`}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <Panel title="Sign-ups, last 12 months" className="xl:col-span-2">
-          <div className="h-64">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <Card
+          className="xl:col-span-2"
+          title="Business sign-ups"
+          description={`${formatNumber(signupsThisYear)} new businesses in the last 12 months`}
+        >
+          <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={signups} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-gray-200 dark:stroke-gray-700" />
-                <XAxis dataKey="month" tickFormatter={formatMonth} tick={{ fontSize: 12 }} stroke="currentColor" className="text-gray-500" />
-                <YAxis allowDecimals={false} tick={{ fontSize: 12 }} stroke="currentColor" className="text-gray-500" />
-                <Tooltip
-                  labelFormatter={formatMonth}
-                  formatter={(value) => [value, "New businesses"]}
-                  cursor={{ fillOpacity: 0.1 }}
+              <AreaChart data={signups} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
+                <defs>
+                  <linearGradient id="signupsFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#6366f1" stopOpacity={0.18} />
+                    <stop offset="100%" stopColor="#6366f1" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid vertical={false} strokeDasharray="0" className="stroke-zinc-100 dark:stroke-zinc-800" />
+                <XAxis
+                  dataKey="month"
+                  tickFormatter={formatMonth}
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  tick={{ fontSize: 12, fill: "#a1a1aa" }}
                 />
-                <Bar dataKey="count" fill="#2563eb" radius={[2, 2, 0, 0]} maxBarSize={36} />
-              </BarChart>
+                <YAxis
+                  allowDecimals={false}
+                  tickLine={false}
+                  axisLine={false}
+                  width={40}
+                  tick={{ fontSize: 12, fill: "#a1a1aa" }}
+                />
+                <Tooltip
+                  cursor={{ stroke: "#a1a1aa", strokeDasharray: "3 3" }}
+                  content={
+                    <ChartTooltip
+                      labelFormatter={(m) => formatMonth(m) + " " + m.slice(0, 4)}
+                      valueFormatter={(v) => `${v} new ${v === 1 ? "business" : "businesses"}`}
+                    />
+                  }
+                />
+                <Area
+                  type="monotone"
+                  dataKey="count"
+                  stroke="#6366f1"
+                  strokeWidth={2}
+                  fill="url(#signupsFill)"
+                  activeDot={{ r: 4, strokeWidth: 0 }}
+                />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
-        </Panel>
+        </Card>
 
-        <div className="space-y-4">
-          <Panel title="Businesses by status">
-            <CountRows counts={businesses.byStatus} render={(s) => <BusinessStatusBadge status={s} />} />
-          </Panel>
-          <Panel title="Subscriptions">
-            <CountRows
-              counts={subscriptions.byStatus}
-              render={(s) => <span className="text-gray-700 dark:text-gray-300">{capitalise(s)}</span>}
-            />
-            {subscriptions.byPlan.length > 0 && (
-              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-2">
+        <DistributionCard
+          title="Business status"
+          description={`${formatNumber(businesses.total)} businesses`}
+          segments={[
+            { key: "active", label: "Active", tone: "green", count: businesses.byStatus.active },
+            { key: "pending", label: "Pending review", tone: "amber", count: businesses.byStatus.pending },
+            { key: "suspended", label: "Suspended", tone: "red", count: businesses.byStatus.suspended },
+            { key: "cancelled", label: "Cancelled", tone: "gray", count: businesses.byStatus.cancelled },
+          ]}
+        />
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-3">
+        <DistributionCard
+          title="Subscriptions"
+          description="By billing status"
+          segments={[
+            { key: "active", label: "Active", tone: "green", count: subscriptions.byStatus.active },
+            { key: "trialing", label: "Trialing", tone: "blue", count: subscriptions.byStatus.trialing },
+            { key: "past_due", label: "Past due", tone: "amber", count: subscriptions.byStatus.past_due },
+            { key: "expired", label: "Expired", tone: "red", count: subscriptions.byStatus.expired },
+            { key: "cancelled", label: "Cancelled", tone: "gray", count: subscriptions.byStatus.cancelled },
+          ]}
+          footer={
+            subscriptions.byPlan.length > 0 && (
+              <dl className="grid grid-cols-3 gap-3">
                 {subscriptions.byPlan.map((p) => (
-                  <span key={p.plan} className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
-                    <PlanBadge plan={p.plan} /> {p.count}
-                  </span>
+                  <div key={p.plan}>
+                    <dt className="text-xs text-zinc-500 dark:text-zinc-400">{capitalise(p.plan)}</dt>
+                    <dd className="mt-0.5 text-sm font-semibold tabular-nums">{formatNumber(p.count)}</dd>
+                  </div>
                 ))}
-              </div>
-            )}
-          </Panel>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        <Panel title="Trials ending in the next 7 days">
-          {subscriptions.trialsEndingSoon.length === 0 ? (
-            <EmptyState>No trials end this week.</EmptyState>
-          ) : (
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-              {subscriptions.trialsEndingSoon.map((t) => (
-                <li key={t.businessId} className="flex items-center justify-between gap-3 py-2">
-                  <div className="min-w-0">
-                    <Link to={`/platform/businesses/${t.businessId}`} className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline truncate block">
-                      {t.businessName}
-                    </Link>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{t.businessEmail}</p>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <PlanBadge plan={t.plan} />
-                    <span className="text-xs text-gray-600 dark:text-gray-400">{formatRelative(t.trialEndDate)}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Panel>
-
-        <Panel
-          title="Newest businesses"
-          action={
-            <Link to="/platform/businesses" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-              View all
-            </Link>
+              </dl>
+            )
           }
+        />
+
+        <Card title="Platform activity" description="Across all businesses" bodyClassName="p-0">
+          <dl className="divide-y divide-zinc-100 dark:divide-zinc-800">
+            {[
+              ["Users", formatNumber(activity.users)],
+              ["Stores", formatNumber(activity.stores)],
+              ["Sales recorded · 30d", formatNumber(activity.sales30d.count)],
+              ["Sales value · 30d", formatMoney(activity.sales30d.total)],
+            ].map(([label, value]) => (
+              <div key={label} className="flex items-center justify-between px-5 py-3.5">
+                <dt className="text-[13px] text-zinc-600 dark:text-zinc-400">{label}</dt>
+                <dd className="text-sm font-semibold tabular-nums">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Card>
+
+        <Card
+          title="Trials ending soon"
+          description="Next 7 days"
+          bodyClassName="p-0"
         >
-          {recentBusinesses.length === 0 ? (
-            <EmptyState>No businesses yet.</EmptyState>
+          {subscriptions.trialsEndingSoon.length === 0 ? (
+            <EmptyState>No trials end in the next 7 days.</EmptyState>
           ) : (
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-              {recentBusinesses.map((b) => (
-                <li key={b._id} className="flex items-center justify-between gap-3 py-2">
-                  <div className="min-w-0">
-                    <Link to={`/platform/businesses/${b._id}`} className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline truncate block">
-                      {b.businessName}
-                    </Link>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                      {[b.city, b.country].filter(Boolean).join(", ") || b.businessEmail} · joined {formatDate(b.createdAt)}
-                    </p>
-                  </div>
-                  <BusinessStatusBadge status={b.status} />
+            <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+              {subscriptions.trialsEndingSoon.map((t) => (
+                <li key={t.businessId}>
+                  <Link
+                    to={`/platform/businesses/${t.businessId}`}
+                    className="flex items-center gap-3 px-5 py-3 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                  >
+                    <Avatar name={t.businessName} />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{t.businessName}</p>
+                      <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+                        {capitalise(t.plan)} trial
+                      </p>
+                    </div>
+                    <span className="shrink-0 text-xs font-medium text-amber-600 dark:text-amber-400">
+                      {formatRelative(t.trialEndDate)}
+                    </span>
+                  </Link>
                 </li>
               ))}
             </ul>
           )}
-        </Panel>
+        </Card>
       </div>
+
+      <Card
+        title="Recently joined"
+        description="The newest businesses on the platform"
+        bodyClassName="p-0"
+        action={
+          <Button size="sm" variant="ghost" onClick={() => navigate("/platform/businesses")}>
+            View all
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+          </Button>
+        }
+      >
+        {recentBusinesses.length === 0 ? (
+          <EmptyState title="No businesses yet">Businesses appear here as soon as they register.</EmptyState>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className={tableClass}>
+              <thead>
+                <tr className={theadRowClass}>
+                  <th className={thClass}>Business</th>
+                  <th className={thClass}>Location</th>
+                  <th className={thClass}>Status</th>
+                  <th className={`${thClass} text-right`}>Joined</th>
+                </tr>
+              </thead>
+              <tbody className={tbodyClass}>
+                {recentBusinesses.map((b) => (
+                  <tr
+                    key={b._id}
+                    className={rowLinkClass}
+                    tabIndex={0}
+                    onClick={() => navigate(`/platform/businesses/${b._id}`)}
+                    onKeyDown={(e) => e.key === "Enter" && navigate(`/platform/businesses/${b._id}`)}
+                  >
+                    <td className={tdClass}>
+                      <div className="flex items-center gap-3">
+                        <Avatar name={b.businessName} />
+                        <div className="min-w-0">
+                          <p className="font-medium">{b.businessName}</p>
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400">{b.businessEmail}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className={`${tdClass} text-zinc-600 dark:text-zinc-400`}>
+                      {[b.city, b.country].filter(Boolean).join(", ") || "—"}
+                    </td>
+                    <td className={tdClass}>
+                      <BusinessStatus status={b.status} />
+                    </td>
+                    <td className={`${tdClass} text-right text-zinc-600 tabular-nums dark:text-zinc-400`}>
+                      {formatDate(b.createdAt)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Card>
     </div>
   );
 };
