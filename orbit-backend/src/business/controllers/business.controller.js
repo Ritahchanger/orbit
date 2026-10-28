@@ -59,17 +59,6 @@ const searchPublic = async (req, res) => {
   }
 };
 
-// ── Get all businesses ────────────────────────────────────────────────────────
-const getAll = async (req, res) => {
-  const { businesses, pagination } = await businessService.getAll(req.query);
-
-  res.status(200).json({
-    success: true,
-    data: businesses,
-    pagination,
-  });
-};
-
 // ── Get single business ───────────────────────────────────────────────────────
 const getById = async (req, res) => {
   const business = await businessService.getById(req.params.id);
@@ -104,32 +93,6 @@ const update = async (req, res) => {
   });
 };
 
-// ── Update status (verify / suspend / activate) ───────────────────────────────
-const updateStatus = async (req, res) => {
-  const { status, reason } = req.body;
-  const business = await businessService.updateStatus(
-    req.params.id,
-    status,
-    reason,
-  );
-
-  res.status(200).json({
-    success: true,
-    message: `Business ${status} successfully`,
-    data: business,
-  });
-};
-
-// ── Delete business ───────────────────────────────────────────────────────────
-const deleteBusiness = async (req, res) => {
-  const result = await businessService.delete(req.params.id);
-
-  res.status(200).json({
-    success: true,
-    message: result.message,
-  });
-};
-
 // ── Ecommerce Settings ───────────────────────────────────────────────────────────
 const getEcommerceSettings = async (req, res) => {
   const ecommerce = await businessService.getEcommerceSettings(req.businessId);
@@ -155,12 +118,9 @@ const updateEcommerceSettings = async (req, res) => {
 
 module.exports = {
   register,
-  getAll,
   getById,
   getMyBusiness,
   update,
-  updateStatus,
-  deleteBusiness,
   searchPublic,
   getEcommerceSettings,
   updateEcommerceSettings,

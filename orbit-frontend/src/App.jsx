@@ -1,4 +1,5 @@
 // App.jsx
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import ScrollToTop from './globals/hooks/ScrollToTop';
@@ -8,6 +9,10 @@ import ModalSetup from './config/ModalSetup.jsx';
 import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
 import { publicRoutes, protectedRoutes } from './config/routes.config.jsx';
 import InstallPrompt from './globals/prompts/InstallModal.jsx';
+
+// Orbit staff dashboard; loaded only when someone opens /platform
+const PlatformApp = lazy(() => import('./platform'));
+
 const App = () => {
   return (
     <ModalProvider>
@@ -61,6 +66,15 @@ const App = () => {
       />
       
       <Routes>
+        <Route
+          path="/platform/*"
+          element={
+            <Suspense fallback={null}>
+              <PlatformApp />
+            </Suspense>
+          }
+        />
+
         {publicRoutes.map((route, index) => (
           <Route
             key={`public-${index}`}

@@ -45,6 +45,15 @@ const refreshTokenValidator = async (req, res, next) => {
       });
     }
 
+    // Platform admins sign in to the platform dashboard only (/api/v1/platform);
+    // they belong to no business, so business routes must never run for them.
+    if (user.role === "platform_admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Platform accounts can't use business routes",
+      });
+    }
+
     // ✅ Attach both
     req.user = user;
     req.businessId = user.businessId; // 🔥 CRITICAL

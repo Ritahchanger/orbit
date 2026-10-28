@@ -12,15 +12,6 @@ export const businessKeys = {
   search: (query) => ["businesses", "search", query],
 };
 
-// ── Get all businesses (protected — admin/superadmin) ─────────────────────────
-export const useGetAllBusinesses = (filters = {}) => {
-  return useQuery({
-    queryKey: businessKeys.list(filters),
-    queryFn: () => businessApi.getAll(filters),
-    staleTime: 1000 * 60 * 5,
-  });
-};
-
 // ── Get single business by ID ─────────────────────────────────────────────────
 export const useGetBusinessById = (id) => {
   return useQuery({

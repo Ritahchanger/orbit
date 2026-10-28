@@ -4,7 +4,6 @@ const router = express.Router();
 const asyncWrapper = require("../../middlewares/asyncMiddleware");
 const businessCtrl = require("../controllers/business.controller");
 const tokenValidator = require("../../middlewares/refreshTokenValidator");
-const platformAdminValidator = require("../../middlewares/platformAdminValidator");
 const businessAccess = require("../middlewares/business-access.middleware");
 
 // ✅ register is PUBLIC — no tokenValidator
@@ -14,9 +13,6 @@ router.get("/search", asyncWrapper(businessCtrl.searchPublic));
 
 // ✅ everything below requires a valid token
 router.use(tokenValidator);
-
-// Every business on the platform — Orbit's platform admins only
-router.get("/", platformAdminValidator, asyncWrapper(businessCtrl.getAll));
 
 router.get("/my-business", asyncWrapper(businessCtrl.getMyBusiness));
 
@@ -30,26 +26,14 @@ router.patch(
   asyncWrapper(businessCtrl.updateEcommerceSettings),
 );
 
-// A business's own users (or a platform admin) only
+// A business's own users only. Listing every business and changing a
+// business's status are platform-dashboard actions (/api/v1/platform).
 router.get("/:id", businessAccess(), asyncWrapper(businessCtrl.getById));
 
 router.patch(
   "/:id",
   businessAccess({ roles: ["admin", "superadmin"] }),
   asyncWrapper(businessCtrl.update),
-);
-
-// Verify / suspend / cancel and delete — platform admins only
-router.patch(
-  "/:id/status",
-  platformAdminValidator,
-  asyncWrapper(businessCtrl.updateStatus),
-);
-
-router.delete(
-  "/:id",
-  platformAdminValidator,
-  asyncWrapper(businessCtrl.deleteBusiness),
 );
 
 module.exports = router;
