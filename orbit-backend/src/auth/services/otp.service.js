@@ -1,0 +1,292 @@
+const { transporter } = require("../../utils/transporter");
+const crypto = require("crypto");
+const { RedisClient } = require("../../config/redis");
+
+const { getEmailTemplate } = require("../emails/otp.email");
+
+require("dotenv").config();
+const log = require("../../utils/log");
+const brand = require("../../config/brand");
+const { findUser } = require("../../user");
+
+class OTPService {
+    constructor() {
+        // Use the existing transporter instead of creating a new one
+        this.transporter = transporter;
+
+        // OTP configuration
+        this.OTP_EXPIRY = 10 * 60; // 10 minutes in seconds
+        this.MAX_ATTEMPTS = 3; // Maximum OTP verification attempts
+        this.RESEND_COOLDOWN = 60; // 60 seconds cooldown between resends
+    }
+
+    /**
+     * Generate a 6-digit OTP
+     */
+    generateOTP() {
+        return crypto.randomInt(100000, 999999).toString();
+    }
+
+    /**
+     * Store OTP in Redis with expiry
+     */
+    async storeOTP(email, otp, purpose = "verification") {
+        const key = `otp:${purpose}:${email}`;
+        const attemptsKey = `otp_attempts:${purpose}:${email}`;
+        const cooldownKey = `otp_cooldown:${purpose}:${email}`;
+
+        // Store OTP with expiry
+        await RedisClient.setEx(key, this.OTP_EXPIRY, otp);
+
+        // Initialize attempts counter
+        await RedisClient.setEx(attemptsKey, this.OTP_EXPIRY, "0");
+
+        // Set cooldown
+        await RedisClient.setEx(cooldownKey, this.RESEND_COOLDOWN, "cooldown");
+
+        return true;
+    }
+
+    /**
+     * Verify OTP
+     */
+    async verifyOTP(email, otp, purpose = "verification") {
+        const key = `otp:${purpose}:${email}`;
+        const attemptsKey = `otp_attempts:${purpose}:${email}`;
+
+        // Get stored OTP
+        const storedOTP = await RedisClient.get(key);
+
+        if (!storedOTP) {
+            throw new Error("OTP expired or not found");
+        }
+
+        // Check attempts
+        const attempts = parseInt(await RedisClient.get(attemptsKey) || "0");
+
+        if (attempts >= this.MAX_ATTEMPTS) {
+            // Delete OTP if max attempts reached
+            await RedisClient.del(key);
+            await RedisClient.del(attemptsKey);
+            throw new Error("Maximum verification attempts reached. Please request a new OTP.");
+        }
+
+        // Increment attempts
+        await RedisClient.incr(attemptsKey);
+
+        if (storedOTP !== otp) {
+            throw new Error("Invalid OTP");
+        }
+
+        // OTP verified successfully
+        // Clean up OTP data
+        await RedisClient.del(key);
+        await RedisClient.del(attemptsKey);
+
+        return true;
+    }
+
+    /**
+     * Send OTP email
+     */
+    async sendOTPEmail(email, otp, purpose = "verification") {
+        const subjectMap = {
+            verification: `Verify your email - ${brand.name}`,
+            password_reset: `Password reset code - ${brand.name}`,
+            login: `Login code - ${brand.name}`,
+            account_creation: `Account created - ${brand.name}`
+        };
+
+        const subject = subjectMap[purpose] || `Your code - ${brand.name}`;
+
+        // Get email templates based on purpose
+        const emailHtml = getEmailTemplate(purpose, { otp });
+
+        const mailOptions = {
+            from: {
+                name: brand.name,
+                address: process.env.COMPANY_EMAIL || process.env.GMAIL_USER,
+            },
+            to: email,
+            subject: subject,
+            html: emailHtml,
+        };
+
+        try {
+            const info = await this.transporter.sendMail(mailOptions);
+            log.debug(`📧 OTP email sent to ${email}: ${info.messageId}`);
+            return info;
+        } catch (error) {
+            console.error("❌ Error sending OTP email:", error);
+            throw new Error(`Failed to send OTP email: ${error.message}`);
+        }
+    }
+
+    // Add this new method to your OTPService
+    async verifyLoginOTPAndGenerateToken(email, otp) {
+
+        const otpResult = await this.verifyOTPWithoutDeletion(email, otp, "login");
+
+        if (!otpResult.success) {
+            throw new Error("OTP verification failed");
+        }
+
+        // Step 2: Find user
+        const jwt = require('jsonwebtoken');
+
+        const user = await findUser({ email });
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        // Step 3: Generate token (same as your normal signin)
+        const token = jwt.sign(
+            {
+                id: user._id,
+                email: user.email,
+                role: user.role
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        // Step 4: Return formatted response
+        return {
+            success: true,
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                role: user.role,
+                firstName: user.firstName,
+                lastName: user.lastName
+            }
+        };
+    }
+
+    async verifyOTPWithoutDeletion(email, otp, purpose = "login") {
+        const key = `otp:${purpose}:${email}`;
+        const attemptsKey = `otp_attempts:${purpose}:${email}`;
+
+        // Debug logs
+        log.debug(`[OTP Service] Verifying OTP for ${email}, purpose: ${purpose}`);
+        log.debug(`[OTP Service] Redis key: ${key}`);
+
+        // Get stored OTP
+        const storedOTP = await RedisClient.get(key);
+        log.debug(`[OTP Service] Stored OTP: ${storedOTP ? 'Found' : 'Not found'}`);
+
+        if (!storedOTP) {
+            throw new Error("OTP expired or not found");
+        }
+
+        // Check attempts
+        const attempts = parseInt(await RedisClient.get(attemptsKey) || "0");
+        log.debug(`[OTP Service] Attempts: ${attempts}/${this.MAX_ATTEMPTS}`);
+
+        if (attempts >= this.MAX_ATTEMPTS) {
+            // Delete OTP if max attempts reached
+            await RedisClient.del(key);
+            await RedisClient.del(attemptsKey);
+            throw new Error("Maximum verification attempts reached. Please request a new OTP.");
+        }
+
+        // Increment attempts
+        await RedisClient.incr(attemptsKey);
+
+        if (storedOTP !== otp) {
+            throw new Error("Invalid OTP");
+        }
+
+        // OTP verified successfully but DON'T delete it
+        // Just clean up attempts and set shorter expiry
+        await RedisClient.del(attemptsKey);
+
+        // Keep OTP alive long enough for the reset-password step (15 min)
+        await RedisClient.expire(key, 15 * 60);
+
+        log.debug(`[OTP Service] OTP verified successfully for ${email}`);
+
+        // Return simple success - This is what verifyLoginOTPAndGenerateToken expects
+        return {
+            success: true,
+            email,
+            purpose
+        };
+    }
+
+  
+
+    /**
+     * Check if can resend OTP (cooldown check)
+     */
+    async canResendOTP(email, purpose = "verification") {
+        const cooldownKey = `otp_cooldown:${purpose}:${email}`;
+        const cooldown = await RedisClient.get(cooldownKey);
+
+        return !cooldown; // Returns true if no cooldown
+    }
+
+    /**
+     * Send and store OTP
+     */
+    async sendAndStoreOTP(email, purpose = "verification") {
+        // Check cooldown
+        if (!(await this.canResendOTP(email, purpose))) {
+            throw new Error("Please wait before requesting a new OTP");
+        }
+
+        // Generate OTP
+        const otp = this.generateOTP();
+
+        // Store OTP
+        await this.storeOTP(email, otp, purpose);
+
+        // Send email
+        await this.sendOTPEmail(email, otp, purpose);
+
+        return { success: true, message: "OTP sent successfully" };
+    }
+
+    /**
+     * Get OTP expiry time remaining
+     */
+    async getOTPExpiry(email, purpose = "verification") {
+        const key = `otp:${purpose}:${email}`;
+        const ttl = await RedisClient.ttl(key);
+        return ttl > 0 ? ttl : 0;
+    }
+
+    /**
+     * Clean up OTP data for an email
+     */
+    async cleanupOTP(email, purpose = "verification") {
+        const keys = [
+            `otp:${purpose}:${email}`,
+            `otp_attempts:${purpose}:${email}`,
+            `otp_cooldown:${purpose}:${email}`
+        ];
+
+        for (const key of keys) {
+            await RedisClient.del(key);
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if OTP exists and is valid
+     */
+    async checkOTPExists(email, purpose = "verification") {
+        const key = `otp:${purpose}:${email}`;
+        const otp = await RedisClient.get(key);
+        const ttl = await RedisClient.ttl(key);
+
+        return {
+            exists: !!otp,
+            expiresIn: ttl > 0 ? ttl : 0
+        };
+    }
+}
+
+module.exports = new OTPService();

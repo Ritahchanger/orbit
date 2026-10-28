@@ -1,14 +1,13 @@
 // repositories/store-read.repository.js
-// The ONLY file in the products module allowed to require the Store model.
 // Narrow, read-only wrapper around the small set of Store queries
-// products.service.js needs.
-const Store = require("../../stores/store.model");
+// products.service.js needs. Goes through the stores module's public API.
+const { findStore, findStoreById } = require("../../stores");
 
-const findById = (storeId) => Store.findById(storeId);
+const findById = (storeId) => findStoreById(storeId);
 
 // Ownership-scoped lookup, mirrors product.repository.js's findByIdAndBusiness.
 const findByIdAndBusiness = (storeId, businessId) =>
-  Store.findOne({ _id: storeId, businessId });
+  findStore({ _id: storeId, businessId });
 
 module.exports = {
   findById,

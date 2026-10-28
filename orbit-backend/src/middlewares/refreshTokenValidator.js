@@ -1,7 +1,7 @@
 // middlewares/refreshTokenValidator.js
 const jwt = require("jsonwebtoken");
-const User = require("../user/user.model");
 const RefreshToken = require("../auth/models/refresh-token.model"); // Create this model
+const { findUserById } = require("../user");
 require("dotenv").config();
 
 const refreshTokenValidator = async (req, res, next) => {
@@ -33,7 +33,7 @@ const refreshTokenValidator = async (req, res, next) => {
       });
     }
 
-    const user = await User.findById(decoded.id)
+    const user = await findUserById(decoded.id)
       .select("-password")
       .populate("assignedStore", "name code address")
       .populate("storePermissions.store", "name code");

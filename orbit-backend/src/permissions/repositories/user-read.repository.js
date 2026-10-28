@@ -1,11 +1,16 @@
 // repositories/user-read.repository.js
-// The ONLY file in the permissions module allowed to require the User model.
 // Narrow, read-only wrapper around the small set of User queries role/permission
 // business logic needs (user counts per role, business-ownership checks).
-const User = require("../../user/user.model");
+// Goes through the user module's public API.
+const {
+  countUsers,
+  findUser,
+  findUserById,
+  findUsers,
+} = require("../../user");
 
 const countByRole = (roleName) => {
-  return User.countDocuments({ role: roleName });
+  return countUsers({ role: roleName });
 };
 
 const findPaginatedByRole = (roleName, { page = 1, limit = 10, sortBy = "createdAt", sortOrder = "desc" } = {}) => {
@@ -13,26 +18,26 @@ const findPaginatedByRole = (roleName, { page = 1, limit = 10, sortBy = "created
   const sort = { [sortBy]: sortOrder === "desc" ? -1 : 1 };
 
   return Promise.all([
-    User.find({ role: roleName })
+    findUsers({ role: roleName })
       .select("-password")
       .sort(sort)
       .skip(skip)
       .limit(limit)
       .lean(),
-    User.countDocuments({ role: roleName }),
+    countUsers({ role: roleName }),
   ]);
 };
 
 const findById = (userId) => {
-  return User.findById(userId);
+  return findUserById(userId);
 };
 
 const findByIdLean = (userId) => {
-  return User.findById(userId).lean();
+  return findUserById(userId).lean();
 };
 
 const findByIdAndBusiness = (userId, businessId) => {
-  return User.findOne({ _id: userId, businessId });
+  return findUser({ _id: userId, businessId });
 };
 
 module.exports = {

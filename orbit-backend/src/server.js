@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-const webSocketService = require("./sales/ws.service");
+const webSocketService = require("./sales/services/ws.service");
 
 const http = require("http");
 

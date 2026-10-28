@@ -1,17 +1,21 @@
 // repositories/store-inventory.repository.js
-// The ONLY file in the products module allowed to require the StoreInventory
-// model. Narrow wrapper around the small set of queries products.service.js
-// makes on its own behalf (linking products into a store's inventory). This
-// is NOT a conversion of the separate store-inventory backend module — that
-// module's own internals are a future, separate pass.
-const StoreInventory = require("../../store-inventory/store-inventory.model");
+// The products module's narrow wrapper around the store-inventory queries
+// products.service.js makes on its own behalf (linking products into a
+// store's inventory). Goes through the store-inventory module's public API.
+const {
+  countInventoryItems,
+  deleteInventoryItem,
+  findInventoryItem,
+  findInventoryItems,
+  newInventoryItem,
+} = require("../../store-inventory");
 
-const findOne = (query) => StoreInventory.findOne(query);
+const findOne = (query) => findInventoryItem(query);
 
-const create = (data) => new StoreInventory(data).save();
+const create = (data) => newInventoryItem(data).save();
 
 const find = (query, { select, sort, skip, limit, lean = true, populate } = {}) => {
-  let q = StoreInventory.find(query);
+  let q = findInventoryItems(query);
   if (Array.isArray(populate)) {
     populate.forEach((p) => {
       q = q.populate(p);
@@ -25,9 +29,9 @@ const find = (query, { select, sort, skip, limit, lean = true, populate } = {}) 
   return q;
 };
 
-const countDocuments = (query) => StoreInventory.countDocuments(query);
+const countDocuments = (query) => countInventoryItems(query);
 
-const findOneAndDelete = (query) => StoreInventory.findOneAndDelete(query);
+const findOneAndDelete = (query) => deleteInventoryItem(query);
 
 module.exports = {
   findOne,

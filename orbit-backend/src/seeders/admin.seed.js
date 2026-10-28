@@ -238,7 +238,7 @@ Examples:
   if (args.includes("--info") || args.includes("-i")) {
     try {
       // Use the real User model for info (it should be loaded by now)
-      const User = require("../user/user.model");
+      const User = require("../user/models/user.model");
       const superadmin = await User.findOne({ role: "superadmin" });
 
       if (superadmin) {
