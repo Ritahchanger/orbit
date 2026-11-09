@@ -15,7 +15,6 @@ import { authApiService } from "./authService";
 
 import otpApi from "../../admin-pages/services/otp-api";
 
-import { useStoreContext } from "../store/StoreContext";
 
 const AuthContext = createContext();
 
@@ -77,7 +76,6 @@ export const AuthProvider = ({ children }) => {
 
   const dispatch = useDispatch();
 
-  const { switchStore } = useStoreContext();
 
   // Get redirection state from Redux
   const { pageToRedirect } = useSelector((state) => state.redirection);
@@ -379,25 +377,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       sessionStorage.setItem("isAuthenticated", "true");
 
-      // Update store context if user has store info
-      // Superadmin, admin, and manager can have assigned stores
-      const rolesWithStores = ["superadmin", "admin", "manager", "cashier"];
-      if (rolesWithStores.includes(userData.role) && userData.assignedStore) {
-        try {
-          if (switchStore && typeof switchStore === "function") {
-            switchStore(userData.assignedStore, { keepView: true });
-
-            // Also store in session for persistence
-            sessionStorage.setItem(
-              "current_store_id",
-              userData.assignedStore._id || userData.assignedStore,
-            );
-          }
-        } catch (err) {
-          console.warn("Could not switch store on fetch:", err);
-          // Don't throw - this shouldn't break the auth flow
-        }
-      }
+      // The store context starts on userData.assignedStore by itself.
 
       console.log("✅ User fetched successfully:", enhancedUserData);
       return enhancedUserData;

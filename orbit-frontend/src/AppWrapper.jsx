@@ -40,8 +40,8 @@ const AppWrapper = () => {
         >
             <QueryClientProvider client={queryClient}>
                 <Router>
-                    <StoreProvider>
-                        <AuthProvider>
+                    <AuthProvider>
+                        <StoreProvider>
                             <RolePermissionProvider>
                                 <PermissionsProvider>
                                     <StoreRoleProvider>
@@ -60,8 +60,8 @@ const AppWrapper = () => {
                                     </StoreRoleProvider>
                                 </PermissionsProvider>
                             </RolePermissionProvider>
-                        </AuthProvider>
-                    </StoreProvider>
+                        </StoreProvider>
+                    </AuthProvider>
                     {/* <ReactQueryDevtools initialIsOpen={false} panelProps={{ style: { display: "none" } }} /> */}
                 </Router>
             </QueryClientProvider>

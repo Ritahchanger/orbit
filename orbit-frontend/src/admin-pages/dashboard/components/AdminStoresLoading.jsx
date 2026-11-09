@@ -3,7 +3,6 @@ import {
   Store,
   Lock,
   AlertCircle,
-  RefreshCw,
   Building2,
   Package,
 } from "lucide-react";
@@ -11,7 +10,6 @@ import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { usePermissions } from "../../../context/permissions/permissions-context";
 import { useAuth } from "../../../context/authentication/AuthenticationContext";
-import { useQueryClient } from "@tanstack/react-query";
 import StoreSwitcher from "./StoreSwitcher";
 import { useStoreContext } from "../../../context/store/StoreContext";
 import { useRole } from "../../../context/authentication/RoleContext";
@@ -34,7 +32,6 @@ const AdminStoresLoading = ({
     canManageStore: roleCanManageStore,
   } = useRole();
 
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { isAllStores, isViewResolved, selectAllStores, setDefaultView } =
     useStoreContext();
@@ -165,19 +162,6 @@ const AdminStoresLoading = ({
     [canAccessStore, handleStoreSwitch],
   );
 
-  // Handle refetching stores when empty
-  useEffect(() => {
-    let timer;
-    if (!storesLoading && (!stores || stores.length === 0)) {
-      timer = setTimeout(() => {
-        queryClient.invalidateQueries(["stores"]);
-      }, 1000);
-    }
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [storesLoading, stores, queryClient]);
-
   // ============ RENDER LOGIC ============
 
   if (storesLoading) {
@@ -210,15 +194,12 @@ const AdminStoresLoading = ({
                   No stores available
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                <RefreshCw
-                  size={14}
-                  className="text-blue-500 dark:text-blue-400 animate-spin"
-                />
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Reloading...
-                </span>
-              </div>
+              {(isSuperadmin || isAdmin) && (
+                <Link to="/admin/stores" className={stripLinkClass}>
+                  <Building2 size={15} />
+                  Add a store
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -279,7 +260,7 @@ const AdminStoresLoading = ({
     hasPermission("inventory.view") || hasPermission("products.view");
 
   return (
-    <div className="sticky top-0 z-40 border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950">
+    <div className="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950">
       <div className="container mx-auto px-4">
         <div className="flex h-12 items-center justify-between gap-3">
           <StoreSwitcher
