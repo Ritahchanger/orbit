@@ -1,11 +1,14 @@
 import { Printer, Download } from "lucide-react"
 
-const AdminProductsFooterActions = ({ activeTab, filteredProducts, filteredSales, storeProducts }) => {
+const AdminProductsFooterActions = ({ activeTab, filteredProducts = [], filteredSales = [], storeProducts = [], showCount = true }) => {
     return (
         <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-gray-600 dark:text-gray-500">
-                Showing {activeTab === 'all' ? filteredProducts.length : activeTab === 'daily' ? filteredSales.length : storeProducts.length} items
-            </div>
+            {/* Pages with their own paginated table footer turn this off */}
+            {showCount ? (
+                <div className="text-sm text-gray-600 dark:text-gray-500">
+                    Showing {activeTab === 'all' ? filteredProducts.length : activeTab === 'daily' ? filteredSales.length : storeProducts.length} items
+                </div>
+            ) : <div />}
             <div className="flex space-x-3">
                 <button className="px-4 py-2 border border-gray-300 dark:border-gray-800 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-900 flex items-center space-x-2 text-sm font-medium transition-colors">
                     <Printer className="h-4 w-4 text-gray-600 dark:text-gray-400" />

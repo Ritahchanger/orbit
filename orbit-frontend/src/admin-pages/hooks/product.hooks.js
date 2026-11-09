@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 import productApi from "../services/product-api";
 import { toast } from "react-hot-toast";
 
@@ -34,6 +34,9 @@ export const useProducts = (filters = {}, page = 1, limit = 10, enabled = true) 
         queryFn: () => productApi.getProducts(filters, page, limit),
         enabled,
         retry: 2,
+        // Keep the current page on screen while the next one loads, instead of
+        // flashing the skeleton on every page change
+        placeholderData: keepPreviousData,
         select: (data) => ({
             products: data.data,
             pagination: data.pagination,

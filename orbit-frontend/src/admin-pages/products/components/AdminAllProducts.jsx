@@ -533,19 +533,27 @@ const AdminAllProducts = ({
                   >
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="text-sm text-gray-600 dark:text-gray-400">
-                        Showing{" "}
-                        <span className="font-semibold">
-                          {filteredProducts.length}
-                        </span>{" "}
-                        products
-                        {pagination.total > 0 && (
+                        {pagination.total > 0 ? (
                           <>
-                            {" "}
+                            Showing{" "}
+                            <span className="font-semibold">
+                              {(pagination.page - 1) * pagination.limit + 1}–
+                              {(pagination.page - 1) * pagination.limit +
+                                filteredProducts.length}
+                            </span>{" "}
                             of{" "}
                             <span className="font-semibold">
                               {pagination.total}
                             </span>{" "}
-                            total
+                            products
+                          </>
+                        ) : (
+                          <>
+                            Showing{" "}
+                            <span className="font-semibold">
+                              {filteredProducts.length}
+                            </span>{" "}
+                            products
                           </>
                         )}
                       </div>

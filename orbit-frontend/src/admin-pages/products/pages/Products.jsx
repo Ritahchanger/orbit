@@ -22,7 +22,6 @@ import {
   useProducts,
   useLowStockProducts,
   useProductStats,
-  useSearchProducts,
   useDeleteProduct,
   useUpdateStock,
   useCreateProduct,
@@ -57,22 +56,24 @@ const AdminProducts = () => {
   const [dailySales, setDailySales] = useState([]);
 
   // ========== GLOBAL PRODUCT HOOKS ONLY ==========
+  // One paginated request drives the table: search, category and the
+  // Featured tab are all applied on the server, so the page count and
+  // totals always describe what is listed.
+  const trimmedSearch = debouncedSearchQuery.trim();
   const {
     data: productsData,
     isLoading: productsLoading,
     isError: productsError,
     error: productsErrorMessage,
-    refetch: refetchProducts,
   } = useProducts(
     {
       category: selectedCategory !== "all" ? selectedCategory : undefined,
-      search: searchQuery.trim() ? searchQuery : undefined,
+      search: trimmedSearch || undefined,
+      isFeatured: activeTab === "featured" ? true : undefined,
     },
     page,
     limit,
-    activeTab === "all" ||
-      activeTab === "featured" ||
-      activeTab === "top-selling",
+    activeTab === "all" || activeTab === "featured",
   );
 
   const {
@@ -81,35 +82,24 @@ const AdminProducts = () => {
     isError: lowStockError,
   } = useLowStockProducts(activeTab === "low-stock");
 
+  // Always loaded: the stat cards above the tabs need it on every tab
   const {
     data: statsData,
     isLoading: statsLoading,
     isError: statsError,
-  } = useProductStats(activeTab === "stats");
-
-  const {
-    data: searchData,
-    isLoading: searchLoading,
-    isError: searchError,
-    refetch: refetchSearch,
-  } = useSearchProducts(
-    debouncedSearchQuery,
-    page,
-    limit,
-    !!debouncedSearchQuery.trim() && activeTab === "all",
-  );
+  } = useProductStats(true);
 
   const tabs = [
     {
       id: "all",
       name: "All Products",
-      count: productsData?.products?.length || 0,
+      count: statsData?.totalProducts ?? "",
       description: "All global products",
     },
     {
       id: "featured",
       name: "Featured",
-      count: productsData?.products?.filter((p) => p.isFeatured).length || 0,
+      count: activeTab === "featured" ? (productsData?.pagination?.totalProducts ?? "") : "",
       description: "Featured globally",
     },
     {
@@ -127,25 +117,13 @@ const AdminProducts = () => {
 
   // Get products based on active tab
   const getProductsForTab = () => {
-    const baseProducts = productsData?.products || [];
-
     switch (activeTab) {
       case "all":
-        // Use search results if we have a search query
-        if (searchQuery.trim() && searchData) {
-          return searchData.products || [];
-        }
-        return baseProducts;
       case "featured":
-        return baseProducts.filter((p) => p.isFeatured);
+      case "stats":
+        return productsData?.products || [];
       case "low-stock":
         return lowStockData || [];
-      case "top-selling":
-        return baseProducts
-          .filter((p) => p.totalSold > 0)
-          .sort((a, b) => b.totalSold - a.totalSold);
-      case "stats":
-        return baseProducts; // For stats tab, we still need products for display
       default:
         return [];
     }
@@ -153,44 +131,28 @@ const AdminProducts = () => {
 
   const products = getProductsForTab();
 
-  // Get pagination with proper defaults
-  const pagination = (() => {
-    if (searchQuery.trim() && searchData) {
-      return {
-        page: searchData.pagination?.page || 1,
-        limit: searchData.pagination?.limit || limit,
-        total: searchData.pagination?.total || 0,
-        pages: searchData.pagination?.pages || 1,
-        hasNext: searchData.pagination?.page < searchData.pagination?.pages,
-        hasPrev: searchData.pagination?.page > 1,
-      };
-    }
+  // The API reports {currentPage, totalPages, totalProducts}; the table reads
+  // {page, pages, total}. (Reading the API's names directly as page/pages/
+  // total left them undefined, so the table thought there was only one page.)
+  const apiPagination = productsData?.pagination || {};
+  const pagination = {
+    page: apiPagination.currentPage || page,
+    limit: apiPagination.limit || limit,
+    total: apiPagination.totalProducts || 0,
+    pages: Math.max(apiPagination.totalPages || 1, 1),
+    hasNext: !!apiPagination.hasNext,
+    hasPrev: !!apiPagination.hasPrev,
+  };
 
-    return {
-      page: productsData?.pagination?.page || 1,
-      limit: productsData?.pagination?.limit || limit,
-      total: productsData?.pagination?.total || 0,
-      pages: productsData?.pagination?.pages || 1,
-      hasNext: productsData?.pagination?.page < productsData?.pagination?.pages,
-      hasPrev: productsData?.pagination?.page > 1,
-    };
-  })();
-
-  // Load data when tab changes
+  // Back to page 1 whenever the list being paged changes
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: productKeys.list() });
-  }, [activeTab, page, queryClient]);
+    setPage(1);
+  }, [selectedCategory, trimmedSearch, activeTab]);
 
-  // Handle search with debounce
+  // If the last page empties (e.g. after a delete), step back to the new last page
   useEffect(() => {
-    if (searchQuery.trim()) {
-      const debounceTimer = setTimeout(() => {
-        refetchSearch();
-      }, 300);
-
-      return () => clearTimeout(debounceTimer);
-    }
-  }, [searchQuery, refetchSearch]);
+    if (productsData && page > pagination.pages) setPage(pagination.pages);
+  }, [productsData, page, pagination.pages]);
 
   // Get category icon
   const getCategoryIcon = (categoryId) => {
@@ -238,37 +200,23 @@ const AdminProducts = () => {
     }
   };
 
-  const handlePageChange = (newPage, newLimit) => {
-    console.log("Page change:", { newPage, newLimit, currentLimit: limit });
-
-    // If limit changed, update it and reset to page 1
-    if (newLimit && newLimit !== limit) {
-      setLimit(newLimit);
-
-      setPage(1); // Reset to first page when changing limit
-
-      // Scroll to top
-      window.scrollTo(0, 0);
-    } else {
-      // Just page change
-      setPage(newPage);
-      window.scrollTo(0, 0);
-    }
+  // Keep the table in view when paging (it sits below the stat cards)
+  const scrollToTable = () => {
+    const table = document.getElementById("all-products");
+    if (!table) return;
+    const top = table.getBoundingClientRect().top + window.scrollY - 200;
+    window.scrollTo({ top: Math.max(top, 0), behavior: "smooth" });
   };
 
-  useEffect(() => {
-    if (
-      activeTab === "all" ||
-      activeTab === "featured" ||
-      activeTab === "top-selling"
-    ) {
-      refetchProducts();
+  const handlePageChange = (newPage, newLimit) => {
+    if (newLimit && newLimit !== limit) {
+      setLimit(newLimit);
+      setPage(1);
+    } else {
+      setPage(newPage);
     }
-  }, [limit, page, selectedCategory, searchQuery, activeTab, refetchProducts]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [selectedCategory, searchQuery]);
+    scrollToTable();
+  };
 
   // Filter products based on category
   const filteredProducts = products.filter((product) => {
@@ -279,8 +227,7 @@ const AdminProducts = () => {
 
   // Statistics from backend API
   const stats = {
-    totalDevices:
-      statsData?.totalProducts || productsData?.products?.length || 0,
+    totalDevices: statsData?.totalProducts || 0,
     totalValue: statsData?.totalValue || 0,
     todaySales: statsData?.totalSold || 0,
     todayRevenue: statsData?.totalRevenue || 0,
@@ -299,17 +246,12 @@ const AdminProducts = () => {
     queryClient.invalidateQueries({ queryKey: productKeys.list() });
     queryClient.invalidateQueries({ queryKey: productKeys.lowStock() });
     queryClient.invalidateQueries({ queryKey: productKeys.stats() });
-    queryClient.invalidateQueries({
-      queryKey: productKeys.search(debouncedSearchQuery),
-    });
     toast.success("Data refreshed");
   };
 
   // Get loading state
   const loading = () => {
     switch (activeTab) {
-      case "all":
-        return searchQuery.trim() ? searchLoading : productsLoading;
       case "low-stock":
         return lowStockLoading;
       case "stats":
@@ -322,8 +264,6 @@ const AdminProducts = () => {
   // Get error state
   const error = () => {
     switch (activeTab) {
-      case "all":
-        return searchQuery.trim() ? searchError : productsError;
       case "low-stock":
         return lowStockError;
       case "stats":
@@ -606,7 +546,7 @@ const AdminProducts = () => {
 
             {activeTab === "featured" && products.length > 0 && (
               <AdminAllProducts
-                filteredProducts={filteredProducts.filter((p) => p.isFeatured)}
+                filteredProducts={filteredProducts}
                 getCategoryIcon={getCategoryIcon}
                 categories={categories}
                 setSelectedProduct={setSelectedProduct}
@@ -645,6 +585,7 @@ const AdminProducts = () => {
             storeProducts={filteredProducts}
             pagination={pagination}
             viewMode="global"
+            showCount={false}
           />
         )}
 
@@ -658,9 +599,10 @@ const AdminProducts = () => {
               />
               <span>Global Products View</span>
             </div>
-            {activeTab !== "stats" && (
+            {activeTab !== "stats" && pagination.total > 0 && (
               <div>
-                Showing {filteredProducts.length} of {products.length} products
+                {pagination.total} product{pagination.total === 1 ? "" : "s"}
+                {pagination.pages > 1 && ` · page ${pagination.page} of ${pagination.pages}`}
               </div>
             )}
           </div>
