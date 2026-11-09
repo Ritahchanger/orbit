@@ -326,7 +326,7 @@ const SalesReport = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Sales Reports
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -454,7 +454,7 @@ const SalesReport = () => {
         {/* Today's Summary */}
         <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-medium text-gray-900 dark:text-white">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
               Today's Performance
             </h3>
             <Calendar className="h-4 w-4 text-gray-400" />
@@ -511,7 +511,7 @@ const SalesReport = () => {
         {/* Monthly Summary */}
         <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-medium text-gray-900 dark:text-white">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
               {monthlyData.monthName || "Current Month"} Summary
             </h3>
             <TrendingUp className="h-4 w-4 text-gray-400" />
@@ -577,7 +577,7 @@ const SalesReport = () => {
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="font-medium text-gray-900 dark:text-white">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                 Recent Sales Data
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -623,22 +623,22 @@ const SalesReport = () => {
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-black dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Date
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-black dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Product
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-black dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Store
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-black dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Amount
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-black dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Profit
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-black dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Quantity
                     </th>
                   </tr>
@@ -773,7 +773,7 @@ const SalesReport = () => {
         ) : (
           <div className="text-center py-8">
             <ShoppingCart className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               No sales data available for the selected period
             </p>
           </div>
@@ -783,7 +783,7 @@ const SalesReport = () => {
       {/* Insights & Recommendations */}
       {trendItems.length > 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-          <h3 className="font-medium text-gray-900 dark:text-white mb-3">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
             Insights & Recommendations
           </h3>
           <div className="space-y-2">

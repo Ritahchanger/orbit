@@ -52,7 +52,7 @@ const AdminAlerts = ({
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
           System Alerts
         </h2>
 
@@ -79,7 +79,7 @@ const AdminAlerts = ({
               <div className="flex items-start">
                 <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <h3 className="font-medium text-yellow-800 dark:text-yellow-300">
+                  <h3 className="text-base font-semibold text-yellow-800 dark:text-yellow-300">
                     Low Stock Alert
                   </h3>
                   <p className="text-sm text-yellow-700 dark:text-yellow-400 mb-2">
@@ -101,7 +101,7 @@ const AdminAlerts = ({
               <div className="flex items-start">
                 <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 mr-3 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <h3 className="font-medium text-red-800 dark:text-red-300">
+                  <h3 className="text-base font-semibold text-red-800 dark:text-red-300">
                     Out of Stock Alert
                   </h3>
                   <p className="text-sm text-red-700 dark:text-red-400 mb-2">
@@ -126,7 +126,7 @@ const AdminAlerts = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Package className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mr-2" />
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                     Low Stock Products ({filteredLowStock.length})
                   </h3>
                 </div>
@@ -189,7 +189,7 @@ const AdminAlerts = ({
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 font-mono">
+                      <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                         {product.sku}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
@@ -242,7 +242,7 @@ const AdminAlerts = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Package className="h-4 w-4 text-red-600 dark:text-red-400 mr-2" />
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                     Out of Stock Products ({filteredOutOfStock.length})
                   </h3>
                 </div>
@@ -302,7 +302,7 @@ const AdminAlerts = ({
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 font-mono">
+                      <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                         {product.sku}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
@@ -351,7 +351,7 @@ const AdminAlerts = ({
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/20 mb-4">
               <AlertTriangle className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <h3 className="text-base font-medium text-gray-900 dark:text-white mb-2">
               No Active Alerts
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md mx-auto">

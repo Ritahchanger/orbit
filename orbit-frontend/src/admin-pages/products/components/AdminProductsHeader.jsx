@@ -2,6 +2,7 @@ import {
     Package, DollarSign, TrendingUp,
     AlertCircle
 } from 'lucide-react';
+import StatCard from '../../components/ui/StatCard';
 
 const AdminProductsHeader = ({
     stats,
@@ -28,51 +29,36 @@ const AdminProductsHeader = ({
         <div className="mb-2">
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-2 text-sm lg:text-lg">
-                <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
-                    <div className="flex items-center justify-between">
-                        <Package className="h-6 w-6 text-blue-600 dark:text-blue-500" />
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Total Devices</span>
-                    </div>
-                    <h3 className="text-sm md:text-lg font-bold text-gray-900 dark:text-white mt-2">
-                        {safeStats.totalDevices}
-                    </h3>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
-                    <div className="flex items-center justify-between">
-                        <DollarSign className="h-6 w-6 text-green-600 dark:text-green-500" />
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Total Value</span>
-                    </div>
-                    <h3 className="text-sm md:text-lg font-bold text-gray-900 dark:text-white mt-2">
-                        KSh {safeStats.totalValue.toLocaleString()}
-                    </h3>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
-                    <div className="flex items-center justify-between">
-                        <AlertCircle className="h-6 w-6 text-yellow-600 dark:text-yellow-500" />
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Low Stock</span>
-                    </div>
-                    <h3 className="text-sm md:text-lg font-bold text-gray-900 dark:text-white mt-2">
-                        {safeStats.lowStockCount}
-                    </h3>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
-                    <div className="flex items-center justify-between">
-                        <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-500" />
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Out of Stock</span>
-                    </div>
-                    <h3 className="text-lg md:text-lg font-bold text-gray-900 dark:text-white mt-2 truncate">
-                        {/* Use outOfStockCount from API if available, otherwise show totalSold */}
-                        {transformedStats.outOfStockCount ?? safeStats.topSelling}
-                    </h3>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-2">
+                <StatCard
+                    title="Total Devices"
+                    value={safeStats.totalDevices}
+                    icon={<Package className="h-5 w-5" />}
+                    color="blue"
+                />
+                <StatCard
+                    title="Total Value"
+                    value={`KSh ${safeStats.totalValue.toLocaleString()}`}
+                    icon={<DollarSign className="h-5 w-5" />}
+                    color="green"
+                />
+                <StatCard
+                    title="Low Stock"
+                    value={safeStats.lowStockCount}
+                    icon={<AlertCircle className="h-5 w-5" />}
+                    color="yellow"
+                />
+                <StatCard
+                    title="Out of Stock"
+                    // Use outOfStockCount from API if available, otherwise show topSelling
+                    value={transformedStats.outOfStockCount ?? safeStats.topSelling}
+                    icon={<TrendingUp className="h-5 w-5" />}
+                    color="purple"
+                />
             </div>
 
             {/* Tabs - Scrollable on mobile */}
-            <div className="overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 text-sm lg:text-lg">
+            <div className="overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
                 <div className="flex space-x-1 border-b border-gray-300 dark:border-gray-700 min-w-max">
                     {tabs.map(tab => (
                         <button

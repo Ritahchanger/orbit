@@ -342,7 +342,7 @@ const StorePerformance = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Store Performance
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -401,7 +401,7 @@ const StorePerformance = () => {
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   Total Revenue
                 </p>
-                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
                   {formatCurrency(summaryMetrics.totalSales)}
                 </p>
               </div>
@@ -418,7 +418,7 @@ const StorePerformance = () => {
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   Total Profit
                 </p>
-                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
                   {formatCurrency(summaryMetrics.totalProfit)}
                 </p>
               </div>
@@ -435,7 +435,7 @@ const StorePerformance = () => {
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   Items Sold
                 </p>
-                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
                   {formatNumber(summaryMetrics.totalItemsSold)}
                 </p>
               </div>
@@ -452,7 +452,7 @@ const StorePerformance = () => {
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   Avg. Transaction
                 </p>
-                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
                   {formatCurrency(summaryMetrics.averageTransactionValue)}
                 </p>
               </div>
@@ -469,7 +469,7 @@ const StorePerformance = () => {
       {/* Store Performance Table */}
       <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="font-medium text-gray-900 dark:text-white">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
             Store Performance Details
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -510,7 +510,7 @@ const StorePerformance = () => {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <h4 className="font-medium text-gray-900 dark:text-white">
+                              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                                 {store.storeName}
                               </h4>
                               <span
@@ -588,7 +588,7 @@ const StorePerformance = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {/* Detailed Metrics */}
                         <div className="space-y-3">
-                          <h5 className="font-medium text-gray-900 dark:text-white text-sm">
+                          <h5 className="text-sm font-medium text-gray-900 dark:text-white">
                             Sales Performance
                           </h5>
                           <div className="space-y-2">
@@ -621,7 +621,7 @@ const StorePerformance = () => {
 
                         {/* Inventory Metrics */}
                         <div className="space-y-3">
-                          <h5 className="font-medium text-gray-900 dark:text-white text-sm">
+                          <h5 className="text-sm font-medium text-gray-900 dark:text-white">
                             Inventory
                           </h5>
                           <div className="space-y-2">
@@ -657,7 +657,7 @@ const StorePerformance = () => {
 
                         {/* Store Details */}
                         <div className="space-y-3">
-                          <h5 className="font-medium text-gray-900 dark:text-white text-sm">
+                          <h5 className="text-sm font-medium text-gray-900 dark:text-white">
                             Store Details
                           </h5>
                           <div className="space-y-2 text-sm">
@@ -678,10 +678,10 @@ const StorePerformance = () => {
                               </span>
                             </div>
                             <div>
-                              <p className="text-gray-500 dark:text-gray-400 mb-1">
+                              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
                                 Address
                               </p>
-                              <p className="text-gray-900 dark:text-white">
+                              <p className="text-sm text-gray-900 dark:text-white">
                                 {store.address?.building},{" "}
                                 {store.address?.street}
                                 {store.address?.floor && (
@@ -700,7 +700,7 @@ const StorePerformance = () => {
 
                       {/* Performance Insights */}
                       <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-900/30 rounded-sm">
-                        <h5 className="font-medium text-gray-900 dark:text-white text-sm mb-2">
+                        <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
                           Performance Insights
                         </h5>
                         <div className="flex flex-wrap gap-2">

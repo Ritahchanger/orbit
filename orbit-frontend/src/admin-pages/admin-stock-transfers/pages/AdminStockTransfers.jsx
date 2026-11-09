@@ -208,7 +208,7 @@ const AdminStockTransfers = () => {
             <button
               onClick={handleExport}
               disabled={isExporting || !pagination.total}
-              className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition-colors text-sm disabled:opacity-50"
+              className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition-colors text-sm font-medium disabled:opacity-50"
             >
               <Download size={18} />
               <span>{isExporting ? "Exporting..." : "Export CSV"}</span>
@@ -306,7 +306,7 @@ const AdminStockTransfers = () => {
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                 placeholder="From"
               />
-              <span className="text-gray-400">to</span>
+              <span className="text-sm text-gray-400">to</span>
               <input
                 type="date"
                 value={filters.toDate}
@@ -320,7 +320,7 @@ const AdminStockTransfers = () => {
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-sm transition-colors whitespace-nowrap"
+                className="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-sm transition-colors whitespace-nowrap"
               >
                 Clear Filters
               </button>
@@ -382,7 +382,7 @@ const AdminStockTransfers = () => {
           {isLoading || isSearching || (isFetching && filters.search) ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                 {isSearching || (isFetching && filters.search)
                   ? "Searching..."
                   : "Loading transfers..."}
@@ -391,12 +391,12 @@ const AdminStockTransfers = () => {
           ) : isError ? (
             <div className="p-8 text-center">
               <XCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-2">
+              <h3 className="text-base font-medium text-red-600 dark:text-red-400 mb-2">
                 Failed to Load Transfers
               </h3>
               <button
                 onClick={() => refetch()}
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700"
+                className="mt-4 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-sm hover:bg-blue-700"
               >
                 Try Again
               </button>
@@ -404,10 +404,10 @@ const AdminStockTransfers = () => {
           ) : transfers.length === 0 ? (
             <div className="p-8 text-center">
               <ArrowRightLeft className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-base font-medium text-gray-900 dark:text-white mb-2">
                 No Transfers Found
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 {filters.search
                   ? `No results found for "${filters.search}"`
                   : filters.status || filters.fromDate || filters.toDate
@@ -417,7 +417,7 @@ const AdminStockTransfers = () => {
               {filters.search && (
                 <button
                   onClick={clearSearch}
-                  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700"
+                  className="mt-4 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-sm hover:bg-blue-700"
                 >
                   Clear Search
                 </button>
@@ -429,28 +429,28 @@ const AdminStockTransfers = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gray-50 dark:bg-gray-700/50">
-                      <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                         Transfer #
                       </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                         Date & Time
                       </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                         From → To
                       </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                         Product
                       </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                         Quantity
                       </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                         Status
                       </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                         Transferred By
                       </th>
-                      <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                         Notes
                       </th>
                     </tr>
@@ -462,13 +462,13 @@ const AdminStockTransfers = () => {
                         className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
                       >
                         <td className="py-4 px-4">
-                          <span className="font-mono text-sm font-medium text-blue-600 dark:text-blue-400">
+                          <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
                             {transfer.transferNumber}
                           </span>
                         </td>
                         <td className="py-4 px-4">
                           <div className="text-sm">
-                            <p className="text-gray-900 dark:text-white font-medium">
+                            <p className="text-sm text-gray-900 dark:text-white font-medium">
                               {formatDate(transfer.transferredAt)}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -557,7 +557,7 @@ const AdminStockTransfers = () => {
                           handleFilterChange("page", pagination.page - 1)
                         }
                         disabled={pagination.page === 1}
-                        className="px-3 py-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         Previous
                       </button>
@@ -602,7 +602,7 @@ const AdminStockTransfers = () => {
                           handleFilterChange("page", pagination.page + 1)
                         }
                         disabled={pagination.page === pagination.pages}
-                        className="px-3 py-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         Next
                       </button>

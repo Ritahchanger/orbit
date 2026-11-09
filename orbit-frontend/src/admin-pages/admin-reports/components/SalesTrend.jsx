@@ -245,7 +245,7 @@ const SalesTrend = ({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 p-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
-        <h3 className="font-medium text-gray-900 dark:text-white">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
           Sales Trend (Daily)
         </h3>
         <div className="flex items-center space-x-4">
@@ -294,7 +294,7 @@ const SalesTrend = ({
                 </p>
                 {peakDay && (
                   <>
-                    <p className="font-bold text-lg text-green-600">
+                    <p className="text-base font-bold text-green-600">
                       {formatCurrency(peakDay.totalSales)}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -311,7 +311,7 @@ const SalesTrend = ({
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                   Average Daily
                 </p>
-                <p className="font-bold text-lg">
+                <p className="text-base font-bold">
                   {formatCurrency(avgDailySales)}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -323,7 +323,7 @@ const SalesTrend = ({
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                   Period Total
                 </p>
-                <p className="font-bold text-lg text-blue-600">
+                <p className="text-base font-bold text-blue-600">
                   {formatCurrency(totalPeriodSales)}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -337,7 +337,7 @@ const SalesTrend = ({
                 </p>
                 {bestGrowth > 0 && bestGrowthDay ? (
                   <>
-                    <p className="font-bold text-lg text-green-600">
+                    <p className="text-base font-bold text-green-600">
                       +{bestGrowth.toFixed(1)}%
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -349,7 +349,7 @@ const SalesTrend = ({
                   </>
                 ) : (
                   <>
-                    <p className="font-bold text-lg text-gray-400">No growth</p>
+                    <p className="text-base font-bold text-gray-400">No growth</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       --
                     </p>
@@ -378,10 +378,10 @@ const SalesTrend = ({
       ) : (
         <div className="text-center py-12">
           <LineChart className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <h4 className="text-base font-medium text-gray-900 dark:text-white mb-2">
             No Sales Data
           </h4>
-          <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+          <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md mx-auto">
             No sales recorded in the selected period. Sales will appear here
             once transactions are completed.
           </p>

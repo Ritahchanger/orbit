@@ -220,10 +220,27 @@
   display: none;
 }
 
-/* Container styling */
+/* Container styling. In rem (125rem = 2000px at the default root size) so
+   the cap grows with the admin's fluid root size on large monitors. */
 .container {
-  max-width: 2000px;
+  max-width: 125rem;
   width: 100%;
+}
+
+/* Admin pages use the full viewport width (navbar, store strip and page
+   content stay aligned since they all use .container). */
+.admin-shell .container {
+  max-width: none;
+}
+
+/* Admin large-screen scaling: the admin UI is sized almost entirely in rem,
+   so growing the root size scales type, spacing and the container together.
+   Stays 16px up to ~2133px wide, then ramps to 20px (≈19px on a 2560px
+   27" panel, which matches its higher pixel density vs a 24" 1080p). */
+@layer base {
+  html:has(.admin-shell) {
+    font-size: clamp(1rem, 0.75vw, 1.25rem);
+  }
 }
 
 /* Gaming utility classes */

@@ -317,7 +317,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
               <div className="flex items-start gap-3">
                 <Store className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-blue-800 dark:text-blue-300 font-medium">
+                  <p className="text-sm text-blue-800 dark:text-blue-300 font-medium">
                     Manager Dashboard
                   </p>
                   <p className="text-blue-700 dark:text-blue-300/80 text-sm mt-1">
@@ -376,10 +376,10 @@ import { useState, useEffect, useRef, useMemo } from "react";
             {itemsSold.length === 0 ? (
               <div className="p-8 text-center">
                 <ShoppingCart className="h-12 w-12 text-gray-400 dark:text-gray-700 mx-auto mb-3" />
-                <h3 className="text-lg font-medium text-gray-600 dark:text-gray-400 mb-1">
+                <h3 className="text-base font-medium text-gray-600 dark:text-gray-400 mb-1">
                   No sales recorded today
                 </h3>
-                <p className="text-gray-500 dark:text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-500">
                   No products were sold on {format(selectedDate, "MMMM d, yyyy")}
                   {!isViewingAllStores && ` for ${actualStoreLabel}`}
                 </p>

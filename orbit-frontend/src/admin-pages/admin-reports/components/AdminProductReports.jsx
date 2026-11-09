@@ -387,7 +387,7 @@ const AdminProductReports = ({ handleExport }) => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Product Performance Reports
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -545,7 +545,7 @@ const AdminProductReports = ({ handleExport }) => {
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
               Total Revenue
             </p>
-            <p className="text-lg font-bold text-gray-900 dark:text-white">
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
               {formatCurrency(summaryMetrics.totalRevenue)}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -557,7 +557,7 @@ const AdminProductReports = ({ handleExport }) => {
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
               Total Profit
             </p>
-            <p className="text-lg font-bold text-green-600">
+            <p className="text-xl font-bold text-green-600">
               {formatCurrency(summaryMetrics.totalProfit)}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -569,7 +569,7 @@ const AdminProductReports = ({ handleExport }) => {
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
               Units Sold
             </p>
-            <p className="text-lg font-bold text-gray-900 dark:text-white">
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
               {formatNumber(summaryMetrics.totalSold)}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -581,7 +581,7 @@ const AdminProductReports = ({ handleExport }) => {
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
               Current Stock
             </p>
-            <p className="text-lg font-bold text-gray-900 dark:text-white">
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
               {formatNumber(summaryMetrics.currentStock)}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -593,7 +593,7 @@ const AdminProductReports = ({ handleExport }) => {
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
               Avg Price
             </p>
-            <p className="text-lg font-bold text-gray-900 dark:text-white">
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
               {formatCurrency(
                 summaryMetrics.totalRevenue /
                   Math.max(1, summaryMetrics.totalSold),
@@ -741,7 +741,7 @@ const AdminProductReports = ({ handleExport }) => {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                               {/* Detailed Metrics */}
                               <div className="space-y-2">
-                                <h5 className="font-medium text-gray-900 dark:text-white text-sm">
+                                <h5 className="text-sm font-medium text-gray-900 dark:text-white">
                                   Performance Details
                                 </h5>
                                 <div className="space-y-1 text-sm">
@@ -774,7 +774,7 @@ const AdminProductReports = ({ handleExport }) => {
 
                               {/* Stock Information */}
                               <div className="space-y-2">
-                                <h5 className="font-medium text-gray-900 dark:text-white text-sm">
+                                <h5 className="text-sm font-medium text-gray-900 dark:text-white">
                                   Stock Information
                                 </h5>
                                 <div className="space-y-1 text-sm">
@@ -807,7 +807,7 @@ const AdminProductReports = ({ handleExport }) => {
 
                               {/* Business Insights */}
                               <div className="space-y-2">
-                                <h5 className="font-medium text-gray-900 dark:text-white text-sm">
+                                <h5 className="text-sm font-medium text-gray-900 dark:text-white">
                                   Business Insights
                                 </h5>
                                 <div className="space-y-1">
@@ -841,7 +841,7 @@ const AdminProductReports = ({ handleExport }) => {
 
                               {/* Actions */}
                               <div className="space-y-2">
-                                <h5 className="font-medium text-gray-900 dark:text-white text-sm">
+                                <h5 className="text-sm font-medium text-gray-900 dark:text-white">
                                   Quick Actions
                                 </h5>
                                 <div className="space-y-1">
@@ -888,7 +888,7 @@ const AdminProductReports = ({ handleExport }) => {
                         <Package className="h-4 w-4 text-gray-500" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900 dark:text-white text-sm line-clamp-1">
+                        <h4 className="text-sm font-medium text-gray-900 dark:text-white line-clamp-1">
                           {product.productName}
                         </h4>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -897,7 +897,7 @@ const AdminProductReports = ({ handleExport }) => {
                         </p>
                       </div>
                     </div>
-                    <div className="text-xs font-mono text-gray-500 dark:text-gray-400">
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
                       {product.sku}
                     </div>
                   </div>
@@ -1015,12 +1015,12 @@ const AdminProductReports = ({ handleExport }) => {
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-sm bg-gray-100 dark:bg-gray-700 mb-4">
             <Search className="h-6 w-6 text-gray-500" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <h3 className="text-base font-medium text-gray-900 dark:text-white mb-2">
             {products.length === 0
               ? "No Product Data Available"
               : "No Matching Products Found"}
           </h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
             {products.length === 0
               ? "There are no product performance records for the selected period. Products will appear here once they have sales data."
               : "No products match your search criteria. Try adjusting your filters or search term."}
