@@ -22,11 +22,18 @@ export const userKeys = {
 
 // ============ QUERY HOOKS ============
 
+// The workers list and its counts can change outside this tab (another admin,
+// an invite being accepted, a seed script), so don't trust the app-wide
+// 4-minute cache: refetch every time the page mounts or the tab regains focus.
+// Cached rows still render instantly while the refetch runs.
+const ALWAYS_FRESH = { staleTime: 0, refetchOnMount: "always" };
+
 // Get all users
 export const useGetAllUsers = (params = {}) => {
   return useQuery({
     queryKey: userKeys.list(params),
     queryFn: () => UserApi.getAllUsers(params),
+    ...ALWAYS_FRESH,
   });
 };
 
@@ -35,6 +42,7 @@ export const useGetUserStats = () => {
   return useQuery({
     queryKey: userKeys.stats(),
     queryFn: () => UserApi.getUserStats(),
+    ...ALWAYS_FRESH,
   });
 };
 
