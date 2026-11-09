@@ -12,11 +12,11 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
     return (
         <div className={`bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4 ${showFullChart ? 'lg:col-span-2' : ''}`}>
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                     <AlertTriangle size={18} className="text-red-600 dark:text-red-500" />
                     Low Stock Alerts
                     {lowStockData?.summary && (
-                        <span className="text-sm text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-900/20 px-2 py-0.5 rounded-sm">
+                        <span className="text-xs font-medium text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-900/20 px-2 py-0.5 rounded-sm">
                             {lowStockData.summary.totalAlerts} Products
                         </span>
                     )}
@@ -34,25 +34,25 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                         <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Total Alerts</p>
-                            <p className="text-xl font-bold text-gray-900 dark:text-white">
+                            <p className="text-base font-bold text-gray-900 dark:text-white">
                                 {lowStockData.summary.totalAlerts}
                             </p>
                         </div>
                         <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Restock Value</p>
-                            <p className="text-xl font-bold text-yellow-700 dark:text-yellow-400">
+                            <p className="text-base font-bold text-yellow-700 dark:text-yellow-400">
                                 {formatCurrency(lowStockData.summary.estimatedRestockValue)}
                             </p>
                         </div>
                         <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Potential Loss</p>
-                            <p className="text-xl font-bold text-red-700 dark:text-red-400">
+                            <p className="text-base font-bold text-red-700 dark:text-red-400">
                                 {formatCurrency(lowStockData.summary.totalPotentialLoss)}
                             </p>
                         </div>
                         <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Critical Items</p>
-                            <p className="text-xl font-bold text-red-700 dark:text-red-400">
+                            <p className="text-base font-bold text-red-700 dark:text-red-400">
                                 {lowStockData.summary.critical}
                             </p>
                         </div>
@@ -88,7 +88,7 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                 {lowStockAlerts?.length === 0 ? (
                     <div className="text-center py-8 text-gray-600 dark:text-gray-400">
                         <CheckCircle className="w-12 h-12 mx-auto text-green-600 dark:text-green-500 mb-2" />
-                        <p>No low stock alerts</p>
+                        <p className="text-base font-medium">No low stock alerts</p>
                         <p className="text-sm mt-1">All products are sufficiently stocked</p>
                     </div>
                 ) : (
@@ -105,7 +105,7 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                                 <div className="flex-1">
                                     <div className="flex items-start justify-between mb-3">
                                         <div>
-                                            <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{product.name}</h4>
+                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">{product.name}</h4>
                                             <div className="flex items-center gap-3 text-sm">
                                                 <span className="text-gray-600 dark:text-gray-400">SKU: {product.sku}</span>
                                                 <span className="text-gray-400">•</span>
@@ -127,19 +127,19 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         <div>
                                             <p className="text-xs text-gray-600 dark:text-gray-400">Current Stock</p>
-                                            <p className="text-xl font-bold text-red-700 dark:text-red-400">
+                                            <p className="text-base font-bold text-red-700 dark:text-red-400">
                                                 {formatNumber(product.stock)}
                                             </p>
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-600 dark:text-gray-400">Minimum Required</p>
-                                            <p className="text-xl font-bold text-gray-900 dark:text-white">
+                                            <p className="text-base font-bold text-gray-900 dark:text-white">
                                                 {formatNumber(product.minStock)}
                                             </p>
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-600 dark:text-gray-400">Deficit</p>
-                                            <p className="text-xl font-bold text-orange-700 dark:text-orange-400">
+                                            <p className="text-base font-bold text-orange-700 dark:text-orange-400">
                                                 {formatNumber(product.deficit)}
                                             </p>
                                         </div>
@@ -171,7 +171,7 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                                             <div className="flex items-start gap-3">
                                                 <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-500 mt-0.5" />
                                                 <div className="flex-1">
-                                                    <p className="text-gray-900 dark:text-white font-medium mb-1">
+                                                    <p className="text-sm text-gray-900 dark:text-white font-medium mb-1">
                                                         {product.recommendation.message}
                                                     </p>
                                                     <div className="flex items-center gap-4 text-sm">
@@ -197,13 +197,13 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                                 <div className="md:w-48 space-y-3">
                                     <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-300 dark:border-gray-600">
                                         <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Inventory Value</p>
-                                        <p className="text-lg font-bold text-gray-900 dark:text-white">
+                                        <p className="text-base font-bold text-gray-900 dark:text-white">
                                             {formatCurrency(product.inventoryValue)}
                                         </p>
                                     </div>
                                     <div className="bg-red-100 dark:bg-red-900/20 p-3 rounded-sm border border-red-300 dark:border-red-800/30">
                                         <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Potential Lost Sales</p>
-                                        <p className="text-lg font-bold text-red-700 dark:text-red-400">
+                                        <p className="text-base font-bold text-red-700 dark:text-red-400">
                                             {formatCurrency(product.lostSalesValue)}
                                         </p>
                                     </div>

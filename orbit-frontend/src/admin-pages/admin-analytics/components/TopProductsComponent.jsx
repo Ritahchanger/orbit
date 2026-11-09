@@ -7,7 +7,7 @@ const TopProductsComponent = ({ showFullChart, topProductsChartConfig, chartType
             {/* Top Products Performance */}
             <div className={`bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4 ${showFullChart ? 'lg:col-span-2' : ''}`}>
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         <BarChart3 size={18} className="text-blue-600 dark:text-blue-500" />
                         Top Products by Revenue
                     </h3>
@@ -36,7 +36,7 @@ const TopProductsComponent = ({ showFullChart, topProductsChartConfig, chartType
             {!showFullChart && (
                 <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                             <PieChartIcon size={18} className="text-green-600 dark:text-green-500" />
                             Category Revenue Distribution
                         </h3>

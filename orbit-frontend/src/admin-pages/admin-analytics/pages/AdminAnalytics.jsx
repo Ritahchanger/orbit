@@ -89,7 +89,7 @@ const KpiCard = ({ label, value, sub, subPositive, icon: Icon, accent = "blue", 
                     {loading ? (
                         <div className="h-7 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mt-1" />
                     ) : (
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-0.5 truncate">{value}</p>
+                        <p className="text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">{value}</p>
                     )}
                     {sub && (
                         <p className={`text-xs mt-1 flex items-center gap-0.5 ${subPositive === undefined ? "text-gray-500 dark:text-gray-400" : subPositive ? "text-green-600 dark:text-green-400" : "text-red-500 dark:text-red-400"}`}>
@@ -1000,17 +1000,17 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
                         </div>
                         <div className="grid grid-cols-3 gap-4 mt-4">
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                                <div className="text-base font-bold text-green-600 dark:text-green-400">
                                     {Math.max(0, (inventoryStats?.totalProducts || 0) - ((inventoryStats?.lowStockCount || 0) + (inventoryStats?.outOfStockCount || 0)))}
                                 </div>
                                 <div className="text-xs text-gray-500 dark:text-gray-400">In Stock</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{inventoryStats?.lowStockCount || 0}</div>
+                                <div className="text-base font-bold text-yellow-600 dark:text-yellow-400">{inventoryStats?.lowStockCount || 0}</div>
                                 <div className="text-xs text-gray-500 dark:text-gray-400">Low Stock</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl font-bold text-red-600 dark:text-red-400">{inventoryStats?.outOfStockCount || 0}</div>
+                                <div className="text-base font-bold text-red-600 dark:text-red-400">{inventoryStats?.outOfStockCount || 0}</div>
                                 <div className="text-xs text-gray-500 dark:text-gray-400">Out of Stock</div>
                             </div>
                         </div>
@@ -1123,7 +1123,7 @@ const AdminAnalytics = () => {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
                         <p className="text-gray-500 dark:text-gray-400 mt-0.5 text-sm">
                             {selectedStore
                                 ? `Analytics for ${selectedStore.name}`

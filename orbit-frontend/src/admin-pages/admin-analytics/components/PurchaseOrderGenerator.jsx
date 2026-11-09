@@ -529,7 +529,7 @@ ${store.email}`;
           <div className="flex items-center gap-3 mb-6">
             <FileText className="w-8 h-8 text-blue-600 dark:text-blue-500" />
             <div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Generate Purchase Order</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Generate Purchase Order</h3>
               <p className="text-gray-600 dark:text-gray-400">Create a professional purchase order for restocking</p>
             </div>
           </div>
@@ -637,7 +637,7 @@ ${store.email}`;
         <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-3">
                 <FileText className="w-8 h-8 text-green-600 dark:text-green-500" />
                 Purchase Order Generated
               </h3>
