@@ -238,7 +238,7 @@ const AdminPermissions = () => {
 
     return (
         <AdminLayout>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
                 <PermissionsHeader handleRefresh={handleRefresh} usersLoading={usersLoading} permissionsLoading={permissionsLoading} />
 
                 <StatsOverview userStats={userStats} />
@@ -246,7 +246,7 @@ const AdminPermissions = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                     {/* Left Column - Users List */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6">
+                        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Select User</h2>
                                 <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -261,7 +261,7 @@ const AdminPermissions = () => {
                                     placeholder="Search users..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
                                 />
                             </div>
 
@@ -289,7 +289,7 @@ const AdminPermissions = () => {
 
                     {/* Right Column - Permissions */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6">
+                        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 md:mb-0">
                                     {selectedUser ? `${selectedUser.firstName}'s Permissions` : 'Available Permissions'}
@@ -300,7 +300,7 @@ const AdminPermissions = () => {
                                     <select
                                         value={moduleFilter}
                                         onChange={(e) => setModuleFilter(e.target.value)}
-                                        className="px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                                        className="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                                     >
                                         {modules.map(module => (
                                             <option key={module} value={module}>

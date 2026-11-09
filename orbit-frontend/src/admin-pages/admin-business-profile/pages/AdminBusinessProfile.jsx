@@ -75,11 +75,11 @@ const AdminBusinessProfile = () => {
   if (isLoading) {
     return (
       <AdminLayout>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-4 sm:p-6">
           <div className="max-w-7xl mx-auto">
             <div className="mb-6">
-              <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-64 mb-2 animate-pulse"></div>
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-96 animate-pulse"></div>
+              <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded w-64 mb-2 animate-pulse"></div>
+              <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-96 animate-pulse"></div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
               <div className="lg:col-span-2 space-y-6">
@@ -100,7 +100,7 @@ const AdminBusinessProfile = () => {
   if (!business) {
     return (
       <AdminLayout>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-4 sm:p-6">
           <div className="text-center py-12">
             <p className="text-gray-600 dark:text-gray-400">
               No business data found
@@ -113,7 +113,7 @@ const AdminBusinessProfile = () => {
 
   return (
     <AdminLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-4 sm:p-6">
         <div className="mx-auto">
           {/* HEADER */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
@@ -156,8 +156,8 @@ const AdminBusinessProfile = () => {
               {/* LEFT COLUMN - Business Info */}
               <div className="lg:col-span-2 space-y-2">
                 {/* BUSINESS INFORMATION */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700  rounded-sm overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
+                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800  rounded-sm overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
                     <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                       <Building2 className="w-5 h-5 text-maroon-600" />
                       Business Information
@@ -208,8 +208,8 @@ const AdminBusinessProfile = () => {
                 </div>
 
                 {/* LOCATION */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
+                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
                     <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                       <MapPin className="w-5 h-5 text-maroon-600" />
                       Location
@@ -246,8 +246,8 @@ const AdminBusinessProfile = () => {
 
                 {/* DESCRIPTION */}
                 {business.businessDescription && (
-                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700  rounded-sm overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800  rounded-sm overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
                       <h2 className="font-semibold text-gray-900 dark:text-white">
                         Description
                       </h2>
@@ -271,7 +271,7 @@ const AdminBusinessProfile = () => {
                 <SubscriptionDetails activeSubscription={activeSubscription} />
 
                 {/* BUSINESS CODE */}
-                <div className="bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20 rounded-sm p-4 text-center border border-gray-200 dark:border-gray-700">
+                <div className="bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20 rounded-sm p-4 text-center border border-gray-200 dark:border-gray-800">
                   <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
                     Business Code
                   </p>
@@ -285,7 +285,7 @@ const AdminBusinessProfile = () => {
             /* EDIT MODE FORM */
             <form
               onSubmit={handleSubmit}
-              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700  rounded-sm p-6"
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800  rounded-sm p-6"
             >
               <div className="grid md:grid-cols-2 gap-2">
                 {[
@@ -318,7 +318,7 @@ const AdminBusinessProfile = () => {
                       name={field.name}
                       value={form[field.name] || ""}
                       onChange={handleChange}
-                      className="p-2 border rounded-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-maroon-500 focus:border-transparent"
+                      className="p-2 border rounded-sm bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-maroon-500 focus:border-transparent"
                     />
                   </div>
                 ))}
@@ -332,7 +332,7 @@ const AdminBusinessProfile = () => {
                     value={form.businessDescription || ""}
                     onChange={handleChange}
                     rows={4}
-                    className="p-2 border rounded-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-maroon-500 focus:border-transparent"
+                    className="p-2 border rounded-sm bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-maroon-500 focus:border-transparent"
                   />
                 </div>
               </div>

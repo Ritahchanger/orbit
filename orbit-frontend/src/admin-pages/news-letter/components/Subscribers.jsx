@@ -22,7 +22,7 @@ const Subscribers = ({
     return (
         <div className="space-y-6">
             {/* Controls */}
-            <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-sm border border-gray-300 dark:border-gray-700">
+            <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-sm border border-gray-300 dark:border-gray-800">
                 <div className="flex flex-col md:flex-row gap-4">
                     {/* Search */}
                     <div className="flex-1">
@@ -33,7 +33,7 @@ const Subscribers = ({
                                 value={searchEmail}
                                 onChange={(e) => setSearchEmail(e.target.value)}
                                 placeholder="Search by email..."
-                                className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20"
+                                className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20"
                             />
                         </div>
                     </div>
@@ -43,7 +43,7 @@ const Subscribers = ({
                         <select
                             value={filterStatus}
                             onChange={(e) => setFilterStatus(e.target.value)}
-                            className="px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20"
+                            className="px-4 py-2.5 bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-400/20"
                         >
                             <option value="all">All Subscribers</option>
                             <option value="subscribed">Active Only</option>
@@ -52,7 +52,7 @@ const Subscribers = ({
 
                         <button
                             onClick={() => refetchSubscribers()}
-                            className="px-4 py-2.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-sm hover:border-blue-500 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:bg-gray-50 dark:hover:bg-gray-800"
+                            className="px-4 py-2.5 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 rounded-sm hover:border-blue-500 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:bg-gray-50 dark:hover:bg-gray-900"
                         >
                             <RefreshCw size={18} className={isRefetchingSubscribers ? 'animate-spin' : ''} />
                         </button>
@@ -61,9 +61,9 @@ const Subscribers = ({
             </div>
 
             {/* Subscribers List */}
-            <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-300 dark:border-gray-700 overflow-hidden">
+            <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-300 dark:border-gray-800 overflow-hidden">
                 {/* Header */}
-                <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700">
+                <div className="px-4 py-3 bg-gray-50 dark:bg-gray-950 border-b border-gray-300 dark:border-gray-800">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <button
@@ -113,7 +113,7 @@ const Subscribers = ({
                         filteredSubscribers.map((subscriber, index) => (
                             <div
                                 key={subscriber._id || subscriber.email}
-                                className={`p-4 border-b border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors ${expandedSubscriber === subscriber.email ? 'bg-gray-50 dark:bg-gray-900' : ''
+                                className={`p-4 border-b border-gray-300 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-950 transition-colors ${expandedSubscriber === subscriber.email ? 'bg-gray-50 dark:bg-gray-950' : ''
                                     }`}
                             >
                                 <div className="flex items-center justify-between">

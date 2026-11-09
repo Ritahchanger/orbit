@@ -44,14 +44,14 @@ const UnexpandedRows = ({
   return (
     <>
       <tr
-        className={`hover:bg-gray-50 dark:hover:bg-gray-700/30 ${expandedRows.includes(consultation.id) ? "bg-blue-50 dark:bg-gray-800/50" : ""}`}
+        className={`hover:bg-gray-50 dark:hover:bg-gray-800/30 ${expandedRows.includes(consultation.id) ? "bg-blue-50 dark:bg-gray-900/50" : ""}`}
       >
         <td className="px-6 py-4">
           <input
             type="checkbox"
             checked={selectedConsultations.includes(consultation.id)}
             onChange={() => toggleSelection(consultation.id)}
-            className="rounded-sm border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+            className="rounded-sm border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
           />
         </td>
         <td className="px-6 py-4">
@@ -60,7 +60,7 @@ const UnexpandedRows = ({
             <div className="ml-4">
               <div className="text-sm font-medium text-gray-900 dark:text-white">
                 {consultation.customerName}
-                <span className="ml-2 px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-sm">
+                <span className="ml-2 px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs rounded-sm">
                   {consultation.referenceNumber}
                 </span>
               </div>
@@ -150,7 +150,7 @@ const UnexpandedRows = ({
             )}
             <button
               onClick={() => toggleRowExpansion(consultation.id)}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
               title={
                 expandedRows.includes(consultation.id)
                   ? "Collapse Details"

@@ -264,7 +264,7 @@ const CalculatorModal = ({ onClose }) => {
         } else if (button.value === '=') {
             return baseClasses + "col-span-2 bg-blue-600 dark:bg-primary hover:bg-blue-700 dark:hover:bg-blue-600 text-white";
         } else {
-            return baseClasses + "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700";
+            return baseClasses + "bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800";
         }
     };
 
@@ -282,8 +282,8 @@ const CalculatorModal = ({ onClose }) => {
                             bottom: '5rem'
                         }}
                     >
-                        <div className="bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-lg shadow-2xl w-64">
-                            <div className="drag-handle p-3 border-b border-gray-200 dark:border-gray-800 cursor-move select-none hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors">
+                        <div className="bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-lg shadow-2xl w-64">
+                            <div className="drag-handle p-3 border-b border-gray-200 dark:border-gray-800 cursor-move select-none hover:bg-gray-50 dark:hover:bg-gray-950/30 transition-colors">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <Calculator className="h-4 w-4 text-blue-600 dark:text-primary" />
@@ -292,7 +292,7 @@ const CalculatorModal = ({ onClose }) => {
                                     <div className="flex items-center gap-1">
                                         <button
                                             onClick={handleRestore}
-                                            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                                            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded"
                                             title="Restore"
                                         >
                                             <Maximize2 className="h-3 w-3 text-gray-600 dark:text-gray-400" />
@@ -366,7 +366,7 @@ const CalculatorModal = ({ onClose }) => {
                         className="bg-white dark:bg-dark-light border w-[850px] border-gray-300 dark:border-gray-800 rounded-sm shadow-2xl transition-all duration-200"
                     >
                         {/* Header with drag handle */}
-                        <div className="drag-handle border-b border-gray-200 dark:border-gray-800 p-3 cursor-move select-none hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors active:cursor-grabbing">
+                        <div className="drag-handle border-b border-gray-200 dark:border-gray-800 p-3 cursor-move select-none hover:bg-gray-50 dark:hover:bg-gray-950/30 transition-colors active:cursor-grabbing">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
                                     <div className="w-8 h-8 bg-blue-100 dark:bg-primary/20 rounded-sm flex items-center justify-center">
@@ -380,7 +380,7 @@ const CalculatorModal = ({ onClose }) => {
 
                                     <button
                                         onClick={() => saveToMemory()}
-                                        className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
+                                        className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition-colors"
                                         title="Save to memory (Ctrl+S)"
                                     >
                                         <Save className="h-4 w-4 text-green-600 dark:text-green-400" />
@@ -388,7 +388,7 @@ const CalculatorModal = ({ onClose }) => {
 
                                     <button
                                         onClick={() => setShowHistory(!showHistory)}
-                                        className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
+                                        className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition-colors"
                                         title="History (Ctrl+H)"
                                     >
                                         <History className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
@@ -396,7 +396,7 @@ const CalculatorModal = ({ onClose }) => {
 
                                     <button
                                         onClick={handleMinimize}
-                                        className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
+                                        className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition-colors"
                                         title="Minimize (Ctrl+M)"
                                     >
                                         <Minimize2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -420,7 +420,7 @@ const CalculatorModal = ({ onClose }) => {
                                 {/* Main Calculator */}
                                 <div className={`${showHistory ? 'w-2/3' : 'w-full'}`}>
                                     {/* Memory Display - Compact */}
-                                    <div className="mb-2 bg-gray-50 dark:bg-gray-900/50 p-2 rounded-sm border border-gray-200 dark:border-gray-800">
+                                    <div className="mb-2 bg-gray-50 dark:bg-gray-950/50 p-2 rounded-sm border border-gray-200 dark:border-gray-800">
                                         <div className="flex items-center justify-between text-xs">
                                             <span className="text-gray-600 dark:text-gray-400 font-medium">Memory:</span>
                                             <span className="text-purple-600 dark:text-purple-400 font-mono text-sm font-semibold">
@@ -431,7 +431,7 @@ const CalculatorModal = ({ onClose }) => {
                                     </div>
 
                                     {/* Display - Reduced size */}
-                                    <div className="mb-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-4 shadow-inner">
+                                    <div className="mb-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm p-4 shadow-inner">
                                         <div
                                             ref={inputRef}
                                             tabIndex={0}
@@ -477,16 +477,16 @@ const CalculatorModal = ({ onClose }) => {
                                     <div className="mt-3 pt-2 border-t border-gray-200 dark:border-gray-800">
                                         <div className="grid grid-cols-4 gap-1 text-xs">
                                             <div className="text-gray-600 dark:text-gray-500">
-                                                <kbd className="bg-gray-100 dark:bg-gray-800 px-1 rounded text-[10px] border border-gray-300 dark:border-gray-700">Esc</kbd> Close
+                                                <kbd className="bg-gray-100 dark:bg-gray-900 px-1 rounded text-[10px] border border-gray-300 dark:border-gray-800">Esc</kbd> Close
                                             </div>
                                             <div className="text-gray-600 dark:text-gray-500">
-                                                <kbd className="bg-gray-100 dark:bg-gray-800 px-1 rounded text-[10px] border border-gray-300 dark:border-gray-700">Ctrl+M</kbd> Min
+                                                <kbd className="bg-gray-100 dark:bg-gray-900 px-1 rounded text-[10px] border border-gray-300 dark:border-gray-800">Ctrl+M</kbd> Min
                                             </div>
                                             <div className="text-gray-600 dark:text-gray-500">
-                                                <kbd className="bg-gray-100 dark:bg-gray-800 px-1 rounded text-[10px] border border-gray-300 dark:border-gray-700">Ctrl+S</kbd> Save
+                                                <kbd className="bg-gray-100 dark:bg-gray-900 px-1 rounded text-[10px] border border-gray-300 dark:border-gray-800">Ctrl+S</kbd> Save
                                             </div>
                                             <div className="text-gray-600 dark:text-gray-500">
-                                                <kbd className="bg-gray-100 dark:bg-gray-800 px-1 rounded text-[10px] border border-gray-300 dark:border-gray-700">Ctrl+H</kbd> Hist
+                                                <kbd className="bg-gray-100 dark:bg-gray-900 px-1 rounded text-[10px] border border-gray-300 dark:border-gray-800">Ctrl+H</kbd> Hist
                                             </div>
                                         </div>
                                     </div>
@@ -502,7 +502,7 @@ const CalculatorModal = ({ onClose }) => {
                                             </div>
                                             <button
                                                 onClick={handleClearHistory}
-                                                className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition"
+                                                className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition"
                                             >
                                                 Clear
                                             </button>
@@ -515,7 +515,7 @@ const CalculatorModal = ({ onClose }) => {
                                                         <div
                                                             key={index}
                                                             onClick={() => handleHistoryClick(calc)}
-                                                            className="p-2 bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm cursor-pointer transition group"
+                                                            className="p-2 bg-gray-50 dark:bg-gray-950/50 hover:bg-gray-100 dark:hover:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-sm cursor-pointer transition group"
                                                         >
                                                             <div className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white break-all">
                                                                 {calc.split(' = ')[0]}

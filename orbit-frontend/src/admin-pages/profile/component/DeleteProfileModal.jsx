@@ -71,11 +71,11 @@ const DeleteConfirmationModal = ({
       {/* Modal */}
       <div className="relative min-h-screen flex items-center justify-center p-4">
         <div
-          className="relative bg-white dark:bg-gray-800 rounded-sm shadow-2xl max-w-md w-full mx-auto transform transition-all animate-in fade-in zoom-in duration-300"
+          className="relative bg-white dark:bg-gray-900 rounded-sm shadow-2xl max-w-md w-full mx-auto transform transition-all animate-in fade-in zoom-in duration-300"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-red-100 dark:bg-red-500/10 rounded-sm">
                 <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
@@ -87,7 +87,7 @@ const DeleteConfirmationModal = ({
             <button
               onClick={onClose}
               disabled={isLoading || isDeleting}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
             </button>
@@ -128,7 +128,7 @@ const DeleteConfirmationModal = ({
                     value={confirmInput}
                     onChange={(e) => setConfirmInput(e.target.value)}
                     placeholder="DELETE"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     autoFocus
                     disabled={isDeleting}
                   />
@@ -155,11 +155,11 @@ const DeleteConfirmationModal = ({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 rounded-b-xl">
+          <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/50 rounded-b-xl">
             <button
               onClick={onClose}
               disabled={isLoading || isDeleting}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {cancelText}
             </button>

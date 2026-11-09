@@ -73,9 +73,9 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
       />
 
       {/* User Menu */}
-      <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-xl py-1 z-50">
+      <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-xl py-1 z-50">
         {/* User Info */}
-        <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+        <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800">
           <p className="text-sm font-medium text-gray-900 dark:text-white">
             {userDisplayName}
           </p>
@@ -90,7 +90,7 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
         {/* Menu Items */}
         <Link
           to="/admin/profile"
-          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           onClick={() => setShowUserMenu(false)}
         >
           <User className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
@@ -99,7 +99,7 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
 
         <Link
           to="/"
-          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           onClick={() => setShowUserMenu(false)}
         >
           <Home className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
@@ -107,7 +107,7 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
         </Link>
         <Link
           to="/admin/business-profile"
-          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           onClick={() => setShowUserMenu(false)}
         >
           <BookOpen className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
@@ -116,7 +116,7 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
 
         <Link
           to="/admin/subscriptions"
-          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           onClick={() => setShowUserMenu(false)}
         >
           <Settings className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
@@ -125,7 +125,7 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
 
         <Link
           to="/admin/logs"
-          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           onClick={() => setShowUserMenu(false)}
         >
           <BookOpen className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
@@ -135,7 +135,7 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
         {/* Help Button - Updated with icon and keyboard shortcut */}
         <button
           onClick={handleHelpClick}
-          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         >
           <HelpCircle className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
           Help & Support
@@ -146,7 +146,7 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
 
         <Link
           to="/admin/settings/permissions"
-          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           onClick={() => setShowUserMenu(false)}
         >
           <Settings className="h-4 w-4 mr-3 text-gray-500 dark:text-gray-400" />
@@ -154,7 +154,7 @@ const ShowUserMenu = ({ setShowUserMenu, handleLogout }) => {
         </Link>
 
         {/* Divider */}
-        <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+        <div className="border-t border-gray-200 dark:border-gray-800 my-1" />
 
         {/* Logout Button */}
         <button

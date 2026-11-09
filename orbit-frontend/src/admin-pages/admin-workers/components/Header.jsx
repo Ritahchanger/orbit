@@ -94,7 +94,7 @@ const Header = ({ canExportUsers, exportLoading, showExportMenu, setShowExportMe
                 <button
                     onClick={handleRefresh}
                     disabled={usersLoading || statsLoading}
-                    className="flex items-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
+                    className="flex items-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-900 hover:bg-gray-300 dark:hover:bg-gray-800 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
                 >
                     <RefreshCw size={18} className={usersLoading ? 'animate-spin' : ''} />
                     <span>Refresh</span>

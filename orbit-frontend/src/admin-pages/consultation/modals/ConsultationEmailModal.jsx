@@ -179,9 +179,9 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[200] flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 m-8 h-[calc(100vh-4rem)] overflow-hidden overflow-y-auto animate-fadeIn">
+      <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 m-8 h-[calc(100vh-4rem)] overflow-hidden overflow-y-auto animate-fadeIn">
         {/* Modal Header */}
-        <div className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800 p-6">
+        <div className="bg-gray-50 dark:bg-gray-950/50 border-b border-gray-200 dark:border-gray-800 p-6">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-start gap-6">
@@ -203,7 +203,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
 
                   {/* Consultation Info Cards */}
                   <div className="flex flex-wrap items-center gap-3 mb-4">
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800/50 rounded-md">
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-900/50 rounded-md">
                       <Calendar className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                       <span className="text-sm text-gray-700 dark:text-gray-300">
                         {new Date(
@@ -217,7 +217,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800/50 rounded-md">
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-900/50 rounded-md">
                       <Clock className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                       <span className="text-sm text-gray-700 dark:text-gray-300">
                         {consultation.consultationTime}
@@ -237,7 +237,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                       <label className="text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                         Recipient Email
                       </label>
-                      <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-900/30 rounded border border-gray-300 dark:border-gray-700">
+                      <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-950/30 rounded border border-gray-300 dark:border-gray-800">
                         <Mail className="h-4 w-4 text-gray-500 dark:text-gray-500 shrink-0" />
                         <div className="min-w-0">
                           <p className="text-sm text-gray-900 dark:text-white truncate">
@@ -254,7 +254,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                       <label className="text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                         Contact Phone
                       </label>
-                      <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-900/30 rounded border border-gray-300 dark:border-gray-700">
+                      <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-950/30 rounded border border-gray-300 dark:border-gray-800">
                         <Phone className="h-4 w-4 text-gray-500 dark:text-gray-500 shrink-0" />
                         <p className="text-sm text-gray-900 dark:text-white">
                           {consultation.customerPhone}
@@ -269,7 +269,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="shrink-0 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-lg transition-all duration-200 ml-4"
+              className="shrink-0 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-900/50 rounded-lg transition-all duration-200 ml-4"
               aria-label="Close modal"
             >
               <X className="h-6 w-6" />
@@ -279,7 +279,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
 
         <div className="flex flex-1 min-h-0">
           {/* Left Sidebar - Templates */}
-          <div className="w-64 border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/20 p-4 overflow-y-auto">
+          <div className="w-64 border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/20 p-4 overflow-y-auto">
             <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
               Email Templates
             </h3>
@@ -291,7 +291,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                   className={`w-full text-left p-3 rounded-sm transition-colors ${
                     selectedTemplateId === template.id
                       ? "bg-blue-100 dark:bg-primary/20 border border-blue-300 dark:border-primary/30"
-                      : "hover:bg-gray-100 dark:hover:bg-gray-800/50 border border-transparent"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-900/50 border border-transparent"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
@@ -328,7 +328,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
               <div className="space-y-2">
                 <button
                   onClick={() => setPreviewMode(!previewMode)}
-                  className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-sm"
+                  className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-full p-2 hover:bg-gray-100 dark:hover:bg-gray-900/50 rounded-sm"
                 >
                   {previewMode ? (
                     <EyeOff className="h-4 w-4" />
@@ -339,7 +339,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                 </button>
                 <button
                   onClick={() => copyToClipboard(emailContent)}
-                  className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-sm"
+                  className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-full p-2 hover:bg-gray-100 dark:hover:bg-gray-900/50 rounded-sm"
                 >
                   <Copy className="h-4 w-4" />
                   Copy Content
@@ -351,7 +351,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                     setEmailContent(filled.content);
                     toast.success("Template refreshed");
                   }}
-                  className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-sm"
+                  className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-full p-2 hover:bg-gray-100 dark:hover:bg-gray-900/50 rounded-sm"
                 >
                   <RefreshCw className="h-4 w-4" />
                   Refresh Template
@@ -390,7 +390,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                       type="text"
                       value={emailSubject}
                       onChange={(e) => setEmailSubject(e.target.value)}
-                      className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-primary"
+                      className="w-full px-4 py-3 bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white text-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-primary"
                       placeholder="Enter email subject..."
                     />
                   </div>
@@ -401,7 +401,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                       Email Content
                       <span className="text-red-500 ml-1">*</span>
                     </label>
-                    <div className="border border-gray-300 dark:border-gray-700 rounded-sm overflow-hidden consultation-email-modal">
+                    <div className="border border-gray-300 dark:border-gray-800 rounded-sm overflow-hidden consultation-email-modal">
                       <SimpleEditor
                         initialContent={emailContent}
                         onContentChange={setEmailContent}
@@ -429,7 +429,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                       {attachments.map((file, index) => (
                         <div
                           key={index}
-                          className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-sm border border-gray-300 dark:border-gray-700"
+                          className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-950/50 rounded-sm border border-gray-300 dark:border-gray-800"
                         >
                           <div className="flex items-center gap-3">
                             <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -454,7 +454,7 @@ const ConsultationEmailModal = ({ isOpen, onClose, consultation }) => {
                       {/* Add Attachment Button */}
                       <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="w-full p-4 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-sm hover:border-blue-400 dark:hover:border-primary/50 transition-colors text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
+                        className="w-full p-4 border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-sm hover:border-blue-400 dark:hover:border-primary/50 transition-colors text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
                       >
                         <div className="flex flex-col items-center">
                           <Paperclip className="h-6 w-6 mb-2" />

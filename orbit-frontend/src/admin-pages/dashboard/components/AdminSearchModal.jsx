@@ -304,9 +304,9 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
             {/* Modal */}
             <div className="flex min-h-screen items-center justify-center p-4  h-[85vh] md:h-[80vh]">
                 <div className="relative w-full max-w-6xl transform transition-all h-[]" ref={modalRef}>
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-2xl overflow-hidden">
+                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-2xl overflow-hidden">
                         {/* Search Header */}
-                        <div className="border-b border-gray-200 dark:border-gray-700 p-6">
+                        <div className="border-b border-gray-200 dark:border-gray-800 p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <div>
                                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">Admin Search</h2>
@@ -316,7 +316,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                 </div>
                                 <button
                                     onClick={handleCloseModal}
-                                    className="p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                    className="p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                                 >
                                     <XCircle className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                                 </button>
@@ -328,7 +328,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                     onClick={() => setActiveTab('products')}
                                     className={`px-4 py-2 rounded-sm font-medium transition-colors ${activeTab === 'products'
                                         ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                                         }`}
                                 >
                                     <Package className="h-4 w-4 inline-block mr-2" />
@@ -340,7 +340,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                         onClick={() => setActiveTab('pages')}
                                         className={`px-4 py-2 rounded-sm font-medium transition-colors ${activeTab === 'pages'
                                             ? 'bg-blue-600 dark:bg-blue-500 text-white'
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                                             }`}
                                     >
                                         <Home className="h-4 w-4 inline-block mr-2" />
@@ -365,7 +365,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                             ? "Search by product name, SKU, category, or brand..."
                                             : "Search admin pages by name or category..."
                                     }
-                                    className="w-full pl-12 pr-24 py-4 text-lg bg-gray-100 dark:bg-gray-900 border-0 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-gray-900 dark:text-white rounded-sm"
+                                    className="w-full pl-12 pr-24 py-4 text-lg bg-gray-100 dark:bg-gray-950 border-0 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-gray-900 dark:text-white rounded-sm"
                                     autoFocus
                                 />
                                 {searchQuery && (
@@ -388,7 +388,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                     disabled={!searchQuery.trim()}
                                     className={`absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 rounded-sm text-sm font-medium transition ${searchQuery.trim()
                                         ? 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600'
-                                        : 'bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-gray-500 cursor-not-allowed'
+                                        : 'bg-gray-300 dark:bg-gray-900 text-gray-500 dark:text-gray-500 cursor-not-allowed'
                                         }`}
                                 >
                                     Search
@@ -409,7 +409,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                                 onClick={() => setActiveFilter(filter.id)}
                                                 className={`px-3 py-1.5 rounded-sm text-sm font-medium transition flex items-center gap-2 ${activeFilter === filter.id
                                                     ? `bg-blue-600 dark:bg-blue-500 text-white`
-                                                    : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700'
+                                                    : 'bg-gray-200 dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-800'
                                                     }`}
                                             >
                                                 <filter.icon className="h-3.5 w-3.5" />
@@ -436,7 +436,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                                         <button
                                                             key={index}
                                                             onClick={() => handleRecentSearchClick(search.query, search.type)}
-                                                            className="w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors text-left group"
+                                                            className="w-full p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors text-left group"
                                                         >
                                                             <div className="flex items-center justify-between">
                                                                 <div className="flex items-center gap-3">
@@ -478,7 +478,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                                         <button
                                                             key={action.id}
                                                             onClick={() => handleQuickAction(action.id)}
-                                                            className="p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm transition-colors text-left group"
+                                                            className="p-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm transition-colors text-left group"
                                                         >
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <action.icon className={`h-4 w-4 text-${action.color}-600 dark:text-${action.color}-400`} />
@@ -533,12 +533,12 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                                             <button
                                                                 key={product._id}
                                                                 onClick={() => handleProductClick(product)}
-                                                                className="w-full p-4 hover:bg-gray-100 dark:hover:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-blue-500/30 dark:hover:border-blue-500/30 rounded-sm transition group text-left"
+                                                                className="w-full p-4 hover:bg-gray-100 dark:hover:bg-gray-950 border border-gray-200 dark:border-gray-800 hover:border-blue-500/30 dark:hover:border-blue-500/30 rounded-sm transition group text-left"
                                                             >
                                                                 <div className="flex items-center justify-between">
                                                                     <div className="flex items-center gap-4">
                                                                         {product.primaryImage ? (
-                                                                            <div className="w-12 h-12 bg-gray-200 dark:bg-gray-800 rounded-sm overflow-hidden">
+                                                                            <div className="w-12 h-12 bg-gray-200 dark:bg-gray-900 rounded-sm overflow-hidden">
                                                                                 <img
                                                                                     src={product.primaryImage}
                                                                                     alt={product.name}
@@ -546,7 +546,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                                                                 />
                                                                             </div>
                                                                         ) : (
-                                                                            <div className="w-12 h-12 bg-gray-200 dark:bg-gray-800 rounded-sm flex items-center justify-center">
+                                                                            <div className="w-12 h-12 bg-gray-200 dark:bg-gray-900 rounded-sm flex items-center justify-center">
                                                                                 <Package className="h-6 w-6 text-gray-500 dark:text-gray-600" />
                                                                             </div>
                                                                         )}
@@ -581,7 +581,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
 
                                                                     <div className="flex items-center gap-2">
                                                                         {product.totalSold > 0 && (
-                                                                            <div className="hidden md:flex items-center gap-1 bg-gray-200 dark:bg-gray-800 px-2 py-1 rounded-sm">
+                                                                            <div className="hidden md:flex items-center gap-1 bg-gray-200 dark:bg-gray-900 px-2 py-1 rounded-sm">
                                                                                 <TrendingUp className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                                                                                 <span className="text-xs text-gray-700 dark:text-gray-300">
                                                                                     {product.totalSold} sold
@@ -604,7 +604,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                                             <button
                                                                 key={page.id}
                                                                 onClick={() => handlePageClick(page)}
-                                                                className="w-full p-4 hover:bg-gray-100 dark:hover:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-blue-500/30 dark:hover:border-blue-500/30 rounded-sm transition group text-left"
+                                                                className="w-full p-4 hover:bg-gray-100 dark:hover:bg-gray-950 border border-gray-200 dark:border-gray-800 hover:border-blue-500/30 dark:hover:border-blue-500/30 rounded-sm transition group text-left"
                                                             >
                                                                 <div className="flex items-center justify-between">
                                                                     <div className="flex items-center gap-4">
@@ -623,7 +623,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                                                                     ? 'bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400'
                                                                                     : page.category === 'Management'
                                                                                         ? 'bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400'
-                                                                                        : 'bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-400'
+                                                                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
                                                                                     }`}>
                                                                                     {page.category}
                                                                                 </span>
@@ -642,7 +642,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                             {totalResults > (activeTab === 'products' ? 8 : 10) && (
                                                 <button
                                                     onClick={handleSearchSubmit}
-                                                    className="w-full mt-4 p-4 text-center border border-gray-300 dark:border-gray-700 hover:border-blue-500/30 dark:hover:border-blue-500/30 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-900 transition group"
+                                                    className="w-full mt-4 p-4 text-center border border-gray-300 dark:border-gray-800 hover:border-blue-500/30 dark:hover:border-blue-500/30 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-950 transition group"
                                                 >
                                                     <div className="flex items-center justify-center gap-2">
                                                         <Search className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -660,7 +660,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                     ) : (
                                         /* No Results */
                                         <div className="text-center py-12">
-                                            <div className="w-16 h-16 bg-gray-200 dark:bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <div className="w-16 h-16 bg-gray-200 dark:bg-gray-950 rounded-full flex items-center justify-center mx-auto mb-4">
                                                 <Search className="h-8 w-8 text-gray-500 dark:text-gray-600" />
                                             </div>
                                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -672,7 +672,7 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                                             <div className="flex flex-wrap gap-3 justify-center">
                                                 <button
                                                     onClick={handleClearSearch}
-                                                    className="px-4 py-2 bg-gray-300 dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm transition"
+                                                    className="px-4 py-2 bg-gray-300 dark:bg-gray-900 hover:bg-gray-400 dark:hover:bg-gray-800 text-gray-800 dark:text-white rounded-sm transition"
                                                 >
                                                     Clear Search
                                                 </button>
@@ -692,11 +692,11 @@ const AdminSearchModal = ({ showSearchModal, setShowSearchModal, searchQuery, se
                         </div>
 
                         {/* Footer */}
-                        <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-100 dark:bg-gray-900/50">
+                        <div className="border-t border-gray-200 dark:border-gray-800 p-4 bg-gray-100 dark:bg-gray-950/50">
                             <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                                 <div className="flex items-center gap-4">
-                                    <span>Press <kbd className="px-1.5 py-0.5 bg-gray-300 dark:bg-gray-800 rounded text-xs">Esc</kbd> to close</span>
-                                    <span>Press <kbd className="px-1.5 py-0.5 bg-gray-300 dark:bg-gray-800 rounded text-xs">Enter</kbd> to search</span>
+                                    <span>Press <kbd className="px-1.5 py-0.5 bg-gray-300 dark:bg-gray-900 rounded text-xs">Esc</kbd> to close</span>
+                                    <span>Press <kbd className="px-1.5 py-0.5 bg-gray-300 dark:bg-gray-900 rounded text-xs">Enter</kbd> to search</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {activeTab === 'products' ? (

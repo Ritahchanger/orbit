@@ -243,7 +243,7 @@ const SalesTrend = ({
   const { growth: bestGrowth, day: bestGrowthDay } = calculateBestGrowth();
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 p-4">
+    <div className="bg-white dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-800 p-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
         <h3 className="text-base font-semibold text-gray-900 dark:text-white">
           Sales Trend (Daily)
@@ -285,9 +285,9 @@ const SalesTrend = ({
           </div>
 
           {/* Stats Summary */}
-          <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-md">
+              <div className="bg-gray-50 dark:bg-gray-950/50 p-3 rounded-md">
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center">
                   <TrendingUp className="h-3 w-3 mr-1" />
                   Peak Day
@@ -307,7 +307,7 @@ const SalesTrend = ({
                 )}
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-md">
+              <div className="bg-gray-50 dark:bg-gray-950/50 p-3 rounded-md">
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                   Average Daily
                 </p>
@@ -319,7 +319,7 @@ const SalesTrend = ({
                 </p>
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-md">
+              <div className="bg-gray-50 dark:bg-gray-950/50 p-3 rounded-md">
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                   Period Total
                 </p>
@@ -331,7 +331,7 @@ const SalesTrend = ({
                 </p>
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-md">
+              <div className="bg-gray-50 dark:bg-gray-950/50 p-3 rounded-md">
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                   Best Growth
                 </p>
@@ -360,7 +360,7 @@ const SalesTrend = ({
           </div>
 
           {/* Additional Insights */}
-          <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Showing {displayItems.length} days with sales in the selected
               period.

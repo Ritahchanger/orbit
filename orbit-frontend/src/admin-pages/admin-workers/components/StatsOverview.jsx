@@ -15,7 +15,7 @@ const StatsOverview = ({statsLoading,stats}) => {
             ) : (
                 <>
                     {/* Total Users Card */}
-                    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
+                    <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-gray-600 dark:text-gray-400 text-sm">Total Users</p>
@@ -31,7 +31,7 @@ const StatsOverview = ({statsLoading,stats}) => {
                     </div>
 
                     {/* Admins Card */}
-                    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
+                    <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-gray-600 dark:text-gray-400 text-sm">Admins</p>
@@ -47,7 +47,7 @@ const StatsOverview = ({statsLoading,stats}) => {
                     </div>
 
                     {/* Store Access Card */}
-                    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
+                    <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-gray-600 dark:text-gray-400 text-sm">Store Access</p>
@@ -64,7 +64,7 @@ const StatsOverview = ({statsLoading,stats}) => {
 
                     {/* Newsletter Card */}
                     <FeatureGate feature="newsletter">
-                    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
+                    <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-gray-600 dark:text-gray-400 text-sm">Newsletter</p>

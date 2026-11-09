@@ -159,15 +159,15 @@ const ConsultationEmailsPanel = ({ onClose }) => {
   if (isLoading) {
     return (
       <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50 p-4">
-        <div className="bg-white dark:bg-gray-800 rounded-sm w-full max-w-6xl max-h-[90vh] overflow-hidden">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div className="h-6 w-48 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+        <div className="bg-white dark:bg-gray-900 rounded-sm w-full max-w-6xl max-h-[90vh] overflow-hidden">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+            <div className="h-6 w-48 bg-gray-200 dark:bg-gray-800 animate-pulse rounded"></div>
           </div>
           <div className="p-6 space-y-4">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="h-16 bg-gray-100 dark:bg-gray-700 animate-pulse rounded"
+                className="h-16 bg-gray-100 dark:bg-gray-800 animate-pulse rounded"
               ></div>
             ))}
           </div>
@@ -180,7 +180,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
   if (error) {
     return (
       <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50 p-4">
-        <div className="bg-white dark:bg-gray-800 rounded-sm w-full max-w-md p-6 text-center">
+        <div className="bg-white dark:bg-gray-900 rounded-sm w-full max-w-md p-6 text-center">
           <AlertCircle className="h-12 w-12 text-rose-600 dark:text-rose-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             Error Loading Emails
@@ -201,15 +201,15 @@ const ConsultationEmailsPanel = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-sm w-full max-w-6xl max-h-[90vh] flex flex-col shadow-xl">
+      <div className="bg-white dark:bg-gray-900 rounded-sm w-full max-w-6xl max-h-[90vh] flex flex-col shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center gap-3">
             <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               Consultation Email Responses
             </h2>
-            <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-sm text-xs font-medium">
+            <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-sm text-xs font-medium">
               {filteredEmails.length} total
             </span>
           </div>
@@ -217,7 +217,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
             <button
               onClick={() => refetch()}
               disabled={isFetching}
-              className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors disabled:opacity-50"
+              className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors disabled:opacity-50"
             >
               <RefreshCw
                 className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`}
@@ -233,7 +233,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
         </div>
 
         {/* Filters */}
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700 space-y-3">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800 space-y-3">
           <div className="flex flex-col sm:flex-row gap-3">
             {/* Search */}
             <div className="flex-1 relative">
@@ -243,7 +243,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
                 placeholder="Search by email, subject, template..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-9 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
@@ -251,7 +251,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All Status</option>
               <option value="sent">Sent</option>
@@ -263,7 +263,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
             <select
               value={filterTemplate}
               onChange={(e) => setFilterTemplate(e.target.value)}
-              className="px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All Templates</option>
               {templates.map((template) => (
@@ -333,7 +333,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
           ) : (
             <div className="space-y-3">
               {/* Select All Header */}
-              <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-sm text-sm font-medium text-gray-700 dark:text-gray-300">
+              <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-sm text-sm font-medium text-gray-700 dark:text-gray-300">
                 <input
                   type="checkbox"
                   checked={
@@ -351,10 +351,10 @@ const ConsultationEmailsPanel = ({ onClose }) => {
               {filteredEmails.map((email) => (
                 <div
                   key={email._id}
-                  className="border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden"
+                  className="border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden"
                 >
                   {/* Email Header */}
-                  <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800">
+                  <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-900">
                     <input
                       type="checkbox"
                       checked={selectedEmails.includes(email._id)}
@@ -410,7 +410,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => downloadEmail(email)}
-                        className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                        className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                         title="Download email"
                       >
                         <Download className="h-4 w-4" />
@@ -430,7 +430,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
 
                   {/* Expanded Content */}
                   {expandedEmail === email._id && (
-                    <div className="p-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700">
+                    <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-800">
                       <div className="space-y-3">
                         {/* Email Details */}
                         <div className="grid grid-cols-2 gap-3 text-xs">
@@ -477,7 +477,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
                             Content:
                           </p>
                           <div
-                            className="p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm max-h-60 overflow-y-auto text-sm prose dark:prose-invert max-w-none"
+                            className="p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm max-h-60 overflow-y-auto text-sm prose dark:prose-invert max-w-none"
                             dangerouslySetInnerHTML={{ __html: email.content }}
                           />
                         </div>
@@ -491,7 +491,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
           <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
             <span>
               Showing {filteredEmails.length} of {emails.length} emails
@@ -514,7 +514,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && emailToDelete && (
         <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-[60] p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-sm w-full max-w-md p-6">
+          <div className="bg-white dark:bg-gray-900 rounded-sm w-full max-w-md p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-rose-100 dark:bg-rose-900/20 rounded-full">
                 <Trash2 className="h-5 w-5 text-rose-600 dark:text-rose-400" />
@@ -535,7 +535,7 @@ const ConsultationEmailsPanel = ({ onClose }) => {
                   setShowDeleteConfirm(false);
                   setEmailToDelete(null);
                 }}
-                className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm text-sm font-medium transition-colors"
+                className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm text-sm font-medium transition-colors"
               >
                 Cancel
               </button>

@@ -436,7 +436,7 @@ const AdminWorkers = () => {
   if (!canViewUsers && !canManageUsers && userRole !== "superadmin") {
     return (
       <AdminLayout>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-6 flex items-center justify-center">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-6 flex items-center justify-center">
           <div className="text-center">
             <Shield className="w-16 h-16 mx-auto text-gray-600 dark:text-gray-500 mb-4" />
             <h3 className="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -454,7 +454,7 @@ const AdminWorkers = () => {
 
   return (
     <AdminLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
         {/* Header */}
 
         <Header
@@ -506,7 +506,7 @@ const AdminWorkers = () => {
             </button>
           </div>
         ) : filteredUsers.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
+          <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-8 text-center">
             <Users className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               No Users Found

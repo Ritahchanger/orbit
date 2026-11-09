@@ -28,7 +28,7 @@ const formatDate = (date) => {
 };
 
 const StatCard = ({ icon: Icon, label, value }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
     <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-2">
       <Icon size={16} />
       <span className="text-xs uppercase tracking-wide">{label}</span>
@@ -38,10 +38,10 @@ const StatCard = ({ icon: Icon, label, value }) => (
 );
 
 const CustomerOrdersTable = ({ orders, navigate }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead className="bg-gray-50 dark:bg-gray-900/50">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+        <thead className="bg-gray-50 dark:bg-gray-950/50">
           <tr>
             {["Order", "Items", "Total", "Payment", "Status", "Created", ""].map((head) => (
               <th
@@ -53,9 +53,9 @@ const CustomerOrdersTable = ({ orders, navigate }) => (
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
           {orders.map((order) => (
-            <tr key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/40">
+            <tr key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/40">
               <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                 {order.orderNumber}
               </td>
@@ -98,7 +98,7 @@ const AdminEcommerceCustomerDetail = () => {
 
   return (
     <AdminEcommerceLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
         <Link
           to="/admin/ecommerce/customers"
           className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:underline mb-4"

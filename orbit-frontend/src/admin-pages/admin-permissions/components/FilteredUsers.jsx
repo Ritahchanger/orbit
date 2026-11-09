@@ -21,7 +21,7 @@ const FilteredUsers = ({ usersLoading, filteredUsers, setSelectedUser, selectedU
             {usersLoading ? (
                 <div className="space-y-2">
                     {[1, 2, 3].map(i => (
-                        <div key={i} className="h-16 bg-gray-200 dark:bg-gray-700 rounded-sm animate-pulse"></div>
+                        <div key={i} className="h-16 bg-gray-200 dark:bg-gray-800 rounded-sm animate-pulse"></div>
                     ))}
                 </div>
             ) : filteredUsers.length === 0 ? (
@@ -44,7 +44,7 @@ const FilteredUsers = ({ usersLoading, filteredUsers, setSelectedUser, selectedU
                         }}
                         className={`w-full text-left p-3 rounded-sm transition-colors border cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 ${selectedUser?._id === user._id
                             ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30 text-blue-800 dark:text-blue-300'
-                            : 'bg-white dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-300'
+                            : 'bg-white dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-300'
                             }`}
                     >
                         <div className="flex items-center justify-between gap-2">
@@ -69,7 +69,7 @@ const FilteredUsers = ({ usersLoading, filteredUsers, setSelectedUser, selectedU
                                     ? 'bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400'
                                     : user.role === 'admin'
                                         ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
-                                        : 'bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-400'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
                                     }`}>
                                     {user.role}
                                 </span>

@@ -247,7 +247,7 @@ const AdminProfile = () => {
 
   // Stats cards
   const StatCard = ({ icon: Icon, label, value, color }) => (
-    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4">
+    <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm text-gray-600 dark:text-gray-400">{label}</p>
@@ -316,7 +316,7 @@ const AdminProfile = () => {
           {/* Left Column - Profile Card */}
           <div className="lg:col-span-2 space-y-2">
             {/* Profile Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm">
+            <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm">
               <div className="p-6">
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center space-x-4">
@@ -361,7 +361,7 @@ const AdminProfile = () => {
                         setFormData({ ...formData, firstName: e.target.value })
                       }
                       disabled={!isEditing}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-500 dark:disabled:text-gray-400"
+                      className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-gray-500 dark:disabled:text-gray-400"
                     />
                   </div>
                   <div>
@@ -375,7 +375,7 @@ const AdminProfile = () => {
                         setFormData({ ...formData, lastName: e.target.value })
                       }
                       disabled={!isEditing}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-500 dark:disabled:text-gray-400"
+                      className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-gray-500 dark:disabled:text-gray-400"
                     />
                   </div>
                   <div>
@@ -389,7 +389,7 @@ const AdminProfile = () => {
                         setFormData({ ...formData, email: e.target.value })
                       }
                       disabled={!isEditing}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-500 dark:disabled:text-gray-400"
+                      className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-gray-500 dark:disabled:text-gray-400"
                     />
                   </div>
                   <div>
@@ -403,7 +403,7 @@ const AdminProfile = () => {
                         setFormData({ ...formData, phoneNo: e.target.value })
                       }
                       disabled={!isEditing}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-500 dark:disabled:text-gray-400"
+                      className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-gray-500 dark:disabled:text-gray-400"
                       placeholder="0712345678"
                     />
                   </div>
@@ -425,10 +425,10 @@ const AdminProfile = () => {
                             profileImage: e.target.value,
                           })
                         }
-                        className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white"
+                        className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white"
                         placeholder="https://example.com/image.jpg"
                       />
-                      <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center space-x-2">
+                      <button className="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-sm hover:bg-gray-300 dark:hover:bg-gray-700 flex items-center space-x-2">
                         <Upload className="w-4 h-4" />
                         <span>Upload</span>
                       </button>
@@ -453,7 +453,7 @@ const AdminProfile = () => {
           {/* Right Column - Security & Actions */}
           <div className="space-y-2">
             {/* Security Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm">
+            <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm">
               <div className="p-6">
                 <div className="flex items-center space-x-2 mb-4">
                   <Shield className="w-5 h-5 text-green-600 dark:text-green-400" />
@@ -464,7 +464,7 @@ const AdminProfile = () => {
 
                 {!showPasswordForm ? (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-950/50 rounded-sm">
                       <div className="flex items-center space-x-3">
                         <div className="p-2 bg-green-100 dark:bg-green-500/20 rounded-sm">
                           <Lock className="w-4 h-4 text-green-600 dark:text-green-400" />
@@ -480,7 +480,7 @@ const AdminProfile = () => {
                       </div>
                       <button
                         onClick={() => setShowPasswordForm(true)}
-                        className="px-3 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-sm transition"
+                        className="px-3 py-1 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-sm transition"
                       >
                         Change
                       </button>
@@ -502,7 +502,7 @@ const AdminProfile = () => {
                               currentPassword: e.target.value,
                             })
                           }
-                          className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white pr-10"
+                          className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white pr-10"
                         />
                         <button
                           type="button"
@@ -534,7 +534,7 @@ const AdminProfile = () => {
                               newPassword: e.target.value,
                             })
                           }
-                          className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white pr-10"
+                          className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white pr-10"
                         />
                         <button
                           type="button"
@@ -564,7 +564,7 @@ const AdminProfile = () => {
                               confirmPassword: e.target.value,
                             })
                           }
-                          className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white pr-10"
+                          className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white pr-10"
                         />
                         <button
                           type="button"
@@ -599,7 +599,7 @@ const AdminProfile = () => {
                       </button>
                       <button
                         onClick={() => setShowPasswordForm(false)}
-                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-sm transition"
+                        className="px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition"
                       >
                         Cancel
                       </button>
@@ -610,7 +610,7 @@ const AdminProfile = () => {
             </div>
 
             {/* Account Info Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm">
+            <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm">
               <div className="p-6">
                 <div className="flex items-center space-x-2 mb-4">
                   <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -620,7 +620,7 @@ const AdminProfile = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-700">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-800">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       User ID
                     </span>
@@ -629,7 +629,7 @@ const AdminProfile = () => {
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-700">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-800">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       Email
                     </span>
@@ -638,7 +638,7 @@ const AdminProfile = () => {
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-700">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-800">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       Phone Number
                     </span>
@@ -647,7 +647,7 @@ const AdminProfile = () => {
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-700">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-800">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       Account Status
                     </span>
@@ -656,7 +656,7 @@ const AdminProfile = () => {
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-700">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-800">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       Newsletter
                     </span>
@@ -667,7 +667,7 @@ const AdminProfile = () => {
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-700">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-800">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                       Store Access
                     </span>

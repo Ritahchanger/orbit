@@ -4,7 +4,7 @@ const AdminConsultationHeader = ({ refetch, exportData, filteredConsultations, c
     return (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-500 dark:to-[#00D4FF] bg-clip-text text-transparent">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                     Booking Management
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-1">Manage and track all gaming setup consultations</p>
@@ -13,7 +13,7 @@ const AdminConsultationHeader = ({ refetch, exportData, filteredConsultations, c
             <div className="flex items-center space-x-3">
                 <button
                     onClick={() => refetch()}
-                    className="p-2 rounded-sm bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
+                    className="p-2 rounded-sm bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors text-gray-700 dark:text-gray-300"
                     title="Refresh"
                 >
                     <RefreshCw className="h-5 w-5" />

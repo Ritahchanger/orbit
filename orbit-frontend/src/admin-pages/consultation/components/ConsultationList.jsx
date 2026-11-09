@@ -61,7 +61,7 @@ const ConsultationList = ({
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
         <div className="overflow-x-auto">
           <ConsultationListTable
             selectedConsultations={selectedConsultations}
@@ -79,7 +79,7 @@ const ConsultationList = ({
         {/* Empty State */}
         {filteredConsultations.length === 0 && (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-50 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-2">
+            <div className="w-16 h-16 bg-gray-50 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-2">
               <Calendar className="h-8 w-8 text-gray-400 dark:text-gray-500" />
             </div>
             <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -108,9 +108,9 @@ const ConsultationList = ({
 
           {/* Modal */}
           <div className="flex min-h-full items-center justify-center p-4">
-            <div className="relative w-full max-w-[500px] bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 shadow-xl">
+            <div className="relative w-full max-w-[500px] bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 shadow-xl">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-amber-100 dark:bg-amber-900/20 rounded-sm">
                     <AlertTriangle
@@ -129,7 +129,7 @@ const ConsultationList = ({
                 </div>
                 <button
                   onClick={closeCancelModal}
-                  className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                  className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                   disabled={isCancelling}
                 >
                   <X size={18} className="text-gray-500 dark:text-gray-400" />
@@ -143,7 +143,7 @@ const ConsultationList = ({
                     Are you sure you want to cancel this booking?
                   </p>
 
-                  <div className="bg-gray-50 dark:bg-gray-700/50 rounded-sm p-4 mb-4 border border-gray-200 dark:border-gray-600">
+                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-sm p-4 mb-4 border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center mb-3">
                       <div className="shrink-0 h-8 w-8 bg-linear-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
                         {bookingToCancel.customerName.charAt(0)}
@@ -199,7 +199,7 @@ const ConsultationList = ({
                       onChange={(e) => setCancellationReason(e.target.value)}
                       placeholder="Please provide a reason for cancellation..."
                       rows="3"
-                      className="w-full px-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors text-sm resize-none"
+                      className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors text-sm resize-none"
                       required
                     />
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -228,14 +228,14 @@ const ConsultationList = ({
                   <button
                     onClick={closeCancelModal}
                     disabled={isCancelling}
-                    className="px-4 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-sm transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Go Back
                   </button>
                   <button
                     onClick={handleCancelBooking}
                     disabled={isCancelling || !cancellationReason.trim()}
-                    className="px-4 py-2.5 bg-linear-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 hover:from-red-700 hover:to-red-800 dark:hover:from-red-600 dark:hover:to-red-700 text-white rounded-sm transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-sm transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     {isCancelling ? (
                       <>

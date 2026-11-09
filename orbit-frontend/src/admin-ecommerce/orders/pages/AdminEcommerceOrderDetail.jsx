@@ -33,7 +33,7 @@ const formatDate = (date) => {
 };
 
 const InfoCard = ({ title, children }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
     <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">{title}</h3>
     <div className="space-y-1.5 text-sm text-gray-700 dark:text-gray-300">{children}</div>
   </div>
@@ -58,10 +58,10 @@ const ShippingCard = ({ address }) => (
 );
 
 const LineItemsTable = ({ items, currency }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead className="bg-gray-50 dark:bg-gray-900/50">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+        <thead className="bg-gray-50 dark:bg-gray-950/50">
           <tr>
             {["Item", "SKU", "Unit Price", "Qty", "Subtotal"].map((head) => (
               <th
@@ -73,7 +73,7 @@ const LineItemsTable = ({ items, currency }) => (
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
           {(items || []).map((item, index) => (
             <tr key={index}>
               <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white">
@@ -100,7 +100,7 @@ const LineItemsTable = ({ items, currency }) => (
 );
 
 const TotalsBreakdown = ({ order }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
     <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Totals</h3>
     <div className="space-y-1.5 text-sm">
       <div className="flex justify-between text-gray-600 dark:text-gray-400">
@@ -121,7 +121,7 @@ const TotalsBreakdown = ({ order }) => (
           <span>-{formatCurrency(order.discount, order.currency)}</span>
         </div>
       )}
-      <div className="flex justify-between text-base font-semibold text-gray-900 dark:text-white pt-2 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex justify-between text-base font-semibold text-gray-900 dark:text-white pt-2 border-t border-gray-200 dark:border-gray-800">
         <span>Total</span>
         <span>{formatCurrency(order.total, order.currency)}</span>
       </div>
@@ -186,7 +186,7 @@ const StatusUpdateControl = ({ currentStatus, orderId }) => {
           value={selected}
           onChange={(e) => setSelected(e.target.value)}
           disabled={updateStatusMutation.isPending}
-          className="flex-1 px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white disabled:opacity-50"
+          className="flex-1 px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white disabled:opacity-50"
         >
           {STATUS_OPTIONS.map((status) => (
             <option key={status} value={status} className="capitalize">
@@ -219,7 +219,7 @@ const OrderDetailErrorState = ({ message, onRetry }) => (
 );
 
 const OrderNotFound = () => (
-  <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
+  <div className="bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-8 text-center">
     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Order not found</h3>
     <p className="text-gray-600 dark:text-gray-400">
       This order may have been removed or the link is incorrect.
@@ -236,7 +236,7 @@ const AdminEcommerceOrderDetail = () => {
 
   return (
     <AdminEcommerceLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
         <button
           onClick={() => navigate("/admin/ecommerce/orders")}
           className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4"

@@ -759,7 +759,7 @@ const POSPaymentModal = () => {
           <Users size={12} />
           <span>Multi-Session</span>
         </div>
-        <div className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-sm">
+        <div className="px-2 py-1 bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 rounded-sm">
           Session {activeSessions.indexOf(currentSessionId) + 1} of{" "}
           {activeSessions.length}
         </div>
@@ -777,7 +777,7 @@ const POSPaymentModal = () => {
 
       {/* Modal Container */}
       <div className="absolute inset-0 flex items-center justify-center p-0">
-        <div className="bg-white dark:bg-gray-900 w-full max-w-10xl h-screen rounded-sm overflow-hidden flex flex-col shadow-2xl">
+        <div className="bg-white dark:bg-gray-950 w-full max-w-10xl h-screen rounded-sm overflow-hidden flex flex-col shadow-2xl">
           {/* Header */}
           <div className="bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 p-5 py-3 text-white">
             <div className="flex items-center justify-between">

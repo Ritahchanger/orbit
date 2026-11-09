@@ -259,7 +259,7 @@ const InventoryPage = () => {
 
   return (
     <AdminLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-4 sm:p-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
           <div>
@@ -306,7 +306,7 @@ const InventoryPage = () => {
             <button
               onClick={() => refetchInventory()}
               disabled={isLoading || !hasStore}
-              className="flex items-center gap-2 px-4 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-sm transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-900 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-sm transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw
                 size={18}
@@ -334,7 +334,7 @@ const InventoryPage = () => {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-sm transition-colors font-medium text-sm whitespace-nowrap ${
                   activeTab === tab.id
                     ? "bg-blue-600 text-white shadow-md"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                    : "bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800"
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 <Icon size={18} />
@@ -357,7 +357,7 @@ const InventoryPage = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by product name, SKU, or brand..."
-                className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
+                className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
                 disabled={!hasStore}
               />
             </div>
@@ -367,7 +367,7 @@ const InventoryPage = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm px-3 py-2.5 text-gray-900 dark:text-gray-100 min-w-[160px] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm px-3 py-2.5 text-gray-900 dark:text-gray-100 min-w-[160px] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               disabled={!hasStore}
             >
               {categories.map((category) => (
@@ -378,7 +378,7 @@ const InventoryPage = () => {
             </select>
 
             <button
-              className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-700 dark:text-gray-200 font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-700 dark:text-gray-200 font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={!hasStore}
             >
               <Filter size={18} />
@@ -427,7 +427,7 @@ const InventoryPage = () => {
 
         {/* No Store Selected */}
         {!hasStore && !isLoading && (
-          <div className="mb-6 p-8 text-center bg-gray-100 dark:bg-gray-800/40 rounded-sm border border-gray-200 dark:border-gray-700">
+          <div className="mb-6 p-8 text-center bg-gray-100 dark:bg-gray-900/40 rounded-sm border border-gray-200 dark:border-gray-800">
             <Package className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               No Store Selected

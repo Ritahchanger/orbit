@@ -201,7 +201,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white dark:bg-gray-800 p-3 rounded-sm shadow-lg border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-900 p-3 rounded-sm shadow-lg border border-gray-200 dark:border-gray-800">
           <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
             {payload[0]?.payload?.fullName || label}
           </p>
@@ -222,10 +222,10 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
 
   return (
     <div
-      className={`space-y-4 ${isFullscreen ? "fixed inset-0 z-50 bg-white dark:bg-gray-900 p-4 overflow-auto" : ""}`}
+      className={`space-y-4 ${isFullscreen ? "fixed inset-0 z-50 bg-white dark:bg-gray-950 p-4 overflow-auto" : ""}`}
     >
       {/* Header with Controls */}
-      <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-sm">
@@ -244,21 +244,21 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setShowControls(!showControls)}
-              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
               title="Toggle Controls"
             >
               <Layers className="h-4 w-4" />
             </button>
             <button
               onClick={onRefresh}
-              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
               title="Refresh Data"
             >
               <RefreshCw className="h-4 w-4" />
             </button>
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
               title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
             >
               {isFullscreen ? (
@@ -267,7 +267,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
                 <Maximize2 className="h-4 w-4" />
               )}
             </button>
-            <button className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm">
+            <button className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm">
               <Download className="h-4 w-4" />
             </button>
           </div>
@@ -275,7 +275,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
 
         {/* Control Panel */}
         {showControls && (
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
                 <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
@@ -284,7 +284,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
                 <select
                   value={viewType}
                   onChange={(e) => setViewType(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
                 >
                   <option value="performance">Performance Analysis</option>
                   <option value="distribution">Category Distribution</option>
@@ -301,7 +301,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
                 <select
                   value={chartType}
                   onChange={(e) => setChartType(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
                   disabled={viewType === "treemap" || viewType === "radar"}
                 >
                   <option value="bar">Bar Chart</option>
@@ -320,7 +320,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
                 <select
                   value={selectedMetric}
                   onChange={(e) => setSelectedMetric(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
                 >
                   <option value="revenue">Revenue</option>
                   <option value="profit">Profit</option>
@@ -335,7 +335,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
                   <button className="px-3 py-2 bg-blue-600 text-white text-sm rounded-sm hover:bg-blue-700">
                     Apply
                   </button>
-                  <button className="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-sm hover:bg-gray-200 dark:hover:bg-gray-600">
+                  <button className="px-3 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-sm hover:bg-gray-200 dark:hover:bg-gray-700">
                     Reset
                   </button>
                 </div>
@@ -346,7 +346,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
       </div>
 
       {/* Main Visualization Area */}
-      <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
         <div className="h-[500px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             {viewType === "performance" &&
@@ -530,7 +530,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
 
       {/* Summary Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-sm">
               <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -547,7 +547,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-sm">
               <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-400" />
@@ -564,7 +564,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-sm">
               <ShoppingCart className="h-5 w-5 text-purple-600 dark:text-purple-400" />
@@ -581,7 +581,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-sm">
               <Archive className="h-5 w-5 text-orange-600 dark:text-orange-400" />
@@ -600,7 +600,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
       </div>
 
       {/* Category Breakdown */}
-      <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
         <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
           <PieChart className="h-4 w-4 mr-2 text-blue-500" />
           Category Performance Breakdown
@@ -609,13 +609,13 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
           {categoryData.slice(0, 6).map((cat, index) => (
             <div
               key={cat.category}
-              className="border border-gray-200 dark:border-gray-700 rounded-sm p-3"
+              className="border border-gray-200 dark:border-gray-800 rounded-sm p-3"
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="font-medium text-gray-900 dark:text-white">
                   {cat.category}
                 </span>
-                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full">
+                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-full">
                   {cat.count} products
                 </span>
               </div>
@@ -642,7 +642,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
                   </span>
                   <span className="font-medium">{formatNumber(cat.units)}</span>
                 </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 mt-2">
                   <div
                     className="bg-blue-600 h-1.5 rounded-full"
                     style={{
@@ -702,7 +702,7 @@ const ScatterTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-white dark:bg-gray-800 p-3 rounded-sm shadow-lg border border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-900 p-3 rounded-sm shadow-lg border border-gray-200 dark:border-gray-800">
         <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
           {data.name}
         </p>

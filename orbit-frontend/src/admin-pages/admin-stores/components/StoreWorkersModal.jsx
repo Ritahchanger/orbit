@@ -128,13 +128,13 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
       <div className="fixed inset-0 z-[60] overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4">
           <div
-            className={`relative w-full max-w-4xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-2xl transform transition-all duration-300 ${
+            className={`relative w-full max-w-4xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-2xl transform transition-all duration-300 ${
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-sm bg-blue-100 dark:bg-blue-500/20">
                   <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -150,14 +150,14 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
               </div>
               <button
                 onClick={onClose}
-                className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
               >
                 <X size={18} />
               </button>
             </div>
 
             {/* Stats Summary */}
-            <div className="grid grid-cols-3 gap-3 p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+            <div className="grid grid-cols-3 gap-3 p-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
               <div className="text-center p-2 bg-purple-100 dark:bg-purple-500/10 rounded-sm">
                 <span className="text-xs text-purple-600 dark:text-purple-400 block">
                   Managers
@@ -185,7 +185,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
             </div>
 
             {/* Search and Filter */}
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="p-4 border-b border-gray-200 dark:border-gray-800">
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* Search */}
                 <div className="flex-1 relative">
@@ -198,7 +198,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
                       setSearchQuery(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className="w-full pl-9 pr-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-9 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
 
@@ -209,7 +209,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
                     setWorkerFilter(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">All Roles</option>
                   <option value="manager">Managers</option>
@@ -220,7 +220,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
                 {/* Refresh Button */}
                 <button
                   onClick={() => refetchWorkers()}
-                  className="px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-sm transition-colors"
+                  className="px-3 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition-colors"
                   title="Refresh"
                 >
                   <RefreshCw
@@ -240,7 +240,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
                     .map((_, i) => (
                       <div
                         key={i}
-                        className="animate-pulse bg-gray-200 dark:bg-gray-700 h-20 rounded-sm"
+                        className="animate-pulse bg-gray-200 dark:bg-gray-800 h-20 rounded-sm"
                       ></div>
                     ))}
                 </div>
@@ -259,7 +259,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
                   {paginatedWorkers.map((worker) => (
                     <div
                       key={worker._id}
-                      className="p-4 bg-white dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-sm hover:shadow-md transition-all"
+                      className="p-4 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm hover:shadow-md transition-all"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-3">
@@ -270,7 +270,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
                               className="w-10 h-10 rounded-full object-cover"
                             />
                           ) : (
-                            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                               <UserCircle className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                             </div>
                           )}
@@ -351,7 +351,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
 
                       {/* Store-specific role */}
                       {worker.storeRole && worker.storeRole !== worker.role && (
-                        <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-600 flex items-center gap-2">
+                        <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center gap-2">
                           <span className="text-xs text-gray-500 dark:text-gray-400">
                             Store role:
                           </span>
@@ -370,7 +370,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
 
             {/* Pagination */}
             {filteredWorkers.length > 0 && (
-              <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-800">
                 <div className="text-sm text-gray-600 dark:text-gray-400">
                   Showing {(currentPage - 1) * itemsPerPage + 1} -{" "}
                   {Math.min(currentPage * itemsPerPage, filteredWorkers.length)}{" "}
@@ -382,7 +382,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
                       setCurrentPage((prev) => Math.max(1, prev - 1))
                     }
                     disabled={currentPage === 1}
-                    className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronLeft size={16} />
                   </button>
@@ -394,7 +394,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
                       setCurrentPage((prev) => Math.min(totalPages, prev + 1))
                     }
                     disabled={currentPage === totalPages}
-                    className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronRight size={16} />
                   </button>
@@ -403,7 +403,7 @@ const StoreWorkersModal = ({ isOpen, onClose, store }) => {
             )}
 
             {/* Footer */}
-            <div className="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex justify-end p-4 border-t border-gray-200 dark:border-gray-800">
               <button
                 onClick={onClose}
                 className="px-4 py-2 text-sm bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 rounded-sm transition-colors"

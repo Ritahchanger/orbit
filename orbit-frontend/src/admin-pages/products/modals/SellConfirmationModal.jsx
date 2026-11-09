@@ -149,13 +149,13 @@ const SaleConfirmationModal = ({
                 >
                     <div
                         ref={modalRef}
-                        className={`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-2xl transition-all duration-200 ${isMaximized
+                        className={`bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-2xl transition-all duration-200 ${isMaximized
                             ? 'w-[95vw] h-[95vh]'
                             : 'w-full max-w-[580px] max-h-[90vh]'
                             }`}
                     >
                         {/* Header with drag handle */}
-                        <div className="drag-handle border-b border-gray-200 dark:border-gray-800 p-4 cursor-move select-none hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors active:cursor-grabbing">
+                        <div className="drag-handle border-b border-gray-200 dark:border-gray-800 p-4 cursor-move select-none hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors active:cursor-grabbing">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
                                     <div className="w-10 h-10 bg-primary/20 dark:bg-primary/20 rounded-lg flex items-center justify-center">
@@ -191,7 +191,7 @@ const SaleConfirmationModal = ({
                             {/* Loading overlay */}
                             {isPending && (
                                 <div className="absolute inset-0 bg-black/70 dark:bg-black/80 z-10 flex items-center justify-center rounded-lg">
-                                    <div className="bg-white dark:bg-gray-900 p-6 rounded-lg flex flex-col items-center space-y-4 shadow-xl">
+                                    <div className="bg-white dark:bg-gray-950 p-6 rounded-lg flex flex-col items-center space-y-4 shadow-xl">
                                         <Loader2 className="h-12 w-12 text-primary dark:text-primary animate-spin" />
                                         <p className="text-gray-900 dark:text-white font-medium">Processing sale...</p>
                                         <p className="text-gray-500 dark:text-gray-400 text-sm">Updating inventory and recording transaction</p>
@@ -215,7 +215,7 @@ const SaleConfirmationModal = ({
                             )}
 
                             {/* Product Details */}
-                            <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg">
+                            <div className="bg-gray-50 dark:bg-gray-950/50 p-4 rounded-lg">
                                 <div className="flex items-center space-x-3 mb-4">
                                     <Package className="h-5 w-5 text-primary dark:text-primary" />
                                     <h4 className="text-gray-900 dark:text-white font-medium">Product Details</h4>
@@ -227,7 +227,7 @@ const SaleConfirmationModal = ({
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">SKU</p>
-                                        <code className="text-gray-900 dark:text-white font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">{product.sku}</code>
+                                        <code className="text-gray-900 dark:text-white font-mono bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded">{product.sku}</code>
                                     </div>
                                     <div className="space-y-1">
                                         <p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">Quantity</p>
@@ -246,7 +246,7 @@ const SaleConfirmationModal = ({
                             </div>
 
                             {/* Customer Details */}
-                            <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg">
+                            <div className="bg-gray-50 dark:bg-gray-950/50 p-4 rounded-lg">
                                 <div className="flex items-center space-x-3 mb-4">
                                     <User className="h-5 w-5 text-blue-600 dark:text-blue-500" />
                                     <h4 className="text-gray-900 dark:text-white font-medium">Customer Details</h4>
@@ -268,7 +268,7 @@ const SaleConfirmationModal = ({
                             </div>
 
                             {/* Payment Details */}
-                            <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg">
+                            <div className="bg-gray-50 dark:bg-gray-950/50 p-4 rounded-lg">
                                 <div className="flex items-center space-x-3 mb-4">
                                     <CreditCard className="h-5 w-5 text-green-600 dark:text-green-500" />
                                     <h4 className="text-gray-900 dark:text-white font-medium">Payment Details</h4>
@@ -276,7 +276,7 @@ const SaleConfirmationModal = ({
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                                     <div className="space-y-1">
                                         <p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">Method</p>
-                                        <p className="text-gray-900 dark:text-white font-medium text-base capitalize px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg inline-block">
+                                        <p className="text-gray-900 dark:text-white font-medium text-base capitalize px-3 py-1.5 bg-gray-100 dark:bg-gray-900 rounded-lg inline-block">
                                             {saleData.paymentMethod === 'mpesa' ? 'M-Pesa' :
                                                 saleData.paymentMethod === 'cash' ? 'Cash' :
                                                     saleData.paymentMethod === 'paybill' ? 'PayBill' :
@@ -295,7 +295,7 @@ const SaleConfirmationModal = ({
                                 {saleData.notes && (
                                     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
                                         <p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider mb-2">Notes</p>
-                                        <p className="text-gray-700 dark:text-gray-300 text-sm italic bg-gray-100 dark:bg-gray-800/50 p-3 rounded-lg">
+                                        <p className="text-gray-700 dark:text-gray-300 text-sm italic bg-gray-100 dark:bg-gray-900/50 p-3 rounded-lg">
                                             {saleData.notes}
                                         </p>
                                     </div>
@@ -303,7 +303,7 @@ const SaleConfirmationModal = ({
                             </div>
 
                             {/* Total Summary */}
-                            <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 p-6 rounded-lg border border-gray-300 dark:border-gray-700">
+                            <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-950 p-6 rounded-lg border border-gray-300 dark:border-gray-800">
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
                                     <div className="flex items-center space-x-3 mb-4 sm:mb-0">
                                         <DollarSign className="h-6 w-6 text-yellow-600 dark:text-yellow-500" />
@@ -317,7 +317,7 @@ const SaleConfirmationModal = ({
                                     </span>
                                 </div>
 
-                                <div className="space-y-3 text-sm bg-gray-200/50 dark:bg-gray-800/30 p-4 rounded-lg">
+                                <div className="space-y-3 text-sm bg-gray-200/50 dark:bg-gray-900/30 p-4 rounded-lg">
                                     <div className="flex justify-between items-center">
                                         <span className="text-gray-600 dark:text-gray-400">Subtotal:</span>
                                         <span className="text-gray-900 dark:text-white font-medium">KSh {totals?.subtotal?.toLocaleString() || '0'}</span>
@@ -330,7 +330,7 @@ const SaleConfirmationModal = ({
                                             </span>
                                         </div>
                                     )}
-                                    <div className="flex justify-between items-center pt-3 border-t border-gray-300 dark:border-gray-700">
+                                    <div className="flex justify-between items-center pt-3 border-t border-gray-300 dark:border-gray-800">
                                         <div>
                                             <span className="text-gray-700 dark:text-gray-300 font-medium">Stock After Sale:</span>
                                             <p className="text-gray-500 dark:text-gray-500 text-xs">
@@ -368,13 +368,13 @@ const SaleConfirmationModal = ({
                         </div>
 
                         {/* Footer */}
-                        <div className="border-t border-gray-200 dark:border-gray-800 p-4 bg-gray-50 dark:bg-gray-900/50">
+                        <div className="border-t border-gray-200 dark:border-gray-800 p-4 bg-gray-50 dark:bg-gray-950/50">
                             <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
                                 <div className="flex space-x-3">
                                     <button
                                         onClick={onClose}
                                         disabled={isPending}
-                                        className="px-5 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm flex items-center space-x-2 transition-colors disabled:opacity-50"
+                                        className="px-5 py-2 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm flex items-center space-x-2 transition-colors disabled:opacity-50"
                                     >
                                         <XCircle size={16} />
                                         <span>Cancel</span>
@@ -383,7 +383,7 @@ const SaleConfirmationModal = ({
                                     <button
                                         onClick={onClose}
                                         disabled={isPending}
-                                        className="px-5 py-2 text-gray-700 dark:text-gray-300 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-600 dark:to-emerald-600 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-700 dark:hover:to-emerald-700 hover:text-gray-900 dark:hover:text-white rounded-sm transition-colors disabled:opacity-50"
+                                        className="px-5 py-2 text-gray-700 dark:text-gray-300 bg-green-600 hover:bg-green-700 hover:text-gray-900 dark:hover:text-white rounded-sm transition-colors disabled:opacity-50"
                                     >
                                         Edit Details
                                     </button>
@@ -391,7 +391,7 @@ const SaleConfirmationModal = ({
                                     <button
                                         onClick={handleConfirmSale}
                                         disabled={isPending}
-                                        className="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-600 dark:to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:hover:from-green-700 dark:hover:to-emerald-700 text-white rounded-sm font-medium flex items-center space-x-2 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-sm font-medium flex items-center space-x-2 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isPending ? (
                                             <>

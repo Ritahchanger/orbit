@@ -345,7 +345,7 @@ const SalesReport = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-3">
+      <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-3">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             {/* Period Filters */}
@@ -357,7 +357,7 @@ const SalesReport = () => {
                   className={`px-2.5 py-1 text-xs rounded-sm ${
                     selectedPeriod === period.value
                       ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
                   }`}
                 >
                   {period.label}
@@ -366,7 +366,7 @@ const SalesReport = () => {
             </div>
 
             {/* Store Display (Read-only) */}
-            <div className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <div className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
               <span className="font-medium">{getCurrentStoreDisplay()}</span>
             </div>
 
@@ -376,7 +376,7 @@ const SalesReport = () => {
             </div>
           </div>
 
-          <button className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-sm text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <button className="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-700 rounded-sm text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
             <Filter className="h-3.5 w-3.5 mr-1.5" />
             Advanced Filters
           </button>
@@ -392,7 +392,7 @@ const SalesReport = () => {
           return (
             <div
               key={index}
-              className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4"
+              className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4"
             >
               <div className="flex items-center justify-between mb-3">
                 <div
@@ -452,7 +452,7 @@ const SalesReport = () => {
       {/* Monthly & Today Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Today's Summary */}
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-base font-semibold text-gray-900 dark:text-white">
               Today's Performance
@@ -509,7 +509,7 @@ const SalesReport = () => {
         </div>
 
         {/* Monthly Summary */}
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-base font-semibold text-gray-900 dark:text-white">
               {monthlyData.monthName || "Current Month"} Summary
@@ -555,7 +555,7 @@ const SalesReport = () => {
                   {formatCurrency(monthlySummaryData.averageTransaction || 0)}
                 </span>
               </div>
-              <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="pt-3 border-t border-gray-200 dark:border-gray-800">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   Date Range: {monthlyData.dateRange?.start || ""} to{" "}
                   {monthlyData.dateRange?.end || ""}
@@ -573,8 +573,8 @@ const SalesReport = () => {
       </div>
 
       {/* Recent Sales Table with Pagination */}
-      <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 className="text-base font-semibold text-gray-900 dark:text-white">
@@ -596,7 +596,7 @@ const SalesReport = () => {
                 <select
                   value={pagination.limit}
                   onChange={(e) => handleLimitChange(e.target.value)}
-                  className="text-sm border border-gray-300 dark:border-gray-600 rounded-sm px-2 py-1 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                  className="text-sm border border-gray-300 dark:border-gray-700 rounded-sm px-2 py-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                 >
                   <option value="5">5</option>
                   <option value="10">10</option>
@@ -620,8 +620,8 @@ const SalesReport = () => {
         ) : salesArray.length > 0 ? (
           <>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-700">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+                <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Date
@@ -643,11 +643,11 @@ const SalesReport = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                   {salesArray.map((sale, index) => (
                     <tr
                       key={`${sale._id}-${index}`}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
                       <td className="px-4 py-3 font-medium text-gray-500 dark:text-gray-300  whitespace-nowrap text-sm">
                         {formatDate(sale.saleDate || sale.createdAt)}
@@ -674,7 +674,7 @@ const SalesReport = () => {
             </div>
 
             {/* Pagination Controls */}
-            <div className="border-t border-gray-200 dark:border-gray-700">
+            <div className="border-t border-gray-200 dark:border-gray-800">
               <div className="flex flex-col sm:flex-row items-center justify-between px-4 py-3">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-0">
                   Showing{" "}
@@ -705,7 +705,7 @@ const SalesReport = () => {
                     className={`p-2 rounded-sm ${
                       pagination.page === 1
                         ? "text-gray-400 dark:text-gray-600 cursor-not-allowed"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     }`}
                   >
                     <ChevronsLeft className="h-4 w-4" />
@@ -718,7 +718,7 @@ const SalesReport = () => {
                     className={`p-2 rounded-sm ${
                       pagination.page === 1
                         ? "text-gray-400 dark:text-gray-600 cursor-not-allowed"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     }`}
                   >
                     <ChevronLeft className="h-4 w-4" />
@@ -733,7 +733,7 @@ const SalesReport = () => {
                         className={`min-w-[32px] h-8 flex items-center justify-center rounded-sm text-sm ${
                           pagination.page === pageNum
                             ? "bg-primary-600 text-white"
-                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                         }`}
                       >
                         {pageNum}
@@ -748,7 +748,7 @@ const SalesReport = () => {
                     className={`p-2 rounded-sm ${
                       pagination.page === pagination.totalPages
                         ? "text-gray-400 dark:text-gray-600 cursor-not-allowed"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     }`}
                   >
                     <ChevronRight className="h-4 w-4" />
@@ -761,7 +761,7 @@ const SalesReport = () => {
                     className={`p-2 rounded-sm ${
                       pagination.page === pagination.totalPages
                         ? "text-gray-400 dark:text-gray-600 cursor-not-allowed"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     }`}
                   >
                     <ChevronsRight className="h-4 w-4" />
@@ -782,7 +782,7 @@ const SalesReport = () => {
 
       {/* Insights & Recommendations */}
       {trendItems.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
           <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
             Insights & Recommendations
           </h3>

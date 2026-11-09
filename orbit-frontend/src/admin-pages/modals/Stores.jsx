@@ -8,14 +8,14 @@ const Stores = ({ stores, handleStoreSelect, selectedStore }) => {
                     onClick={() => handleStoreSelect(store)}
                     className={`p-5 border-2 rounded-sm cursor-pointer transition-all duration-200 hover:shadow-lg ${selectedStore?._id === store._id
                         ? 'border-blue-500 dark:border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-500/30'
-                        : 'border-gray-300 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700 bg-white dark:bg-gray-800'
+                        : 'border-gray-300 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 bg-white dark:bg-gray-900'
                         }`}
                 >
                     <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                             <div className={`p-3 rounded-lg ${selectedStore?._id === store._id
                                 ? 'bg-blue-100 dark:bg-blue-800'
-                                : 'bg-gray-100 dark:bg-gray-700'
+                                : 'bg-gray-100 dark:bg-gray-800'
                                 }`}>
                                 <Building className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                             </div>

@@ -274,7 +274,7 @@ const AdminAllProducts = ({
   // Show a message if user has no permissions at all
   if (!canViewProducts && !canManageProducts && userRole !== "superadmin") {
     return (
-      <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
+      <div className="bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-8 text-center">
         <div className="flex flex-col items-center justify-center space-y-4">
           <Package className="h-16 w-16 text-gray-400 dark:text-gray-500" />
           <h3 className="text-base font-medium text-gray-700 dark:text-gray-300">
@@ -292,13 +292,13 @@ const AdminAllProducts = ({
   return (
     <>
       <div
-        className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm overflow-hidden"
+        className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm overflow-hidden"
         id="all-products"
       >
         <div className="overflow-x-auto">
           <table className="w-full ">
             <thead>
-              <tr className="bg-gray-100 dark:bg-gray-900/50">
+              <tr className="bg-gray-100 dark:bg-gray-950/50">
                 <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[60px]">
                   Image
                 </th>
@@ -351,7 +351,7 @@ const AdminAllProducts = ({
                 return (
                   <tr
                     key={product._id}
-                    className={`border-t border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 ${
+                    className={`border-t border-gray-300 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/30 ${
                       isSelected
                         ? "bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 dark:border-blue-400"
                         : ""
@@ -365,7 +365,7 @@ const AdminAllProducts = ({
                             onClick={() =>
                               handleImageClick(imageUrl, product.name)
                             }
-                            className="group relative w-12 h-12 overflow-hidden rounded-sm border border-gray-300 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-200"
+                            className="group relative w-12 h-12 overflow-hidden rounded-sm border border-gray-300 dark:border-gray-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-200"
                             title="Click to view image"
                           >
                             <img
@@ -382,7 +382,7 @@ const AdminAllProducts = ({
                             </div>
                           </button>
                         ) : (
-                          <div className="w-12 h-12 rounded-sm border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-sm border border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-950 flex items-center justify-center">
                             <ImageIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                           </div>
                         )}
@@ -529,7 +529,7 @@ const AdminAllProducts = ({
                 <tr>
                   <td
                     colSpan={canManageProducts ? 10 : 9}
-                    className="py-4 px-4 bg-gray-50 dark:bg-gray-900/30"
+                    className="py-4 px-4 bg-gray-50 dark:bg-gray-950/30"
                   >
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -559,8 +559,8 @@ const AdminAllProducts = ({
                           disabled={pagination.page <= 1}
                           className={`px-3 py-1 text-sm border rounded-sm transition-colors ${
                             pagination.page <= 1
-                              ? "border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-not-allowed bg-gray-50 dark:bg-gray-800"
-                              : "border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                              ? "border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed bg-gray-50 dark:bg-gray-900"
+                              : "border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
                           }`}
                         >
                           Previous
@@ -594,7 +594,7 @@ const AdminAllProducts = ({
                                   className={`w-8 h-8 text-sm rounded-sm transition-colors ${
                                     pagination.page === pageNum
                                       ? "bg-blue-600 dark:bg-blue-500 text-white"
-                                      : "border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                      : "border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
                                   }`}
                                 >
                                   {pageNum}
@@ -612,8 +612,8 @@ const AdminAllProducts = ({
                           disabled={!pagination.hasNext}
                           className={`px-3 py-1 text-sm border rounded-sm transition-colors ${
                             !pagination.hasNext
-                              ? "border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-not-allowed bg-gray-50 dark:bg-gray-800"
-                              : "border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                              ? "border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed bg-gray-50 dark:bg-gray-900"
+                              : "border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
                           }`}
                         >
                           Next
@@ -631,7 +631,7 @@ const AdminAllProducts = ({
                             const newLimit = parseInt(e.target.value);
                             onPageChange(1, newLimit); // Reset to page 1 when changing limit
                           }}
-                          className="text-sm text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-sm px-2 py-1 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="text-sm text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-sm px-2 py-1 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           <option value={10}>10</option>
                           <option value={20}>20</option>
@@ -681,9 +681,9 @@ const AdminAllProducts = ({
 
           {/* Modal Content */}
           <div className="relative min-h-full flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-sm shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900 rounded-sm shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-gray-200 dark:border-gray-800">
               {/* Header */}
-              <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
+              <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex items-center justify-between">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
                     {selectedImage.title}
@@ -694,7 +694,7 @@ const AdminAllProducts = ({
                 </div>
                 <button
                   onClick={handleCloseImageModal}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                   aria-label="Close image preview"
                 >
                   <X className="h-5 w-5 text-gray-600 dark:text-gray-400" />
@@ -702,7 +702,7 @@ const AdminAllProducts = ({
               </div>
 
               {/* Image Content */}
-              <div className="p-6 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+              <div className="p-6 flex items-center justify-center bg-gray-50 dark:bg-gray-950">
                 <div className="relative max-h-[70vh] overflow-hidden rounded-sm">
                   <img
                     src={selectedImage.url}
@@ -717,10 +717,10 @@ const AdminAllProducts = ({
               </div>
 
               {/* Footer */}
-              <div className="border-t border-gray-200 dark:border-gray-700 px-6 py-4 bg-gray-50 dark:bg-gray-900 flex justify-between items-center">
+              <div className="border-t border-gray-200 dark:border-gray-800 px-6 py-4 bg-gray-50 dark:bg-gray-950 flex justify-between items-center">
                 <div className="text-sm text-gray-600 dark:text-gray-400">
                   Click outside image or press{" "}
-                  <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 ml-1">
+                  <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-900 rounded border border-gray-300 dark:border-gray-700 ml-1">
                     Esc
                   </kbd>{" "}
                   to close

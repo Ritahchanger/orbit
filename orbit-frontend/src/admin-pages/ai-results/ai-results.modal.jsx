@@ -156,13 +156,13 @@ const AIResultsModal = () => {
             if (inline) {
               return (
                 <code
-                  className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm font-mono"
+                  className="bg-gray-100 dark:bg-gray-900 px-1 py-0.5 rounded text-sm font-mono"
                   {...props}
                 />
               );
             }
             return (
-              <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4">
+              <pre className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto mb-4">
                 <code className="text-sm font-mono" {...props} />
               </pre>
             );
@@ -178,13 +178,13 @@ const AIResultsModal = () => {
           table: ({ node, ...props }) => (
             <div className="overflow-x-auto mb-4">
               <table
-                className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
+                className="min-w-full divide-y divide-gray-200 dark:divide-gray-800"
                 {...props}
               />
             </div>
           ),
           thead: ({ node, ...props }) => (
-            <thead className="bg-gray-50 dark:bg-gray-800" {...props} />
+            <thead className="bg-gray-50 dark:bg-gray-900" {...props} />
           ),
           th: ({ node, ...props }) => (
             <th
@@ -194,7 +194,7 @@ const AIResultsModal = () => {
           ),
           td: ({ node, ...props }) => (
             <td
-              className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border-t border-gray-200 dark:border-gray-700"
+              className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border-t border-gray-200 dark:border-gray-800"
               {...props}
             />
           ),
@@ -210,7 +210,7 @@ const AIResultsModal = () => {
           // Custom component for horizontal rules
           hr: ({ node, ...props }) => (
             <hr
-              className="my-6 border-t border-gray-200 dark:border-gray-700"
+              className="my-6 border-t border-gray-200 dark:border-gray-800"
               {...props}
             />
           ),
@@ -324,7 +324,7 @@ const AIResultsModal = () => {
           </div>
           {confidence && (
             <div
-              className={`px-3 py-1 rounded-full text-sm font-medium ${getConfidenceColor(confidence)} bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700`}
+              className={`px-3 py-1 rounded-full text-sm font-medium ${getConfidenceColor(confidence)} bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800`}
             >
               {getConfidenceBadge(confidence)}
             </div>
@@ -334,7 +334,7 @@ const AIResultsModal = () => {
         {/* Key Metrics Grid */}
         {metrics && (
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Total Sales
@@ -346,7 +346,7 @@ const AIResultsModal = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Total Profit
@@ -358,7 +358,7 @@ const AIResultsModal = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Transactions
@@ -370,7 +370,7 @@ const AIResultsModal = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Avg. Profit Margin
@@ -408,7 +408,7 @@ const AIResultsModal = () => {
               {insights.map((insight, index) => (
                 <div
                   key={index}
-                  className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow"
+                  className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow"
                 >
                   {typeof insight === "string" ? (
                     <p className="text-gray-800 dark:text-gray-200">
@@ -443,7 +443,7 @@ const AIResultsModal = () => {
               Store Overview
             </h4>
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+              <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   Total Customers
                 </p>
@@ -451,7 +451,7 @@ const AIResultsModal = () => {
                   {formatNumber(metrics.totalCustomers)}
                 </p>
               </div>
-              <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+              <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   Inventory Value
                 </p>
@@ -473,7 +473,7 @@ const AIResultsModal = () => {
               {insights.map((insight, index) => (
                 <div
                   key={index}
-                  className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+                  className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800"
                 >
                   {typeof insight === "string" ? (
                     <p className="text-gray-700 dark:text-gray-300">
@@ -530,7 +530,7 @@ const AIResultsModal = () => {
               return (
                 <div
                   key={index}
-                  className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow"
+                  className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-shadow"
                 >
                   <div className="flex items-start gap-3">
                     <div
@@ -638,7 +638,7 @@ const AIResultsModal = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-2xl bg-white dark:bg-gray-900 shadow-2xl z-[201] flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-2xl bg-white dark:bg-gray-950 shadow-2xl z-[201] flex flex-col"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
@@ -661,14 +661,14 @@ const AIResultsModal = () => {
                     // This would trigger re-analysis
                     console.log("Refresh analysis");
                   }}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                   title="Refresh analysis"
                 >
                   <RefreshCw className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                 </button>
                 <button
                   onClick={() => dispatch(closeAiResults())}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
                   title="Close"
                 >
                   <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
@@ -697,7 +697,7 @@ const AIResultsModal = () => {
             <div className="flex-1 overflow-y-auto p-6">{renderView()}</div>
 
             {/* Footer */}
-            <div className="p-6 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
+            <div className="p-6 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/50">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                   <Brain className="h-4 w-4" />
@@ -711,7 +711,7 @@ const AIResultsModal = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={handleExport}
-                    className="px-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 text-sm border border-gray-300 dark:border-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors flex items-center gap-2"
                   >
                     <Download className="h-4 w-4" />
                     Export

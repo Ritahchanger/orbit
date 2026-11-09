@@ -16,7 +16,7 @@ const ComposeTab = ({
     return (
         <div className="space-y-2">
             {/* Subject Input */}
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-sm border border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900/50 p-4 rounded-sm border border-gray-200 dark:border-gray-800">
                 <label className="block text-gray-900 dark:text-white font-medium mb-2">
                     Newsletter Subject
                 </label>
@@ -25,7 +25,7 @@ const ComposeTab = ({
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder="Enter newsletter subject..."
-                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-medium transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-medium transition-all"
                 />
                 <div className="flex items-center gap-2 mt-2 text-sm text-gray-600 dark:text-gray-400">
                     <AlertCircle size={14} />
@@ -34,7 +34,7 @@ const ComposeTab = ({
             </div>
 
             {/* Campaign ID */}
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-sm border border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900/50 p-4 rounded-sm border border-gray-200 dark:border-gray-800">
                 <div className="flex items-center justify-between mb-2">
                     <label className="block text-gray-900 dark:text-white font-medium">
                         Campaign ID
@@ -52,7 +52,7 @@ const ComposeTab = ({
                     value={campaignId}
                     onChange={(e) => setCampaignId(e.target.value)}
                     placeholder="CAMPAIGN-20240101-ABC123"
-                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                 />
                 <div className="flex items-center gap-2 mt-2 text-sm text-gray-600 dark:text-gray-400">
                     <Hash size={14} />
@@ -61,11 +61,11 @@ const ComposeTab = ({
             </div>
 
             {/* Editor */}
-            <div className="bg-white dark:bg-gray-800/50 rounded-sm border border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900/50 rounded-sm border border-gray-200 dark:border-gray-800">
                 <label className="block text-gray-900 dark:text-white px-4 pt-4 font-medium mb-2">
                     Newsletter Content
                 </label>
-                <div className="border border-gray-300 dark:border-gray-700 rounded-sm overflow-hidden">
+                <div className="border border-gray-300 dark:border-gray-800 rounded-sm overflow-hidden">
                     <SimpleEditor
                         initialContent={content}
                         onContentChange={handleContentChange}
@@ -75,7 +75,7 @@ const ComposeTab = ({
             </div>
 
             {/* Send Action */}
-            <div className="bg-white dark:bg-gray-800/50 p-4 rounded-sm border border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900/50 p-4 rounded-sm border border-gray-200 dark:border-gray-800">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="text-gray-600 dark:text-gray-400">
                         <p className="font-medium">Ready to send newsletter</p>
@@ -90,7 +90,7 @@ const ComposeTab = ({
                                 setContent('');
                                 setCampaignId('');
                             }}
-                            className="px-5 py-2.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-sm hover:border-yellow-500 hover:text-yellow-600 dark:hover:text-yellow-400 transition-all"
+                            className="px-5 py-2.5 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 rounded-sm hover:border-yellow-500 hover:text-yellow-600 dark:hover:text-yellow-400 transition-all"
                         >
                             Clear
                         </button>

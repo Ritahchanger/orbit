@@ -342,7 +342,7 @@ const AdminEcommerceDashboard = () => {
 
     if (!statsData)
       return (
-        <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
+        <div className="bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-8 text-center">
           <Package className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             No Statistics Available
@@ -351,13 +351,13 @@ const AdminEcommerceDashboard = () => {
       );
 
     return (
-      <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-6">
+      <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Product Statistics
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-sm">
+          <div className="bg-gray-50 dark:bg-gray-950 p-4 rounded-sm">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Total Stock
@@ -369,7 +369,7 @@ const AdminEcommerceDashboard = () => {
             </p>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-sm">
+          <div className="bg-gray-50 dark:bg-gray-950 p-4 rounded-sm">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Total Revenue
@@ -383,7 +383,7 @@ const AdminEcommerceDashboard = () => {
             </p>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-sm">
+          <div className="bg-gray-50 dark:bg-gray-950 p-4 rounded-sm">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Total Sold
@@ -397,7 +397,7 @@ const AdminEcommerceDashboard = () => {
             </p>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-sm">
+          <div className="bg-gray-50 dark:bg-gray-950 p-4 rounded-sm">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Average Price
@@ -419,7 +419,7 @@ const AdminEcommerceDashboard = () => {
               Category Statistics
             </h4>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+              <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-800">
                 <thead>
                   <tr>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
@@ -433,7 +433,7 @@ const AdminEcommerceDashboard = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-300 dark:divide-gray-700">
+                <tbody className="divide-y divide-gray-300 dark:divide-gray-800">
                   {statsData.categoryStats.map((catStat, index) => (
                     <tr key={index}>
                       <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white">
@@ -458,7 +458,7 @@ const AdminEcommerceDashboard = () => {
 
   return (
     <AdminEcommerceLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
         {/* Header */}
         <div className="flex items-start flex-col md:flex-row justify-between md:items-center mb-2">
           <div>
@@ -487,7 +487,7 @@ const AdminEcommerceDashboard = () => {
             <button
               onClick={handleRefresh}
               disabled={isLoading}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-lg"
+              className="flex items-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-900 hover:bg-gray-300 dark:hover:bg-gray-800 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-lg"
             >
               <span>Refresh</span>
             </button>
@@ -547,7 +547,7 @@ const AdminEcommerceDashboard = () => {
           !hasError &&
           products.length === 0 &&
           activeTab !== "stats" && (
-            <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
+            <div className="bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-8 text-center">
               <Package className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 No Products Found
@@ -567,7 +567,7 @@ const AdminEcommerceDashboard = () => {
                 {searchQuery.trim() && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="px-4 py-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-sm transition-colors"
+                    className="px-4 py-2 bg-gray-300 dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm transition-colors"
                   >
                     Clear Search
                   </button>
@@ -637,7 +637,7 @@ const AdminEcommerceDashboard = () => {
         )}
 
         {/* Info Bar */}
-        <div className="mt-6 pt-4 border-t border-gray-300 dark:border-gray-700">
+        <div className="mt-6 pt-4 border-t border-gray-300 dark:border-gray-800">
           <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-center space-x-2">
               <Globe

@@ -260,7 +260,7 @@ const AdminConsultation = () => {
   if (!canViewConsultations && userRole !== "superadmin") {
     return (
       <AdminLayout>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex items-center justify-center p-6">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white flex items-center justify-center p-6">
           <div className="text-center">
             <AlertCircle className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -289,7 +289,7 @@ const AdminConsultation = () => {
   if (error) {
     return (
       <AdminLayout>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white flex items-center justify-center p-6">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white flex items-center justify-center p-6">
           <div className="text-center">
             <AlertCircle className="h-12 w-12 text-rose-600 dark:text-rose-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -312,7 +312,7 @@ const AdminConsultation = () => {
 
   return (
     <AdminLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
         {/* Header */}
         <div className="mb-2">
           <AdminConsultationHeader
@@ -336,7 +336,7 @@ const AdminConsultation = () => {
                 className={`px-4 py-2 rounded-sm flex items-center gap-2 transition-colors text-sm font-medium ${
                   viewMode === "list"
                     ? "bg-blue-600 dark:bg-blue-500 text-white"
-                    : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+                    : "bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
                 <BarChart3 className="h-4 w-4" />
@@ -347,7 +347,7 @@ const AdminConsultation = () => {
                 className={`px-4 py-2 rounded-sm flex items-center gap-2 transition-colors text-sm font-medium ${
                   viewMode === "calendar"
                     ? "bg-blue-600 dark:bg-blue-500 text-white"
-                    : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+                    : "bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
                 <CalendarDays className="h-4 w-4" />
@@ -408,7 +408,7 @@ const AdminConsultation = () => {
                       }
                     }
                   }}
-                  className="px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 >
                   <option value="" className="text-gray-500 dark:text-gray-400">
                     Change Status

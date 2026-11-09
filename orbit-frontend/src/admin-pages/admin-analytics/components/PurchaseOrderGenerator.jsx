@@ -513,7 +513,7 @@ ${store.email}`;
 
   if (!lowStockAlerts?.length) {
     return (
-      <div className="p-6 bg-gray-100 dark:bg-gray-700/30 rounded-sm border border-gray-300 dark:border-gray-600">
+      <div className="p-6 bg-gray-100 dark:bg-gray-800/30 rounded-sm border border-gray-300 dark:border-gray-700">
         <div className="text-center">
           <ShoppingBag className="w-12 h-12 mx-auto text-gray-500 dark:text-gray-600 mb-4" />
           <p className="text-gray-600 dark:text-gray-400">No low stock items to generate purchase order</p>
@@ -525,7 +525,7 @@ ${store.email}`;
   return (
     <div className="space-y-6">
       {!purchaseOrder ? (
-        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-6">
+        <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-6">
           <div className="flex items-center gap-3 mb-6">
             <FileText className="w-8 h-8 text-blue-600 dark:text-blue-500" />
             <div>
@@ -535,7 +535,7 @@ ${store.email}`;
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-sm border border-gray-300 dark:border-gray-600">
+            <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-sm border border-gray-300 dark:border-gray-700">
               <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <Building size={16} />
                 Order Summary
@@ -561,7 +561,7 @@ ${store.email}`;
                     KES {purchaseOrderSummary?.vatAmount?.toLocaleString('en-KE') || '0'}
                   </span>
                 </div>
-                <div className="pt-2 border-t border-gray-300 dark:border-gray-700">
+                <div className="pt-2 border-t border-gray-300 dark:border-gray-800">
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400 font-medium">Total Amount:</span>
                     <span className="text-blue-600 dark:text-blue-500 font-bold text-lg">
@@ -573,7 +573,7 @@ ${store.email}`;
             </div>
 
             <div className="space-y-4">
-              <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-sm border border-gray-300 dark:border-gray-600">
+              <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-sm border border-gray-300 dark:border-gray-700">
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                   <User size={16} />
                   Supplier Information
@@ -586,7 +586,7 @@ ${store.email}`;
                 </div>
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-sm border border-gray-300 dark:border-gray-600">
+              <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-sm border border-gray-300 dark:border-gray-700">
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                   <Calendar size={16} />
                   Delivery Information
@@ -618,7 +618,7 @@ ${store.email}`;
           <button
             onClick={generatePurchaseOrder}
             disabled={isGenerating}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white font-semibold rounded-sm transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-sm transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isGenerating ? (
               <>
@@ -634,7 +634,7 @@ ${store.email}`;
           </button>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-6">
+        <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-3">
@@ -651,19 +651,19 @@ ${store.email}`;
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-gray-100 dark:bg-gray-700/50 p-4 rounded-sm border border-gray-300 dark:border-gray-600">
+            <div className="bg-gray-100 dark:bg-gray-800/50 p-4 rounded-sm border border-gray-300 dark:border-gray-700">
               <p className="text-gray-600 dark:text-gray-400 text-sm">Order Date</p>
               <p className="text-gray-900 dark:text-white font-medium">
                 {new Date(purchaseOrder.orderDate).toLocaleDateString('en-KE')}
               </p>
             </div>
-            <div className="bg-gray-100 dark:bg-gray-700/50 p-4 rounded-sm border border-gray-300 dark:border-gray-600">
+            <div className="bg-gray-100 dark:bg-gray-800/50 p-4 rounded-sm border border-gray-300 dark:border-gray-700">
               <p className="text-gray-600 dark:text-gray-400 text-sm">Expected Delivery</p>
               <p className="text-gray-900 dark:text-white font-medium">
                 {new Date(purchaseOrder.expectedDelivery).toLocaleDateString('en-KE')}
               </p>
             </div>
-            <div className="bg-gray-100 dark:bg-gray-700/50 p-4 rounded-sm border border-gray-300 dark:border-gray-600">
+            <div className="bg-gray-100 dark:bg-gray-800/50 p-4 rounded-sm border border-gray-300 dark:border-gray-700">
               <p className="text-gray-600 dark:text-gray-400 text-sm">Total Amount</p>
               <p className="text-blue-600 dark:text-blue-500 font-bold text-lg">
                 KES {purchaseOrder.summary.totalAmount.toLocaleString('en-KE')}

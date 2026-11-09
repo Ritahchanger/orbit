@@ -21,7 +21,7 @@ const QuickActionsCard = () => {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm">
+      <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm">
         <div className="p-6">
           <div className="flex items-center space-x-2 mb-4">
             <Settings className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
@@ -30,15 +30,15 @@ const QuickActionsCard = () => {
             </h3>
           </div>
           <div className="space-y-2">
-            <button className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition flex items-center justify-between group">
+            <button className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-950/50 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition flex items-center justify-between group">
               <span>View Activity Log</span>
               <Clock className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>
-            <button className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition flex items-center justify-between group">
+            <button className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-950/50 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition flex items-center justify-between group">
               <span>Export Data</span>
               <Download className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>
-            <button className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition flex items-center justify-between group">
+            <button className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-950/50 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition flex items-center justify-between group">
               <span>Privacy Settings</span>
               <Shield className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>

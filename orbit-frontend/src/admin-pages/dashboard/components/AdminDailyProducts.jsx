@@ -129,7 +129,7 @@ const AdminDailyProducts = ({
         <div className="overflow-x-auto" id="daily-items" ref={dailyItemsRef}>
           {/* Print Action Bar */}
           {itemsSold.length > 0 && (
-            <div className="no-print mb-4 p-3 bg-gray-100 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-sm mx-2 mt-2">
+            <div className="no-print mb-4 p-3 bg-gray-100 dark:bg-gray-900/50 border border-gray-300 dark:border-gray-800 rounded-sm mx-2 mt-2">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <Printer className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -150,7 +150,7 @@ const AdminDailyProducts = ({
           )}
 
           {/* Summary Stats Bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-gray-100 dark:bg-gray-800/30 border-b border-gray-200 dark:border-gray-700">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-gray-100 dark:bg-gray-900/30 border-b border-gray-200 dark:border-gray-800">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 dark:bg-blue-500/10 rounded-sm">
                 <Package className="h-4 w-4 text-blue-600 dark:text-blue-500" />
@@ -214,7 +214,7 @@ const AdminDailyProducts = ({
           {/* Original Table for Desktop */}
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-100 dark:bg-gray-800/50">
+              <tr className="bg-gray-100 dark:bg-gray-900/50">
                 <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   #
                 </th>
@@ -262,7 +262,7 @@ const AdminDailyProducts = ({
               {itemsSold.map((item, index) => (
                 <tr
                   key={`${item.productId}-${item.storeId || ""}-${index}`}
-                  className={`border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors 
+                  className={`border-t border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors 
                                         ${highlightFirstItem && index === 0 ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}
                 >
                   <td className="p-4 text-sm text-gray-600 dark:text-gray-400">
@@ -274,7 +274,7 @@ const AdminDailyProducts = ({
                         {item.productName}
                       </p>
                       {item.category && (
-                        <span className="text-xs text-gray-500 dark:text-gray-500 mt-1 bg-gray-200 dark:bg-gray-800 px-2 py-1 rounded-sm inline-block w-fit">
+                        <span className="text-xs text-gray-500 dark:text-gray-500 mt-1 bg-gray-200 dark:bg-gray-900 px-2 py-1 rounded-sm inline-block w-fit">
                           {item.category
                             .replace("gaming-", "")
                             .replace(/-/g, " ")}
@@ -383,7 +383,7 @@ const AdminDailyProducts = ({
                           >
                             {parseFloat(item.profitMargin || 0).toFixed(1)}%
                           </p>
-                          <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                          <div className="w-full bg-gray-300 dark:bg-gray-800 rounded-full h-1.5 mt-2">
                             <div
                               className={`h-1.5 rounded-full ${
                                 parseFloat(item.profitMargin || 0) > 50
@@ -431,7 +431,7 @@ const AdminDailyProducts = ({
               ))}
             </tbody>
             {canSeeProfit && (
-              <tfoot className="bg-gray-100 dark:bg-gray-800/50">
+              <tfoot className="bg-gray-100 dark:bg-gray-900/50">
                 <tr>
                   <td
                     colSpan="4"
@@ -463,7 +463,7 @@ const AdminDailyProducts = ({
                   </td>
                 </tr>
                 {/* Additional summary row */}
-                <tr className="border-t border-gray-200 dark:border-gray-700">
+                <tr className="border-t border-gray-200 dark:border-gray-800">
                   <td
                     colSpan="10"
                     className="p-3 text-xs text-gray-600 dark:text-gray-500"
@@ -516,7 +516,7 @@ const AdminDailyProducts = ({
 
           {/* Legend for non-superadmin users */}
           {!canSeeProfit && (
-            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/30">
+            <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900/30">
               <p className="text-xs text-gray-600 dark:text-gray-500 text-center">
                 <span className="text-blue-600 dark:text-blue-400">Note:</span>{" "}
                 Profit and margin details are only visible to super
@@ -547,7 +547,7 @@ const AdminDailyProducts = ({
     <div className="px-2 pb-4" id="daily-items" ref={dailyItemsRef}>
       {/* Print Action Bar - Mobile Optimized */}
       {itemsSold.length > 0 && (
-        <div className="no-print mb-4 p-3 bg-gray-100 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 rounded-sm mx-1 mt-2">
+        <div className="no-print mb-4 p-3 bg-gray-100 dark:bg-gray-900/50 border border-gray-300 dark:border-gray-800 rounded-sm mx-1 mt-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Printer className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -671,19 +671,19 @@ const AdminDailyProducts = ({
         {itemsSold.map((item, index) => (
           <div
             key={`${item.productId}-${item.storeId || ""}-${index}`}
-            className={`bg-white dark:bg-gray-800/50 rounded-sm border border-gray-200 dark:border-gray-700 overflow-hidden
-                            ${highlightFirstItem && index === 0 ? "ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-900" : ""}`}
+            className={`bg-white dark:bg-gray-900/50 rounded-sm border border-gray-200 dark:border-gray-800 overflow-hidden
+                            ${highlightFirstItem && index === 0 ? "ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-950" : ""}`}
           >
             {/* Card Header - Always Visible */}
             <div className="p-3">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-800 px-2 py-0.5 rounded-full">
                       #{index + 1}
                     </span>
                     {item.category && (
-                      <span className="text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                      <span className="text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900 px-2 py-0.5 rounded-full">
                         {item.category
                           .replace("gaming-", "")
                           .replace(/-/g, " ")}
@@ -696,7 +696,7 @@ const AdminDailyProducts = ({
                 </div>
                 <button
                   onClick={() => toggleItem(item.productId)}
-                  className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                  className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
                 >
                   {expandedItems[item.productId] ? (
                     <ChevronUp className="h-5 w-5 text-gray-600 dark:text-gray-400" />
@@ -708,7 +708,7 @@ const AdminDailyProducts = ({
 
               {/* Quick Stats Row */}
               <div className="grid grid-cols-3 gap-2 mt-3">
-                <div className="bg-gray-50 dark:bg-gray-800/50 p-2 rounded-sm">
+                <div className="bg-gray-50 dark:bg-gray-900/50 p-2 rounded-sm">
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     Qty
                   </p>
@@ -716,7 +716,7 @@ const AdminDailyProducts = ({
                     {item.totalQuantitySold || 0}
                   </p>
                 </div>
-                <div className="bg-gray-50 dark:bg-gray-800/50 p-2 rounded-sm">
+                <div className="bg-gray-50 dark:bg-gray-900/50 p-2 rounded-sm">
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     Price
                   </p>
@@ -724,7 +724,7 @@ const AdminDailyProducts = ({
                     {formatCurrency(item.sellingPrice)}
                   </p>
                 </div>
-                <div className="bg-gray-50 dark:bg-gray-800/50 p-2 rounded-sm">
+                <div className="bg-gray-50 dark:bg-gray-900/50 p-2 rounded-sm">
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     Revenue
                   </p>
@@ -752,7 +752,7 @@ const AdminDailyProducts = ({
 
             {/* Expanded Details - Shown when card is expanded */}
             {expandedItems[item.productId] && (
-              <div className="border-t border-gray-200 dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-800/30">
+              <div className="border-t border-gray-200 dark:border-gray-800 p-3 bg-gray-50 dark:bg-gray-900/30">
                 <div className="space-y-3">
                   {canSeeProfit && (
                     <>
@@ -807,7 +807,7 @@ const AdminDailyProducts = ({
                             {parseFloat(item.profitMargin || 0).toFixed(1)}%
                           </p>
                         </div>
-                        <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2">
+                        <div className="w-full bg-gray-300 dark:bg-gray-800 rounded-full h-2">
                           <div
                             className={`h-2 rounded-full ${
                               parseFloat(item.profitMargin || 0) > 50
@@ -871,7 +871,7 @@ const AdminDailyProducts = ({
 
       {/* Empty State - Mobile */}
       {itemsSold.length === 0 && (
-        <div className="p-8 text-center bg-white dark:bg-gray-800/50 rounded-sm border border-gray-200 dark:border-gray-700">
+        <div className="p-8 text-center bg-white dark:bg-gray-900/50 rounded-sm border border-gray-200 dark:border-gray-800">
           <ShoppingBag className="h-12 w-12 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
           <h3 className="text-base font-medium text-gray-600 dark:text-gray-400 mb-1">
             No products sold

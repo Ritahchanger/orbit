@@ -22,7 +22,7 @@ const EmptyState = ({
     const canManageInventory = userRole === "superadmin" || userRole === "admin";
 
     return (
-        <div className="mb-6 p-6 sm:p-8 text-center bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg dark:shadow-gray-900/30">
+        <div className="mb-6 p-6 sm:p-8 text-center bg-white dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-800 shadow-lg dark:shadow-gray-900/30">
             {/* Icon Section */}
             <div className="relative mb-6">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-500/10 dark:to-indigo-500/10 rounded-full flex items-center justify-center mb-4">
@@ -47,7 +47,7 @@ const EmptyState = ({
                     <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6">
                         <button
                             onClick={() => setShowQuickAddModal(true)}
-                            className="group relative px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-sm text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center justify-center gap-2"
+                            className="group relative px-5 py-2.5 sm:px-6 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-sm text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 flex items-center justify-center gap-2"
                         >
                             <PlusCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                             <span>Quick Add by SKU</span>
@@ -56,14 +56,14 @@ const EmptyState = ({
 
                         <button
                             onClick={() => navigate("/admin/products")}
-                            className="px-5 py-2.5 sm:px-6 sm:py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800/50 dark:hover:bg-gray-700/50 border border-gray-300 dark:border-gray-600 dark:hover:border-gray-500 text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white rounded-sm text-sm font-medium transition-all duration-300 hover:scale-105"
+                            className="px-5 py-2.5 sm:px-6 sm:py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-900/50 dark:hover:bg-gray-800/50 border border-gray-300 dark:border-gray-700 dark:hover:border-gray-500 text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white rounded-sm text-sm font-medium transition-all duration-300 hover:scale-105"
                         >
                             Browse Products
                         </button>
                     </div>
 
                     {/* Stats Placeholder */}
-                    <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-md mx-auto p-3 sm:p-4 bg-gray-50 dark:bg-gray-800/30 rounded-sm border border-gray-200 dark:border-gray-700/30 mb-6">
+                    <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-md mx-auto p-3 sm:p-4 bg-gray-50 dark:bg-gray-900/30 rounded-sm border border-gray-200 dark:border-gray-800/30 mb-6">
                         <div className="text-center">
                             <div className="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400">0</div>
                             <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Items</div>
@@ -87,10 +87,10 @@ const EmptyState = ({
             )}
 
             {/* Helpful Tips */}
-            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700/50">
+            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800/50">
                 <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">QUICK TIPS</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-left">
-                    <div className="p-3 bg-gray-50 dark:bg-gray-800/30 rounded-sm border border-gray-100 dark:border-gray-700/30">
+                    <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-sm border border-gray-100 dark:border-gray-800/30">
                         <div className="flex items-center gap-2 mb-2">
                             <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                             <Search className="w-3 h-3 text-blue-500" />
@@ -99,7 +99,7 @@ const EmptyState = ({
                         <p className="text-xs text-gray-600 dark:text-gray-400">Use the search bar to quickly find and add existing products</p>
                     </div>
                     
-                    <div className="p-3 bg-gray-50 dark:bg-gray-800/30 rounded-sm border border-gray-100 dark:border-gray-700/30">
+                    <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-sm border border-gray-100 dark:border-gray-800/30">
                         <div className="flex items-center gap-2 mb-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                             <Upload className="w-3 h-3 text-green-500" />
@@ -108,7 +108,7 @@ const EmptyState = ({
                         <p className="text-xs text-gray-600 dark:text-gray-400">Upload CSV files to add multiple products at once</p>
                     </div>
                     
-                    <div className="p-3 bg-gray-50 dark:bg-gray-800/30 rounded-sm border border-gray-100 dark:border-gray-700/30">
+                    <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-sm border border-gray-100 dark:border-gray-800/30">
                         <div className="flex items-center gap-2 mb-2">
                             <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                             <BarChart className="w-3 h-3 text-purple-500" />
@@ -132,11 +132,11 @@ const EmptyState = ({
 
             {/* Keyboard Shortcut Hint */}
             {canManageInventory && (
-                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/30">
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800/30">
                     <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center gap-2">
-                        <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs">Ctrl</kbd>
+                        <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded text-xs">Ctrl</kbd>
                         <span className="text-gray-400">+</span>
-                        <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-xs">N</kbd>
+                        <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded text-xs">N</kbd>
                         <span className="ml-2">to add new product</span>
                     </div>
                 </div>

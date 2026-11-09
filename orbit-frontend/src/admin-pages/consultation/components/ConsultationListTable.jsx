@@ -15,9 +15,9 @@ const ConsultationListTable = ({
   openCancelModal,
 }) => {
   return (
-    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
       <thead>
-        <tr className="bg-gray-50 dark:bg-gray-700/50">
+        <tr className="bg-gray-50 dark:bg-gray-800/50">
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 dark:text-gray-300 uppercase tracking-wider">
             <input
               type="checkbox"
@@ -26,7 +26,7 @@ const ConsultationListTable = ({
                 filteredConsultations.length > 0
               }
               onChange={selectAll}
-              className="rounded-sm border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+              className="rounded-sm border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             />
           </th>
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 dark:text-gray-300 uppercase tracking-wider">
@@ -55,7 +55,7 @@ const ConsultationListTable = ({
           </th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+      <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
         {filteredConsultations.map((consultation) => (
           <React.Fragment key={consultation.id}>
             <UnexpandedRows
@@ -68,7 +68,7 @@ const ConsultationListTable = ({
               toggleSelection={toggleSelection}
             />
             {expandedRows.includes(consultation.id) && (
-              <tr className="bg-gray-50 dark:bg-gray-700/30">
+              <tr className="bg-gray-50 dark:bg-gray-800/30">
                 <td colSpan="8" className="px-6 py-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Customer Details */}
@@ -156,7 +156,7 @@ const ConsultationListTable = ({
                       </h4>
                       <div className="space-y-3">
                         <div>
-                          <p className="text-sm text-gray-800 dark:text-gray-300 bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm">
+                          <p className="text-sm text-gray-800 dark:text-gray-300 bg-gray-100 dark:bg-gray-800/50 p-3 rounded-sm">
                             {consultation.notes || "No notes provided"}
                           </p>
                         </div>
@@ -168,14 +168,14 @@ const ConsultationListTable = ({
                               );
                               toast.success("Reference copied to clipboard");
                             }}
-                            className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 text-sm rounded-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium border border-gray-300 dark:border-gray-600"
+                            className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300 text-sm rounded-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-medium border border-gray-300 dark:border-gray-700"
                           >
                             Copy Reference
                           </button>
                           {consultation.status === "pending" && (
                             <button
                               onClick={() => openCancelModal(consultation)}
-                              className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 text-white text-sm rounded-sm hover:from-red-700 hover:to-red-800 dark:hover:from-red-600 dark:hover:to-red-700 transition-colors font-medium"
+                              className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded-sm transition-colors font-medium"
                             >
                               Cancel Booking
                             </button>

@@ -1,7 +1,7 @@
 import { Eye, Lock, Shield, Store, Trash2, Unlock } from "lucide-react";
 
 const iconButton =
-  "rounded-sm p-1.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700";
+  "rounded-sm p-1.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800";
 
 // The action buttons for one worker, shared by the list and grid views.
 // `allowed` comes from the page and already reflects the current user's

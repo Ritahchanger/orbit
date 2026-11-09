@@ -198,9 +198,9 @@ const UserRegistrationModal = () => {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm max-w-6xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
+      <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm max-w-6xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-300 dark:border-gray-700">
+        <div className="flex items-center justify-between p-6 border-b border-gray-300 dark:border-gray-800">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-blue-500/10 dark:bg-blue-500/10 rounded-sm">
               <UserPlus
@@ -220,7 +220,7 @@ const UserRegistrationModal = () => {
           <button
             onClick={handleClose}
             disabled={registerMutation.isPending}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors disabled:opacity-50 text-gray-700 dark:text-gray-300"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors disabled:opacity-50 text-gray-700 dark:text-gray-300"
           >
             <X size={20} />
           </button>
@@ -249,7 +249,7 @@ const UserRegistrationModal = () => {
                   value={formData.firstName}
                   onChange={handleInputChange}
                   disabled={registerMutation.isPending}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
                   placeholder="Enter first name"
                   required
                 />
@@ -265,7 +265,7 @@ const UserRegistrationModal = () => {
                   value={formData.lastName}
                   onChange={handleInputChange}
                   disabled={registerMutation.isPending}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
                   placeholder="Enter last name"
                   required
                 />
@@ -286,7 +286,7 @@ const UserRegistrationModal = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     disabled={registerMutation.isPending}
-                    className="w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
+                    className="w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
                     placeholder="user@example.com"
                     required
                   />
@@ -308,7 +308,7 @@ const UserRegistrationModal = () => {
                     value={formData.phoneNo}
                     onChange={handleInputChange}
                     disabled={registerMutation.isPending}
-                    className="w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
+                    className="w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
                     placeholder="+1 (555) 123-4567"
                   />
                 </div>
@@ -342,7 +342,7 @@ const UserRegistrationModal = () => {
                   value={formData.role}
                   onChange={handleInputChange}
                   disabled={registerMutation.isPending}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
                 >
                   {roleOptions.map((option) => (
                     <option
@@ -370,7 +370,7 @@ const UserRegistrationModal = () => {
                     value={formData.assignedStore}
                     onChange={handleInputChange}
                     disabled={registerMutation.isPending}
-                    className="w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
+                    className="w-full pl-10 pr-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors disabled:opacity-50"
                   >
                     <option
                       value=""
@@ -407,7 +407,7 @@ const UserRegistrationModal = () => {
                           className={`px-3 py-2 text-sm rounded-sm transition-colors ${
                             storeRole === role
                               ? "bg-blue-600 dark:bg-blue-500 text-white"
-                              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                              : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700"
                           } disabled:opacity-50`}
                         >
                           {role.charAt(0).toUpperCase() + role.slice(1)}
@@ -428,15 +428,15 @@ const UserRegistrationModal = () => {
                             className={`flex items-center p-2 rounded-sm transition-colors cursor-pointer ${
                               value
                                 ? "bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-500/20"
-                                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
-                            } hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50`}
+                                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
+                            } hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50`}
                           >
                             <input
                               type="checkbox"
                               checked={value}
                               onChange={() => handlePermissionChange(key)}
                               disabled={registerMutation.isPending}
-                              className="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400"
+                              className="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400 bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-400"
                             />
                             <span className="text-sm capitalize">
                               {key.replace("can", "").trim()}
@@ -449,14 +449,14 @@ const UserRegistrationModal = () => {
                 </>
               )}
 
-              <label className="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-sm cursor-pointer transition-colors">
+              <label className="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-sm cursor-pointer transition-colors">
                 <input
                   type="checkbox"
                   name="newsletter"
                   checked={formData.newsletter}
                   onChange={handleInputChange}
                   disabled={registerMutation.isPending}
-                  className="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400"
+                  className="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400 bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
                 <span className="text-sm text-gray-700 dark:text-gray-300">
                   Subscribe to newsletter
@@ -477,12 +477,12 @@ const UserRegistrationModal = () => {
           )}
 
           {/* Modal Footer */}
-          <div className="mt-8 pt-6 border-t border-gray-300 dark:border-gray-700 flex justify-end space-x-3">
+          <div className="mt-8 pt-6 border-t border-gray-300 dark:border-gray-800 flex justify-end space-x-3">
             <button
               type="button"
               onClick={handleClose}
               disabled={registerMutation.isPending}
-              className="px-4 py-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-sm transition-colors font-medium disabled:opacity-50"
+              className="px-4 py-2.5 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm transition-colors font-medium disabled:opacity-50"
             >
               Cancel
             </button>

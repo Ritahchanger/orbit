@@ -15,9 +15,9 @@ const ClearCartModal = ({ isOpen, onClose, onConfirm, cartCount }) => {
 
       {/* Modal */}
       <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-sm shadow-xl border border-gray-300 dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-950 w-full max-w-md rounded-sm shadow-xl border border-gray-300 dark:border-gray-800">
           {/* Header */}
-          <div className="px-5 py-4 border-b border-gray-300 dark:border-gray-700 flex items-center justify-between">
+          <div className="px-5 py-4 border-b border-gray-300 dark:border-gray-800 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-sm">
                 <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
@@ -28,7 +28,7 @@ const ClearCartModal = ({ isOpen, onClose, onConfirm, cartCount }) => {
             </div>
             <button
               onClick={onClose}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
+              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm"
             >
               <X className="h-5 w-5" />
             </button>
@@ -50,7 +50,7 @@ const ClearCartModal = ({ isOpen, onClose, onConfirm, cartCount }) => {
               </button>
               <button
                 onClick={onClose}
-                className="flex-1 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-sm transition-colors"
+                className="flex-1 py-2.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-sm transition-colors"
               >
                 Cancel
               </button>

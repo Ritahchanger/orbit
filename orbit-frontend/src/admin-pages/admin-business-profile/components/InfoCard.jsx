@@ -1,5 +1,5 @@
 export const InfoCard = ({ icon: Icon, label, value }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700  rounded-sm p-4">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800  rounded-sm p-4">
     <div className="flex items-start gap-2">
       <div className="p-2 rounded-md bg-maroon-50 dark:bg-maroon-900/20">
         <Icon className="w-5 h-5 text-maroon-600 dark:text-maroon-400" />

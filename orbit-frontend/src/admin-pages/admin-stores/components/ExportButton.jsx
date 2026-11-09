@@ -86,7 +86,7 @@ const ExportButton = ({
                 onClick={handleExportFiltered}
                 disabled={isExporting || filteredStores.length === 0}
                 className={`flex items-center gap-2 px-3 py-2 rounded-sm transition-colors ${isExporting || filteredStores.length === 0
-                    ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                    ? 'bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                     : 'bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white'
                     }`}
             >
@@ -111,7 +111,7 @@ const ExportButton = ({
                 onClick={() => setShowDropdown(!showDropdown)}
                 disabled={isExporting}
                 className={`flex items-center gap-2 px-3 py-2 rounded-sm transition-colors ${isExporting
-                    ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                    ? 'bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                     : 'bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white'
                     }`}
             >
@@ -138,16 +138,16 @@ const ExportButton = ({
                         className="fixed inset-0 z-40"
                         onClick={() => setShowDropdown(false)}
                     />
-                    <div className="absolute top-full right-0 mt-1 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-lg z-50">
+                    <div className="absolute top-full right-0 mt-1 w-56 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-lg z-50">
                         <div className="py-1">
-                            <div className="px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 font-medium">
+                            <div className="px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-800 font-medium">
                                 Export Options
                             </div>
 
                             <button
                                 onClick={handleExportFiltered}
                                 disabled={filteredStores.length === 0}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Filter size={14} className="text-blue-600 dark:text-blue-400" />
                                 <div className="flex-1">
@@ -162,14 +162,14 @@ const ExportButton = ({
                             <button
                                 onClick={handleExportAll}
                                 disabled={stores.length === 0}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Database size={14} className="text-purple-600 dark:text-purple-400" />
                                 <div className="flex-1">
                                     <div className="font-medium">All Stores</div>
                                     <div className="text-xs text-gray-500 dark:text-gray-400">Complete database</div>
                                 </div>
-                                <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded">
+                                <span className="text-xs bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded">
                                     {stores.length}
                                 </span>
                             </button>
@@ -177,7 +177,7 @@ const ExportButton = ({
                             <button
                                 onClick={handleExportJSON}
                                 disabled={filteredStores.length === 0}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <FileDown size={14} className="text-green-600 dark:text-green-400" />
                                 <div className="flex-1">
@@ -186,7 +186,7 @@ const ExportButton = ({
                                 </div>
                             </button>
 
-                            <div className="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700">
+                            <div className="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-800">
                                 Files download in selected format
                             </div>
                         </div>

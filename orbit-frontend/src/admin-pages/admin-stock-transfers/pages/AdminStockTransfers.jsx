@@ -197,7 +197,7 @@ const AdminStockTransfers = () => {
             <button
               onClick={() => refetch()}
               disabled={isFetching}
-              className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors disabled:opacity-50"
+              className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition-colors disabled:opacity-50"
               title="Refresh"
             >
               <RefreshCw
@@ -208,7 +208,7 @@ const AdminStockTransfers = () => {
             <button
               onClick={handleExport}
               disabled={isExporting || !pagination.total}
-              className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition-colors text-sm font-medium disabled:opacity-50"
+              className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-sm transition-colors text-sm font-medium disabled:opacity-50"
             >
               <Download size={18} />
               <span>{isExporting ? "Exporting..." : "Export CSV"}</span>
@@ -217,7 +217,7 @@ const AdminStockTransfers = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
           <div className="flex flex-col lg:flex-row lg:flex-wrap gap-3">
             {/* Search - Removed the form wrapper */}
             <div className="flex-1">
@@ -231,7 +231,7 @@ const AdminStockTransfers = () => {
                   placeholder="Search by transfer number, product, or store..."
                   value={searchInput}
                   onChange={handleSearchChange}
-                  className="w-full pl-10 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-sm text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                  className="w-full pl-10 pr-10 py-2 border border-gray-300 dark:border-gray-700 rounded-sm text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
                 {searchInput && (
                   <button
@@ -255,7 +255,7 @@ const AdminStockTransfers = () => {
               <select
                 value={filters.status}
                 onChange={(e) => handleFilterChange("status", e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
               >
                 <option value="">All Status</option>
                 <option value="completed">Completed</option>
@@ -270,7 +270,7 @@ const AdminStockTransfers = () => {
               <select
                 value={filters.sourceStore}
                 onChange={(e) => handleFilterChange("sourceStore", e.target.value)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm max-w-[160px]"
+                className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm max-w-[160px]"
                 aria-label="From store"
               >
                 <option value="">From: any store</option>
@@ -284,7 +284,7 @@ const AdminStockTransfers = () => {
               <select
                 value={filters.destinationStore}
                 onChange={(e) => handleFilterChange("destinationStore", e.target.value)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm max-w-[160px]"
+                className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm max-w-[160px]"
                 aria-label="To store"
               >
                 <option value="">To: any store</option>
@@ -303,7 +303,7 @@ const AdminStockTransfers = () => {
                 type="date"
                 value={filters.fromDate}
                 onChange={(e) => handleFilterChange("fromDate", e.target.value)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
                 placeholder="From"
               />
               <span className="text-sm text-gray-400">to</span>
@@ -311,7 +311,7 @@ const AdminStockTransfers = () => {
                 type="date"
                 value={filters.toDate}
                 onChange={(e) => handleFilterChange("toDate", e.target.value)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
                 placeholder="To"
               />
             </div>
@@ -378,7 +378,7 @@ const AdminStockTransfers = () => {
         </div>
 
         {/* Transfers Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
           {isLoading || isSearching || (isFetching && filters.search) ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -428,7 +428,7 @@ const AdminStockTransfers = () => {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-gray-50 dark:bg-gray-700/50">
+                    <tr className="bg-gray-50 dark:bg-gray-800/50">
                       <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                         Transfer #
                       </th>
@@ -459,7 +459,7 @@ const AdminStockTransfers = () => {
                     {transfers.map((transfer) => (
                       <tr
                         key={transfer._id}
-                        className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
+                        className="border-t border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors"
                       >
                         <td className="py-4 px-4">
                           <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
@@ -545,7 +545,7 @@ const AdminStockTransfers = () => {
 
               {/* Pagination */}
               {pagination.pages > 1 && (
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="p-4 border-t border-gray-200 dark:border-gray-800">
                   <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="text-sm text-gray-600 dark:text-gray-400">
                       Showing {transfers.length} of {pagination.total} transfers
@@ -557,7 +557,7 @@ const AdminStockTransfers = () => {
                           handleFilterChange("page", pagination.page - 1)
                         }
                         disabled={pagination.page === 1}
-                        className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         Previous
                       </button>
@@ -588,7 +588,7 @@ const AdminStockTransfers = () => {
                                 className={`px-3 py-1 rounded-sm text-sm transition-colors ${
                                   pagination.page === pageNum
                                     ? "bg-blue-600 text-white"
-                                    : "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
+                                    : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
                                 }`}
                               >
                                 {pageNum}
@@ -602,7 +602,7 @@ const AdminStockTransfers = () => {
                           handleFilterChange("page", pagination.page + 1)
                         }
                         disabled={pagination.page === pagination.pages}
-                        className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         Next
                       </button>

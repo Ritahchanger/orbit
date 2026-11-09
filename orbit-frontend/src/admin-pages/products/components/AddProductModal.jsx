@@ -165,9 +165,9 @@ const AdminAddProductModal = () => {
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-xl">
+      <div className="bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-xl">
         {/* Modal Header */}
-        <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-300 dark:border-gray-800 p-6 z-10">
+        <div className="sticky top-0 bg-white dark:bg-gray-950 border-b border-gray-300 dark:border-gray-800 p-6 z-10">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -179,7 +179,7 @@ const AdminAddProductModal = () => {
             </div>
             <button
               onClick={() => dispatch(closeModal())}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors text-gray-700 dark:text-gray-300"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition-colors text-gray-700 dark:text-gray-300"
             >
               <X className="h-5 w-5" />
             </button>
@@ -205,7 +205,7 @@ const AdminAddProductModal = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2.5 bg-white dark:bg-gray-800 border ${errors.name ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-700"} rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
+                  className={`w-full px-3 py-2.5 bg-white dark:bg-gray-900 border ${errors.name ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-800"} rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
                   placeholder="Enter product name"
                 />
                 {errors.name && (
@@ -224,7 +224,7 @@ const AdminAddProductModal = () => {
                   name="sku"
                   value={formData.sku}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                   placeholder="Will auto-generate"
                 />
               </div>
@@ -237,7 +237,7 @@ const AdminAddProductModal = () => {
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2.5 bg-white dark:bg-gray-800 border ${errors.category ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-700"} rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
+                  className={`w-full px-3 py-2.5 bg-white dark:bg-gray-900 border ${errors.category ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-800"} rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
                 >
                   <option value="" className="text-gray-500 dark:text-gray-400">
                     Select category
@@ -268,7 +268,7 @@ const AdminAddProductModal = () => {
                   name="brand"
                   value={formData.brand}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                   placeholder="Enter brand name"
                 />
               </div>
@@ -295,7 +295,7 @@ const AdminAddProductModal = () => {
                       name="price"
                       value={formData.price}
                       onChange={handleChange}
-                      className={`w-full pl-12 pr-3 py-2.5 bg-white dark:bg-gray-800 border ${errors.price ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-700"} rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
+                      className={`w-full pl-12 pr-3 py-2.5 bg-white dark:bg-gray-900 border ${errors.price ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-800"} rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
                       placeholder="0.00"
                       step="0.01"
                       min="0"
@@ -321,7 +321,7 @@ const AdminAddProductModal = () => {
                       name="costPrice"
                       value={formData.costPrice}
                       onChange={handleChange}
-                      className="w-full pl-12 pr-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                      className="w-full pl-12 pr-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                       placeholder="0.00"
                       step="0.01"
                       min="0"
@@ -340,7 +340,7 @@ const AdminAddProductModal = () => {
                     name="stock"
                     value={formData.stock}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2.5 bg-white dark:bg-gray-800 border ${errors.stock ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-700"} rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
+                    className={`w-full px-3 py-2.5 bg-white dark:bg-gray-900 border ${errors.stock ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-800"} rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
                     placeholder="0"
                     min="0"
                   />
@@ -360,7 +360,7 @@ const AdminAddProductModal = () => {
                     name="minStock"
                     value={formData.minStock}
                     onChange={handleChange}
-                    className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                    className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                     placeholder="5"
                     min="0"
                   />
@@ -375,7 +375,7 @@ const AdminAddProductModal = () => {
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                 >
                   <option
                     value="active"
@@ -410,14 +410,14 @@ const AdminAddProductModal = () => {
                 </select>
               </div>
 
-              <div className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-sm">
+              <div className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-900/50 rounded-sm">
                 <input
                   type="checkbox"
                   id="isFeatured"
                   name="isFeatured"
                   checked={formData.isFeatured}
                   onChange={handleChange}
-                  className="h-4 w-4 text-blue-600 dark:text-blue-400 rounded focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-600"
+                  className="h-4 w-4 text-blue-600 dark:text-blue-400 rounded focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-700"
                 />
                 <label
                   htmlFor="isFeatured"
@@ -440,7 +440,7 @@ const AdminAddProductModal = () => {
               value={formData.description}
               onChange={handleChange}
               rows="4"
-              className={`w-full px-3 py-2.5 bg-white dark:bg-gray-800 border ${errors.description ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-700"} rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
+              className={`w-full px-3 py-2.5 bg-white dark:bg-gray-900 border ${errors.description ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-800"} rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors`}
               placeholder="Enter detailed product description..."
             />
             {errors.description && (
@@ -457,7 +457,7 @@ const AdminAddProductModal = () => {
               Product Images
             </h3>
             <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center bg-gray-50 dark:bg-gray-800/50">
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-sm p-8 text-center bg-gray-50 dark:bg-gray-900/50">
                 <Upload className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
                 <p className="text-gray-600 dark:text-gray-400 mb-2">
                   Drag & drop images or click to upload
@@ -489,7 +489,7 @@ const AdminAddProductModal = () => {
                       <img
                         src={image.preview}
                         alt={`Preview ${index}`}
-                        className="w-full h-32 object-cover rounded-sm border border-gray-300 dark:border-gray-700"
+                        className="w-full h-32 object-cover rounded-sm border border-gray-300 dark:border-gray-800"
                       />
                       <button
                         type="button"
@@ -521,7 +521,7 @@ const AdminAddProductModal = () => {
                     type="text"
                     value={spec}
                     onChange={(e) => updateSpec(index, e.target.value)}
-                    className="flex-1 px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                    className="flex-1 px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                     placeholder={`Specification ${index + 1} (e.g., Processor: Intel i7)`}
                   />
                   {specifications.length > 1 && (
@@ -559,7 +559,7 @@ const AdminAddProductModal = () => {
                     type="text"
                     value={feature}
                     onChange={(e) => updateFeat(index, e.target.value)}
-                    className="flex-1 px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                    className="flex-1 px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                     placeholder={`Feature ${index + 1} (e.g., RGB Lighting)`}
                   />
                   {features.length > 1 && (
@@ -600,7 +600,7 @@ const AdminAddProductModal = () => {
                   name="weight"
                   value={formData.weight}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                   placeholder="2.5 kg"
                 />
               </div>
@@ -613,7 +613,7 @@ const AdminAddProductModal = () => {
                   name="model"
                   value={formData.model}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                   placeholder="Model number"
                 />
               </div>
@@ -633,7 +633,7 @@ const AdminAddProductModal = () => {
                   name="color"
                   value={formData.color}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                   placeholder="Black, White, etc."
                 />
               </div>
@@ -646,7 +646,7 @@ const AdminAddProductModal = () => {
                   name="connectivity"
                   value={formData.connectivity}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                   placeholder="Wi-Fi 6, Bluetooth 5.2, etc."
                 />
               </div>
@@ -659,7 +659,7 @@ const AdminAddProductModal = () => {
                   name="powerConsumption"
                   value={formData.powerConsumption}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                   placeholder="850W, 240W, etc."
                 />
               </div>
@@ -672,7 +672,7 @@ const AdminAddProductModal = () => {
                   name="warranty"
                   value={formData.warranty}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
+                  className="w-full px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors"
                   placeholder="1 Year"
                 />
               </div>
@@ -680,12 +680,12 @@ const AdminAddProductModal = () => {
           </div>
 
           {/* Form Actions */}
-          <div className="sticky bottom-0 bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-800 p-6 -mx-6 -mb-6">
+          <div className="sticky bottom-0 bg-white dark:bg-gray-950 border-t border-gray-300 dark:border-gray-800 p-6 -mx-6 -mb-6">
             <div className="flex items-center justify-end gap-3">
               <button
                 type="button"
                 onClick={() => dispatch(closeModal())}
-                className="px-6 py-2.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                className="px-6 py-2.5 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors font-medium"
               >
                 Cancel
               </button>

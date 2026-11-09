@@ -15,7 +15,7 @@ const MainReportContent = ({
   handleExport,
 }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-sm shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+    <div className="bg-white dark:bg-gray-900 rounded-sm shadow-sm border border-gray-200 dark:border-gray-800 p-4">
       {dashboardLoading ? (
         <div className="flex justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
@@ -36,7 +36,7 @@ const MainReportContent = ({
 
               {/* Sales & Inventory Overview */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4">
-                <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-sm">
+                <div className="p-3 border border-gray-200 dark:border-gray-800 rounded-sm">
                   <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
                     Sales Summary
                   </h3>
@@ -71,7 +71,7 @@ const MainReportContent = ({
                   </div>
                 </div>
 
-                <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-sm">
+                <div className="p-3 border border-gray-200 dark:border-gray-800 rounded-sm">
                   <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
                     Inventory Summary
                   </h3>
@@ -110,17 +110,17 @@ const MainReportContent = ({
 
               {/* Recent Sales */}
               {recentSales.length > 0 && (
-                <div className="border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden mb-4">
-                  <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden mb-4">
+                  <div className="p-3 border-b border-gray-200 dark:border-gray-800">
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                       Recent Sales
                     </h3>
                   </div>
-                  <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                  <div className="divide-y divide-gray-200 dark:divide-gray-800">
                     {recentSales.map((sale, index) => (
                       <div
                         key={index}
-                        className="p-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700"
+                        className="p-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800"
                       >
                         <div className="flex-1">
                           <p className="font-medium text-gray-900 dark:text-white text-sm">
@@ -176,7 +176,7 @@ const MainReportContent = ({
                 </div>
               ) : (
                 <div>
-                  <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-sm">
+                  <div className="p-3 border border-gray-200 dark:border-gray-800 rounded-sm">
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                       Inventory Summary
                     </h3>

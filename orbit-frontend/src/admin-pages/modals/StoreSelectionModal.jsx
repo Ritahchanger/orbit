@@ -74,13 +74,13 @@ const StoreSelectionModal = () => {
             {/* Modal Container */}
             <div className="absolute inset-0 flex items-center justify-center p-4">
                 <div 
-                    className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl transform transition-all duration-300 scale-100 opacity-100"
+                    className="bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl transform transition-all duration-300 scale-100 opacity-100"
                 >
                     {/* Modal Header */}
-                    <div className="bg-linear-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 border-b border-gray-300 dark:border-gray-700 p-6">
+                    <div className="bg-linear-to-r from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-950 border-b border-gray-300 dark:border-gray-800 p-6">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="p-3 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                                <div className="p-3 bg-white dark:bg-gray-900 rounded-lg shadow-md">
                                     <Building className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                                 </div>
                                 <div>
@@ -94,7 +94,7 @@ const StoreSelectionModal = () => {
                             </div>
                             <button
                                 onClick={handleClose}
-                                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors duration-200"
                                 aria-label="Close modal"
                             >
                                 <X className="h-6 w-6" />
@@ -107,7 +107,7 @@ const StoreSelectionModal = () => {
                         {/* Global View Card */}
                         <div
                             onClick={handleGlobalSelection}
-                            className="mb-6 p-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 border-2 border-purple-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-500 rounded-sm cursor-pointer transition-all duration-300 hover:shadow-lg group"
+                            className="mb-6 p-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-950 border-2 border-purple-200 dark:border-gray-800 hover:border-purple-400 dark:hover:border-purple-500 rounded-sm cursor-pointer transition-all duration-300 hover:shadow-lg group"
                         >
                             <div className="flex items-center gap-5">
                                 <div className="p-4 bg-gradient-to-br from-purple-500 to-blue-500 rounded-sm group-hover:from-purple-600 group-hover:to-blue-600 shadow-md transition-all duration-300">
@@ -142,7 +142,7 @@ const StoreSelectionModal = () => {
 
                             {loadingStores ? (
                                 <div className="text-center py-12">
-                                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-200 dark:border-gray-700 border-t-blue-600 dark:border-t-blue-500 mb-4"></div>
+                                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-200 dark:border-gray-800 border-t-blue-600 dark:border-t-blue-500 mb-4"></div>
                                     <p className="text-gray-600 dark:text-gray-400">Loading stores...</p>
                                     <p className="text-gray-500 dark:text-gray-500 text-sm mt-1">Please wait a moment</p>
                                 </div>
@@ -153,8 +153,8 @@ const StoreSelectionModal = () => {
                                     selectedStore={selectedStore} 
                                 />
                             ) : (
-                                <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-300 dark:border-gray-700">
-                                    <div className="inline-flex p-4 bg-gray-200 dark:bg-gray-700 rounded-full mb-4">
+                                <div className="text-center py-12 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-300 dark:border-gray-800">
+                                    <div className="inline-flex p-4 bg-gray-200 dark:bg-gray-800 rounded-full mb-4">
                                         <Building className="h-12 w-12 text-gray-500 dark:text-gray-400" />
                                     </div>
                                     <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Stores Available</h4>

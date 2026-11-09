@@ -27,7 +27,7 @@ const AdminHeader = ({
         return (
             <div className="relative flex items-center min-w-[180px]">
                 <Store className="absolute left-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
-                <div className="pl-9 pr-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-sm w-full">
+                <div className="pl-9 pr-3 py-2 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white text-sm w-full">
                     <div className="flex flex-col">
                         <p className="font-medium truncate">
                             {primaryStore?.name || 'My Store'}
@@ -73,13 +73,13 @@ const AdminHeader = ({
                         type="date"
                         value={dateString}
                         onChange={handleDateChange}
-                        className="pl-9 pr-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400"
+                        className="pl-9 pr-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400"
                     />
                 </div>
 
                 <button
                     onClick={handleTodayClick}
-                    className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors flex items-center gap-2 text-sm font-medium"
+                    className="px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors flex items-center gap-2 text-sm font-medium"
                 >
                     <RefreshCw className="h-3 w-3" />
                     Today
@@ -89,7 +89,7 @@ const AdminHeader = ({
                 {itemsSold.length > 0 && (isAdmin || isSuperadmin || isManager) && (
                     <button
                         onClick={handleExportCSV}
-                        className="px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 rounded-sm transition-colors flex items-center gap-2 text-sm font-medium"
+                        className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm transition-colors flex items-center gap-2 text-sm font-medium"
                         title={isAdmin || isSuperadmin ? "Export all data" : "Export my store data"}
                     >
                         <Download className="h-3 w-3" />
@@ -101,7 +101,7 @@ const AdminHeader = ({
                 {/* {(isAdmin || isSuperadmin || isManager) && (
                     <button
                         onClick={navigateToInventory}
-                        className="px-4 py-2 rounded-sm bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 flex items-center space-x-2"
+                        className="px-4 py-2 rounded-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center space-x-2"
                         title="View inventory"
                     >
                         <ShoppingCart className="h-4 w-4" />
@@ -113,7 +113,7 @@ const AdminHeader = ({
                 {(isAdmin || isSuperadmin || isManager) && (
                     <button
                         onClick={navigateToAllProducts}
-                        className="px-4 py-2 rounded-sm bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600 text-white hover:from-green-700 hover:to-green-800 dark:hover:from-green-600 dark:hover:to-green-700 flex items-center gap-2 text-sm font-medium"
+                        className="px-4 py-2 rounded-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 text-sm font-medium"
                         title="View all products"
                     >
                         <Package className="h-4 w-4" />

@@ -30,10 +30,10 @@ const ProductDetailsModal = ({
 
   // Helper functions for consistent styling
   const getCardClass = () =>
-    "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm shadow-lg";
+    "bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm shadow-lg";
   const getMutedTextClass = () => "text-gray-600 dark:text-gray-400";
 
-  const getBorderClass = () => "border-gray-300 dark:border-gray-700";
+  const getBorderClass = () => "border-gray-300 dark:border-gray-800";
 
   // Permission checks
   const canViewCost = hasPermission
@@ -141,14 +141,14 @@ const ProductDetailsModal = ({
                             "_blank",
                           )
                         }
-                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition-colors"
                         title="Open in new tab"
                       >
                         <ExternalLink className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                       </button>
                       <button
                         onClick={handleCloseProductModal}
-                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition-colors"
                       >
                         <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                       </button>
@@ -160,9 +160,9 @@ const ProductDetailsModal = ({
                   {/* Left Column - Image Gallery */}
                   <div className="lg:col-span-1">
                     <div className="sticky top-6">
-                      <div className="bg-gray-50 dark:bg-gray-900/30 rounded-sm ">
+                      <div className="bg-gray-50 dark:bg-gray-950/30 rounded-sm ">
                         {/* Main Image */}
-                        <div className="relative aspect-square mb-4 bg-white dark:bg-gray-900 rounded-sm overflow-hidden border border-gray-300 dark:border-gray-700">
+                        <div className="relative aspect-square mb-4 bg-white dark:bg-gray-950 rounded-sm overflow-hidden border border-gray-300 dark:border-gray-800">
                           {productImages.length > 0 ? (
                             <img
                               src={
@@ -189,7 +189,7 @@ const ProductDetailsModal = ({
                                 className={`flex-shrink-0 w-16 h-16 rounded border ${
                                   selectedImageIndex === index
                                     ? "border-blue-500 dark:border-blue-400 ring-2 ring-blue-500/20"
-                                    : "border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600"
+                                    : "border-gray-300 dark:border-gray-800 hover:border-gray-400 dark:hover:border-gray-700"
                                 }`}
                               >
                                 <img
@@ -240,7 +240,7 @@ const ProductDetailsModal = ({
                     {/* Product Information Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Basic Info Card */}
-                      <div className="bg-gray-50 dark:bg-gray-900/30 rounded-sm border border-gray-300 dark:border-gray-700 p-4">
+                      <div className="bg-gray-50 dark:bg-gray-950/30 rounded-sm border border-gray-300 dark:border-gray-800 p-4">
                         <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
                           <Info className="h-4 w-4" />
                           Basic Information
@@ -283,7 +283,7 @@ const ProductDetailsModal = ({
                                     (tag, index) => (
                                       <span
                                         key={index}
-                                        className="px-2 py-1 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs rounded-full"
+                                        className="px-2 py-1 bg-gray-200 dark:bg-gray-900 text-gray-700 dark:text-gray-300 text-xs rounded-full"
                                       >
                                         {tag}
                                       </span>
@@ -296,7 +296,7 @@ const ProductDetailsModal = ({
                       </div>
 
                       {/* Pricing Card */}
-                      <div className="bg-gray-50 dark:bg-gray-900/30 rounded-sm border border-gray-300 dark:border-gray-700 p-4">
+                      <div className="bg-gray-50 dark:bg-gray-950/30 rounded-sm border border-gray-300 dark:border-gray-800 p-4">
                         <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
                           <DollarSign className="h-4 w-4" />
                           Pricing
@@ -326,7 +326,7 @@ const ProductDetailsModal = ({
                                   )?.toLocaleString()}
                                 </span>
                               </div>
-                              <div className="flex justify-between items-center pt-3 border-t border-gray-300 dark:border-gray-700">
+                              <div className="flex justify-between items-center pt-3 border-t border-gray-300 dark:border-gray-800">
                                 <span className="text-gray-600 dark:text-gray-400">
                                   Profit per Unit
                                 </span>
@@ -348,13 +348,13 @@ const ProductDetailsModal = ({
                       </div>
 
                       {/* Sales & Inventory Card */}
-                      <div className="bg-gray-50 dark:bg-gray-900/30 rounded-sm border border-gray-300 dark:border-gray-700 p-4 md:col-span-2">
+                      <div className="bg-gray-50 dark:bg-gray-950/30 rounded-sm border border-gray-300 dark:border-gray-800 p-4 md:col-span-2">
                         <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
                           <BarChart3 className="h-4 w-4" />
                           Sales & Inventory
                         </h3>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          <div className="text-center p-3 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700">
+                          <div className="text-center p-3 bg-white dark:bg-gray-900 rounded border border-gray-300 dark:border-gray-800">
                             <div className="text-2xl font-bold text-gray-900 dark:text-white">
                               {selectedProductDetails.quantity || 0}
                             </div>
@@ -362,7 +362,7 @@ const ProductDetailsModal = ({
                               Current Stock
                             </div>
                           </div>
-                          <div className="text-center p-3 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700">
+                          <div className="text-center p-3 bg-white dark:bg-gray-900 rounded border border-gray-300 dark:border-gray-800">
                             <div className="text-2xl font-bold text-gray-900 dark:text-white">
                               {selectedProductDetails.minStock || 0}
                             </div>
@@ -370,7 +370,7 @@ const ProductDetailsModal = ({
                               Minimum Stock
                             </div>
                           </div>
-                          <div className="text-center p-3 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700">
+                          <div className="text-center p-3 bg-white dark:bg-gray-900 rounded border border-gray-300 dark:border-gray-800">
                             <div className="text-2xl font-bold text-gray-900 dark:text-white">
                               {selectedProductDetails.totalSold || 0}
                             </div>
@@ -378,7 +378,7 @@ const ProductDetailsModal = ({
                               Total Sold
                             </div>
                           </div>
-                          <div className="text-center p-3 bg-white dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700">
+                          <div className="text-center p-3 bg-white dark:bg-gray-900 rounded border border-gray-300 dark:border-gray-800">
                             <div className="text-2xl font-bold text-gray-900 dark:text-white">
                               KSh{" "}
                               {(
@@ -395,7 +395,7 @@ const ProductDetailsModal = ({
                       {/* Specifications Card */}
                       {(selectedProductDetails.description ||
                         selectedProductDetails.features) && (
-                        <div className="bg-gray-50 dark:bg-gray-900/30 rounded-sm border border-gray-300 dark:border-gray-700 p-4 md:col-span-2">
+                        <div className="bg-gray-50 dark:bg-gray-950/30 rounded-sm border border-gray-300 dark:border-gray-800 p-4 md:col-span-2">
                           <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-3">
                             Description & Features
                           </h3>
@@ -486,7 +486,7 @@ const ProductDetailsModal = ({
 
                 {/* Footer */}
                 <div
-                  className={`border-t ${getBorderClass()} px-6 py-4 bg-gray-50 dark:bg-gray-900/30`}
+                  className={`border-t ${getBorderClass()} px-6 py-4 bg-gray-50 dark:bg-gray-950/30`}
                 >
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-500 dark:text-gray-400">

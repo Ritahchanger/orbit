@@ -56,7 +56,7 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
     return (
         <div className="space-y-6">
             {/* User's Current Permissions */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -82,7 +82,7 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
                     {showScrollButtons && canScrollUp && (
                         <button
                             onClick={scrollUp}
-                            className="absolute left-1/2 -translate-x-1/2 top-0 z-10 p-2 bg-gray-800 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 text-gray-300 dark:text-gray-200 rounded-b-lg shadow-lg transition-all border border-gray-700 dark:border-gray-600"
+                            className="absolute left-1/2 -translate-x-1/2 top-0 z-10 p-2 bg-gray-800 dark:bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-700 text-gray-300 dark:text-gray-200 rounded-b-lg shadow-lg transition-all border border-gray-700 dark:border-gray-700"
                             aria-label="Scroll up"
                         >
                             <ChevronUp size={16} />
@@ -93,7 +93,7 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
                     <div
                         ref={scrollContainerRef}
                         onScroll={handleScroll}
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-h-80 overflow-y-auto  scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-gray-100 dark:scrollbar-track-gray-800 rounded-md  dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30"
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-h-80 overflow-y-auto  scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-gray-100 dark:scrollbar-track-gray-800 rounded-md  dark:border-gray-800 bg-gray-50 dark:bg-gray-950/30"
                     >
                         {userPermissions && userPermissions.length > 0 ? (
                             userPermissions.map((perm) => (
@@ -107,9 +107,9 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
                                 </div>
                             ))
                         ) : (
-                            <div className="col-span-4 text-center py-10 px-4 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900/20 rounded-lg border border-gray-200 dark:border-gray-700">
-                                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 mb-3">
-                                    <div className="h-5 w-5 rounded-full border-2 border-gray-300 dark:border-gray-600 border-t-transparent dark:border-t-transparent animate-spin"></div>
+                            <div className="col-span-4 text-center py-10 px-4 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-950/20 rounded-lg border border-gray-200 dark:border-gray-800">
+                                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-900 mb-3">
+                                    <div className="h-5 w-5 rounded-full border-2 border-gray-300 dark:border-gray-700 border-t-transparent dark:border-t-transparent animate-spin"></div>
                                 </div>
                                 <p className="font-medium text-gray-700 dark:text-gray-300">No custom permissions assigned</p>
                                 <p className="text-sm mt-1">User only has role-based permissions</p>
@@ -121,7 +121,7 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
                     {showScrollButtons && canScrollDown && (
                         <button
                             onClick={scrollDown}
-                            className="absolute left-1/2 -translate-x-1/2 bottom-0 z-10 p-2 bg-gray-800 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 text-gray-300 dark:text-gray-200 rounded-t-lg shadow-lg transition-all border border-gray-700 dark:border-gray-600"
+                            className="absolute left-1/2 -translate-x-1/2 bottom-0 z-10 p-2 bg-gray-800 dark:bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-700 text-gray-300 dark:text-gray-200 rounded-t-lg shadow-lg transition-all border border-gray-700 dark:border-gray-700"
                             aria-label="Scroll down"
                         >
                             <ChevronDown size={16} />
@@ -131,10 +131,10 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
 
                 {/* Summary Stats */}
                 {userPermissions && userPermissions.length > 0 && (
-                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
                         <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Permission Summary</h4>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 text-center">
+                            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 text-center">
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Global</div>
                                 <div className="text-lg font-bold text-gray-900 dark:text-white">
                                     {userPermissions.filter(p => p.scope === 'global').length}
@@ -142,7 +142,7 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">permissions</div>
                             </div>
 
-                            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 text-center">
+                            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 text-center">
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Store-specific</div>
                                 <div className="text-lg font-bold text-gray-900 dark:text-white">
                                     {userPermissions.filter(p => p.scope === 'store').length}
@@ -150,7 +150,7 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">permissions</div>
                             </div>
 
-                            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 text-center">
+                            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 text-center">
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Role-based</div>
                                 <div className="text-lg font-bold text-gray-900 dark:text-white">
                                     {userPermissions.filter(p => p.source === 'role').length}
@@ -158,7 +158,7 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">permissions</div>
                             </div>
 
-                            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 text-center">
+                            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 text-center">
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Custom</div>
                                 <div className="text-lg font-bold text-gray-900 dark:text-white">
                                     {userPermissions.filter(p => p.source === 'user').length}
@@ -171,7 +171,7 @@ const AdminUserPermission = ({ userPermissions, updateAvailablePermissionsProps,
             </div>
 
             {/* Available Permissions */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     Available Permissions
                 </h3>

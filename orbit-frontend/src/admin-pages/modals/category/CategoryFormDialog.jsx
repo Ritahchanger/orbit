@@ -4,7 +4,7 @@ import CategoryDialog, { Spinner } from "./CategoryDialog";
 import { dialogButton } from "./dialogStyles";
 
 const fieldClass =
-  "w-full rounded-sm border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:opacity-60 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500";
+  "w-full rounded-sm border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-500";
 
 const labelClass =
   "mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300";
@@ -123,7 +123,7 @@ const CategoryFormDialog = ({ category, onClose, onSubmit, isSaving, error }) =>
         </div>
 
         {isEdit && category.slug && (
-          <p className="rounded-sm bg-gray-50 px-3 py-2 text-xs text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+          <p className="rounded-sm bg-gray-50 px-3 py-2 text-xs text-gray-500 dark:bg-gray-950 dark:text-gray-400">
             Current slug: <span className="font-mono">{category.slug}</span>
           </p>
         )}

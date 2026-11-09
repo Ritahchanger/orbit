@@ -492,7 +492,7 @@ const RoleManagement = () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => refetchRoles()}
-                  className="p-2 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-sm transition text-gray-700 dark:text-gray-300"
+                  className="p-2 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-sm transition text-gray-700 dark:text-gray-300"
                   title="Refresh"
                 >
                   <RefreshCw className="h-4 w-4" />
@@ -506,17 +506,17 @@ const RoleManagement = () => {
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div
                     key={i}
-                    className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4 animate-pulse"
+                    className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-sm p-4 animate-pulse"
                   >
-                    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded mb-3"></div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded mb-3"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded"></div>
                   </div>
                 ))}
               </div>
             ) : sortedRoles.length === 0 ? (
-              <div className="text-center py-12 bg-white dark:bg-gray-800/30 border border-gray-200 dark:border-gray-700 rounded-sm">
+              <div className="text-center py-12 bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-800 rounded-sm">
                 <ShieldAlert className="w-16 h-16 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
                 <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
                   No Roles Found
@@ -568,10 +568,10 @@ const RoleManagement = () => {
               </div>
             ) : (
               // Table View
-              <div className="overflow-x-auto bg-white dark:bg-gray-800/30 border border-gray-200 dark:border-gray-700 rounded-sm">
+              <div className="overflow-x-auto bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-800 rounded-sm">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                    <tr className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
                       <th className="px-4 py-3">
                         <input
                           type="checkbox"

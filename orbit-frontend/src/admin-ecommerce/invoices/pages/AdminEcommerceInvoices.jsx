@@ -56,13 +56,13 @@ const ModalShell = ({ title, onClose, children, maxWidth = "max-w-lg" }) => (
     <div className="fixed inset-0 z-[100]">
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
         <div className="absolute inset-0 flex items-center justify-center p-4">
-            <div className={`bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm w-full ${maxWidth} max-h-[90vh] overflow-y-auto shadow-2xl`}>
-                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+            <div className={`bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm w-full ${maxWidth} max-h-[90vh] overflow-y-auto shadow-2xl`}>
+                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800">
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
                     <button
                         type="button"
                         onClick={onClose}
-                        className="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
+                        className="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition-colors"
                         aria-label="Close"
                     >
                         <X size={18} />
@@ -144,28 +144,28 @@ const StandaloneInvoiceModal = ({ onClose }) => {
                             placeholder="Customer name *"
                             value={form.customer.name}
                             onChange={(e) => updateCustomerField("name", e.target.value)}
-                            className="px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <input
                             type="email"
                             placeholder="Email"
                             value={form.customer.email}
                             onChange={(e) => updateCustomerField("email", e.target.value)}
-                            className="px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <input
                             type="text"
                             placeholder="Phone"
                             value={form.customer.phone}
                             onChange={(e) => updateCustomerField("phone", e.target.value)}
-                            className="px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <input
                             type="text"
                             placeholder="Address"
                             value={form.customer.address}
                             onChange={(e) => updateCustomerField("address", e.target.value)}
-                            className="px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                 </div>
@@ -190,7 +190,7 @@ const StandaloneInvoiceModal = ({ onClose }) => {
                                 step="0.01"
                                 value={form.tax}
                                 onChange={(e) => setForm((prev) => ({ ...prev, tax: e.target.value }))}
-                                className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <div>
@@ -201,7 +201,7 @@ const StandaloneInvoiceModal = ({ onClose }) => {
                                 step="0.01"
                                 value={form.discount}
                                 onChange={(e) => setForm((prev) => ({ ...prev, discount: e.target.value }))}
-                                className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <div>
@@ -212,7 +212,7 @@ const StandaloneInvoiceModal = ({ onClose }) => {
                                 step="0.01"
                                 value={form.shippingFee}
                                 onChange={(e) => setForm((prev) => ({ ...prev, shippingFee: e.target.value }))}
-                                className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <div>
@@ -221,7 +221,7 @@ const StandaloneInvoiceModal = ({ onClose }) => {
                                 type="text"
                                 value={form.currency}
                                 onChange={(e) => setForm((prev) => ({ ...prev, currency: e.target.value }))}
-                                className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                     </div>
@@ -234,7 +234,7 @@ const StandaloneInvoiceModal = ({ onClose }) => {
                             type="date"
                             value={form.dueDate}
                             onChange={(e) => setForm((prev) => ({ ...prev, dueDate: e.target.value }))}
-                            className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                 </div>
@@ -245,11 +245,11 @@ const StandaloneInvoiceModal = ({ onClose }) => {
                         rows={3}
                         value={form.notes}
                         onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))}
-                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-800">
                     <p className="text-sm text-gray-600 dark:text-gray-300">
                         Computed total:{" "}
                         <span className="font-semibold text-gray-900 dark:text-white">
@@ -260,7 +260,7 @@ const StandaloneInvoiceModal = ({ onClose }) => {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-sm transition-colors"
+                            className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-sm transition-colors"
                         >
                             Cancel
                         </button>
@@ -305,14 +305,14 @@ const GenerateFromSaleModal = ({ onClose }) => {
                         placeholder="Paste POS transaction id"
                         value={transactionId}
                         onChange={(e) => setTransactionId(e.target.value)}
-                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
                 <div className="flex items-center justify-end gap-2">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-sm transition-colors"
+                        className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-sm transition-colors"
                     >
                         Cancel
                     </button>
@@ -355,7 +355,7 @@ const AdminEcommerceInvoices = () => {
 
     return (
         <AdminEcommerceLayout>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
                 <div className="flex items-start flex-col md:flex-row justify-between md:items-center mb-4 gap-3">
                     <div>
                         <h1 className="text-2xl sm:text-3xl font-heading font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 bg-clip-text text-transparent">
@@ -368,7 +368,7 @@ const AdminEcommerceInvoices = () => {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => setShowFromSaleModal(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm text-sm transition-colors"
+                            className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-900 hover:bg-gray-300 dark:hover:bg-gray-800 text-gray-800 dark:text-white rounded-sm text-sm transition-colors"
                         >
                             <Zap size={16} />
                             Generate from Sale
@@ -390,7 +390,7 @@ const AdminEcommerceInvoices = () => {
                             setTypeFilter(e.target.value);
                             setPage(1);
                         }}
-                        className="px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         {TYPE_OPTIONS.map((opt) => (
                             <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -402,7 +402,7 @@ const AdminEcommerceInvoices = () => {
                             setStatusFilter(e.target.value);
                             setPage(1);
                         }}
-                        className="px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         {STATUS_OPTIONS.map((opt) => (
                             <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -425,7 +425,7 @@ const AdminEcommerceInvoices = () => {
                 )}
 
                 {!isLoading && !isError && invoices.length === 0 && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
+                    <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-8 text-center">
                         <FileText className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                             No Invoices Found
@@ -437,11 +437,11 @@ const AdminEcommerceInvoices = () => {
                 )}
 
                 {!isLoading && !isError && invoices.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
+                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead>
-                                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                                    <tr className="border-b border-gray-200 dark:border-gray-800">
                                         {["Invoice #", "Type", "Customer", "Total", "Status", "Due Date", ""].map((h) => (
                                             <th
                                                 key={h}
@@ -456,7 +456,7 @@ const AdminEcommerceInvoices = () => {
                                     {invoices.map((invoice) => (
                                         <tr
                                             key={invoice._id}
-                                            className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
+                                            className="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors"
                                         >
                                             <td className="py-3 px-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                                 {invoice.invoiceNumber}
@@ -479,7 +479,7 @@ const AdminEcommerceInvoices = () => {
                                             <td className="py-3 px-4 text-right">
                                                 <button
                                                     onClick={() => navigate(`/admin/ecommerce/invoices/${invoice._id}`)}
-                                                    className="px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-sm transition-colors"
+                                                    className="px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-sm transition-colors"
                                                 >
                                                     View
                                                 </button>

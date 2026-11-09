@@ -283,7 +283,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm' transition-colors"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm' transition-colors"
             >
               <X className="h-5 w-5 text-gray-600 dark:text-gray-400" />
             </button>
@@ -312,7 +312,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   className={`w-full px-3 py-2 bg-white dark:bg-dark-light border ${
                     errors.name
                       ? "border-red-300 dark:border-red-500"
-                      : "border-gray-300 dark:border-gray-700"
+                      : "border-gray-300 dark:border-gray-800"
                   } rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                   placeholder="Enter product name"
                 />
@@ -331,7 +331,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   type="text"
                   value={formData.sku || product.sku}
                   readOnly
-                  className="w-full px-3 py-2 bg-gray-100 dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-600 dark:text-gray-400 cursor-not-allowed"
+                  className="w-full px-3 py-2 bg-gray-100 dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-600 dark:text-gray-400 cursor-not-allowed"
                 />
                 <p className="text-gray-500 dark:text-gray-500 text-xs mt-1">
                   SKU cannot be changed
@@ -349,7 +349,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   className={`w-full px-3 py-2 bg-white dark:bg-dark-light border ${
                     errors.category
                       ? "border-red-300 dark:border-red-500"
-                      : "border-gray-300 dark:border-gray-700"
+                      : "border-gray-300 dark:border-gray-800"
                   } rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                 >
                   <option value="">Select category</option>
@@ -375,7 +375,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   name="brand"
                   value={formData.brand}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter brand name"
                 />
               </div>
@@ -405,7 +405,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                       className={`w-full pl-12 pr-3 py-2 bg-white dark:bg-dark-light border ${
                         errors.price
                           ? "border-red-300 dark:border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                          : "border-gray-300 dark:border-gray-800"
                       } rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                       placeholder="0.00"
                       step="0.01"
@@ -432,7 +432,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                       name="costPrice"
                       value={formData.costPrice}
                       onChange={handleChange}
-                      className="w-full pl-12 pr-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-12 pr-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="0.00"
                       step="0.01"
                       min="0"
@@ -454,7 +454,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                     className={`w-full px-3 py-2 bg-white dark:bg-dark-light border ${
                       errors.stock
                         ? "border-red-300 dark:border-red-500"
-                        : "border-gray-300 dark:border-gray-700"
+                        : "border-gray-300 dark:border-gray-800"
                     } rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                     placeholder="0"
                     min="0"
@@ -475,7 +475,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                     name="minStock"
                     value={formData.minStock}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="5"
                     min="0"
                   />
@@ -490,7 +490,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
@@ -507,7 +507,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   name="isFeatured"
                   checked={formData.isFeatured}
                   onChange={handleChange}
-                  className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300 dark:border-gray-700"
+                  className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300 dark:border-gray-800"
                 />
                 <label
                   htmlFor="isFeatured"
@@ -533,7 +533,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
               className={`w-full px-3 py-2 bg-white dark:bg-dark-light border ${
                 errors.description
                   ? "border-red-300 dark:border-red-500"
-                  : "border-gray-300 dark:border-gray-700"
+                  : "border-gray-300 dark:border-gray-800"
               } rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               placeholder="Enter detailed product description..."
             />
@@ -551,7 +551,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
               Product Images
             </h3>
             <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-sm p-6 text-center bg-gray-50 dark:bg-dark-light">
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-800 rounded-sm p-6 text-center bg-gray-50 dark:bg-dark-light">
                 <Upload className="h-10 w-10 text-gray-500 dark:text-gray-500 mx-auto mb-3" />
                 <p className="text-gray-700 dark:text-gray-400 mb-2">
                   Add new images or replace existing ones
@@ -583,7 +583,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                       <img
                         src={image.preview || image.displayUrl || image.url}
                         alt={`Preview ${index}`}
-                        className="w-full h-32 object-cover rounded-sm border border-gray-200 dark:border-gray-700"
+                        className="w-full h-32 object-cover rounded-sm border border-gray-200 dark:border-gray-800"
                       />
                       {image.isExisting && (
                         <div className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
@@ -620,7 +620,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                     type="text"
                     value={spec}
                     onChange={(e) => updateSpecification(index, e.target.value)}
-                    className="flex-1 px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder={`Specification ${index + 1}`}
                   />
                   {specifications.length > 1 && (
@@ -658,7 +658,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                     type="text"
                     value={feature}
                     onChange={(e) => updateFeature(index, e.target.value)}
-                    className="flex-1 px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder={`Feature ${index + 1}`}
                   />
                   {features.length > 1 && (
@@ -699,7 +699,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   name="weight"
                   value={formData.weight}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="2.5 kg"
                 />
               </div>
@@ -712,7 +712,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   name="model"
                   value={formData.model}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Model number"
                 />
               </div>
@@ -732,7 +732,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   name="color"
                   value={formData.color}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Black, White, etc."
                 />
               </div>
@@ -745,7 +745,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   name="connectivity"
                   value={formData.connectivity}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Wi-Fi 6, Bluetooth 5.2, etc."
                 />
               </div>
@@ -758,7 +758,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   name="powerConsumption"
                   value={formData.powerConsumption}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="850W, 240W, etc."
                 />
               </div>
@@ -771,7 +771,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
                   name="warranty"
                   value={formData.warranty}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white dark:bg-dark-light border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="1 Year"
                 />
               </div>
@@ -784,7 +784,7 @@ const AdminEditProductModal = ({ product, categories, onClose, onSuccess }) => {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="px-6 py-2 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
               >
                 Cancel
               </button>

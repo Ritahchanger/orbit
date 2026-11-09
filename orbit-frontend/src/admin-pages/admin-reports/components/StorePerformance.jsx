@@ -258,7 +258,7 @@ const StorePerformance = () => {
       case "poor":
         return "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300 border-red-200 dark:border-red-800";
       default:
-        return "bg-gray-100 dark:bg-gray-900/20 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-800";
+        return "bg-gray-100 dark:bg-gray-950/20 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-800";
     }
   };
 
@@ -284,13 +284,13 @@ const StorePerformance = () => {
       case "active":
         return "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 border-green-200 dark:border-green-800";
       case "inactive":
-        return "bg-gray-100 dark:bg-gray-900/20 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-800";
+        return "bg-gray-100 dark:bg-gray-950/20 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-800";
       case "maintenance":
         return "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800";
       case "closed":
         return "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300 border-red-200 dark:border-red-800";
       default:
-        return "bg-gray-100 dark:bg-gray-900/20 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-800";
+        return "bg-gray-100 dark:bg-gray-950/20 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-800";
     }
   };
 
@@ -395,7 +395,7 @@ const StorePerformance = () => {
       {/* Summary Cards */}
       {summaryMetrics && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-3">
+          <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-3">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -412,7 +412,7 @@ const StorePerformance = () => {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-3">
+          <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-3">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -429,7 +429,7 @@ const StorePerformance = () => {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-3">
+          <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-3">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -446,7 +446,7 @@ const StorePerformance = () => {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-3">
+          <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-3">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -467,8 +467,8 @@ const StorePerformance = () => {
       )}
 
       {/* Store Performance Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
           <h3 className="text-base font-semibold text-gray-900 dark:text-white">
             Store Performance Details
           </h3>
@@ -489,7 +489,7 @@ const StorePerformance = () => {
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="divide-y divide-gray-200 dark:divide-gray-800">
             {stores.map((store) => {
               const performance = getPerformanceIndicator(store);
               const isExpanded = expandedStore === store.storeId;
@@ -497,7 +497,7 @@ const StorePerformance = () => {
               return (
                 <div
                   key={store.storeId}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
                 >
                   {/* Store Summary Row */}
                   <div
@@ -584,7 +584,7 @@ const StorePerformance = () => {
 
                   {/* Expanded Details */}
                   {isExpanded && (
-                    <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-800 pt-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {/* Detailed Metrics */}
                         <div className="space-y-3">
@@ -699,7 +699,7 @@ const StorePerformance = () => {
                       </div>
 
                       {/* Performance Insights */}
-                      <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-900/30 rounded-sm">
+                      <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-950/30 rounded-sm">
                         <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
                           Performance Insights
                         </h5>
@@ -736,7 +736,7 @@ const StorePerformance = () => {
       </div>
 
       {/* Sorting Controls */}
-      <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-3">
+      <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-3">
         <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
           Sort By
         </h4>
@@ -746,7 +746,7 @@ const StorePerformance = () => {
             className={`px-3 py-1.5 text-xs rounded-sm ${
               sortConfig.key === "totalSales"
                 ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
             }`}
           >
             Revenue{" "}
@@ -758,7 +758,7 @@ const StorePerformance = () => {
             className={`px-3 py-1.5 text-xs rounded-sm ${
               sortConfig.key === "totalProfit"
                 ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
             }`}
           >
             Profit{" "}
@@ -770,7 +770,7 @@ const StorePerformance = () => {
             className={`px-3 py-1.5 text-xs rounded-sm ${
               sortConfig.key === "transactionCount"
                 ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
             }`}
           >
             Transactions{" "}
@@ -782,7 +782,7 @@ const StorePerformance = () => {
             className={`px-3 py-1.5 text-xs rounded-sm ${
               sortConfig.key === "averageTransaction"
                 ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
             }`}
           >
             Avg. Transaction{" "}
@@ -794,7 +794,7 @@ const StorePerformance = () => {
             className={`px-3 py-1.5 text-xs rounded-sm ${
               sortConfig.key === "profitMargin"
                 ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
             }`}
           >
             Profit Margin{" "}

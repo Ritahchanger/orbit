@@ -371,7 +371,7 @@ const AdminReports = () => {
   if (rolesLoading || storesLoading) {
     return (
       <AdminLayout>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
             <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
@@ -387,8 +387,8 @@ const AdminReports = () => {
   if (!hasSelectedReportPermission()) {
     return (
       <AdminLayout>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-          <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-sm shadow-lg max-w-md">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
+          <div className="text-center p-8 bg-white dark:bg-gray-900 rounded-sm shadow-lg max-w-md">
             <Lock className="h-12 w-12 text-red-500 mx-auto mb-4" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Access Denied
@@ -414,7 +414,7 @@ const AdminReports = () => {
       <PageContainer>
           {/* Report Type Navigation */}
           <div>
-            <div className="border-b border-gray-200 dark:border-gray-700">
+            <div className="border-b border-gray-200 dark:border-gray-800">
               <nav className="-mb-px flex space-x-4 sm:space-x-6 overflow-x-auto">
                 {filteredReportTypes.map((report) => {
                   const Icon = report.icon;
@@ -431,7 +431,7 @@ const AdminReports = () => {
                                                 ${
                                                   isActive
                                                     ? `${colors.text} ${colors.tab}`
-                                                    : "text-black dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 border-transparent"
+                                                    : "text-black dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 border-transparent"
                                                 }
                                             `}
                     >
@@ -447,7 +447,7 @@ const AdminReports = () => {
           </div>
 
           {/* Scope: store comes from the global switcher, period is set here */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-3">
             <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
               <Store className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               <span className="font-medium">{currentStoreName}</span>
@@ -464,7 +464,7 @@ const AdminReports = () => {
                 onChange={(e) =>
                   setDateRange((r) => ({ ...r, startDate: e.target.value }))
                 }
-                className="px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="px-2 py-1.5 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 aria-label="Start date"
               />
               <span className="text-gray-500 dark:text-gray-400">to</span>
@@ -475,7 +475,7 @@ const AdminReports = () => {
                 onChange={(e) =>
                   setDateRange((r) => ({ ...r, endDate: e.target.value }))
                 }
-                className="px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="px-2 py-1.5 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 aria-label="End date"
               />
             </div>
@@ -495,8 +495,8 @@ const AdminReports = () => {
                       key={index}
                       onClick={action.action}
                       disabled={action.disabled}
-                      className={`disabled:opacity-60 disabled:cursor-wait p-2 sm:p-3 rounded-sm border border-gray-200 dark:border-gray-700 
-                                              bg-white dark:bg-gray-800 text-left hover:shadow-sm transition-shadow
+                      className={`disabled:opacity-60 disabled:cursor-wait p-2 sm:p-3 rounded-sm border border-gray-200 dark:border-gray-800 
+                                              bg-white dark:bg-gray-900 text-left hover:shadow-sm transition-shadow
                                               ${colors.hoverBorder}`}
                     >
                       <div className="flex items-center mb-1">
@@ -574,7 +574,7 @@ const AdminReports = () => {
           />
 
           {/* Bottom Actions */}
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
               <div className="text-xs text-gray-500 dark:text-gray-400">
                 Last updated:{" "}
@@ -592,7 +592,7 @@ const AdminReports = () => {
                 <button
                   onClick={handleRefresh}
                   disabled={loading}
-                  className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 dark:border-gray-600 rounded-sm text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 dark:border-gray-700 rounded-sm text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Calendar className="h-3 w-3 mr-1" />
                   {loading ? "Refreshing..." : "Refresh Data"}

@@ -4,7 +4,7 @@ const StatsOverview = ({userStats}) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
             {/* Total Users */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6 hover:shadow-sm transition-shadow">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6 hover:shadow-sm transition-shadow">
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">Total Users</p>
@@ -17,7 +17,7 @@ const StatsOverview = ({userStats}) => {
             </div>
 
             {/* With Permissions */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6 hover:shadow-sm transition-shadow">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6 hover:shadow-sm transition-shadow">
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">With Permissions</p>
@@ -30,7 +30,7 @@ const StatsOverview = ({userStats}) => {
             </div>
 
             {/* Super Admins */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6 hover:shadow-sm transition-shadow">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6 hover:shadow-sm transition-shadow">
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">Super Admins</p>
@@ -43,7 +43,7 @@ const StatsOverview = ({userStats}) => {
             </div>
 
             {/* Admins */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6 hover:shadow-sm transition-shadow">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6 hover:shadow-sm transition-shadow">
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">Admins</p>

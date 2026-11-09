@@ -30,7 +30,7 @@ const PermissionsHeader = ({
         </button>
         <button
           onClick={() => navigate("/admin/roles/management")}
-          className="px-4  py-2 rounded-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center space-x-2 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+          className="px-4  py-2 rounded-sm bg-blue-600 hover:bg-blue-700 text-white flex items-center space-x-2 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
           title="View inventory"
         >
           <span>Manage Roles</span>
@@ -39,7 +39,7 @@ const PermissionsHeader = ({
         <button
           onClick={handleRefresh}
           disabled={usersLoading || permissionsLoading}
-          className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-sm disabled:opacity-50 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+          className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm disabled:opacity-50 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
         >
           <RefreshCw
             size={18}

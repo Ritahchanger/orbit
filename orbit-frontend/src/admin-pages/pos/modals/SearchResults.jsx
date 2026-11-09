@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 const SearchResults = ({ isSearching, searchResults, handleAddToCart, setSelectedProductIndex,selectedProductIndex,formatCurrency }) => {
     return (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-xl z-30 max-h-100 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-xl z-30 max-h-100 overflow-y-auto">
             {isSearching ? (
                 <div className="p-4 text-center">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
@@ -16,7 +16,7 @@ const SearchResults = ({ isSearching, searchResults, handleAddToCart, setSelecte
                 </div>
             ) : (
                 <div>
-                    <div className="px-3 py-2 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                    <div className="px-3 py-2 bg-gray-50 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
                         <p className="text-xs text-gray-500 dark:text-gray-400">
                             Found {searchResults.length} product{searchResults.length !== 1 ? 's' : ''}
                         </p>
@@ -31,7 +31,7 @@ const SearchResults = ({ isSearching, searchResults, handleAddToCart, setSelecte
                                 key={item._id}
                                 onClick={() => handleAddToCart(item)}
                                 disabled={isOutOfStock}
-                                className={`w-full text-left p-3 border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition-colors ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-700'
+                                className={`w-full text-left p-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0 transition-colors ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800'
                                     } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 onMouseEnter={() => setSelectedProductIndex(index)}
                             >
@@ -44,7 +44,7 @@ const SearchResults = ({ isSearching, searchResults, handleAddToCart, setSelecte
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-3 mt-1">
-                                            <span className="text-sm font-mono bg-gray-100 text-black dark:bg-gray-700 dark:text-white px-2 py-0.5 rounded">
+                                            <span className="text-sm font-mono bg-gray-100 text-black dark:bg-gray-800 dark:text-white px-2 py-0.5 rounded">
                                                 {product?.sku || 'N/A'}
                                             </span>
                                             <span className="text-sm text-gray-600 dark:text-gray-300">

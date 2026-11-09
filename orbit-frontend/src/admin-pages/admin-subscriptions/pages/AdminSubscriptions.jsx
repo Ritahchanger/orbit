@@ -179,7 +179,7 @@ const statusConfig = {
 
 // Info Card Component
 const InfoCard = ({ icon: Icon, label, value, color = "text-gray-400" }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
     <div className="flex items-start gap-2">
       <div className={`p-2 rounded-sm ${color} bg-opacity-10`}>
         <Icon className={`w-5 h-5 ${color}`} />
@@ -196,7 +196,7 @@ const InfoCard = ({ icon: Icon, label, value, color = "text-gray-400" }) => (
 
 // Stat Card Component
 const StatCard = ({ icon: Icon, label, value, sublabel, color }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
     <div className="flex items-center justify-between mb-2">
       <div className={`p-2 rounded-sm ${color}`}>
         <Icon className="w-4 h-4" />
@@ -212,7 +212,7 @@ const StatCard = ({ icon: Icon, label, value, sublabel, color }) => (
 
 // Feature Pill Component
 const FeaturePill = ({ feature }) => (
-  <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-700/50 rounded-sm text-sm text-gray-700 dark:text-gray-300">
+  <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800/50 rounded-sm text-sm text-gray-700 dark:text-gray-300">
     <CheckCircle className="w-4 h-4 text-green-500" />
     {feature}
   </div>
@@ -267,7 +267,7 @@ const AdminSubscriptionProfile = () => {
 
   return (
     <AdminLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
         {/* Header with Refresh */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
           <div>
@@ -282,7 +282,7 @@ const AdminSubscriptionProfile = () => {
             <button
               onClick={handleRefresh}
               disabled={loading}
-              className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors disabled:opacity-50"
+              className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors disabled:opacity-50"
               title="Refresh"
             >
               <RefreshCw
@@ -291,7 +291,7 @@ const AdminSubscriptionProfile = () => {
             </button>
             <button
               onClick={handleContactSupport}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               Contact Support
             </button>
@@ -327,8 +327,8 @@ const AdminSubscriptionProfile = () => {
           {/* Left Column - Business Info & Plan */}
           <div className="lg:col-span-2 space-y-2">
             {/* Business Information Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-800">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                   <Building2 className="w-5 h-5" />
                   Business Information
@@ -377,8 +377,8 @@ const AdminSubscriptionProfile = () => {
             </div>
 
             {/* Current Plan Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-800">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                   <Package className="w-5 h-5" />
                   Current Plan
@@ -454,16 +454,16 @@ const AdminSubscriptionProfile = () => {
             </div>
 
             {/* Payment History */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-800">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                   <Receipt className="w-5 h-5" />
                   Payment History
                 </h2>
               </div>
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-gray-50 dark:bg-gray-700">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+                  <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         Date
@@ -482,11 +482,11 @@ const AdminSubscriptionProfile = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                  <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
                     {subscription.paymentHistory.map((payment) => (
                       <tr
                         key={payment.id}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                        className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
                       >
                         <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">
                           {formatDate(payment.date)}
@@ -531,8 +531,8 @@ const AdminSubscriptionProfile = () => {
           {/* Right Column - Stats & Actions */}
           <div className="space-y-2">
             {/* Admin Info Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+              <div className="p-4 border-b border-gray-200 dark:border-gray-800">
                 <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                   <Users className="w-4 h-4" />
                   Administrator
@@ -561,8 +561,8 @@ const AdminSubscriptionProfile = () => {
             </div>
 
             {/* Usage Stats Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+              <div className="p-4 border-b border-gray-200 dark:border-gray-800">
                 <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                   <TrendingUp className="w-4 h-4" />
                   Usage Statistics
@@ -578,7 +578,7 @@ const AdminSubscriptionProfile = () => {
                       {subscription.activeUsers}/{subscription.totalUsers}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
                     <div
                       className="bg-blue-600 h-2 rounded-full"
                       style={{
@@ -611,8 +611,8 @@ const AdminSubscriptionProfile = () => {
             </div>
 
             {/* Quick Actions Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+              <div className="p-4 border-b border-gray-200 dark:border-gray-800">
                 <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                   <Shield className="w-4 h-4" />
                   Quick Actions
@@ -621,21 +621,21 @@ const AdminSubscriptionProfile = () => {
               <div className="p-4 space-y-2">
                 <button
                   onClick={handleUpdatePaymentMethod}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                 >
                   <CreditCard className="w-4 h-4 text-blue-500" />
                   Update Payment Method
                 </button>
                 <button
                   onClick={() => setActiveTab("billing")}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                 >
                   <Receipt className="w-4 h-4 text-green-500" />
                   View Billing History
                 </button>
                 <button
                   onClick={handleContactSupport}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                 >
                   <Mail className="w-4 h-4 text-purple-500" />
                   Contact Support

@@ -67,7 +67,7 @@ const AdminEcommerceInvoiceDetail = () => {
 
     return (
         <AdminEcommerceLayout>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
                 <Link
                     to="/admin/ecommerce/invoices"
                     className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4 transition-colors"
@@ -112,7 +112,7 @@ const AdminEcommerceInvoiceDetail = () => {
 
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                             <div className="lg:col-span-2 space-y-4">
-                                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+                                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
                                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
                                         Customer
                                     </h3>
@@ -136,14 +136,14 @@ const AdminEcommerceInvoiceDetail = () => {
                                     </div>
                                 </div>
 
-                                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
+                                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
                                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white p-4 pb-0">
                                         Line Items
                                     </h3>
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-sm mt-3">
                                             <thead>
-                                                <tr className="border-b border-gray-200 dark:border-gray-700">
+                                                <tr className="border-b border-gray-200 dark:border-gray-800">
                                                     {["Description", "Qty", "Unit Price", "Amount"].map((h) => (
                                                         <th
                                                             key={h}
@@ -156,7 +156,7 @@ const AdminEcommerceInvoiceDetail = () => {
                                             </thead>
                                             <tbody>
                                                 {(invoice.items || []).map((item, i) => (
-                                                    <tr key={i} className="border-b border-gray-100 dark:border-gray-700/50">
+                                                    <tr key={i} className="border-b border-gray-100 dark:border-gray-800/50">
                                                         <td className="py-2.5 px-4 text-gray-900 dark:text-white">{item.description}</td>
                                                         <td className="py-2.5 px-4 text-gray-700 dark:text-gray-300">{item.quantity}</td>
                                                         <td className="py-2.5 px-4 text-gray-700 dark:text-gray-300">
@@ -180,7 +180,7 @@ const AdminEcommerceInvoiceDetail = () => {
                                 </div>
 
                                 {invoice.notes && (
-                                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+                                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
                                         <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Notes</h3>
                                         <p className="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-wrap">
                                             {invoice.notes}
@@ -190,7 +190,7 @@ const AdminEcommerceInvoiceDetail = () => {
                             </div>
 
                             <div className="space-y-4">
-                                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+                                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
                                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Totals</h3>
                                     <div className="space-y-2 text-sm">
                                         <div className="flex items-center justify-between">
@@ -217,7 +217,7 @@ const AdminEcommerceInvoiceDetail = () => {
                                                 {formatCurrency(invoice.shippingFee, invoice.currency)}
                                             </span>
                                         </div>
-                                        <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
+                                        <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-800">
                                             <span className="font-semibold text-gray-900 dark:text-white">Total</span>
                                             <span className="font-semibold text-gray-900 dark:text-white">
                                                 {formatCurrency(invoice.total, invoice.currency)}
@@ -226,13 +226,13 @@ const AdminEcommerceInvoiceDetail = () => {
                                     </div>
                                 </div>
 
-                                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+                                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
                                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Update Status</h3>
                                     <div className="flex items-center gap-2">
                                         <select
                                             value={statusValue}
                                             onChange={(e) => setStatusValue(e.target.value)}
-                                            className="flex-1 px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 capitalize"
+                                            className="flex-1 px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 capitalize"
                                         >
                                             {STATUS_OPTIONS.map((status) => (
                                                 <option key={status} value={status} className="capitalize">
@@ -250,7 +250,7 @@ const AdminEcommerceInvoiceDetail = () => {
                                     </div>
                                 </div>
 
-                                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+                                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
                                     <button
                                         onClick={handleDelete}
                                         disabled={deleteInvoice.isPending}

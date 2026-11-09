@@ -1,7 +1,7 @@
 const PreviewPurchaseOrder = ({ purchaseOrder }) => {
     return (
-        <div className="bg-gray-50 dark:bg-gray-700/30 border border-gray-300 dark:border-gray-600 rounded-sm p-4 mb-6 font-mono text-sm">
-            <div className="text-center border-b border-gray-300 dark:border-gray-700 pb-3 mb-4">
+        <div className="bg-gray-50 dark:bg-gray-800/30 border border-gray-300 dark:border-gray-700 rounded-sm p-4 mb-6 font-mono text-sm">
+            <div className="text-center border-b border-gray-300 dark:border-gray-800 pb-3 mb-4">
                 <h4 className="text-lg font-bold text-gray-900 dark:text-white">PURCHASE ORDER</h4>
                 <p className="text-gray-600 dark:text-gray-400">{purchaseOrder.poNumber}</p>
             </div>
@@ -22,7 +22,7 @@ const PreviewPurchaseOrder = ({ purchaseOrder }) => {
             <div className="overflow-x-auto">
                 <table className="w-full text-left">
                     <thead>
-                        <tr className="border-b border-gray-300 dark:border-gray-700">
+                        <tr className="border-b border-gray-300 dark:border-gray-800">
                             <th className="py-2 text-gray-700 dark:text-gray-400 text-xs font-medium">#</th>
                             <th className="py-2 text-gray-700 dark:text-gray-400 text-xs font-medium">Product</th>
                             <th className="py-2 text-gray-700 dark:text-gray-400 text-xs font-medium">Qty</th>
@@ -32,7 +32,7 @@ const PreviewPurchaseOrder = ({ purchaseOrder }) => {
                     </thead>
                     <tbody>
                         {purchaseOrder.items.slice(0, 3).map(item => (
-                            <tr key={item.id} className="border-b border-gray-200 dark:border-gray-600">
+                            <tr key={item.id} className="border-b border-gray-200 dark:border-gray-700">
                                 <td className="py-2 text-gray-700 dark:text-gray-300">{item.id}</td>
                                 <td className="py-2 text-gray-900 dark:text-white">
                                     <div className="truncate max-w-[120px]" title={item.name}>
@@ -59,7 +59,7 @@ const PreviewPurchaseOrder = ({ purchaseOrder }) => {
                 </table>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-700">
+            <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-800">
                 <div className="flex justify-between items-center">
                     <div>
                         <span className="text-gray-600 dark:text-gray-400 text-sm">Total Items: </span>

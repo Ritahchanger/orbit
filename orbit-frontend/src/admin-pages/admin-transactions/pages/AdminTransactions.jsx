@@ -160,7 +160,7 @@ const AdminTransactions = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={refreshAll}
-              className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
               Refresh
@@ -216,11 +216,11 @@ const AdminTransactions = () => {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4"
+                className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4"
               >
                 <div className="animate-pulse">
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-sm w-1/2 mb-3"></div>
-                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-sm w-3/4"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded-sm w-1/2 mb-3"></div>
+                  <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded-sm w-3/4"></div>
                 </div>
               </div>
             ))}
@@ -228,7 +228,7 @@ const AdminTransactions = () => {
         )}
 
         {/* Filters Section - FIXED: Uniform typography */}
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
             <div>
               <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white flex items-center">
@@ -241,7 +241,7 @@ const AdminTransactions = () => {
             </div>
 
             {summary.totalTransactions > 0 && (
-              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 px-3 py-1.5 rounded-sm">
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-3 py-1.5 rounded-sm">
                 Showing {transactions.length} of {summary.totalTransactions}{" "}
                 transactions
               </div>
@@ -262,7 +262,7 @@ const AdminTransactions = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search by customer name..."
-                    className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
               </div>
@@ -275,7 +275,7 @@ const AdminTransactions = () => {
                 <select
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="">All Methods</option>
                   <option value="cash">Cash</option>
@@ -294,7 +294,7 @@ const AdminTransactions = () => {
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="">All Statuses</option>
                   <option value="completed">Completed</option>
@@ -305,7 +305,7 @@ const AdminTransactions = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-800">
               <button
                 type="button"
                 onClick={clearFilters}
@@ -320,7 +320,7 @@ const AdminTransactions = () => {
                     setPage(1);
                     refetchTransactions();
                   }}
-                  className="px-3 py-1.5 text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  className="px-3 py-1.5 text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   Reset
                 </button>
@@ -336,9 +336,9 @@ const AdminTransactions = () => {
         </div>
 
         {/* Transactions Table - FIXED: Consistent header typography */}
-        <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
           {/* Table Header */}
-          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
             <div className="flex items-center justify-between">
               <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white">
                 Recent Transactions
@@ -357,7 +357,7 @@ const AdminTransactions = () => {
               <div className="space-y-3">
                 {[...Array(5)].map((_, i) => (
                   <div key={i} className="animate-pulse">
-                    <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="h-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
                   </div>
                 ))}
               </div>
@@ -390,7 +390,7 @@ const AdminTransactions = () => {
             !transactionsError &&
             transactions.length === 0 && (
               <div className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700 mb-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 mb-3">
                   <ShoppingCart className="h-6 w-6 text-gray-500 dark:text-gray-400" />
                 </div>
                 <h3 className="text-base font-medium text-gray-900 dark:text-white mb-1">
@@ -434,12 +434,12 @@ const AdminTransactions = () => {
         {!transactionsLoading &&
           !transactionsError &&
           summary.totalTransactions > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+            <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
               <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Transaction Summary
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-3 bg-gray-50 dark:bg-gray-700/30 rounded-sm">
+                <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/30 rounded-sm">
                   <div className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
                     {summary.totalTransactions}
                   </div>
@@ -447,7 +447,7 @@ const AdminTransactions = () => {
                     Total Transactions
                   </div>
                 </div>
-                <div className="text-center p-3 bg-gray-50 dark:bg-gray-700/30 rounded-sm">
+                <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/30 rounded-sm">
                   <div className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
                     {formatCurrency(summary.totalRevenue)}
                   </div>
@@ -455,7 +455,7 @@ const AdminTransactions = () => {
                     Total Revenue
                   </div>
                 </div>
-                <div className="text-center p-3 bg-gray-50 dark:bg-gray-700/30 rounded-sm">
+                <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/30 rounded-sm">
                   <div className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
                     {formatCurrency(Math.round(summary.averageTransaction))}
                   </div>

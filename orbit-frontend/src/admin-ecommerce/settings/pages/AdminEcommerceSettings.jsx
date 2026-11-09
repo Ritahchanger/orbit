@@ -14,7 +14,7 @@ import {
 } from "../../../admin-pages/hooks/ecommerce-settings.hooks";
 
 const inputClass =
-  "w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent";
+  "w-full px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent";
 
 const PAYMENT_METHOD_OPTIONS = ["cash", "mpesa", "card", "paybill", "other"];
 
@@ -47,7 +47,7 @@ const Field = ({ label, hint, children }) => (
 );
 
 const SectionCard = ({ icon: Icon, title, description, children }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6">
     <div className="flex items-center gap-3">
       <div className="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-sm">
         <Icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -75,8 +75,8 @@ const ToggleSwitch = ({ checked, onChange, disabled, label }) => (
     aria-label={label}
     disabled={disabled}
     onClick={() => onChange(!checked)}
-    className={`relative inline-flex items-center h-6 w-12 rounded-full transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed ${
-      checked ? "bg-blue-600" : "bg-gray-300 dark:bg-gray-600"
+    className={`relative inline-flex items-center h-6 w-12 rounded-full transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-950 disabled:opacity-50 disabled:cursor-not-allowed ${
+      checked ? "bg-blue-600" : "bg-gray-300 dark:bg-gray-700"
     }`}
   >
     <span
@@ -170,7 +170,7 @@ const BrandingSection = ({ theme, onThemeChange }) => (
           type="color"
           value={theme.primaryColor || "#2563eb"}
           onChange={(e) => onThemeChange("primaryColor", e.target.value)}
-          className="h-10 w-12 border border-gray-300 dark:border-gray-700 rounded-sm bg-gray-50 dark:bg-gray-900 cursor-pointer"
+          className="h-10 w-12 border border-gray-300 dark:border-gray-800 rounded-sm bg-gray-50 dark:bg-gray-950 cursor-pointer"
         />
         <input
           type="text"
@@ -262,7 +262,7 @@ const CommerceSection = ({ values, onFieldChange }) => (
 );
 
 const PaymentMethodsSection = ({ paymentMethods, onToggleMethod }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6">
     <div className="flex items-center gap-3">
       <div className="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-sm">
         <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -284,7 +284,7 @@ const PaymentMethodsSection = ({ paymentMethods, onToggleMethod }) => (
             className={`flex items-center gap-2 px-3 py-2 border rounded-sm cursor-pointer text-sm capitalize transition-colors ${
               checked
                 ? "border-blue-500 bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400"
-                : "border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300"
+                : "border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300"
             }`}
           >
             <input
@@ -302,7 +302,7 @@ const PaymentMethodsSection = ({ paymentMethods, onToggleMethod }) => (
 );
 
 const StatusSection = ({ values, slugError, onToggleEnabled, onTogglePublished }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6">
     <div className="flex items-center gap-3">
       <div className="p-2 bg-blue-50 dark:bg-blue-500/10 rounded-sm">
         <Globe className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -326,7 +326,7 @@ const StatusSection = ({ values, slugError, onToggleEnabled, onTogglePublished }
         <ToggleSwitch checked={values.enabled} onChange={onToggleEnabled} label="Enabled" />
       </div>
 
-      <div className="flex items-start justify-between gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex items-start justify-between gap-4 pt-4 border-t border-gray-200 dark:border-gray-800">
         <div>
           <p className="text-sm font-medium text-gray-900 dark:text-white">Published</p>
           <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -344,15 +344,15 @@ const SettingsSkeleton = () => (
     {[1, 2, 3, 4].map((i) => (
       <div
         key={i}
-        className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6"
+        className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6"
       >
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-9 h-9 bg-gray-200 dark:bg-gray-700 rounded-sm" />
-          <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="w-9 h-9 bg-gray-200 dark:bg-gray-800 rounded-sm" />
+          <div className="h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="h-10 bg-gray-100 dark:bg-gray-900 rounded-sm" />
-          <div className="h-10 bg-gray-100 dark:bg-gray-900 rounded-sm" />
+          <div className="h-10 bg-gray-100 dark:bg-gray-950 rounded-sm" />
+          <div className="h-10 bg-gray-100 dark:bg-gray-950 rounded-sm" />
         </div>
       </div>
     ))}
@@ -427,7 +427,7 @@ const AdminEcommerceSettings = () => {
 
   return (
     <AdminEcommerceLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
         <div className="flex items-start flex-col md:flex-row justify-between md:items-center mb-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-heading font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 bg-clip-text text-transparent">

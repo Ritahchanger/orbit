@@ -21,7 +21,7 @@ const MobileMenuOpen = ({
         (userRole === 'superadmin' || userRole === 'admin') && stores?.length > 1;
 
     return (
-        <div className="lg:hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div className="lg:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
             <div className="container mx-auto px-4 py-4 pt-1">
                 {/* Store Switcher - Mobile */}
                 <div className="mb-3 space-y-2">
@@ -67,7 +67,7 @@ const MobileMenuOpen = ({
                 </nav>
 
                 {/* Admin Mobile Actions */}
-                <div className="mt-6 border-t border-gray-200 pt-4 dark:border-gray-700">
+                <div className="mt-6 border-t border-gray-200 pt-4 dark:border-gray-800">
                     <button
                         onClick={handleLogout}
                         type="button"

@@ -53,7 +53,7 @@ const OrdersHeader = ({ activeStatus, setActiveStatus, onRefresh, isFetching }) 
       <button
         onClick={onRefresh}
         disabled={isFetching}
-        className="flex items-center gap-2 mt-2 md:mt-0 px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+        className="flex items-center gap-2 mt-2 md:mt-0 px-4 py-2 bg-gray-200 dark:bg-gray-900 hover:bg-gray-300 dark:hover:bg-gray-800 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm"
       >
         <RefreshCw size={16} className={isFetching ? "animate-spin" : ""} />
         <span>Refresh</span>
@@ -68,7 +68,7 @@ const OrdersHeader = ({ activeStatus, setActiveStatus, onRefresh, isFetching }) 
           className={`px-3 py-1.5 text-sm rounded-sm border transition-colors ${
             activeStatus === tab.id
               ? "bg-blue-600 dark:bg-blue-500 text-white border-blue-600 dark:border-blue-500"
-              : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+              : "bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800"
           }`}
         >
           {tab.label}
@@ -79,7 +79,7 @@ const OrdersHeader = ({ activeStatus, setActiveStatus, onRefresh, isFetching }) 
 );
 
 const OrdersEmptyState = () => (
-  <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
+  <div className="bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-8 text-center">
     <ShoppingBag className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No orders yet</h3>
     <p className="text-gray-600 dark:text-gray-400">
@@ -101,10 +101,10 @@ const OrdersErrorState = ({ message, onRetry }) => (
 );
 
 const OrdersTable = ({ orders, navigate }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead className="bg-gray-50 dark:bg-gray-900/50">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+        <thead className="bg-gray-50 dark:bg-gray-950/50">
           <tr>
             {["Order", "Customer", "Items", "Total", "Payment", "Status", "Created", ""].map((head) => (
               <th
@@ -116,9 +116,9 @@ const OrdersTable = ({ orders, navigate }) => (
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
           {orders.map((order) => (
-            <tr key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/40">
+            <tr key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/40">
               <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                 {order.orderNumber}
               </td>
@@ -181,7 +181,7 @@ const AdminEcommerceOrders = () => {
 
   return (
     <AdminEcommerceLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
         <OrdersHeader
           activeStatus={activeStatus}
           setActiveStatus={handleStatusChange}

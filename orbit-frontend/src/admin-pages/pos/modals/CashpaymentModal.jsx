@@ -88,17 +88,17 @@ const CashPaymentModal = ({
 
       {/* Modal */}
       <div
-        className="relative bg-white dark:bg-gray-800 rounded-sm shadow-xl w-full max-w-md"
+        className="relative bg-white dark:bg-gray-900 rounded-sm shadow-xl w-full max-w-md"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
             Cash Payment
           </h3>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -142,7 +142,7 @@ const CashPaymentModal = ({
                 value={amountGiven}
                 onChange={(e) => setAmountGiven(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="w-full pl-14 pr-4 py-3 text-2xl font-semibold border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-14 pr-4 py-3 text-2xl font-semibold border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="0.00"
                 autoFocus
                 min="0"
@@ -182,7 +182,7 @@ const CashPaymentModal = ({
                   className={`py-2 px-3 text-sm font-medium rounded-md transition-colors ${
                     amountGiven === amount.toString()
                       ? "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
                   }`}
                 >
                   {formatCurrency(amount)}
@@ -193,11 +193,11 @@ const CashPaymentModal = ({
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex gap-3 p-6 border-t border-gray-200 dark:border-gray-800">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-3 px-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-sm transition-colors font-medium"
+            className="flex-1 py-3 px-4 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-sm transition-colors font-medium"
           >
             Cancel
           </button>

@@ -276,10 +276,10 @@ const AdminConsultationTypes = () => {
     if (consultationTypes.length === 0) {
         return (
             <AdminLayout>
-                <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-6">
+                <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-6">
                     <div className="flex flex-col items-center justify-center min-h-[60vh]">
                         <div className="text-center max-w-md">
-                            <div className="h-16 w-16 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div className="h-16 w-16 bg-gray-200 dark:bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <BarChart3 className="h-8 w-8 text-gray-500 dark:text-gray-400" />
                             </div>
                             <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">No consultation types yet</h3>
@@ -300,12 +300,12 @@ const AdminConsultationTypes = () => {
 
     return (
         <AdminLayout>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
                 {/* Header */}
                 <div className="mb-2">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                         <div>
-                            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-500 dark:to-cyan-500 bg-clip-text text-transparent">
+                            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                                 Consultation Types
                             </h1>
                             <p className="text-gray-600 dark:text-gray-400 mt-1">Manage different types of gaming setup consultations</p>
@@ -314,14 +314,14 @@ const AdminConsultationTypes = () => {
                         <div className="flex items-center space-x-3">
                             <button
                                 onClick={() => refetch()}
-                                className="p-2 rounded-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                className="p-2 rounded-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                                 title="Refresh"
                             >
                                 <RefreshCw className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                             </button>
                             <button
                                 onClick={handleExportCSV}
-                                className="p-2 rounded-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                className="p-2 rounded-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                                 title="Export CSV"
                             >
                                 <Download className="h-5 w-5 text-gray-600 dark:text-gray-400" />
@@ -342,7 +342,7 @@ const AdminConsultationTypes = () => {
                 </div>
 
                 {/* Filters & Controls */}
-                <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4 mb-2">
+                <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-4 mb-2">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         {/* Search */}
                         <div>
@@ -354,7 +354,7 @@ const AdminConsultationTypes = () => {
                                     placeholder="Search by title or description..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
+                                    className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
                                 />
                             </div>
                         </div>
@@ -365,7 +365,7 @@ const AdminConsultationTypes = () => {
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
-                                className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
+                                className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
                             >
                                 <option value="order">Display Order</option>
                                 <option value="title">Title</option>
@@ -380,13 +380,13 @@ const AdminConsultationTypes = () => {
                             <div className="flex">
                                 <button
                                     onClick={() => setSortOrder('asc')}
-                                    className={`flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-l-sm ${sortOrder === 'asc' ? 'bg-blue-600 dark:bg-blue-500 text-white' : 'bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                                    className={`flex-1 px-4 py-2 border border-gray-300 dark:border-gray-800 rounded-l-sm ${sortOrder === 'asc' ? 'bg-blue-600 dark:bg-blue-500 text-white' : 'bg-gray-50 dark:bg-gray-950 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                                 >
                                     Asc
                                 </button>
                                 <button
                                     onClick={() => setSortOrder('desc')}
-                                    className={`flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 border-l-0 rounded-r-sm ${sortOrder === 'desc' ? 'bg-blue-600 dark:bg-blue-500 text-white' : 'bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                                    className={`flex-1 px-4 py-2 border border-gray-300 dark:border-gray-800 border-l-0 rounded-r-sm ${sortOrder === 'desc' ? 'bg-blue-600 dark:bg-blue-500 text-white' : 'bg-gray-50 dark:bg-gray-950 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                                 >
                                     Desc
                                 </button>

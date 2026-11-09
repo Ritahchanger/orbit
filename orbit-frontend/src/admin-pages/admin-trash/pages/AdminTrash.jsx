@@ -89,7 +89,7 @@ const AdminTrash = () => {
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-200 dark:border-gray-700 mb-2">
+        <div className="border-b border-gray-200 dark:border-gray-800 mb-2">
           <nav className="flex space-x-8" aria-label="Tabs">
             <button
               onClick={() => setActiveTab("transactions")}
@@ -140,7 +140,7 @@ const AdminTrash = () => {
                   setSearchTerm(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 text-sm font-medium rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
@@ -151,19 +151,19 @@ const AdminTrash = () => {
                 type="date"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="pl-10 pr-4 py-2 border text-sm border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500"
+                className="pl-10 pr-4 py-2 border text-sm border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <button
               onClick={handleClearFilters}
-              className="px-4 py-2 border text-sm border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="px-4 py-2 border text-sm border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               title="Clear filters"
             >
               <XCircle className="w-5 h-5 text-gray-500" />
             </button>
             <button
               onClick={() => refetchTransactions()}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               title="Refresh"
             >
               <RefreshCw className="w-5 h-5 text-gray-500" />
@@ -188,7 +188,7 @@ const AdminTrash = () => {
 
         {/* Bulk Actions Bar */}
         <div className="mt-4 flex justify-end gap-2">
-          <button className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+          <button className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             <Download className="w-4 h-4 mr-2 inline" />
             Export Trash Data
           </button>

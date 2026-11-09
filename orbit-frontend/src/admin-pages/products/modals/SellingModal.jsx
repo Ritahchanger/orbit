@@ -178,9 +178,9 @@ const SellModal = () => {
 
     return (
         <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg w-full max-w-[600px] max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg w-full max-w-[600px] max-h-[90vh] overflow-y-auto">
                 {/* Header */}
-                <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 z-10">
+                <div className="sticky top-0 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 p-4 z-10">
                     <div className="flex justify-between items-center">
                         <div>
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Sell Product</h3>
@@ -190,7 +190,7 @@ const SellModal = () => {
                         </div>
                         <button
                             onClick={() => dispatch(closeSellModal())}
-                            className="p-1 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                            className="p-1 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900"
                         >
                             <X size={20} />
                         </button>
@@ -200,7 +200,7 @@ const SellModal = () => {
                 {/* Body */}
                 <div className="p-4 space-y-4">
                     {/* Product Info */}
-                    <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
+                    <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg">
                         <div className="flex justify-between items-center">
                             <div>
                                 <p className="text-gray-900 dark:text-white font-medium">{product.name}</p>
@@ -225,7 +225,7 @@ const SellModal = () => {
                         <div className="flex items-center space-x-4">
                             <button
                                 onClick={() => dispatch(decrementQuantity())}
-                                className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-900 flex items-center justify-center text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                                 disabled={saleData.quantity <= 1}
                             >
                                 -
@@ -236,11 +236,11 @@ const SellModal = () => {
                                 max={product.quantity}
                                 value={saleData.quantity}
                                 onChange={(e) => handleQuantityChange(e.target.value)}
-                                className="w-20 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-center placeholder-gray-400 dark:placeholder-gray-500"
+                                className="w-20 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white text-center placeholder-gray-400 dark:placeholder-gray-500"
                             />
                             <button
                                 onClick={() => dispatch(incrementQuantity())}
-                                className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-900 flex items-center justify-center text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                                 disabled={saleData.quantity >= product.quantity}
                             >
                                 +
@@ -259,7 +259,7 @@ const SellModal = () => {
                         <select
                             value={saleData.paymentMethod}
                             onChange={handleSelectChange}
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                         >
                             {paymentMethods.filter(p => p.id !== 'all').map(method => (
                                 <option key={method.id} value={method.id}>
@@ -279,7 +279,7 @@ const SellModal = () => {
                                 type="text"
                                 value={saleData.customerName || ''}
                                 onChange={(e) => handleInputChange('customerName', e.target.value)}
-                                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                                 placeholder="John Doe"
                                 required
                             />
@@ -292,7 +292,7 @@ const SellModal = () => {
                                 type="tel"
                                 value={saleData.customerPhone || ''}
                                 onChange={(e) => handleInputChange('customerPhone', e.target.value)}
-                                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                                 placeholder="0712345678"
                             />
                         </div>
@@ -314,13 +314,13 @@ const SellModal = () => {
                                 value={saleData.discount === 0 ? '' : saleData.discount}
                                 onChange={(e) => handleDiscountChange(e.target.value)}
                                 placeholder="0.00"
-                                className="w-full pl-12 pr-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent"
+                                className="w-full pl-12 pr-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent"
                             />
                         </div>
                     </div>
 
                     {/* Total Summary */}
-                    <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg">
+                    <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg">
                         <div className="flex justify-between items-center mb-2">
                             <span className="text-gray-600 dark:text-gray-400">Subtotal:</span>
                             <span className="text-gray-900 dark:text-white">
@@ -348,7 +348,7 @@ const SellModal = () => {
                 <div className="border-t border-gray-200 dark:border-gray-800 p-4 flex justify-end space-x-3">
                     <button
                         onClick={() => dispatch(closeSellModal())}
-                        className="px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg"
+                        className="px-4 py-2 border border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-lg"
                     >
                         Cancel
                     </button>

@@ -42,7 +42,7 @@ const CustomersHeader = ({ search, setSearch, onRefresh, isFetching }) => (
       <button
         onClick={onRefresh}
         disabled={isFetching}
-        className="flex items-center gap-2 mt-2 md:mt-0 px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+        className="flex items-center gap-2 mt-2 md:mt-0 px-4 py-2 bg-gray-200 dark:bg-gray-900 hover:bg-gray-300 dark:hover:bg-gray-800 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm"
       >
         <RefreshCw size={16} className={isFetching ? "animate-spin" : ""} />
         <span>Refresh</span>
@@ -56,14 +56,14 @@ const CustomersHeader = ({ search, setSearch, onRefresh, isFetching }) => (
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search by name, phone, or email..."
-        className="w-full pl-9 pr-3 py-2 rounded-sm border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="w-full pl-9 pr-3 py-2 rounded-sm border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-950 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
     </div>
   </div>
 );
 
 const CustomersEmptyState = () => (
-  <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
+  <div className="bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-8 text-center">
     <Users className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No customers yet</h3>
     <p className="text-gray-600 dark:text-gray-400">
@@ -85,10 +85,10 @@ const CustomersErrorState = ({ message, onRetry }) => (
 );
 
 const CustomersTable = ({ customers, navigate }) => (
-  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
+  <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead className="bg-gray-50 dark:bg-gray-900/50">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+        <thead className="bg-gray-50 dark:bg-gray-950/50">
           <tr>
             {["Name", "Phone", "Email", "Orders", "Total Spent", "Last Order", ""].map((head) => (
               <th
@@ -100,9 +100,9 @@ const CustomersTable = ({ customers, navigate }) => (
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
           {customers.map((customer) => (
-            <tr key={customer.phone} className="hover:bg-gray-50 dark:hover:bg-gray-700/40">
+            <tr key={customer.phone} className="hover:bg-gray-50 dark:hover:bg-gray-800/40">
               <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                 {customer.name || "-"}
               </td>
@@ -162,7 +162,7 @@ const AdminEcommerceCustomers = () => {
 
   return (
     <AdminEcommerceLayout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white p-4 sm:p-6">
         <CustomersHeader
           search={search}
           setSearch={handleSearchChange}

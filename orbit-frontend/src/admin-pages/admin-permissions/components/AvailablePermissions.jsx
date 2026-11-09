@@ -57,7 +57,7 @@ const AvailablePermissions = ({
             </div>
 
             {/* Search and Info Bar */}
-            <div className="bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 p-3">
+            <div className="bg-white dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-800 p-3">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                         Showing all available system permissions
@@ -85,7 +85,7 @@ const AvailablePermissions = ({
                     return (
                         <div
                             key={perm._id}
-                            className="bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow cursor-pointer"
+                            className="bg-white dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-800 p-4 hover:shadow-md transition-shadow cursor-pointer"
                             onClick={() => {
                                 setPermissionData({
                                     permission: perm.key,
@@ -109,7 +109,7 @@ const AvailablePermissions = ({
                                         </span>
                                     </div>
                                 </div>
-                                <span className="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 capitalize">
+                                <span className="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 capitalize">
                                     {action}
                                 </span>
                             </div>
@@ -136,7 +136,7 @@ const AvailablePermissions = ({
                                 </div>
 
                                 {/* Action Button */}
-                                <div className="pt-2 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                <div className="pt-2 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
                                     <div className="text-xs text-primary-600 dark:text-primary-400 font-medium">
                                         {isAssigned(perm.key) ? 'Assign again (different scope) →' : 'Click to assign →'}
                                     </div>
@@ -157,34 +157,34 @@ const AvailablePermissions = ({
                 <div
                     ref={tableRef}
                     onScroll={handleScroll}
-                    className="bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden"
+                    className="bg-white dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-800 overflow-hidden"
                     style={{
                         maxHeight: '60vh',
                         overflowY: 'auto',
                         position: 'relative'
                     }}
                 >
-                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead className="sticky top-0 bg-gray-50 dark:bg-gray-700 z-10">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+                        <thead className="sticky top-0 bg-gray-50 dark:bg-gray-800 z-10">
                             <tr>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-700">
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-800">
                                     Module
                                 </th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-700">
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-800">
                                     Permission
                                 </th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-700">
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-800">
                                     Description
                                 </th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-700">
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-800">
                                     Action Type
                                 </th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-700">
+                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider sticky top-0 bg-gray-50 dark:bg-gray-800">
                                     Status
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                        <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                             {filteredPermissions.map(perm => {
                                 const ModuleIcon = getModuleIcon(perm.module);
                                 const action = perm.key.split('.')[1];
@@ -193,7 +193,7 @@ const AvailablePermissions = ({
                                 return (
                                     <tr
                                         key={perm._id}
-                                        className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                                        className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
                                         onClick={() => {
                                             setPermissionData({
                                                 permission: perm.key,
@@ -224,7 +224,7 @@ const AvailablePermissions = ({
                                             </div>
                                         </td>
                                         <td className="px-4 py-3 whitespace-nowrap">
-                                            <span className="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 capitalize">
+                                            <span className="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 capitalize">
                                                 {action}
                                             </span>
                                         </td>
@@ -248,7 +248,7 @@ const AvailablePermissions = ({
 
                 {/* Scroll Indicator */}
                 {showScrollIndicator && (
-                    <div className="absolute bottom-0 left-0 right-0 flex justify-center py-2 bg-gradient-to-t from-white to-transparent dark:from-gray-800 dark:to-transparent z-20 pointer-events-none">
+                    <div className="absolute bottom-0 left-0 right-0 flex justify-center py-2 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent z-20 pointer-events-none">
                         <div className="animate-bounce flex flex-col items-center">
                             <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                                 Scroll for more
@@ -274,7 +274,7 @@ const AvailablePermissions = ({
             {/* Empty State */}
             {filteredPermissions.length === 0 && (
                 <div className="text-center py-12">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700 mb-4">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
                         <div className="h-6 w-6 text-gray-500">🔒</div>
                     </div>
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -289,13 +289,13 @@ const AvailablePermissions = ({
 
             {/* Footer with pagination info */}
             {filteredPermissions.length > 0 && (
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-800">
                     <div>
                         Showing {filteredPermissions.length} permissions
                     </div>
                     <div className="flex items-center space-x-2">
                         <button
-                            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
                             onClick={() => tableRef.current?.scrollTo({ top: 0, behavior: 'smooth' })}
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -303,7 +303,7 @@ const AvailablePermissions = ({
                             </svg>
                         </button>
                         <button
-                            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
                             onClick={() => tableRef.current?.scrollTo({ top: tableRef.current.scrollHeight, behavior: 'smooth' })}
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

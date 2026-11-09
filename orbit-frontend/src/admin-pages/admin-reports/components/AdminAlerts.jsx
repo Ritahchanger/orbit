@@ -65,7 +65,7 @@ const AdminAlerts = ({
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500 w-64"
+              className="pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500 w-64"
             />
           </div>
         )}
@@ -121,8 +121,8 @@ const AdminAlerts = ({
 
         {/* Low Stock Products Table */}
         {filteredLowStock.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-            <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+            <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Package className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mr-2" />
@@ -139,8 +139,8 @@ const AdminAlerts = ({
               </div>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-700">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+                <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Product
@@ -165,11 +165,11 @@ const AdminAlerts = ({
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
                   {displayedLowStock.map((product) => (
                     <tr
                       key={product._id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center">
@@ -180,7 +180,7 @@ const AdminAlerts = ({
                               className="h-8 w-8 rounded-sm object-cover mr-3"
                             />
                           ) : (
-                            <div className="h-8 w-8 rounded-sm bg-gray-200 dark:bg-gray-700 mr-3 flex items-center justify-center">
+                            <div className="h-8 w-8 rounded-sm bg-gray-200 dark:bg-gray-800 mr-3 flex items-center justify-center">
                               <Package className="h-4 w-4 text-gray-400" />
                             </div>
                           )}
@@ -223,7 +223,7 @@ const AdminAlerts = ({
               </table>
             </div>
             {filteredLowStock.length > 5 && !showAllLowStock && (
-              <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+              <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
                 <button
                   onClick={() => setShowAllLowStock(true)}
                   className="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
@@ -237,8 +237,8 @@ const AdminAlerts = ({
 
         {/* Out of Stock Products Table */}
         {filteredOutOfStock.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-            <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+            <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Package className="h-4 w-4 text-red-600 dark:text-red-400 mr-2" />
@@ -255,8 +255,8 @@ const AdminAlerts = ({
               </div>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-700">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+                <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Product
@@ -278,11 +278,11 @@ const AdminAlerts = ({
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
                   {displayedOutOfStock.map((product) => (
                     <tr
                       key={product._id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center">
@@ -293,7 +293,7 @@ const AdminAlerts = ({
                               className="h-8 w-8 rounded-sm object-cover mr-3"
                             />
                           ) : (
-                            <div className="h-8 w-8 rounded-sm bg-gray-200 dark:bg-gray-700 mr-3 flex items-center justify-center">
+                            <div className="h-8 w-8 rounded-sm bg-gray-200 dark:bg-gray-800 mr-3 flex items-center justify-center">
                               <Package className="h-4 w-4 text-gray-400" />
                             </div>
                           )}
@@ -333,7 +333,7 @@ const AdminAlerts = ({
               </table>
             </div>
             {filteredOutOfStock.length > 5 && !showAllOutOfStock && (
-              <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+              <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
                 <button
                   onClick={() => setShowAllOutOfStock(true)}
                   className="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
@@ -347,7 +347,7 @@ const AdminAlerts = ({
 
         {/* No Alerts State */}
         {metrics.lowStockItems === 0 && metrics.outOfStockItems === 0 && (
-          <div className="py-10 text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm">
+          <div className="py-10 text-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/20 mb-4">
               <AlertTriangle className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>

@@ -229,7 +229,7 @@ const StockTransferModal = ({
         onClick={onClose}
       />
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white dark:bg-gray-900 rounded-sm shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div className="relative bg-white dark:bg-gray-950 rounded-sm shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden border border-gray-200 dark:border-gray-800">
           {/* Header */}
           <div className="sticky top-0 bg-linear-to-r from-blue-600 to-indigo-600 text-white px-6 py-4">
             <div className="flex items-center justify-between">
@@ -271,7 +271,7 @@ const StockTransferModal = ({
                     </label>
                     <div className="relative">
                       <Store className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                      <div className="w-full pl-10 pr-4 py-3 border rounded-sm bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white cursor-not-allowed opacity-75">
+                      <div className="w-full pl-10 pr-4 py-3 border rounded-sm bg-gray-100 dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white cursor-not-allowed opacity-75">
                         {currentStore ? (
                           <div className="flex items-center justify-between">
                             <span>{currentStore.name}</span>
@@ -385,8 +385,8 @@ const StockTransferModal = ({
                         className={`w-full px-4 py-3 border rounded-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                           touched.quantity && errors.quantity
                             ? "border-red-500 dark:border-red-500"
-                            : "border-gray-300 dark:border-gray-600"
-                        } bg-white dark:bg-gray-800 text-gray-900 dark:text-white`}
+                            : "border-gray-300 dark:border-gray-700"
+                        } bg-white dark:bg-gray-900 text-gray-900 dark:text-white`}
                       />
                       {touched.quantity && errors.quantity && (
                         <p className="mt-1 text-sm text-red-600 dark:text-red-400">
@@ -414,7 +414,7 @@ const StockTransferModal = ({
                     {bulkItems.map((item, index) => (
                       <div
                         key={index}
-                        className="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-sm"
+                        className="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-sm"
                       >
                         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
                           <SearchableSelect
@@ -444,7 +444,7 @@ const StockTransferModal = ({
                               min="1"
                               max="1000"
                               placeholder="Qty"
-                              className="w-24 px-3 py-2 border rounded-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                              className="w-24 px-3 py-2 border rounded-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                             />
                             {bulkItems.length > 1 && (
                               <button
@@ -476,7 +476,7 @@ const StockTransferModal = ({
                       name="reason"
                       value={formData.reason}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                     >
                       <option value="store_transfer">Store Transfer</option>
                       <option value="restock">Restock</option>
@@ -497,7 +497,7 @@ const StockTransferModal = ({
                       onChange={handleChange}
                       rows="3"
                       placeholder="Add any additional notes about this transfer..."
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white resize-none"
                     />
                   </div>
                 </div>
@@ -521,7 +521,7 @@ const StockTransferModal = ({
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-sm">
+                  <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
                     <div>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         From
@@ -541,7 +541,7 @@ const StockTransferModal = ({
                   </div>
 
                   {mode === "single" ? (
-                    <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-sm">
+                    <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
                       <div>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           Product
@@ -567,7 +567,7 @@ const StockTransferModal = ({
                       {bulkItems.map((item, index) => (
                         <div
                           key={index}
-                          className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-sm"
+                          className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-sm"
                         >
                           <span className="text-sm text-gray-900 dark:text-white">
                             {getProductName(item.productId)}
@@ -581,7 +581,7 @@ const StockTransferModal = ({
                   )}
 
                   {formData.notes && (
-                    <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-sm">
+                    <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         Notes
                       </p>
@@ -635,7 +635,7 @@ const StockTransferModal = ({
                         </p>
                       )}
                     </div>
-                    <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-sm text-left">
+                    <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-sm text-left">
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         Source Store: {getStoreName(formData.sourceStoreId)} →{" "}
                         {transferResult.sourceInventory?.newStock ||
@@ -657,13 +657,13 @@ const StockTransferModal = ({
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 px-6 py-4">
+          <div className="sticky bottom-0 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800 px-6 py-4">
             <div className="flex items-center justify-between">
               {step === 1 && (
                 <>
                   <button
                     onClick={onClose}
-                    className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                    className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-sm transition-colors"
                   >
                     Cancel
                   </button>
@@ -680,7 +680,7 @@ const StockTransferModal = ({
                 <>
                   <button
                     onClick={() => setStep(1)}
-                    className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                    className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-sm transition-colors"
                   >
                     Back
                   </button>

@@ -231,9 +231,9 @@ const TransactionDetailsModal = ({
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white dark:bg-gray-800 rounded-sm shadow-xl max-w-8xl w-full max-h-[90vh] overflow-hidden">
+        <div className="relative bg-white dark:bg-gray-900 rounded-sm shadow-xl max-w-8xl w-full max-h-[90vh] overflow-hidden">
           {/* Header */}
-          <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+          <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <ShoppingBag className="h-6 w-6 text-blue-600 dark:text-blue-400" />
@@ -252,7 +252,7 @@ const TransactionDetailsModal = ({
                           "Transaction ID",
                         )
                       }
-                      className="p-1 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      className="p-1 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
                     >
                       <Copy className="h-3.5 w-3.5" />
                     </button>
@@ -389,7 +389,7 @@ const TransactionDetailsModal = ({
                                   "Receipt Number",
                                 )
                               }
-                              className="p-0.5 text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                              className="p-0.5 text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
                             >
                               <Copy className="h-3 w-3" />
                             </button>
@@ -444,7 +444,7 @@ const TransactionDetailsModal = ({
                                 "Checkout ID",
                               )
                             }
-                            className="p-0.5 text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                            className="p-0.5 text-gray-500 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
                           >
                             <Copy className="h-2.5 w-2.5" />
                           </button>
@@ -469,7 +469,7 @@ const TransactionDetailsModal = ({
                   </div>
                 )}
 
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-sm p-4">
+                <div className="bg-gray-50 dark:bg-gray-950 rounded-sm p-4">
                   <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2 uppercase tracking-wider">
                     <ShoppingBag className="h-4 w-4" />
                     Transaction Summary
@@ -533,7 +533,7 @@ const TransactionDetailsModal = ({
                 </div>
 
                 {/* Items List */}
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-sm p-4">
+                <div className="bg-gray-50 dark:bg-gray-950 rounded-sm p-4">
                   <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2 uppercase tracking-wider">
                     <Package className="h-4 w-4" />
                     Items Purchased ({transaction.saleIds?.length || 0})
@@ -543,7 +543,7 @@ const TransactionDetailsModal = ({
                       transaction.saleIds?.map((item, index) => (
                         <div
                           key={item._id || index}
-                          className="border border-gray-200 dark:border-gray-700 rounded p-3 bg-white dark:bg-gray-800"
+                          className="border border-gray-200 dark:border-gray-800 rounded p-3 bg-white dark:bg-gray-900"
                         >
                           <div className="flex justify-between items-start">
                             <div className="flex-1">
@@ -608,7 +608,7 @@ const TransactionDetailsModal = ({
                         </div>
                       ))
                     ) : (
-                      <div className="text-center py-6 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700">
+                      <div className="text-center py-6 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800">
                         <Package className="h-10 w-10 text-gray-400 mx-auto mb-2" />
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           No items linked to this transaction
@@ -625,7 +625,7 @@ const TransactionDetailsModal = ({
               {/* Customer & Payment Info */}
               <div className="space-y-4">
                 {/* Customer Info */}
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-sm p-4">
+                <div className="bg-gray-50 dark:bg-gray-950 rounded-sm p-4">
                   <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2 uppercase tracking-wider">
                     <User className="h-4 w-4" />
                     Customer Information
@@ -652,7 +652,7 @@ const TransactionDetailsModal = ({
                             onClick={() =>
                               handleCopy(transaction.customerPhone, "Phone")
                             }
-                            className="p-1 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                            className="p-1 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
                           >
                             <Copy className="h-3.5 w-3.5" />
                           </button>
@@ -672,7 +672,7 @@ const TransactionDetailsModal = ({
                             onClick={() =>
                               handleCopy(transaction.customerEmail, "Email")
                             }
-                            className="p-1 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                            className="p-1 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
                           >
                             <Copy className="h-3.5 w-3.5" />
                           </button>
@@ -683,7 +683,7 @@ const TransactionDetailsModal = ({
                 </div>
 
                 {/* Payment Details */}
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-sm p-4">
+                <div className="bg-gray-50 dark:bg-gray-950 rounded-sm p-4">
                   <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2 uppercase tracking-wider">
                     <CreditCard className="h-4 w-4" />
                     Payment Details
@@ -694,7 +694,7 @@ const TransactionDetailsModal = ({
                         Method:
                       </span>
                       <div className="flex items-center gap-2">
-                        <div className="p-1 rounded bg-gray-100 dark:bg-gray-700">
+                        <div className="p-1 rounded bg-gray-100 dark:bg-gray-800">
                           {getPaymentMethodIcon(transaction.paymentMethod)}
                         </div>
                         <span className="text-sm font-medium text-gray-900 dark:text-white capitalize">
@@ -762,7 +762,7 @@ const TransactionDetailsModal = ({
 
                     {/* Cash Payment Summary */}
                     {isCashPayment && transaction.amountGiven > 0 && (
-                      <div className="pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
+                      <div className="pt-3 border-t border-gray-200 dark:border-gray-800 space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Amount Given:
@@ -798,7 +798,7 @@ const TransactionDetailsModal = ({
 
                     {/* Total Profit - Only show if has permission */}
                     {canViewProfitDetails && (
-                      <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <div className="pt-3 border-t border-gray-200 dark:border-gray-800">
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Total Profit:
@@ -829,7 +829,7 @@ const TransactionDetailsModal = ({
                 </div>
 
                 {/* Transaction Meta */}
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-sm p-4">
+                <div className="bg-gray-50 dark:bg-gray-950 rounded-sm p-4">
                   <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2 uppercase tracking-wider">
                     <Calendar className="h-4 w-4" />
                     Transaction Info
@@ -909,7 +909,7 @@ const TransactionDetailsModal = ({
                       {transaction.refunds.map((refund, index) => (
                         <div
                           key={refund._id || index}
-                          className="bg-white dark:bg-gray-800 rounded p-3 border border-gray-200 dark:border-gray-700 space-y-2"
+                          className="bg-white dark:bg-gray-900 rounded p-3 border border-gray-200 dark:border-gray-800 space-y-2"
                         >
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-semibold text-gray-900 dark:text-white">
@@ -967,7 +967,7 @@ const TransactionDetailsModal = ({
                             </div>
                           </div>
                           {refund.items?.length > 0 && (
-                            <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                            <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
                               <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                 Items Refunded:
                               </span>
@@ -987,7 +987,7 @@ const TransactionDetailsModal = ({
                             </div>
                           )}
                           {refund.notes && (
-                            <p className="text-xs text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200 dark:border-gray-700">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200 dark:border-gray-800">
                               {refund.notes}
                             </p>
                           )}
@@ -1037,7 +1037,7 @@ const TransactionDetailsModal = ({
                   {transaction.saleIds?.map((item, index) => (
                     <div
                       key={index}
-                      className="bg-white dark:bg-gray-800 rounded p-3 border border-gray-200 dark:border-gray-700"
+                      className="bg-white dark:bg-gray-900 rounded p-3 border border-gray-200 dark:border-gray-800"
                     >
                       <p
                         className="text-xs font-medium text-gray-900 dark:text-white truncate"
@@ -1079,7 +1079,7 @@ const TransactionDetailsModal = ({
 
             {/* No Access Message */}
             {!canViewProfitDetails && (
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-sm p-4 border border-gray-200 dark:border-gray-700 text-center">
+              <div className="bg-gray-50 dark:bg-gray-950 rounded-sm p-4 border border-gray-200 dark:border-gray-800 text-center">
                 <DollarSign className="h-8 w-8 text-gray-400 mx-auto mb-2" />
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   You don't have permission to view profit information
@@ -1089,7 +1089,7 @@ const TransactionDetailsModal = ({
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 border-t border-gray-200 dark:border-gray-700 px-6 py-4 bg-white dark:bg-gray-800">
+          <div className="sticky bottom-0 border-t border-gray-200 dark:border-gray-800 px-6 py-4 bg-white dark:bg-gray-900">
             <div className="flex justify-between items-center">
               <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
                 <span>
@@ -1109,7 +1109,7 @@ const TransactionDetailsModal = ({
               <div className="flex space-x-3">
                 <button
                   onClick={onClose}
-                  className="px-4 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm transition-colors uppercase tracking-wider"
+                  className="px-4 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm transition-colors uppercase tracking-wider"
                 >
                   Close
                 </button>

@@ -31,7 +31,7 @@ const RoleCard = ({
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800/50 border ${isSelected ? "border-blue-500" : "border-gray-200 dark:border-gray-700"} rounded-sm p-4 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200`}
+      className={`bg-white dark:bg-gray-900/50 border ${isSelected ? "border-blue-500" : "border-gray-200 dark:border-gray-800"} rounded-sm p-4 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200`}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
@@ -85,7 +85,7 @@ const RoleCard = ({
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-2 mb-4">
-        <div className="text-center p-2 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
+        <div className="text-center p-2 bg-gray-50 dark:bg-gray-950/50 rounded-sm">
           <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
             <Users className="h-3 w-3" />
             Users
@@ -94,7 +94,7 @@ const RoleCard = ({
             {role.userCount || 0}
           </div>
         </div>
-        <div className="text-center p-2 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
+        <div className="text-center p-2 bg-gray-50 dark:bg-gray-950/50 rounded-sm">
           <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
             <ListChecks className="h-3 w-3" />
             Permissions
@@ -103,7 +103,7 @@ const RoleCard = ({
             {role.permissions?.length || 0}
           </div>
         </div>
-        <div className="text-center p-2 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
+        <div className="text-center p-2 bg-gray-50 dark:bg-gray-950/50 rounded-sm">
           <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
             <span className="text-xs">👑</span>
             Assign
@@ -131,7 +131,7 @@ const RoleCard = ({
                 return (
                   <div
                     key={module}
-                    className="flex items-center gap-1 px-2 py-1 bg-gray-50 dark:bg-gray-900/50 rounded-sm"
+                    className="flex items-center gap-1 px-2 py-1 bg-gray-50 dark:bg-gray-950/50 rounded-sm"
                     title={`${count} permissions in ${module}`}
                   >
                     <ModuleIcon className="h-3 w-3 text-gray-500 dark:text-gray-400" />
@@ -145,7 +145,7 @@ const RoleCard = ({
                 );
               })}
             {Object.keys(permissionCountByModule).length > 3 && (
-              <div className="px-2 py-1 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
+              <div className="px-2 py-1 bg-gray-50 dark:bg-gray-950/50 rounded-sm">
                 <span className="text-xs text-gray-600 dark:text-gray-400">
                   +{Object.keys(permissionCountByModule).length - 3}
                 </span>
@@ -167,7 +167,7 @@ const RoleCard = ({
         <div className="flex items-center gap-1">
           <button
             onClick={onEdit}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition"
             title="Edit"
             disabled={role.isSystemRole}
           >
@@ -177,14 +177,14 @@ const RoleCard = ({
           </button>
           <button
             onClick={onClone}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition"
             title="Clone"
           >
             <Copy className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
           </button>
           <button
             onClick={onDelete}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition"
             title="Delete"
             disabled={role.isSystemRole}
           >

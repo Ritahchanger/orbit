@@ -344,8 +344,8 @@ import { useState, useEffect, useRef, useMemo } from "react";
             storeLabel={actualStoreLabel}
           />
 
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
-            <div className="border-b border-gray-200 dark:border-gray-700 p-4">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
+            <div className="border-b border-gray-200 dark:border-gray-800 p-4">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-white">

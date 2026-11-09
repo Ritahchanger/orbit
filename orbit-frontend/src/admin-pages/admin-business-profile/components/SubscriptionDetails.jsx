@@ -1,8 +1,8 @@
 import { Users, CreditCard, Store } from "lucide-react";
 const SubscriptionDetails = ({activeSubscription}) => {
   return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700  rounded-sm overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800  rounded-sm overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-linear-to-r from-maroon-50 to-blue-50 dark:from-maroon-900/20 dark:to-blue-900/20">
         <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <CreditCard className="w-5 h-5 text-maroon-600" />
           Active Subscription
@@ -46,7 +46,7 @@ const SubscriptionDetails = ({activeSubscription}) => {
             {activeSubscription?.pricePaid?.toLocaleString() || "—"}
           </span>
         </div>
-        <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-2">
+        <div className="border-t border-gray-200 dark:border-gray-800 pt-3 mt-2">
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs text-gray-500 dark:text-gray-400">
               Stores Limit
@@ -68,7 +68,7 @@ const SubscriptionDetails = ({activeSubscription}) => {
             </span>
           </div>
         </div>
-        <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-2">
+        <div className="border-t border-gray-200 dark:border-gray-800 pt-3 mt-2">
           <div className="flex justify-between items-center">
             <span className="text-xs text-gray-500 dark:text-gray-400">
               Days Until Expiry

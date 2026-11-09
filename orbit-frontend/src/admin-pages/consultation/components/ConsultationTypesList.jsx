@@ -112,7 +112,7 @@ const ConsultationTypesList = ({
             return (
               <div
                 key={type.id}
-                className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
+                className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-4 hover:border-gray-400 dark:hover:border-gray-700 transition-colors"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center space-x-3">
@@ -134,7 +134,7 @@ const ConsultationTypesList = ({
                     </div>
                   </div>
                   <div className="relative">
-                    <button className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm">
+                    <button className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm">
                       <MoreVertical className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                     </button>
                   </div>
@@ -145,7 +145,7 @@ const ConsultationTypesList = ({
                 </p>
 
                 <div className="grid grid-cols-2 gap-2 mb-4">
-                  <div className="text-center p-2 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
+                  <div className="text-center p-2 bg-gray-50 dark:bg-gray-950/50 rounded-sm">
                     <div className="text-xs text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1">
                       <Clock className="h-3 w-3" />
                       Duration
@@ -154,7 +154,7 @@ const ConsultationTypesList = ({
                       {type.duration}
                     </div>
                   </div>
-                  <div className="text-center p-2 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
+                  <div className="text-center p-2 bg-gray-50 dark:bg-gray-950/50 rounded-sm">
                     <div className="text-xs text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1">
                       <DollarSign className="h-3 w-3" />
                       Price
@@ -175,14 +175,14 @@ const ConsultationTypesList = ({
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => handleViewDetails(type)}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                       title="View Details"
                     >
                       <Eye className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                     </button>
                     <button
                       onClick={() => handleToggleStatus(type.id)}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                       disabled={isTogglingConsultationTypeStatus}
                       title={isActive ? "Deactivate" : "Activate"}
                     >
@@ -194,14 +194,14 @@ const ConsultationTypesList = ({
                     </button>
                     <button
                       onClick={() => setEditingType(type)}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                       title="Edit"
                     >
                       <Edit2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                     </button>
                     <button
                       onClick={() => handleDeleteType(type.id)}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                       disabled={isDeletingConsultationType}
                       title="Delete"
                     >
@@ -218,7 +218,7 @@ const ConsultationTypesList = ({
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-gray-100 dark:bg-gray-900/50">
+              <tr className="bg-gray-100 dark:bg-gray-950/50">
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                   <input type="checkbox" className="rounded-sm" />
                 </th>
@@ -252,7 +252,7 @@ const ConsultationTypesList = ({
                 return (
                   <tr
                     key={type.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-900/30"
+                    className="hover:bg-gray-50 dark:hover:bg-gray-950/30"
                   >
                     <td className="px-4 py-3">
                       <input type="checkbox" className="rounded-sm" />
@@ -305,14 +305,14 @@ const ConsultationTypesList = ({
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => handleViewDetails(type)}
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                           title="View Details"
                         >
                           <Eye className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                         </button>
                         <button
                           onClick={() => handleToggleStatus(type.id)}
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                           disabled={isTogglingConsultationTypeStatus}
                           title={isActive ? "Deactivate" : "Activate"}
                         >
@@ -324,21 +324,21 @@ const ConsultationTypesList = ({
                         </button>
                         <button
                           onClick={() => setEditingType(type)}
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                           title="Edit"
                         >
                           <Edit2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                         </button>
                         <button
                           onClick={() => handleDuplicateType(type)}
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                           title="Duplicate"
                         >
                           <Copy className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                         </button>
                         <button
                           onClick={() => handleDeleteType(type.id)}
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                           disabled={isDeletingConsultationType}
                           title="Delete"
                         >
@@ -363,9 +363,9 @@ const ConsultationTypesList = ({
 
           <div className="flex min-h-screen items-center justify-center p-4">
             <div className="relative w-full max-w-4xl transform transition-all">
-              <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm shadow-2xl overflow-hidden">
+              <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm shadow-2xl overflow-hidden">
                 {/* Modal Header */}
-                <div className="border-b border-gray-300 dark:border-gray-700 p-6">
+                <div className="border-b border-gray-300 dark:border-gray-800 p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <div className="flex items-center gap-3">
@@ -399,7 +399,7 @@ const ConsultationTypesList = ({
                     </div>
                     <button
                       onClick={handleCloseDetails}
-                      className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                      className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                     >
                       <X className="h-5 w-5 text-gray-700 dark:text-gray-400" />
                     </button>
@@ -450,7 +450,7 @@ const ConsultationTypesList = ({
                           Quick Information
                         </h3>
                         <div className="grid grid-cols-2 gap-4">
-                          <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
+                          <div className="bg-gray-50 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
                             <div className="flex items-center justify-between mb-2">
                               <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                               <span className="text-sm text-gray-600 dark:text-gray-400">
@@ -462,7 +462,7 @@ const ConsultationTypesList = ({
                             </div>
                           </div>
 
-                          <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
+                          <div className="bg-gray-50 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
                             <div className="flex items-center justify-between mb-2">
                               <DollarSign
                                 className={`h-5 w-5 ${isPriceFree(selectedType.price) ? "text-green-600 dark:text-green-400" : "text-yellow-600 dark:text-yellow-400"}`}
@@ -481,7 +481,7 @@ const ConsultationTypesList = ({
                       </div>
 
                       {/* Additional Details */}
-                      <div className="bg-gray-50 dark:bg-gray-900/30 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
+                      <div className="bg-gray-50 dark:bg-gray-950/30 border border-gray-300 dark:border-gray-800 rounded-sm p-4">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                           Additional Details
                         </h3>
@@ -555,7 +555,7 @@ const ConsultationTypesList = ({
                           handleDuplicateType(selectedType);
                           handleCloseDetails();
                         }}
-                        className="px-4 py-2 bg-gray-600 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-sm transition"
+                        className="px-4 py-2 bg-gray-600 dark:bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-700 text-white rounded-sm transition"
                       >
                         <Copy className="h-4 w-4 inline mr-2" />
                         Duplicate

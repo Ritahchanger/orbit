@@ -73,7 +73,7 @@ const ListView = ({
     return (
         <div className="overflow-x-auto">
             <table className="w-full">
-                <thead className="bg-gray-100 dark:bg-gray-800">
+                <thead className="bg-gray-100 dark:bg-gray-900">
                     <tr>
                         <th className="py-3 px-4 text-left text-gray-700 dark:text-gray-300 font-medium text-sm">Store</th>
                         <th className="py-3 px-4 text-left text-gray-700 dark:text-gray-300 font-medium text-sm">Code</th>
@@ -85,7 +85,7 @@ const ListView = ({
                         <th className="py-3 px-4 text-left text-gray-700 dark:text-gray-300 font-medium text-sm">Actions</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                     {filteredStores.map(store => {
                         const storePermissions = getStorePermissions(store._id);
                         const canViewStore = canAccessStore(store._id);
@@ -100,10 +100,10 @@ const ListView = ({
                         }
 
                         return (
-                            <tr key={store._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+                            <tr key={store._id} className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors">
                                 <td className="py-4 px-4">
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 rounded-sm flex items-center justify-center border ${isCurrentStore ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-800' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-600'}`}>
+                                        <div className={`w-10 h-10 rounded-sm flex items-center justify-center border ${isCurrentStore ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-800' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-700'}`}>
                                             <Store size={18} />
                                         </div>
                                         <div>
@@ -170,7 +170,7 @@ const ListView = ({
                                         {canViewStore && (
                                             <button
                                                 onClick={() => handleViewProducts(store)}
-                                                className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors flex items-center gap-1"
+                                                className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors flex items-center gap-1"
                                                 title="View store products"
                                             >
                                                 <Package size={12} />
@@ -194,7 +194,7 @@ const ListView = ({
                                         {canViewStore && (
                                             <button
                                                 onClick={() => handleViewStoreDetails(store)}
-                                                className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                                                className="p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                                                 title="View details"
                                             >
                                                 <Eye size={16} />

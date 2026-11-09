@@ -249,13 +249,13 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
         <div className="flex min-h-full items-center justify-center p-4 text-center">
           {/* Modal panel with animation */}
           <div
-            className={`relative w-full max-w-8xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-2xl transform transition-all duration-300 ${
+            className={`relative w-full max-w-8xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-2xl transform transition-all duration-300 ${
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-sm bg-blue-100 dark:bg-blue-500/20">
                   <Store className="h-6 w-6 text-blue-600 dark:text-blue-400" />
@@ -298,7 +298,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                 </button>
                 <button
                   onClick={onClose}
-                  className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                  className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -310,7 +310,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                 {/* Left Column - Store Info */}
                 <div className="lg:col-span-2 space-y-6">
                   {/* Contact Information */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+                  <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                       <Building2 size={18} />
                       Store Information
@@ -355,7 +355,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                               onClick={() =>
                                 copyToClipboard(store.phone, "phone")
                               }
-                              className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-all rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                              className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-all rounded hover:bg-gray-200 dark:hover:bg-gray-800"
                               title="Copy phone number"
                             >
                               <Copy size={14} />
@@ -380,7 +380,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                               onClick={() =>
                                 copyToClipboard(store.email, "email")
                               }
-                              className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-all rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                              className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-all rounded hover:bg-gray-200 dark:hover:bg-gray-800"
                               title="Copy email"
                             >
                               <Copy size={14} />
@@ -434,7 +434,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                   </div>
 
                   {/* Opening Hours */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+                  <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                       <Clock size={18} />
                       Opening Hours
@@ -447,7 +447,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                           className={`flex items-center justify-between p-3 rounded-sm ${
                             day.isToday
                               ? "bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20"
-                              : "bg-gray-100 dark:bg-gray-700/30"
+                              : "bg-gray-100 dark:bg-gray-800/30"
                           }`}
                         >
                           <div className="flex items-center gap-2">
@@ -484,7 +484,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                 {/* Right Column - Actions & Store Workers */}
                 <div className="space-y-6">
                   {/* Quick Actions */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+                  <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                       Quick Actions
                     </h3>
@@ -529,7 +529,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                   </div>
 
                   {/* Store Workers Section */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+                  <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         <Users size={18} />
@@ -537,7 +537,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                       </h3>
                       <button
                         onClick={() => refetchWorkers()}
-                        className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                        className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800 rounded-sm transition-colors"
                         title="Refresh workers"
                       >
                         <RefreshCw
@@ -584,7 +584,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                           className={`px-3 py-1.5 text-xs font-medium rounded-sm transition-colors capitalize ${
                             workerFilter === filter
                               ? "bg-blue-600 dark:bg-blue-500 text-white"
-                              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                              : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700"
                           }`}
                         >
                           {filter}
@@ -601,7 +601,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                           .map((_, i) => (
                             <div
                               key={i}
-                              className="animate-pulse bg-gray-200 dark:bg-gray-700 h-16 rounded-sm"
+                              className="animate-pulse bg-gray-200 dark:bg-gray-800 h-16 rounded-sm"
                             ></div>
                           ))
                       ) : workersError ? (
@@ -616,7 +616,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                         workers.map((worker) => (
                           <div
                             key={worker._id}
-                            className="p-3 bg-white dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-sm hover:shadow-sm transition-all group"
+                            className="p-3 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm hover:shadow-sm transition-all group"
                           >
                             <div className="flex items-start justify-between">
                               <div className="flex items-start gap-2">
@@ -627,7 +627,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                                     className="w-8 h-8 rounded-full object-cover"
                                   />
                                 ) : (
-                                  <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+                                  <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                                     <UserCircle className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                   </div>
                                 )}
@@ -699,7 +699,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                             {/* Store-specific role if different from global role */}
                             {worker.storeRole &&
                               worker.storeRole !== worker.role && (
-                                <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-600 flex items-center gap-1">
+                                <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 flex items-center gap-1">
                                   <span className="text-xs text-gray-500 dark:text-gray-400">
                                     Store role:
                                   </span>
@@ -731,7 +731,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between p-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-t border-gray-200 dark:border-gray-800">
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 Store ID: {store._id}
               </div>
@@ -739,7 +739,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={onClose}
-                  className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                  className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                 >
                   Close
                 </button>
@@ -747,7 +747,7 @@ const StoreDetailsModal = ({ isOpen, onClose, store, onEdit, onDelete }) => {
                   onClick={() => {
                     copyToClipboard(store._id, "id");
                   }}
-                  className="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-sm transition-colors flex items-center gap-2"
+                  className="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm transition-colors flex items-center gap-2"
                 >
                   <Copy size={14} />
                   Copy Store ID

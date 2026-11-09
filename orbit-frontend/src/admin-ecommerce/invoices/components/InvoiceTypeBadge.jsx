@@ -11,7 +11,7 @@ const TYPE_LABELS = {
 };
 
 const InvoiceTypeBadge = ({ type }) => {
-    const style = TYPE_STYLES[type] || "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300";
+    const style = TYPE_STYLES[type] || "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300";
 
     return (
         <span className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-sm ${style}`}>

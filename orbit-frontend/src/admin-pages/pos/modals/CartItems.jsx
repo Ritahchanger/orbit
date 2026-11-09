@@ -68,7 +68,7 @@ const CartItems = ({
                 ) : (
                     <>
                         {/* Table Header */}
-                        <div className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/30 sticky top-0 z-10">
+                        <div className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30 sticky top-0 z-10">
                             <div className="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                 <div className="col-span-5">Product</div>
                                 <div className="col-span-2 text-center">Unit Price</div>
@@ -88,7 +88,7 @@ const CartItems = ({
                                     return (
                                         <div 
                                             key={item.product._id}
-                                            className={`px-6 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors ${
+                                            className={`px-6 py-2 hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors ${
                                                 isAtStockLimit ? 'bg-amber-50/30 dark:bg-amber-900/10' : ''
                                             }`}
                                         >
@@ -133,7 +133,7 @@ const CartItems = ({
                                                     <div className="flex items-center justify-center gap-1">
                                                         <button
                                                             onClick={() => handleDecrement(item.product._id)}
-                                                            className="w-8 h-8 rounded-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                                                            className="w-8 h-8 rounded-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
                                                             disabled={item.quantity <= 1}
                                                             title="Decrease quantity"
                                                         >
@@ -149,7 +149,7 @@ const CartItems = ({
                                                             className={`w-14 text-center px-2 py-1.5 border rounded-sm font-medium text-sm ${
                                                                 isAtStockLimit
                                                                     ? 'border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300'
-                                                                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white'
+                                                                    : 'border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white'
                                                             }`}
                                                         />
 
@@ -158,7 +158,7 @@ const CartItems = ({
                                                             className={`w-8 h-8 rounded-sm flex items-center justify-center transition-colors ${
                                                                 isAtStockLimit
                                                                     ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 cursor-not-allowed opacity-60'
-                                                                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
+                                                                    : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
                                                             }`}
                                                             disabled={isAtStockLimit}
                                                             title={isAtStockLimit ? "Maximum stock reached" : "Increase quantity"}
@@ -193,14 +193,14 @@ const CartItems = ({
                         </div>
 
                         {/* Summary Footer */}
-                        <div className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/30 px-6 py-4">
+                        <div className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30 px-6 py-4">
                             <div className="flex justify-between items-center">
                                 <div className="text-sm text-gray-600 dark:text-gray-400">
                                     <span className="font-medium">{calculateTotalItems()}</span> items • Subtotal: <span className="font-semibold text-gray-900 dark:text-white">{formatCurrency(calculateSubtotal())}</span>
                                 </div>
                                 <div className="text-right">
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        Press <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded-sm mx-1">↑</kbd> and <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded-sm mx-1">↓</kbd> to navigate
+                                        Press <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-800 rounded-sm mx-1">↑</kbd> and <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-800 rounded-sm mx-1">↓</kbd> to navigate
                                     </div>
                                 </div>
                             </div>
@@ -212,7 +212,7 @@ const CartItems = ({
             {/* Remove Confirmation Modal */}
             {showRemoveModal && itemToRemove && (
                 <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6">
+                    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6">
                         <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-red-100 dark:bg-red-900/30 rounded-full">
                             <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
                         </div>
@@ -228,14 +228,14 @@ const CartItems = ({
                         <div className="flex flex-col sm:flex-row gap-3">
                             <button
                                 onClick={closeRemoveModal}
-                                className="flex-1 px-4 py-3 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm font-medium transition-colors"
+                                className="flex-1 px-4 py-3 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm font-medium transition-colors"
                             >
                                 Cancel
                             </button>
                             
                             <button
                                 onClick={confirmRemoveItem}
-                                className="flex-1 px-4 py-3 bg-linear-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white rounded-sm font-medium transition-all hover:shadow-lg hover:shadow-red-500/20"
+                                className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-sm font-medium transition-all hover:shadow-lg hover:shadow-red-500/20"
                             >
                                 Yes, Remove Item
                             </button>

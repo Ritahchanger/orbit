@@ -210,12 +210,12 @@
   /* Border radius scale: controls and cards share one base radius,
      larger surfaces step up gently so the UI reads as one system. */
   --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius: 6px;
-  --radius-md: 6px;
+  --radius-sm: 8px;
+  --radius: 8px;
+  --radius-md: 8px;
   --radius-lg: 8px;
-  --radius-xl: 10px;
-  --radius-2xl: 12px;
+  --radius-xl: 12px;
+  --radius-2xl: 14px;
   --radius-3xl: 16px;
   --radius-full: 9999px;
 
@@ -245,6 +245,18 @@
    content stay aligned since they all use .container). */
 .admin-shell .container {
   max-width: none;
+}
+
+/* Admin focus style, matching the login screen: blue border plus a soft
+   4px ring. Unlayered so it replaces the assorted ring-1/ring-2 utilities;
+   fields already showing an error (red border) keep their own colour. */
+.admin-shell :is(input, select, textarea):not([type="checkbox"], [type="radio"], [type="range"]):focus-visible:not([class*="border-red"]) {
+  outline: none;
+  border-color: var(--color-blue-600);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-blue-600) 15%, transparent);
+}
+.dark .admin-shell :is(input, select, textarea):not([type="checkbox"], [type="radio"], [type="range"]):focus-visible:not([class*="border-red"]) {
+  border-color: var(--color-blue-500);
 }
 
 /* Admin large-screen scaling: the admin UI is sized almost entirely in rem,
@@ -302,7 +314,7 @@
   }
   .dark .admin-shell :where(option) {
     color: var(--color-white);
-    background-color: var(--color-gray-800);
+    background-color: var(--color-gray-900);
   }
 }
 

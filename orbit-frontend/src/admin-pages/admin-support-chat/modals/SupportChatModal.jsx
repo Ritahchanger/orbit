@@ -99,7 +99,7 @@ const UserAvatar = () => (
 const TypingIndicator = () => (
   <div className="flex gap-2 items-start">
     <AiAvatar />
-    <div className="bg-gray-100 dark:bg-gray-700/60 border border-gray-200 dark:border-gray-700 rounded-tl-none rounded-sm px-3 py-2.5">
+    <div className="bg-gray-100 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-800 rounded-tl-none rounded-sm px-3 py-2.5">
       <div className="flex gap-1 items-center">
         {[0, 1, 2].map((i) => (
           <span
@@ -126,7 +126,7 @@ const Message = ({ msg }) => {
       <div
         className={`max-w-[78%] rounded-sm px-3 py-2 border text-[13px] leading-relaxed ${
           isAi
-            ? "bg-gray-100  dark:bg-gray-700/60 border-gray-200 dark:border-gray-700  dark:text-gray-200 rounded-tl-none"
+            ? "bg-gray-100  dark:bg-gray-800/60 border-gray-200 dark:border-gray-800  dark:text-gray-200 rounded-tl-none"
             : "bg-purple-600 border-purple-600 text-white rounded-tr-none"
         }`}
       >
@@ -170,7 +170,7 @@ const ChatInput = ({ onSend, isLoading }) => {
   };
 
   return (
-    <div className="flex-shrink-0 px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+    <div className="flex-shrink-0 px-4 py-3 border-t border-gray-200 dark:border-gray-800">
       <div className="flex gap-2 items-end">
         <textarea
           ref={textareaRef}
@@ -179,13 +179,13 @@ const ChatInput = ({ onSend, isLoading }) => {
           placeholder="Type your message… (Enter to send)"
           rows={1}
           disabled={isLoading}
-          className="flex-1 resize-none rounded-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-colors disabled:opacity-50"
+          className="flex-1 resize-none rounded-sm border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-colors disabled:opacity-50"
           style={{ minHeight: "36px", maxHeight: "100px" }}
         />
         <button
           onClick={submit}
           disabled={isLoading}
-          className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-sm bg-purple-600 hover:bg-purple-700 disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:cursor-not-allowed transition-colors"
+          className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-sm bg-purple-600 hover:bg-purple-700 disabled:bg-gray-200 dark:disabled:bg-gray-800 disabled:cursor-not-allowed transition-colors"
         >
           {isLoading ? (
             <Loader2 className="w-4 h-4 text-white animate-spin" />
@@ -195,7 +195,7 @@ const ChatInput = ({ onSend, isLoading }) => {
         </button>
       </div>
       <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5 text-center">
-        <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-[10px]">
+        <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-[10px]">
           Shift+Enter
         </kbd>{" "}
         for new line
@@ -253,10 +253,10 @@ export default function SupportChatModal() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed top-0 right-0 z-[9999] h-full w-full sm:w-[650px] bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col shadow-2xl"
+            className="fixed top-0 right-0 z-[9999] h-full w-full sm:w-[650px] bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 flex flex-col shadow-2xl"
           >
             {/* ── Header ── */}
-            <div className="flex-shrink-0 px-4 py-3.5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between bg-white dark:bg-gray-800">
+            <div className="flex-shrink-0 px-4 py-3.5 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-white dark:bg-gray-900">
               <div className="flex items-center gap-2.5">
                 <div className="p-1.5 rounded-sm bg-gradient-to-br from-purple-500 to-pink-500">
                   <Shield className="w-4 h-4 text-white" />
@@ -278,14 +278,14 @@ export default function SupportChatModal() {
                 <button
                   onClick={handleClear}
                   title="Clear chat"
-                  className="p-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                  className="p-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={handleClose}
                   title="Close panel"
-                  className="p-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                  className="p-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                 >
                   <Minimize2 className="w-4 h-4" />
                 </button>
@@ -293,7 +293,7 @@ export default function SupportChatModal() {
             </div>
 
             {/* ── Quick chips ── */}
-            <div className="flex-shrink-0 px-3 py-2.5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40">
+            <div className="flex-shrink-0 px-3 py-2.5 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/40">
               <p className="text-[10px] text-gray-400 dark:text-gray-500 mb-2 uppercase tracking-wide font-medium">
                 Quick help
               </p>
@@ -303,7 +303,7 @@ export default function SupportChatModal() {
                     key={label}
                     onClick={() => handleSend(text)}
                     disabled={isLoading}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-sm hover:bg-purple-50 hover:border-purple-300 dark:hover:bg-purple-900/20 dark:hover:border-purple-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-left"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-sm hover:bg-purple-50 hover:border-purple-300 dark:hover:bg-purple-900/20 dark:hover:border-purple-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-left"
                   >
                     <Icon className="w-3 h-3 flex-shrink-0 text-purple-500" />
                     {label}

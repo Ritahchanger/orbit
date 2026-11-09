@@ -10,7 +10,7 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
     const [showPurchaseOrder, setShowPurchaseOrder] = useState(false);
     
     return (
-        <div className={`bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-4 ${showFullChart ? 'lg:col-span-2' : ''}`}>
+        <div className={`bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-4 ${showFullChart ? 'lg:col-span-2' : ''}`}>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                     <AlertTriangle size={18} className="text-red-600 dark:text-red-500" />
@@ -32,25 +32,25 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
             {lowStockData?.summary && (
                 <div className="mb-4">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
-                        <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
+                        <div className="bg-gray-100 dark:bg-gray-800/50 p-3 rounded-sm border border-gray-200 dark:border-gray-700">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Total Alerts</p>
                             <p className="text-base font-bold text-gray-900 dark:text-white">
                                 {lowStockData.summary.totalAlerts}
                             </p>
                         </div>
-                        <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
+                        <div className="bg-gray-100 dark:bg-gray-800/50 p-3 rounded-sm border border-gray-200 dark:border-gray-700">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Restock Value</p>
                             <p className="text-base font-bold text-yellow-700 dark:text-yellow-400">
                                 {formatCurrency(lowStockData.summary.estimatedRestockValue)}
                             </p>
                         </div>
-                        <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
+                        <div className="bg-gray-100 dark:bg-gray-800/50 p-3 rounded-sm border border-gray-200 dark:border-gray-700">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Potential Loss</p>
                             <p className="text-base font-bold text-red-700 dark:text-red-400">
                                 {formatCurrency(lowStockData.summary.totalPotentialLoss)}
                             </p>
                         </div>
-                        <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
+                        <div className="bg-gray-100 dark:bg-gray-800/50 p-3 rounded-sm border border-gray-200 dark:border-gray-700">
                             <p className="text-xs text-gray-600 dark:text-gray-400">Critical Items</p>
                             <p className="text-base font-bold text-red-700 dark:text-red-400">
                                 {lowStockData.summary.critical}
@@ -61,11 +61,11 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                     {/* Category Breakdown */}
                     {lowStockData.summary.byCategory &&
                         Object.keys(lowStockData.summary.byCategory)?.length > 0 && (
-                            <div className="bg-gray-50 dark:bg-gray-700/30 p-3 rounded-sm border border-gray-200 dark:border-gray-600">
+                            <div className="bg-gray-50 dark:bg-gray-800/30 p-3 rounded-sm border border-gray-200 dark:border-gray-700">
                                 <p className="text-sm text-gray-700 dark:text-gray-400 mb-2">Affected Categories:</p>
                                 <div className="flex flex-wrap gap-2">
                                     {Object.entries(lowStockData.summary.byCategory)?.map(([category, data]) => (
-                                        <div key={category} className="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 px-3 py-1.5 rounded-sm border border-gray-300 dark:border-gray-600">
+                                        <div key={category} className="flex items-center gap-2 bg-gray-200 dark:bg-gray-800 px-3 py-1.5 rounded-sm border border-gray-300 dark:border-gray-700">
                                             <span className="text-gray-900 dark:text-white text-sm font-medium">
                                                 {category.replace('-', ' ').toUpperCase()}
                                             </span>
@@ -146,7 +146,7 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                                         <div>
                                             <p className="text-xs text-gray-600 dark:text-gray-400">Urgency</p>
                                             <div className="flex items-center gap-2">
-                                                <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2">
+                                                <div className="w-full bg-gray-300 dark:bg-gray-800 rounded-full h-2">
                                                     <div
                                                         className={`h-2 rounded-full ${product.urgency >= 80 ? 'bg-red-600 dark:bg-red-500' :
                                                             product.urgency >= 50 ? 'bg-orange-600 dark:bg-orange-500' :
@@ -167,7 +167,7 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
 
                                     {/* Recommendation */}
                                     {product.recommendation && (
-                                        <div className="mt-4 p-3 bg-gray-100 dark:bg-gray-700/50 rounded-sm border border-gray-300 dark:border-gray-600">
+                                        <div className="mt-4 p-3 bg-gray-100 dark:bg-gray-800/50 rounded-sm border border-gray-300 dark:border-gray-700">
                                             <div className="flex items-start gap-3">
                                                 <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-500 mt-0.5" />
                                                 <div className="flex-1">
@@ -195,7 +195,7 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
 
                                 {/* Right Column - Financial Info */}
                                 <div className="md:w-48 space-y-3">
-                                    <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-sm border border-gray-300 dark:border-gray-600">
+                                    <div className="bg-gray-100 dark:bg-gray-800/50 p-3 rounded-sm border border-gray-300 dark:border-gray-700">
                                         <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Inventory Value</p>
                                         <p className="text-base font-bold text-gray-900 dark:text-white">
                                             {formatCurrency(product.inventoryValue)}
@@ -220,7 +220,7 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
                             </div>
 
                             {/* Stats Row */}
-                            <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-700 grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-800 grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div>
                                     <p className="text-xs text-gray-600 dark:text-gray-400">Total Sold</p>
                                     <p className="text-sm font-bold text-green-700 dark:text-green-400">
@@ -253,7 +253,7 @@ const LowStockAlerts = ({ lowStockData, lowStockAlerts, formatCurrency, formatNu
 
             {/* Quick Actions */}
             {lowStockAlerts?.length > 0 && (
-                <div className="mt-6 pt-6 border-t border-gray-300 dark:border-gray-700">
+                <div className="mt-6 pt-6 border-t border-gray-300 dark:border-gray-800">
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm text-gray-700 dark:text-gray-400">Quick Actions:</p>

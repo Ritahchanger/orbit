@@ -322,12 +322,12 @@ const ShortcutsOverlay = () => {
       {/* Keyboard Shortcuts Toggle Button */}
       <button
         onClick={() => setShowShortcuts(!showShortcuts)}
-        className="hidden md:block fixed bottom-4 right-16 z-[30] p-2 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full shadow-lg shadow-blue-500/20 dark:shadow-blue-500/30 transition-all duration-300 hover:scale-110 group border border-white/10 dark:border-white/20"
+        className="hidden md:block fixed bottom-4 right-16 z-[30] p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg shadow-blue-500/20 dark:shadow-blue-500/30 transition-all duration-300 hover:scale-110 group border border-white/10 dark:border-white/20"
         aria-label="Keyboard shortcuts"
         title="Toggle keyboard shortcuts (Ctrl + /)"
       >
         <Keyboard size={18} />
-        <span className="absolute top-0 right-full mr-2 px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-gray-200 dark:border-gray-700 shadow-sm">
+        <span className="absolute top-0 right-full mr-2 px-3 py-1.5 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-gray-200 dark:border-gray-800 shadow-sm">
           Shortcuts (Ctrl + /)
         </span>
       </button>
@@ -340,7 +340,7 @@ const ShortcutsOverlay = () => {
             : "translate-y-full opacity-0"
         }`}
       >
-        <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 shadow-lg dark:shadow-gray-900/30">
+        <div className="bg-white/95 dark:bg-gray-950/95 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 shadow-lg dark:shadow-gray-900/30">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="py-3 sm:py-4">
               {/* Header */}
@@ -372,7 +372,7 @@ const ShortcutsOverlay = () => {
                   </div>
                   <button
                     onClick={() => setShowShortcuts(false)}
-                    className="p-1 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
+                    className="p-1 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-sm transition-colors"
                     aria-label="Close shortcuts"
                   >
                     <X
@@ -385,7 +385,7 @@ const ShortcutsOverlay = () => {
 
               {/* Recent Shortcuts */}
               {recentShortcuts.length > 0 && (
-                <div className="mb-3 sm:mb-4 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-sm border border-gray-200 dark:border-gray-700">
+                <div className="mb-3 sm:mb-4 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-sm border border-gray-200 dark:border-gray-800">
                   <div className="flex items-center space-x-2 mb-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -401,14 +401,14 @@ const ShortcutsOverlay = () => {
                         <button
                           key={index}
                           onClick={() => handleShortcutAction(shortcut.action)}
-                          className="flex items-center space-x-2 px-3 py-1.5 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm border border-gray-200 dark:border-gray-700 transition-colors group"
+                          className="flex items-center space-x-2 px-3 py-1.5 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-800 transition-colors group"
                         >
                           <shortcut.icon
                             size={14}
                             className={`${shortcut.color} group-hover:scale-110 transition-transform`}
                           />
                           <div>
-                            <kbd className="text-xs font-mono bg-gray-100 dark:bg-gray-900 px-1.5 py-1 rounded text-gray-700 dark:text-gray-300">
+                            <kbd className="text-xs font-mono bg-gray-100 dark:bg-gray-950 px-1.5 py-1 rounded text-gray-700 dark:text-gray-300">
                               {shortcut.key}
                             </kbd>
                             <span className="ml-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
@@ -439,11 +439,11 @@ const ShortcutsOverlay = () => {
                               onClick={() =>
                                 handleShortcutAction(shortcut.action)
                               }
-                              className="group flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50/50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-sm border border-gray-200 dark:border-gray-700 transition-all duration-200 hover:scale-[1.02] hover:border-gray-300 dark:hover:border-gray-600"
+                              className="group flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50/50 dark:bg-gray-900/30 hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-sm border border-gray-200 dark:border-gray-800 transition-all duration-200 hover:scale-[1.02] hover:border-gray-300 dark:hover:border-gray-700"
                               title={`${shortcut.description} (${shortcut.key})`}
                             >
                               <div
-                                className={`p-1.5 sm:p-2 rounded-sm bg-white dark:bg-gray-800 ${shortcut.color} group-hover:bg-gray-100 dark:group-hover:bg-gray-700 transition-colors`}
+                                className={`p-1.5 sm:p-2 rounded-sm bg-white dark:bg-gray-900 ${shortcut.color} group-hover:bg-gray-100 dark:group-hover:bg-gray-800 transition-colors`}
                               >
                                 <Icon size={16} className="sm:w-5 sm:h-5" />
                               </div>
@@ -451,7 +451,7 @@ const ShortcutsOverlay = () => {
                                 <div className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-gray-800 dark:group-hover:text-gray-100 transition-colors truncate">
                                   {shortcut.description}
                                 </div>
-                                <kbd className="text-xs font-mono text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900 px-1.5 py-1 rounded mt-1 inline-block">
+                                <kbd className="text-xs font-mono text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-950 px-1.5 py-1 rounded mt-1 inline-block">
                                   {shortcut.key}
                                 </kbd>
                               </div>
@@ -466,7 +466,7 @@ const ShortcutsOverlay = () => {
 
               {/* Store Indicator */}
               {currentStore && (
-                <div className="mt-3 sm:mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                <div className="mt-3 sm:mt-4 pt-3 border-t border-gray-200 dark:border-gray-800">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -481,7 +481,7 @@ const ShortcutsOverlay = () => {
                     </div>
                     <div className="text-xs text-gray-600 dark:text-gray-400">
                       Quick access:{" "}
-                      <kbd className="px-1.5 py-1 bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300 ml-1">
+                      <kbd className="px-1.5 py-1 bg-gray-100 dark:bg-gray-900 rounded text-gray-700 dark:text-gray-300 ml-1">
                         Ctrl + P
                       </kbd>{" "}
                       for POS
@@ -506,7 +506,7 @@ const ShortcutsOverlay = () => {
       {/* Floating Helper - Shows when shortcuts are hidden */}
       {!showShortcuts && isVisible && (
         <div className="hidden md:block fixed bottom-20 left-1/2 transform -translate-x-1/2 z-[9999] animate-pulse">
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 shadow-lg">
+          <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-800 shadow-lg">
             <div className="flex items-center space-x-2">
               <Keyboard
                 size={14}
@@ -514,7 +514,7 @@ const ShortcutsOverlay = () => {
               />
               <span className="text-xs text-gray-700 dark:text-gray-300">
                 Press{" "}
-                <kbd className="px-1.5 py-1 bg-gray-100 dark:bg-gray-900 rounded text-gray-700 dark:text-gray-300 mx-1">
+                <kbd className="px-1.5 py-1 bg-gray-100 dark:bg-gray-950 rounded text-gray-700 dark:text-gray-300 mx-1">
                   Ctrl + /
                 </kbd>{" "}
                 for shortcuts

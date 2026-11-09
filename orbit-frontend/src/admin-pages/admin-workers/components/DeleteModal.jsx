@@ -3,7 +3,7 @@ import { AlertCircle } from "lucide-react"
 const DeleteModal = ({ setShowDeleteModal, selectedUser, handleDeleteUser, deleteUserMutation }) => {
     return (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-6 max-w-md w-full shadow-xl">
+            <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-6 max-w-md w-full shadow-xl">
                 <div className="flex items-center mb-4">
                     <AlertCircle className="text-red-600 dark:text-red-400 mr-3" size={24} />
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -13,10 +13,10 @@ const DeleteModal = ({ setShowDeleteModal, selectedUser, handleDeleteUser, delet
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
                     Are you sure you want to delete <strong className="text-gray-900 dark:text-white">{selectedUser.firstName} {selectedUser.lastName}</strong> ({selectedUser.email})? This action cannot be undone.
                 </p>
-                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-800">
                     <button
                         onClick={() => setShowDeleteModal(false)}
-                        className="px-4 py-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-sm transition-colors font-medium"
+                        className="px-4 py-2.5 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm transition-colors font-medium"
                     >
                         Cancel
                     </button>

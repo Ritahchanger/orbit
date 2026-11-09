@@ -26,12 +26,12 @@ const AdminGlobalButtons = ({
             {/* Calculator Button - Bottom Left */}
             <button
                 onClick={handleCalculatorOpen}
-                className="hidden md:block fixed left-4 bottom-4 z-40 p-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full shadow-lg hover:shadow-xl shadow-blue-500/25 dark:shadow-blue-500/50 transition-all duration-300 hover:scale-110 group"
+                className="hidden md:block fixed left-4 bottom-4 z-40 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl shadow-blue-500/25 dark:shadow-blue-500/50 transition-all duration-300 hover:scale-110 group"
                 aria-label="Open calculator"
                 title="Quick Calculator"
             >
                 <Calculator size={24} />
-                <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+                <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-900 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
                     Calculator
                 </span>
             </button>
@@ -41,12 +41,12 @@ const AdminGlobalButtons = ({
                 {/* Scroll to Top Button */}
                 <button
                     onClick={handleScrollToTop}
-                    className="p-2 bg-linear-to-br from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 hover:from-gray-700 hover:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700 text-white rounded-full shadow-lg hover:shadow-xl shadow-gray-500/20 dark:shadow-gray-900/50 transition-all duration-300 hover:scale-110 group"
+                    className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl shadow-gray-500/20 dark:shadow-gray-900/50 transition-all duration-300 hover:scale-110 group"
                     aria-label="Scroll to top"
                     title="Scroll to Top"
                 >
                     <ChevronUp size={24} />
-                    <span className="absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none">
+                    <span className="absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-900 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none">
                         Top
                     </span>
                 </button>
@@ -54,12 +54,12 @@ const AdminGlobalButtons = ({
                 {/* Scroll to Bottom Button */}
                 <button
                     onClick={handleScrollToBottom}
-                    className="p-2 bg-linear-to-br from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 hover:from-gray-700 hover:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700 text-white rounded-full shadow-lg hover:shadow-xl shadow-gray-500/20 dark:shadow-gray-900/50 transition-all duration-300 hover:scale-110 group"
+                    className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl shadow-gray-500/20 dark:shadow-gray-900/50 transition-all duration-300 hover:scale-110 group"
                     aria-label="Scroll to bottom"
                     title="Scroll to Bottom"
                 >
                     <ChevronDown size={24} />
-                    <span className="absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none">
+                    <span className="absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-900 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none">
                         Bottom
                     </span>
                 </button>
@@ -69,14 +69,14 @@ const AdminGlobalButtons = ({
                     onClick={handleBack}
                     disabled={!historyState.canGoBack}
                     className={`p-2 rounded-full shadow-lg transition-all duration-300 group ${historyState.canGoBack
-                        ? 'bg-linear-to-br from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 hover:from-gray-700 hover:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700 text-white hover:shadow-xl hover:scale-110 cursor-pointer shadow-gray-500/20 dark:shadow-gray-900/50'
-                        : 'bg-linear-to-br from-gray-300 to-gray-400 dark:from-gray-800 dark:to-gray-900 text-gray-500 dark:text-gray-600 cursor-not-allowed'
+                        ? 'bg-linear-to-br from-gray-800 to-gray-900 dark:from-gray-800 dark:to-gray-900 hover:from-gray-700 hover:to-gray-800 dark:hover:from-gray-700 dark:hover:to-gray-800 text-white hover:shadow-xl hover:scale-110 cursor-pointer shadow-gray-500/20 dark:shadow-gray-900/50'
+                        : 'bg-linear-to-br from-gray-300 to-gray-400 dark:from-gray-900 dark:to-gray-950 text-gray-500 dark:text-gray-600 cursor-not-allowed'
                         }`}
                     aria-label="Go back"
                     title={historyState.canGoBack ? "Go Back" : "Cannot go back"}
                 >
                     <ArrowLeft size={24} />
-                    <span className={`absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none ${!historyState.canGoBack && 'hidden'
+                    <span className={`absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-900 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none ${!historyState.canGoBack && 'hidden'
                         }`}>
                         Back
                     </span>
@@ -87,14 +87,14 @@ const AdminGlobalButtons = ({
                     onClick={handleForward}
                     disabled={!historyState.canGoForward}
                     className={`p-2 rounded-full shadow-lg transition-all duration-300 group ${historyState.canGoForward
-                        ? 'bg-linear-to-br from-gray-800 to-gray-900 dark:from-gray-700 dark:to-gray-800 hover:from-gray-700 hover:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700 text-white hover:shadow-xl hover:scale-110 cursor-pointer shadow-gray-500/20 dark:shadow-gray-900/50'
-                        : 'bg-linear-to-br from-gray-300 to-gray-400 dark:from-gray-800 dark:to-gray-900 text-gray-500 dark:text-gray-600 cursor-not-allowed'
+                        ? 'bg-linear-to-br from-gray-800 to-gray-900 dark:from-gray-800 dark:to-gray-900 hover:from-gray-700 hover:to-gray-800 dark:hover:from-gray-700 dark:hover:to-gray-800 text-white hover:shadow-xl hover:scale-110 cursor-pointer shadow-gray-500/20 dark:shadow-gray-900/50'
+                        : 'bg-linear-to-br from-gray-300 to-gray-400 dark:from-gray-900 dark:to-gray-950 text-gray-500 dark:text-gray-600 cursor-not-allowed'
                         }`}
                     aria-label="Go forward"
                     title={historyState.canGoForward ? "Go Forward" : "Cannot go forward"}
                 >
                     <ArrowRight size={24} />
-                    <span className={`absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-800 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none ${!historyState.canGoForward && 'hidden'
+                    <span className={`absolute right-full mr-2 px-2 py-1 bg-gray-900 dark:bg-gray-900 text-white text-xs rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap top-1/2 -translate-y-1/2 pointer-events-none ${!historyState.canGoForward && 'hidden'
                         }`}>
                         Forward
                     </span>

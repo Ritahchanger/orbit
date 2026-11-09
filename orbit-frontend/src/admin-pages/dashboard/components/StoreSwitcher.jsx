@@ -102,7 +102,7 @@ const StoreSwitcher = ({
     </>
   );
 
-  const triggerClass = `flex h-9 min-w-0 items-center gap-2 rounded-sm border border-gray-300 bg-white px-3 dark:border-gray-700 dark:bg-gray-800 ${
+  const triggerClass = `flex h-9 min-w-0 items-center gap-2 rounded-sm border border-gray-300 bg-white px-3 dark:border-gray-800 dark:bg-gray-900 ${
     fullWidth ? "w-full" : "max-w-xs sm:max-w-sm"
   }`;
 
@@ -114,7 +114,7 @@ const StoreSwitcher = ({
     `flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left transition-colors ${
       active
         ? "bg-blue-50 dark:bg-blue-500/10"
-        : "hover:bg-gray-100 dark:hover:bg-gray-700/60"
+        : "hover:bg-gray-100 dark:hover:bg-gray-800/60"
     }`;
 
   return (
@@ -124,7 +124,7 @@ const StoreSwitcher = ({
         onClick={() => (open ? close() : setOpen(true))}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className={`${triggerClass} transition-colors hover:border-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:border-gray-600`}
+        className={`${triggerClass} transition-colors hover:border-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:border-gray-700`}
       >
         {trigger}
         <ChevronDown
@@ -135,12 +135,12 @@ const StoreSwitcher = ({
 
       {open && (
         <div
-          className={`absolute left-0 z-50 mt-1 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800 ${
+          className={`absolute left-0 z-50 mt-1 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 ${
             fullWidth ? "w-full" : "w-80"
           }`}
         >
           {showSearch && (
-            <div className="border-b border-gray-200 p-2 dark:border-gray-700">
+            <div className="border-b border-gray-200 p-2 dark:border-gray-800">
               <div className="relative">
                 <Search
                   size={14}
@@ -153,7 +153,7 @@ const StoreSwitcher = ({
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleSearchKeyDown}
                   placeholder="Search stores"
-                  className="h-8 w-full rounded-sm border border-gray-300 bg-white pr-2 pl-8 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                  className="h-8 w-full rounded-sm border border-gray-300 bg-white pr-2 pl-8 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-950 dark:text-white"
                 />
               </div>
             </div>

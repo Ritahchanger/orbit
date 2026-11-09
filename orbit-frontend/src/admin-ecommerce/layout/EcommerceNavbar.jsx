@@ -111,7 +111,7 @@ const AdminEcommerceNavbar = () => {
   return (
     <>
       {/* Admin Ecommerce Navbar - Matching POS theme */}
-      <nav className="fixed top-0 z-40 w-full bg-linear-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+      <nav className="fixed top-0 z-40 w-full bg-linear-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
         {/* Top Navbar Row */}
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
@@ -133,7 +133,7 @@ const AdminEcommerceNavbar = () => {
                         className={`px-4 py-2.5 rounded-sm flex items-center space-x-2 transition-all duration-200 text-sm ${
                           active
                             ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20"
-                            : "text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50 hover:shadow-md"
+                            : "text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-900/50 hover:shadow-md"
                         }`}
                       >
                         <Icon className="h-4 w-4" />
@@ -163,7 +163,7 @@ const AdminEcommerceNavbar = () => {
                           className={`px-4 py-2.5 rounded-sm flex items-center space-x-2 transition-all duration-200 ${
                             hasActiveChild || isDropdownOpen
                               ? "bg-linear-to-r from-blue-600/20 to-indigo-600/20 text-blue-600 dark:text-white border border-blue-300 dark:border-blue-500/30"
-                              : "text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50"
+                              : "text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-900/50"
                           }`}
                         >
                           <Icon className="h-4 w-4" />
@@ -184,7 +184,7 @@ const AdminEcommerceNavbar = () => {
                               className="fixed inset-0 z-40"
                               onClick={() => setOpenDropdown(null)}
                             />
-                            <div className="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-sm shadow-2xl backdrop-blur-xl z-50 overflow-hidden">
+                            <div className="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-sm shadow-2xl backdrop-blur-xl z-50 overflow-hidden">
                               {item.items
                                 .filter(
                                   (subItem) =>
@@ -202,7 +202,7 @@ const AdminEcommerceNavbar = () => {
                                       className={`flex items-center px-4 py-3 text-sm transition-colors duration-150 ${
                                         active
                                           ? "bg-linear-to-r from-blue-50 to-blue-100 dark:from-blue-600/20 dark:to-indigo-600/20 text-blue-600 dark:text-white border-l-2 border-blue-500"
-                                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-white"
+                                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900/50 hover:text-gray-900 dark:hover:text-white"
                                       }`}
                                       onClick={() => setOpenDropdown(null)}
                                     >
@@ -232,7 +232,7 @@ const AdminEcommerceNavbar = () => {
               {/* Search Button */}
               <button
                 onClick={() => setShowSearchModal(true)}
-                className="search-btn p-2.5 rounded-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50 transition-all duration-200"
+                className="search-btn p-2.5 rounded-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-900/50 transition-all duration-200"
                 title="Search"
                 id="admin-search-btn"
                 aria-label="Search"
@@ -281,7 +281,7 @@ const AdminEcommerceNavbar = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-2 p-2 hover:bg-blue-50 dark:hover:bg-gray-800/50 transition-all duration-200 mr-[-1rem] rounded-sm"
+                  className="flex items-center space-x-2 p-2 hover:bg-blue-50 dark:hover:bg-gray-900/50 transition-all duration-200 mr-[-1rem] rounded-sm"
                 >
                   <CustomerAvatar
                     name={`${user?.firstName?.charAt(0) || ""} ${user?.lastName?.charAt(0) || ""}`.trim()}
@@ -308,7 +308,7 @@ const AdminEcommerceNavbar = () => {
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="mr-[-0.93rem] lg:hidden p-2.5 rounded-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-800/50 transition-all duration-200"
+                className="mr-[-0.93rem] lg:hidden p-2.5 rounded-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-gray-900/50 transition-all duration-200"
               >
                 {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>

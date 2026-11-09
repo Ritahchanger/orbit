@@ -4,7 +4,7 @@ const StatsCards = ({ statsLoading, stats }) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
             {/* Total Items Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4 hover:shadow-md transition-shadow duration-200">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4 hover:shadow-md transition-shadow duration-200">
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Items</p>
@@ -20,7 +20,7 @@ const StatsCards = ({ statsLoading, stats }) => {
             </div>
 
             {/* Total Value Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4 hover:shadow-md transition-shadow duration-200">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4 hover:shadow-md transition-shadow duration-200">
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Value</p>
@@ -36,7 +36,7 @@ const StatsCards = ({ statsLoading, stats }) => {
             </div>
 
             {/* Low Stock Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4 hover:shadow-md transition-shadow duration-200">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4 hover:shadow-md transition-shadow duration-200">
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Low Stock</p>
@@ -52,7 +52,7 @@ const StatsCards = ({ statsLoading, stats }) => {
             </div>
 
             {/* Out of Stock Card */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4 hover:shadow-md transition-shadow duration-200">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4 hover:shadow-md transition-shadow duration-200">
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Out of Stock</p>

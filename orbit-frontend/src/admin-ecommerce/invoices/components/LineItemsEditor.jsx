@@ -43,14 +43,14 @@ const LineItemsEditor = ({ items, onChange, currency = "KES" }) => {
                         value={item.description}
                         onChange={(e) => updateItem(index, "description", e.target.value)}
                         placeholder="Item description"
-                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <input
                         type="number"
                         min="0"
                         value={item.quantity}
                         onChange={(e) => updateItem(index, "quantity", e.target.value)}
-                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <input
                         type="number"
@@ -58,7 +58,7 @@ const LineItemsEditor = ({ items, onChange, currency = "KES" }) => {
                         step="0.01"
                         value={item.unitPrice}
                         onChange={(e) => updateItem(index, "unitPrice", e.target.value)}
-                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <div className="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 truncate">
                         {currency} {lineTotal(item).toLocaleString()}
@@ -79,7 +79,7 @@ const LineItemsEditor = ({ items, onChange, currency = "KES" }) => {
                 <button
                     type="button"
                     onClick={addItem}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-sm transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-sm transition-colors"
                 >
                     <Plus size={14} />
                     Add item

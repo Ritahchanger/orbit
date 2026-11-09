@@ -2,7 +2,7 @@ import { CheckCircle, AlertTriangle, XCircle } from "lucide-react"
 
 const FooterInfo = ({ stats }) => {
     return (
-        <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-sm">
                 {/* Status Indicators */}
                 <div className="flex flex-wrap gap-4">

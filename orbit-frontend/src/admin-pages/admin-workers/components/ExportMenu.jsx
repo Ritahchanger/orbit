@@ -8,7 +8,7 @@ const ExportMenu = ({ setShowExportMenu, filteredUsers, handleExportAllUsers, ha
             />
 
             {/* Export Menu */}
-            <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm shadow-xl z-50">
+            <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm shadow-xl z-50">
                 <div className="p-2">
                     <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-2 px-2">
                         Export Options
@@ -22,7 +22,7 @@ const ExportMenu = ({ setShowExportMenu, filteredUsers, handleExportAllUsers, ha
 
                         <button
                             onClick={handleExportCSV}
-                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +37,7 @@ const ExportMenu = ({ setShowExportMenu, filteredUsers, handleExportAllUsers, ha
 
                         <button
                             onClick={handleExportPDF}
-                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@ const ExportMenu = ({ setShowExportMenu, filteredUsers, handleExportAllUsers, ha
 
                         <button
                             onClick={handlePrintView}
-                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -67,14 +67,14 @@ const ExportMenu = ({ setShowExportMenu, filteredUsers, handleExportAllUsers, ha
                     </div>
 
                     {/* Divider */}
-                    <div className="border-t border-gray-300 dark:border-gray-700 pt-2">
+                    <div className="border-t border-gray-300 dark:border-gray-800 pt-2">
                         <p className="text-xs text-gray-600 dark:text-gray-400 px-2 mb-1">
                             All Users
                         </p>
 
                         <button
                             onClick={() => handleExportAllUsers('csv')}
-                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
                             title="Export all users (may take longer)"
                         >
                             <svg
@@ -90,7 +90,7 @@ const ExportMenu = ({ setShowExportMenu, filteredUsers, handleExportAllUsers, ha
 
                         <button
                             onClick={() => handleExportAllUsers('pdf')}
-                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm flex items-center gap-2 text-gray-800 dark:text-gray-200 transition-colors"
                             title="Export all users (may take longer)"
                         >
                             <svg

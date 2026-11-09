@@ -11,7 +11,7 @@ const PrintTransactionButton = ({ transaction, variant = "icon", className = "" 
       <button
         onClick={print}
         disabled={busy}
-        className={`p-1 text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors disabled:opacity-50 ${className}`}
+        className={`p-1 text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors disabled:opacity-50 ${className}`}
         title="Print receipt (downloads PDF)"
       >
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Printer className="h-4 w-4" />}

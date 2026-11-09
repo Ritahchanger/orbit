@@ -179,8 +179,8 @@ const SearchableSelect = ({
         className={`w-full px-4 py-3 border rounded-sm cursor-pointer transition-all duration-200 flex items-center justify-between ${
           error
             ? "border-red-500 dark:border-red-500"
-            : "border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400"
-        } ${disabled ? "opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800" : "bg-white dark:bg-gray-800"}`}
+            : "border-gray-300 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400"
+        } ${disabled ? "opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-900" : "bg-white dark:bg-gray-900"}`}
       >
         <div className="flex items-center space-x-2 truncate">
           {Icon && <Icon className="h-5 w-5 text-gray-400" />}
@@ -229,10 +229,10 @@ const SearchableSelect = ({
               width: containerRef.current?.offsetWidth,
               zIndex: 99999,
             }}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-xl overflow-hidden"
+            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-xl overflow-hidden"
           >
             {/* Search Input */}
-            <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+            <div className="p-2 border-b border-gray-200 dark:border-gray-800">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <input
@@ -242,7 +242,7 @@ const SearchableSelect = ({
                   onChange={handleSearchChange}
                   onKeyDown={handleKeyDown}
                   placeholder={searchPlaceholder}
-                  className="w-full pl-9 pr-8 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                  className="w-full pl-9 pr-8 py-2 text-sm border border-gray-200 dark:border-gray-800 rounded-sm focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-950 text-gray-900 dark:text-white"
                 />
                 {searchTerm && (
                   <button
@@ -250,7 +250,7 @@ const SearchableSelect = ({
                       setSearchTerm("");
                       if (onSearch) onSearch("");
                     }}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm"
                   >
                     <X className="h-3 w-3 text-gray-400" />
                   </button>
@@ -292,8 +292,8 @@ const SearchableSelect = ({
                         normalizeId(value) === normalizeId(option[valueKey])
                           ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
                           : highlightedIndex === index
-                            ? "bg-gray-100 dark:bg-gray-700/50 text-gray-900 dark:text-white"
-                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/30"
+                            ? "bg-gray-100 dark:bg-gray-800/50 text-gray-900 dark:text-white"
+                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/30"
                       }`}
                     >
                       {renderOption ? (
@@ -320,7 +320,7 @@ const SearchableSelect = ({
             </div>
 
             {/* Footer with count */}
-            <div className="p-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+            <div className="p-2 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 {filteredOptions.length} option
                 {filteredOptions.length !== 1 ? "s" : ""}

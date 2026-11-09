@@ -109,12 +109,12 @@ const StoresPerformanceComparison = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-sm shadow-sm p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-sm shadow-sm p-6">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-4"></div>
+          <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/4 mb-4"></div>
           <div className="space-y-3">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded"></div>
           </div>
         </div>
       </div>
@@ -123,7 +123,7 @@ const StoresPerformanceComparison = () => {
 
   if (error) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-sm shadow-sm p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-sm shadow-sm p-6">
         <div className="text-center text-red-600 dark:text-red-400">
           Error loading comparison data
         </div>
@@ -133,7 +133,7 @@ const StoresPerformanceComparison = () => {
 
   if (!data?.stores?.length) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-sm shadow-sm p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-sm shadow-sm p-6">
         <div className="text-center text-gray-500 dark:text-gray-400">
           No store comparison data available
         </div>
@@ -180,9 +180,9 @@ const StoresPerformanceComparison = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-sm shadow-sm border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-900 rounded-sm shadow-sm border border-gray-200 dark:border-gray-800">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -233,9 +233,9 @@ const StoresPerformanceComparison = () => {
       ) : (
         <div>
           {/* Summary Stats */}
-          <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+          <div className="px-6 py-4 bg-gray-50 dark:bg-gray-950/50 border-b border-gray-200 dark:border-gray-800">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="p-3 bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700">
+              <div className="p-3 bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800">
                 <div className="flex items-center justify-between mb-2">
                   <Star className="h-5 w-5 text-yellow-500" />
                   <span className="text-xs font-medium text-green-600">
@@ -250,7 +250,7 @@ const StoresPerformanceComparison = () => {
                 </p>
               </div>
 
-              <div className="p-3 bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700">
+              <div className="p-3 bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800">
                 <div className="flex items-center justify-between mb-2">
                   <AlertTriangle className="h-5 w-5 text-red-500" />
                   <span className="text-xs font-medium text-red-600">
@@ -265,7 +265,7 @@ const StoresPerformanceComparison = () => {
                 </p>
               </div>
 
-              <div className="p-3 bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700">
+              <div className="p-3 bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800">
                 <div className="flex items-center justify-between mb-2">
                   <DollarSign className="h-5 w-5 text-green-500" />
                   <span className="text-xs font-medium text-blue-600">
@@ -280,7 +280,7 @@ const StoresPerformanceComparison = () => {
                 </p>
               </div>
 
-              <div className="p-3 bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700">
+              <div className="p-3 bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800">
                 <div className="flex items-center justify-between mb-2">
                   <Package className="h-5 w-5 text-blue-500" />
                   <span className="text-xs font-medium text-purple-600">
@@ -299,11 +299,11 @@ const StoresPerformanceComparison = () => {
           </div>
 
           {/* Stores List */}
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="divide-y divide-gray-200 dark:divide-gray-800">
             {sortedStores.map((store, index) => (
               <div
                 key={store.storeInfo.id}
-                className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-900/50"
+                className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-950/50"
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
@@ -335,7 +335,7 @@ const StoresPerformanceComparison = () => {
                 {/* Store Metrics Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                   {/* Sales Metric */}
-                  <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-sm">
+                  <div className="p-3 bg-gray-50 dark:bg-gray-950/30 rounded-sm">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
                         <DollarSign className="h-4 w-4 text-green-500" />
@@ -368,7 +368,7 @@ const StoresPerformanceComparison = () => {
                   </div>
 
                   {/* Inventory Metric */}
-                  <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-sm">
+                  <div className="p-3 bg-gray-50 dark:bg-gray-950/30 rounded-sm">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
                         <Package className="h-4 w-4 text-blue-500" />
@@ -405,7 +405,7 @@ const StoresPerformanceComparison = () => {
                   </div>
 
                   {/* Efficiency Metric */}
-                  <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-sm">
+                  <div className="p-3 bg-gray-50 dark:bg-gray-950/30 rounded-sm">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
                         <BarChart3 className="h-4 w-4 text-purple-500" />
@@ -440,7 +440,7 @@ const StoresPerformanceComparison = () => {
                   </div>
 
                   {/* Risk Metric */}
-                  <div className="p-3 bg-gray-50 dark:bg-gray-900/30 rounded-sm">
+                  <div className="p-3 bg-gray-50 dark:bg-gray-950/30 rounded-sm">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
                         <AlertTriangle className="h-4 w-4 text-amber-500" />
@@ -498,12 +498,12 @@ const StoresPerformanceComparison = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     {store.scores?.sales !== null && (
-                      <span className="text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                      <span className="text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
                         Sales: {store.scores.sales}/100
                       </span>
                     )}
                     {store.scores?.inventory !== null && (
-                      <span className="text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                      <span className="text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
                         Inventory: {store.scores.inventory}/100
                       </span>
                     )}
@@ -515,13 +515,13 @@ const StoresPerformanceComparison = () => {
 
           {/* Insights Section */}
           {insights && (
-            <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+            <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/50">
               <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                 Key Insights
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Top Performers */}
-                <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+                <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
                   <div className="flex items-center mb-3">
                     <Star className="h-5 w-5 text-yellow-500 mr-2" />
                     <h4 className="text-sm font-medium text-gray-900 dark:text-white">
@@ -550,7 +550,7 @@ const StoresPerformanceComparison = () => {
                 </div>
 
                 {/* Improvement Areas */}
-                <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
+                <div className="bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800 p-4">
                   <div className="flex items-center mb-3">
                     <AlertTriangle className="h-5 w-5 text-amber-500 mr-2" />
                     <h4 className="text-sm font-medium text-gray-900 dark:text-white">

@@ -380,7 +380,7 @@ const CashRefundModal = ({
 
       {/* Modal */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-gray-900 w-full max-w-3xl rounded-sm shadow-2xl overflow-hidden">
+        <div className="bg-white dark:bg-gray-950 w-full max-w-3xl rounded-sm shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-orange-600 to-orange-700 dark:from-orange-800 dark:to-orange-900 px-6 py-4 text-white">
             <div className="flex items-center justify-between">
@@ -414,7 +414,7 @@ const CashRefundModal = ({
             ) : (
               <div className="space-y-6">
                 {/* Transaction Summary */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-sm">
+                <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-sm">
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                     <Receipt className="w-4 h-4 text-orange-600" />
                     Original Transaction Details
@@ -479,7 +479,7 @@ const CashRefundModal = ({
                       className={`p-3 border rounded-sm text-left transition-all ${
                         !isPartialRefund
                           ? "bg-orange-50 dark:bg-orange-900/30 border-orange-500"
-                          : "border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          : "border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900"
                       }`}
                     >
                       <span className="font-medium text-gray-900 dark:text-white">
@@ -494,7 +494,7 @@ const CashRefundModal = ({
                       className={`p-3 border rounded-sm text-left transition-all ${
                         isPartialRefund
                           ? "bg-orange-50 dark:bg-orange-900/30 border-orange-500"
-                          : "border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          : "border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900"
                       }`}
                     >
                       <span className="font-medium text-gray-900 dark:text-white">
@@ -522,11 +522,11 @@ const CashRefundModal = ({
                         item selected so we know what to restock.
                       </p>
                     )}
-                    <div className="border border-gray-200 dark:border-gray-700 rounded-sm max-h-48 overflow-y-auto">
+                    <div className="border border-gray-200 dark:border-gray-800 rounded-sm max-h-48 overflow-y-auto">
                       {transactionItems.map((item, index) => (
                         <div
                           key={item._id || index}
-                          className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-900"
                         >
                           <div className="flex items-center gap-3">
                             <input
@@ -594,7 +594,7 @@ const CashRefundModal = ({
                       min="0"
                       max={maxRefundAmount}
                       step="0.01"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500"
                       placeholder="0.00"
                     />
                   </div>
@@ -621,7 +621,7 @@ const CashRefundModal = ({
                       className={`p-3 border rounded-sm text-center transition-all ${
                         refundMethod === "cash"
                           ? "bg-green-50 dark:bg-green-900/30 border-green-500"
-                          : "border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          : "border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900"
                       }`}
                     >
                       <span className="block font-medium text-gray-900 dark:text-white">
@@ -635,7 +635,7 @@ const CashRefundModal = ({
                       className={`p-3 border rounded-sm text-center transition-all ${
                         refundMethod === "mpesa"
                           ? "bg-green-50 dark:bg-green-900/30 border-green-500"
-                          : "border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          : "border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900"
                       }`}
                     >
                       <span className="block font-medium text-gray-900 dark:text-white">
@@ -653,7 +653,7 @@ const CashRefundModal = ({
                   <select
                     value={refundReason}
                     onChange={(e) => setRefundReason(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                   >
                     <option value="">Select a reason</option>
                     {refundReasons.map((reason) => (
@@ -673,7 +673,7 @@ const CashRefundModal = ({
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                     placeholder="Add any additional information about this refund..."
                   />
                 </div>
@@ -711,7 +711,7 @@ const CashRefundModal = ({
 
           {/* Footer */}
           {!refundStatus && (
-            <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+            <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   <span className="font-medium">Refund Amount:</span>
@@ -722,14 +722,14 @@ const CashRefundModal = ({
                 <div className="flex gap-3">
                   <button
                     onClick={onClose}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-sm transition-colors"
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-sm transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={processRefund}
                     disabled={!isValidRefund || isProcessing}
-                    className="px-6 py-2 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-medium rounded-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     {isProcessing ? (
                       <>

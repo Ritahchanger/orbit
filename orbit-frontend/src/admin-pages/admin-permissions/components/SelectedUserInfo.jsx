@@ -2,7 +2,7 @@ import { Plus } from "lucide-react"
 
 const SelectedUserInfo = ({ selectedUser, setShowAssignModal }) => {
     return (
-        <div className="mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-6">
+        <div className="mt-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-6">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-4 text-sm">Selected User</h3>
             <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -23,7 +23,7 @@ const SelectedUserInfo = ({ selectedUser, setShowAssignModal }) => {
                         ? 'bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400'
                         : selectedUser.role === 'admin'
                             ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
-                            : 'bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-400'
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
                         }`}>
                         {selectedUser.role}
                     </span>

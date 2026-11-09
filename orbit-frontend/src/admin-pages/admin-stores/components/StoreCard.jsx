@@ -118,10 +118,10 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
 
     return (
         <>
-            <div className={`bg-white dark:bg-gray-800 border rounded-sm p-4 hover:shadow-sm transition-all duration-200 ${isCurrentStore ? 'border-blue-500 dark:border-blue-400' : 'border-gray-200 dark:border-gray-700'}`}>
+            <div className={`bg-white dark:bg-gray-900 border rounded-sm p-4 hover:shadow-sm transition-all duration-200 ${isCurrentStore ? 'border-blue-500 dark:border-blue-400' : 'border-gray-200 dark:border-gray-800'}`}>
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                        <div className={`w-12 h-12 rounded-sm flex items-center justify-center ${isCurrentStore ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600'}`}>
+                        <div className={`w-12 h-12 rounded-sm flex items-center justify-center ${isCurrentStore ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-700'}`}>
                             <Store size={20} />
                         </div>
                         <div>
@@ -144,7 +144,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
 
                     <div className="relative">
                         <button
-                            className="p-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                            className="p-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                             onClick={() => setShowMenu(!showMenu)}
                         >
                             <MoreVertical size={18} />
@@ -156,13 +156,13 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                                     className="fixed inset-0 z-40"
                                     onClick={() => setShowMenu(false)}
                                 />
-                                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-lg z-50">
+                                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-lg z-50">
                                     <div className="py-1">
                                         {/* Quick permission summary */}
-                                        <div className="px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                                        <div className="px-4 py-2 text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-800">
                                             <p className="font-medium">Permissions:</p>
                                             <div className="flex flex-wrap gap-1 mt-1">
-                                                {storePermissions.canView && <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs">View</span>}
+                                                {storePermissions.canView && <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs">View</span>}
                                                 {storePermissions.canEdit && <span className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded text-xs">Edit</span>}
                                                 {storePermissions.canSell && <span className="px-1.5 py-0.5 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded text-xs">Sell</span>}
                                                 {storePermissions.canManage && <span className="px-1.5 py-0.5 bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 rounded text-xs">Manage</span>}
@@ -171,7 +171,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
 
                                         <button
                                             onClick={handleViewDetailsClick}
-                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                                         >
                                             View Details
                                         </button>
@@ -218,7 +218,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-800">
                     <StatusBadge
                         status={store.status}
                         icon={store.status === 'active' ? CheckCircle : store.status === 'maintenance' ? Wrench : XCircle}
@@ -229,7 +229,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                         {canViewStore && (
                             <button
                                 onClick={handleViewProductsClick}
-                                className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors flex items-center gap-1"
+                                className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors flex items-center gap-1"
                                 title="View store products"
                             >
                                 <Package size={12} />
@@ -241,7 +241,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                         {canSwitchToStore && (
                             <button
                                 onClick={handleStoreSwitchClick}
-                                className={`text-xs px-2 py-1 rounded-sm transition-colors flex items-center gap-1 ${isCurrentStore ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                                className={`text-xs px-2 py-1 rounded-sm transition-colors flex items-center gap-1 ${isCurrentStore ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'}`}
                                 title={isCurrentStore ? 'Currently selected' : 'Switch to this store'}
                             >
                                 {isCurrentStore ? 'Selected' : 'Select'}
@@ -252,7 +252,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                         {canViewStore && (
                             <button
                                 onClick={handleViewDetailsClick}
-                                className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                                className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                             >
                                 View
                             </button>
@@ -292,8 +292,8 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                             onClick={() => !isDeleting && setShowDeleteModal(false)}
                         />
 
-                        <div className="relative z-[10000] w-full max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-xl">
-                            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div className="relative z-[10000] w-full max-w-md bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-xl">
+                            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
                                 <div className="flex items-center gap-3">
                                     <div className="p-2 rounded-sm bg-red-100 dark:bg-red-900/30">
                                         <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-500" />
@@ -307,7 +307,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                                 {!isDeleting && (
                                     <button
                                         onClick={() => setShowDeleteModal(false)}
-                                        className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                                        className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                                     >
                                         <X size={20} />
                                     </button>
@@ -321,7 +321,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                                     </p>
 
                                     {/* Store details section */}
-                                    <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900/50 border border-gray-300 dark:border-gray-600 rounded-sm">
+                                    <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-700 rounded-sm">
                                         <div className="flex items-start gap-3">
                                             <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-sm flex items-center justify-center">
                                                 <Store size={16} className="text-blue-600 dark:text-blue-400" />
@@ -379,7 +379,7 @@ const StoreCard = ({ store, currentStoreId, onViewDetails, onEdit, onDelete, han
                                     <button
                                         onClick={() => setShowDeleteModal(false)}
                                         disabled={isDeleting}
-                                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         Cancel
                                     </button>

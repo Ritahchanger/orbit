@@ -14,14 +14,14 @@ const RoleTabs = ({ tabs, activeTab, onChange }) => (
           className={`flex items-center gap-2 rounded-sm px-4 py-2 transition-colors ${
             active
               ? "bg-blue-600 text-white dark:bg-blue-500"
-              : "bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              : "bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
           }`}
         >
           <Icon size={18} />
           <span className="text-sm md:text-base">{name}</span>
           <span
             className={`rounded-full px-2 py-0.5 text-xs ${
-              active ? "bg-white/20" : "bg-gray-100 dark:bg-gray-700"
+              active ? "bg-white/20" : "bg-gray-100 dark:bg-gray-800"
             }`}
           >
             {count}

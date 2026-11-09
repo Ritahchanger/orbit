@@ -39,7 +39,7 @@ const CategoryDetailsDialog = ({ category, onClose }) => (
       <Detail label="Status">
         <CategoryStatusBadge status={category.status} />
       </Detail>
-      <div className="grid grid-cols-1 gap-4 border-t border-gray-200 pt-4 sm:grid-cols-2 dark:border-gray-700">
+      <div className="grid grid-cols-1 gap-4 border-t border-gray-200 pt-4 sm:grid-cols-2 dark:border-gray-800">
         <Detail label="Created">{formatDate(category.createdAt)}</Detail>
         <Detail label="Updated">{formatDate(category.updatedAt)}</Detail>
       </div>

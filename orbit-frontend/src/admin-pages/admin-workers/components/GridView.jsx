@@ -144,10 +144,10 @@ const GridView = ({
         {filteredUsers.map((user) => (
           <div
             key={user._id}
-            className={`bg-white dark:bg-gray-800 border rounded-sm p-4 transition-colors ${
+            className={`bg-white dark:bg-gray-900 border rounded-sm p-4 transition-colors ${
               user.isSuspended
                 ? "border-red-300 dark:border-red-700 bg-red-50/30 dark:bg-red-900/10"
-                : "border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600"
+                : "border-gray-300 dark:border-gray-800 hover:border-gray-400 dark:hover:border-gray-700"
             }`}
           >
             {/* Header */}
@@ -207,7 +207,7 @@ const GridView = ({
             )}
 
             {/* Store Information */}
-            <div className="mb-3 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-sm">
+            <div className="mb-3 p-3 bg-gray-50 dark:bg-gray-950/50 rounded-sm">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Store
@@ -228,7 +228,7 @@ const GridView = ({
                     </p>
                   </div>
                 </div>
-                <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded">
+                <span className="text-xs bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 rounded">
                   {getStoreRole(user)}
                 </span>
               </div>
@@ -337,7 +337,7 @@ const GridView = ({
             </div>
 
             {/* Footer Actions */}
-            <div className="pt-3 border-t border-gray-300 dark:border-gray-700">
+            <div className="pt-3 border-t border-gray-300 dark:border-gray-800">
               <div className="flex justify-between items-center">
                 <div
                   className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[100px]"

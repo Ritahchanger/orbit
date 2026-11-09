@@ -101,7 +101,7 @@ const AdminNavbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 z-40 w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
+      <nav className="fixed top-0 z-40 w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
         {/* Top Navbar Row */}
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between gap-4">
@@ -125,7 +125,7 @@ const AdminNavbar = () => {
               <button
                 type="button"
                 onClick={() => setShowSearchModal(true)}
-                className="search-btn rounded-sm p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                className="search-btn rounded-sm p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white"
                 title="Search"
                 id="admin-search-btn"
                 aria-label="Search"
@@ -139,7 +139,7 @@ const AdminNavbar = () => {
                 <button
                   type="button"
                   onClick={() => dispatch(openModal())}
-                  className="hidden items-center gap-2 rounded-sm border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 md:flex dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                  className="hidden items-center gap-2 rounded-sm border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 md:flex dark:border-gray-800 dark:text-gray-200 dark:hover:bg-gray-900"
                 >
                   <Plus className="h-4 w-4" />
                   Add product
@@ -165,7 +165,7 @@ const AdminNavbar = () => {
                   aria-haspopup="menu"
                   aria-expanded={showUserMenu}
                   aria-label="Account menu"
-                  className="flex items-center gap-1 rounded-sm p-1.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="flex items-center gap-1 rounded-sm p-1.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-900"
                 >
                   <CustomerAvatar
                     name={[user?.firstName?.charAt(0), user?.lastName?.charAt(0)]
@@ -194,7 +194,7 @@ const AdminNavbar = () => {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-expanded={isMobileMenuOpen}
                 aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-                className="rounded-sm p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                className="rounded-sm p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 lg:hidden dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white"
               >
                 {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
               </button>

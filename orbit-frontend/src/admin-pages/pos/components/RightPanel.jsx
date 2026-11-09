@@ -52,7 +52,7 @@ const RightPanel = ({
                   dispatch(setCustomerName(e.target.value));
                 }
               }}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
               placeholder="Enter customer name"
               required
             />
@@ -77,7 +77,7 @@ const RightPanel = ({
                   dispatch(setCustomerPhone(e.target.value));
                 }
               }}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
               placeholder="0712 345 678"
             />
           </div>
@@ -120,7 +120,7 @@ const RightPanel = ({
               className={`p-3 rounded-sm border transition-all relative ${
                 displayPaymentMethod === method.id
                   ? "bg-blue-50 dark:bg-blue-900/30 border-blue-500 text-blue-600 dark:text-blue-400"
-                  : "bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-600"
+                  : "bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-700"
               }`}
             >
               <div className="flex flex-col items-center gap-1">
@@ -148,12 +148,12 @@ const RightPanel = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="p-4 bg-gray-50 dark:bg-gray-800/30">
+      <div className="p-4 bg-gray-50 dark:bg-gray-900/30">
         <div className="space-y-3">
           <button
             onClick={handleProcessPayment}
             disabled={!isPaymentValid() || isProcessingPayment}
-            className="w-full py-3 bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isProcessingPayment ? (
               <>
@@ -170,7 +170,7 @@ const RightPanel = ({
 
           <button
             onClick={() => dispatch(closePosModal())}
-            className="w-full py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-sm transition-colors"
+            className="w-full py-3 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-sm transition-colors"
           >
             Cancel Sale
           </button>

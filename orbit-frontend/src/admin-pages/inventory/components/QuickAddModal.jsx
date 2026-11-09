@@ -84,8 +84,8 @@ const QuickAddModal = ({
     // Confirmation Dialog
     const ConfirmationDialog = () => (
         <div className="fixed inset-0 bg-black/70 dark:bg-black/70 flex items-center justify-center z-[60] p-4">
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm w-full max-w-md shadow-xl">
-                <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm w-full max-w-md shadow-xl">
+                <div className="p-6 border-b border-gray-200 dark:border-gray-800">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/20 rounded-full flex items-center justify-center">
                             <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
@@ -99,7 +99,7 @@ const QuickAddModal = ({
 
                 <div className="p-6">
                     {/* Store Information */}
-                    <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-sm mb-4">
+                    <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-sm mb-4">
                         <div className="flex items-center gap-2 mb-2">
                             <Store className="h-4 w-4 text-blue-500 dark:text-blue-400" />
                             <span className="text-sm text-gray-600 dark:text-gray-400">Store:</span>
@@ -111,7 +111,7 @@ const QuickAddModal = ({
                     </div>
 
                     {/* Product Information */}
-                    <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-sm mb-4">
+                    <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-sm mb-4">
                         <div className="flex items-center gap-2 mb-2">
                             <Package className="h-4 w-4 text-emerald-500 dark:text-emerald-400" />
                             <span className="text-sm text-gray-600 dark:text-gray-400">Product Details:</span>
@@ -143,18 +143,18 @@ const QuickAddModal = ({
                     </div>
                 </div>
 
-                <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+                <div className="p-6 border-t border-gray-200 dark:border-gray-800 flex justify-end gap-3">
                     <button
                         onClick={() => setShowConfirmation(false)}
                         disabled={quickAddMutation.isPending}
-                        className="px-4 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-sm transition-colors font-medium text-sm disabled:opacity-50"
+                        className="px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition-colors font-medium text-sm disabled:opacity-50"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleConfirmedAdd}
                         disabled={quickAddMutation.isPending}
-                        className="px-4 py-2.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white rounded-sm font-medium text-sm flex items-center gap-2 transition-colors disabled:opacity-50"
+                        className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-sm font-medium text-sm flex items-center gap-2 transition-colors disabled:opacity-50"
                     >
                         {quickAddMutation.isPending ? (
                             <>
@@ -176,9 +176,9 @@ const QuickAddModal = ({
     return (
         <>
             <div className="fixed inset-0 bg-black/50 dark:bg-black/50 flex items-center justify-center z-50 p-4">
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm w-full max-w-md">
+                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm w-full max-w-md">
                     {/* Header */}
-                    <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                    <div className="p-6 border-b border-gray-200 dark:border-gray-800">
                         <div className="flex justify-between items-center">
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Quick Add by SKU</h3>
@@ -199,7 +199,7 @@ const QuickAddModal = ({
                     <div className="p-6">
                         <div className="space-y-6">
                             {/* Store Display */}
-                            <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-sm border border-gray-200 dark:border-gray-700">
+                            <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-sm border border-gray-200 dark:border-gray-800">
                                 <div className="flex items-center gap-2">
                                     <Store className="h-4 w-4 text-blue-500 dark:text-blue-400" />
                                     <div>
@@ -224,7 +224,7 @@ const QuickAddModal = ({
                                         setValidationError('');
                                     }}
                                     placeholder="Enter product SKU"
-                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-sm"
                                     autoFocus
                                 />
                             </div>
@@ -244,7 +244,7 @@ const QuickAddModal = ({
                                     min="1"
                                     max="1000"
                                     step="1"
-                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-center text-sm"
+                                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-center text-sm"
                                     onFocus={(e) => e.target.select()}
                                 />
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Maximum: 1000 units</p>
@@ -260,21 +260,21 @@ const QuickAddModal = ({
                     </div>
 
                     {/* Footer */}
-                    <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div className="p-6 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div className="text-xs text-gray-500 dark:text-gray-400">
-                            Press <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">Enter</kbd> to confirm
+                            Press <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-xs">Enter</kbd> to confirm
                         </div>
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setShowQuickAddModal(false)}
-                                className="px-4 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-sm transition-colors font-medium text-sm"
+                                className="px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-sm transition-colors font-medium text-sm"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleQuickAddWithConfirmation}
                                 disabled={!quickAddSku.trim() || !quickAddQuantity || quickAddQuantity < 1 || quickAddMutation.isPending}
-                                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-sm font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-sm font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 {quickAddMutation.isPending ? (
                                     <span className="flex items-center gap-2">

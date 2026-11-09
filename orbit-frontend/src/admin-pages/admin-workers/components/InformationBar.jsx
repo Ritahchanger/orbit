@@ -2,7 +2,7 @@ import { Globe, Shield } from "lucide-react"
 
 const InformationBar = ({ usersLoading, filteredUsers }) => {
     return (
-        <div className="mt-6 pt-4 border-t border-gray-300 dark:border-gray-700">
+        <div className="mt-6 pt-4 border-t border-gray-300 dark:border-gray-800">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
                 {/* Left side - Global badge */}
                 <div className="flex items-center space-x-2">
@@ -23,7 +23,7 @@ const InformationBar = ({ usersLoading, filteredUsers }) => {
                     </div>
                     
                     {/* User count badge */}
-                    <div className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-sm font-medium">
+                    <div className="text-xs bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-sm font-medium">
                         {usersLoading ? 'Loading...' : `${filteredUsers.length} users displayed`}
                     </div>
                 </div>

@@ -8,7 +8,7 @@ const ShowConfirmDialog = ({
 }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm max-w-md w-full shadow-lg">
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm max-w-md w-full shadow-lg">
         <div className="p-6">
           <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-2">
             {confirmAction === "restock" && "Confirm Restock"}
@@ -28,7 +28,7 @@ const ShowConfirmDialog = ({
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-                  className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white rounded-sm text-sm font-medium transition-colors border border-gray-300 dark:border-gray-600"
+                  className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-white rounded-sm text-sm font-medium transition-colors border border-gray-300 dark:border-gray-700"
                 >
                   -
                 </button>
@@ -38,12 +38,12 @@ const ShowConfirmDialog = ({
                   onChange={(e) =>
                     setQuantity(Math.max(1, parseInt(e.target.value) || 1))
                   }
-                  className="w-20 px-3 py-1.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-center text-sm text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-20 px-3 py-1.5 bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-center text-sm text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                   min="1"
                 />
                 <button
                   onClick={() => setQuantity((prev) => prev + 1)}
-                  className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white rounded-sm text-sm font-medium transition-colors border border-gray-300 dark:border-gray-600"
+                  className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-white rounded-sm text-sm font-medium transition-colors border border-gray-300 dark:border-gray-700"
                 >
                   +
                 </button>
@@ -54,7 +54,7 @@ const ShowConfirmDialog = ({
           <div className="flex justify-end space-x-3">
             <button
               onClick={closeConfirmDialog}
-              className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-white rounded-sm text-xs md:text-sm font-medium transition-colors"
+              className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-white rounded-sm text-xs md:text-sm font-medium transition-colors"
             >
               Cancel
             </button>

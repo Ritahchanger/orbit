@@ -161,11 +161,11 @@ const ListView = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm overflow-hidden">
+    <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-gray-100 dark:bg-gray-800">
+            <tr className="bg-gray-100 dark:bg-gray-900">
               <th className="py-3 px-4 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
                 User
               </th>
@@ -203,7 +203,7 @@ const ListView = ({
                 return (
                   <tr
                     key={user._id || index}
-                    className={`border-t border-gray-200 dark:border-gray-700 ${index % 2 === 0 ? "bg-gray-50 dark:bg-gray-800/30" : ""}`}
+                    className={`border-t border-gray-200 dark:border-gray-800 ${index % 2 === 0 ? "bg-gray-50 dark:bg-gray-900/30" : ""}`}
                   >
                     {/* User Info */}
                     <td className="py-3 px-4">

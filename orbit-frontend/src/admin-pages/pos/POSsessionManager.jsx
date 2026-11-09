@@ -147,9 +147,9 @@ const POSSessionManager = () => {
         case "pending-payment":
           return `${baseClasses} border-blue-500 bg-blue-100 dark:bg-blue-900/30`;
         case "completed":
-          return `${baseClasses} border-gray-400 dark:border-gray-500 bg-gray-200 dark:bg-gray-800`;
+          return `${baseClasses} border-gray-400 dark:border-gray-500 bg-gray-200 dark:bg-gray-900`;
         default:
-          return `${baseClasses} border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800`;
+          return `${baseClasses} border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-900`;
       }
     } else {
       switch (status) {
@@ -160,9 +160,9 @@ const POSSessionManager = () => {
         case "pending-payment":
           return `${baseClasses} border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30`;
         case "completed":
-          return `${baseClasses} border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700`;
+          return `${baseClasses} border-gray-300 dark:border-gray-800 bg-gray-100 dark:bg-gray-900/50 hover:bg-gray-200 dark:hover:bg-gray-800`;
         default:
-          return `${baseClasses} border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-700`;
+          return `${baseClasses} border-gray-300 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-800`;
       }
     }
   };

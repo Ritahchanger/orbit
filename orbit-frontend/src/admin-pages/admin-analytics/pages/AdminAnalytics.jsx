@@ -82,12 +82,12 @@ const KpiCard = ({ label, value, sub, subPositive, icon: Icon, accent = "blue", 
         cyan: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400",
     };
     return (
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
             <div className="flex items-center justify-between">
                 <div className="min-w-0">
                     <p className="text-gray-500 dark:text-gray-400 text-sm truncate">{label}</p>
                     {loading ? (
-                        <div className="h-7 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mt-1" />
+                        <div className="h-7 w-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse mt-1" />
                     ) : (
                         <p className="text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">{value}</p>
                     )}
@@ -108,7 +108,7 @@ const KpiCard = ({ label, value, sub, subPositive, icon: Icon, accent = "blue", 
 };
 
 const SectionShell = ({ title, subtitle, children, action }) => (
-    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
         <div className="flex items-center justify-between mb-4">
             <div>
                 <h3 className="text-base font-semibold text-gray-900 dark:text-white">{title}</h3>
@@ -407,14 +407,14 @@ const SalesOverviewTab = ({ timeRange, chartType, storeId, store }) => {
                 title="Sales & Profit Trend"
                 subtitle={`${trendPeriod === "daily" ? "Daily" : "Monthly"} breakdown for the selected period`}
                 action={
-                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-sm">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-sm">
                         {trendPoints.length} data points
                     </span>
                 }
             >
                 <div className="h-72">
                     {trendLoading ? (
-                        <div className="h-full bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
+                        <div className="h-full bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
                     ) : salesTrendConfig ? (
                         <ChartWrapper key={`trend-${timeRange}-${chartType}-${scope}`} {...salesTrendConfig} />
                     ) : (
@@ -431,14 +431,14 @@ const SalesOverviewTab = ({ timeRange, chartType, storeId, store }) => {
                         title="Store Performance"
                         subtitle="Revenue comparison across all stores"
                         action={
-                            <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-sm">
+                            <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-sm">
                                 {stores.length} stores
                             </span>
                         }
                     >
                         <div className="h-72">
                             {storeLoading ? (
-                                <div className="h-full bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
+                                <div className="h-full bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
                             ) : storeChartConfig ? (
                                 <ChartWrapper key={`stores-${timeRange}`} {...storeChartConfig} />
                             ) : (
@@ -456,7 +456,7 @@ const SalesOverviewTab = ({ timeRange, chartType, storeId, store }) => {
                     >
                         <div className="h-64">
                             {pmLoading ? (
-                                <div className="h-full bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
+                                <div className="h-full bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
                             ) : pmChartConfig ? (
                                 <ChartWrapper key={`pm-${timeRange}-${scope}`} {...pmChartConfig} />
                             ) : (
@@ -502,7 +502,7 @@ const SalesOverviewTab = ({ timeRange, chartType, storeId, store }) => {
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="border-b border-gray-200 dark:border-gray-700">
+                                <tr className="border-b border-gray-200 dark:border-gray-800">
                                     {["#", "Store", "Revenue", "Profit", "Margin", "Transactions", "Avg. Sale", "Customers"].map((h) => (
                                         <th key={h} className="text-left py-2.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                                             {h}
@@ -512,7 +512,7 @@ const SalesOverviewTab = ({ timeRange, chartType, storeId, store }) => {
                             </thead>
                             <tbody>
                                 {stores.map((s, i) => (
-                                    <tr key={s.storeId} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                                    <tr key={s.storeId} className="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                                         <td className="py-2.5 px-2 text-gray-400 dark:text-gray-500">{i + 1}</td>
                                         <td className="py-2.5 px-2">
                                             <div className="font-medium text-gray-900 dark:text-white">{s.storeName || "—"}</div>
@@ -523,7 +523,7 @@ const SalesOverviewTab = ({ timeRange, chartType, storeId, store }) => {
                                         <td className="py-2.5 px-2 text-green-600 dark:text-green-400 font-medium">{fmt(s.totalSales)}</td>
                                         <td className="py-2.5 px-2 text-blue-600 dark:text-blue-400">{fmt(s.totalProfit)}</td>
                                         <td className="py-2.5 px-2">
-                                            <span className={`px-1.5 py-0.5 text-xs rounded-sm ${s.profitMargin >= 20 ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400" : s.profitMargin >= 10 ? "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400" : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400"}`}>
+                                            <span className={`px-1.5 py-0.5 text-xs rounded-sm ${s.profitMargin >= 20 ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400" : s.profitMargin >= 10 ? "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400" : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"}`}>
                                                 {(s.profitMargin || 0).toFixed(1)}%
                                             </span>
                                         </td>
@@ -552,7 +552,7 @@ const SalesOverviewTab = ({ timeRange, chartType, storeId, store }) => {
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="border-b border-gray-200 dark:border-gray-700">
+                                <tr className="border-b border-gray-200 dark:border-gray-800">
                                     {["Product", "Qty", "Total", "Payment", "Customer", "Date"].map((h) => (
                                         <th key={h} className="text-left py-2.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                                             {h}
@@ -562,7 +562,7 @@ const SalesOverviewTab = ({ timeRange, chartType, storeId, store }) => {
                             </thead>
                             <tbody>
                                 {recentSales.map((sale, i) => (
-                                    <tr key={sale._id || i} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                                    <tr key={sale._id || i} className="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                                         <td className="py-2.5 px-2 font-medium text-gray-900 dark:text-white max-w-[140px] truncate">
                                             {sale.productName || "—"}
                                         </td>
@@ -860,14 +860,14 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
                 subtitle={store ? `Stock value and counts for ${store.name}` : "Stock value and unit count per store across the entire business"}
                 action={
                     !store && (
-                        <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-1 rounded-sm">
+                        <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-1 rounded-sm">
                             {storeInventories.length} stores
                         </span>
                     )
                 }
             >
                 {storeInventoryLoading ? (
-                    <div className="h-64 bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
+                    <div className="h-64 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
                 ) : storeInventoryChartConfig ? (
                     <>
                         {!store && (
@@ -880,7 +880,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead>
-                                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                                    <tr className="border-b border-gray-200 dark:border-gray-800">
                                         {["#", "Store", "Products", "Total Stock", "Inv. Value", "Retail Value", "In Stock", "Low Stock", "Out of Stock", "Health"].map((h) => (
                                             <th key={h} className="text-left py-2 px-2 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">
                                                 {h}
@@ -890,7 +890,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
                                 </thead>
                                 <tbody>
                                     {storeInventories.map((s, i) => (
-                                        <tr key={String(s.storeId)} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                                        <tr key={String(s.storeId)} className="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                                             <td className="py-2.5 px-2 text-gray-400">{i + 1}</td>
                                             <td className="py-2.5 px-2">
                                                 <div className="font-medium text-gray-900 dark:text-white">{s.storeName || "—"}</div>
@@ -905,7 +905,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
                                             <td className="py-2.5 px-2 text-red-600 dark:text-red-400">{fmtNum(s.outOfStockCount)}</td>
                                             <td className="py-2.5 px-2">
                                                 <div className="flex items-center gap-1.5">
-                                                    <div className="w-16 h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                                                    <div className="w-16 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                                         <div
                                                             className={`h-full rounded-full ${s.inventoryHealth >= 80 ? "bg-green-500" : s.inventoryHealth >= 50 ? "bg-yellow-500" : "bg-red-500"}`}
                                                             style={{ width: `${s.inventoryHealth || 0}%` }}
@@ -935,7 +935,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
                 >
                     <div className="h-64">
                         {categoryLoading ? (
-                            <div className="h-full bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
+                            <div className="h-full bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
                         ) : categoryStockChartConfig ? (
                             <ChartWrapper key={`cat-stock-${storeId || "global"}`} {...categoryStockChartConfig} />
                         ) : (
@@ -960,7 +960,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
                                             <span className="text-sm text-gray-800 dark:text-gray-200 capitalize truncate">{c.category || "Uncategorized"}</span>
                                             <span className="text-xs text-gray-500 dark:text-gray-400 shrink-0 ml-2">{pct}%</span>
                                         </div>
-                                        <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                                        <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                             <div
                                                 className="h-full rounded-full transition-all"
                                                 style={{ width: `${pct}%`, background: CHART_PALETTE[i % CHART_PALETTE.length] }}
@@ -994,7 +994,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
             {/* Inventory health + Low stock */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div className="lg:col-span-1">
-                    <SectionShell title="Inventory Status" action={<span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-1 rounded-sm">Stock Levels</span>}>
+                    <SectionShell title="Inventory Status" action={<span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-1 rounded-sm">Stock Levels</span>}>
                         <div className="h-64">
                             <ChartWrapper key={`inv-health-${timeRange}-${storeId || "global"}`} {...inventoryHealthChartConfig} />
                         </div>
@@ -1041,7 +1041,7 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="border-b border-gray-200 dark:border-gray-700">
+                                <tr className="border-b border-gray-200 dark:border-gray-800">
                                     {["#", "Product", "SKU", "Revenue", "Sold", "Margin", "Stock", "Status"].map((h) => (
                                         <th key={h} className="text-left py-2.5 px-2 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                                             {h}
@@ -1051,20 +1051,20 @@ const InventoryTab = ({ timeRange, chartType, showFullChart, setShowFullChart, s
                             </thead>
                             <tbody>
                                 {topProductsChartData.map((p, i) => (
-                                    <tr key={i} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                                    <tr key={i} className="border-b border-gray-100 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                                         <td className="py-2.5 px-2 text-gray-400 dark:text-gray-500">{i + 1}</td>
                                         <td className="py-2.5 px-2 font-medium text-gray-900 dark:text-white w-[120px]">{p.name}</td>
                                         <td className="py-2.5 px-2"><AdminCopySKU productSku={p.sku} /></td>
                                         <td className="py-2.5 px-2 text-green-600 dark:text-green-400 font-medium">{fmt(p.revenue)}</td>
                                         <td className="py-2.5 px-2 text-gray-700 dark:text-gray-300">{fmtNum(p.unitsSold)}</td>
                                         <td className="py-2.5 px-2">
-                                            <span className={`text-xs px-1.5 py-0.5 rounded-sm ${p.margin > 30 ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400" : p.margin > 20 ? "bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400" : p.margin > 0 ? "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400" : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"}`}>
+                                            <span className={`text-xs px-1.5 py-0.5 rounded-sm ${p.margin > 30 ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400" : p.margin > 20 ? "bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400" : p.margin > 0 ? "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400" : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"}`}>
                                                 {p.margin.toFixed(1)}%
                                             </span>
                                         </td>
                                         <td className="py-2.5 px-2 text-gray-700 dark:text-gray-300">{fmtNum(p.stock)}</td>
                                         <td className="py-2.5 px-2">
-                                            <span className={`text-xs px-1.5 py-0.5 rounded-sm ${p.status === "In Stock" ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400" : p.status === "Low Stock" ? "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400" : p.status === "Out of Stock" ? "bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400" : "bg-gray-100 dark:bg-gray-700 text-gray-500"}`}>
+                                            <span className={`text-xs px-1.5 py-0.5 rounded-sm ${p.status === "In Stock" ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400" : p.status === "Low Stock" ? "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400" : p.status === "Out of Stock" ? "bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400" : "bg-gray-100 dark:bg-gray-800 text-gray-500"}`}>
                                                 {p.status}
                                             </span>
                                         </td>
@@ -1119,7 +1119,7 @@ const AdminAnalytics = () => {
 
     return (
         <AdminLayout>
-            <div className="min-h-screen bg-white dark:bg-gray-800 p-4 sm:p-6">
+            <div className="min-h-screen bg-white dark:bg-gray-900 p-4 sm:p-6">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
                     <div>
@@ -1137,7 +1137,7 @@ const AdminAnalytics = () => {
                 </div>
 
                 {/* Tabs + Controls Bar */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 border-b border-gray-200 dark:border-gray-700 pb-3">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 border-b border-gray-200 dark:border-gray-800 pb-3">
                     {/* Tab switcher */}
                     <div className="flex gap-1">
                         {tabs.map(({ id, label, icon: Icon }) => (
@@ -1146,7 +1146,7 @@ const AdminAnalytics = () => {
                                 onClick={() => setActiveTab(id)}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition-colors ${activeTab === id
                                     ? "bg-blue-600 dark:bg-blue-500 text-white"
-                                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
+                                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
                                     }`}
                             >
                                 <Icon size={15} />
@@ -1163,7 +1163,7 @@ const AdminAnalytics = () => {
                             <select
                                 value={timeRange}
                                 onChange={(e) => setTimeRange(e.target.value)}
-                                className="appearance-none bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm pl-9 pr-7 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="appearance-none bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm pl-9 pr-7 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                                 {timeRangeOptions.map((o) => (
                                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -1172,13 +1172,13 @@ const AdminAnalytics = () => {
                         </div>
 
                         {/* Chart type */}
-                        <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-1 flex items-center gap-0.5">
+                        <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-sm p-1 flex items-center gap-0.5">
                             {[{ type: "bar", Icon: BarChart }, { type: "line", Icon: LineChart }, { type: "pie", Icon: PieChartIcon }].map(({ type, Icon }) => (
                                 <button
                                     key={type}
                                     onClick={() => setChartType(type)}
                                     title={`${type.charAt(0).toUpperCase() + type.slice(1)} chart`}
-                                    className={`p-1.5 rounded transition-colors ${chartType === type ? "bg-blue-600 dark:bg-blue-500 text-white" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"}`}
+                                    className={`p-1.5 rounded transition-colors ${chartType === type ? "bg-blue-600 dark:bg-blue-500 text-white" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"}`}
                                 >
                                     <Icon size={15} />
                                 </button>
@@ -1189,7 +1189,7 @@ const AdminAnalytics = () => {
                         <button
                             onClick={handleRefresh}
                             disabled={isRefreshing}
-                            className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-sm transition-colors disabled:opacity-50"
+                            className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-sm transition-colors disabled:opacity-50"
                         >
                             <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
                             {isRefreshing ? "Refreshing…" : "Refresh"}
@@ -1217,7 +1217,7 @@ const AdminAnalytics = () => {
                 )}
 
                 {/* Footer */}
-                <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
                     <span>
                         <span className="text-green-500">●</span> Data updates automatically — use Refresh for latest figures
                     </span>

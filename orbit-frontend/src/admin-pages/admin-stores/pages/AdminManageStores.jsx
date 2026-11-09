@@ -224,7 +224,7 @@ const AdminManageStores = () => {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-                            className="p-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-sm transition-colors"
+                            className="p-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-sm transition-colors"
                             title={viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
                         >
                             {viewMode === 'grid' ? (
@@ -297,7 +297,7 @@ const AdminManageStores = () => {
                                     placeholder="Search stores by name, code, or address..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
+                                    className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
                                 />
                             </div>
                         </div>
@@ -308,7 +308,7 @@ const AdminManageStores = () => {
                                 <select
                                     value={statusFilter}
                                     onChange={(e) => setStatusFilter(e.target.value)}
-                                    className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white text-sm rounded-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                                    className="bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 text-gray-900 dark:text-white text-sm rounded-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                                 >
                                     <option value="all" className="text-gray-700 dark:text-gray-300">All Status</option>
                                     <option value="active" className="text-gray-900 dark:text-white">Active</option>
@@ -319,7 +319,7 @@ const AdminManageStores = () => {
 
                             <button
                                 onClick={() => refetch()}
-                                className="p-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-sm transition-colors"
+                                className="p-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-sm transition-colors"
                                 title="Refresh stores"
                             >
                                 <svg className="w-4 h-4 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

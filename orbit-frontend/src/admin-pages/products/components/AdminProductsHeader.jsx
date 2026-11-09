@@ -59,7 +59,7 @@ const AdminProductsHeader = ({
 
             {/* Tabs - Scrollable on mobile */}
             <div className="overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
-                <div className="flex space-x-1 border-b border-gray-300 dark:border-gray-700 min-w-max">
+                <div className="flex space-x-1 border-b border-gray-300 dark:border-gray-800 min-w-max">
                     {tabs.map(tab => (
                         <button
                             key={tab.id}
@@ -73,7 +73,7 @@ const AdminProductsHeader = ({
                             {tab.name}
                             <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${activeTab === tab.id
                                 ? 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400'
-                                : 'bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                                : 'bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-400'
                                 }`}>
                                 {tab.count}
                             </span>

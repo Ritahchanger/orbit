@@ -46,10 +46,10 @@ const SuspendUserModal = ({
       />
 
       {/* Modal panel */}
-      <div className="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-sm shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+      <div className="relative w-full max-w-lg bg-white dark:bg-gray-900 rounded-sm shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
         {/* Header */}
         <div
-          className={`flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 ${
+          className={`flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800 ${
             isSuspending
               ? "bg-red-50 dark:bg-red-500/10"
               : "bg-green-50 dark:bg-green-500/10"
@@ -73,7 +73,7 @@ const SuspendUserModal = ({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="p-1.5 rounded-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-40"
+            className="p-1.5 rounded-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-40"
           >
             <X size={18} />
           </button>
@@ -86,8 +86,8 @@ const SuspendUserModal = ({
         >
           <div className="px-6 py-5 space-y-5">
             {/* User Info Card */}
-            <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-sm">
-              <div className="flex-shrink-0 w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+            <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-950/50 border border-gray-200 dark:border-gray-800 rounded-sm">
+              <div className="flex-shrink-0 w-10 h-10 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center">
                 <User size={18} className="text-gray-500 dark:text-gray-400" />
               </div>
               <div className="min-w-0">
@@ -97,7 +97,7 @@ const SuspendUserModal = ({
                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                   {user.email}
                   {user.role && (
-                    <span className="ml-1.5 px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-gray-600 dark:text-gray-300 font-medium capitalize">
+                    <span className="ml-1.5 px-1.5 py-0.5 bg-gray-200 dark:bg-gray-800 rounded text-gray-600 dark:text-gray-300 font-medium capitalize">
                       {user.role}
                     </span>
                   )}
@@ -134,7 +134,7 @@ const SuspendUserModal = ({
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
                     rows={3}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     placeholder="Enter reason for suspension..."
                     required
                   />
@@ -175,7 +175,7 @@ const SuspendUserModal = ({
                           value={customDate}
                           onChange={(e) => setCustomDate(e.target.value)}
                           min={new Date().toISOString().split("T")[0]}
-                          className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-sm text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                           required
                         />
                       </div>
@@ -184,7 +184,7 @@ const SuspendUserModal = ({
                 </div>
 
                 {/* Notify User */}
-                <div className="p-3 bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-sm">
+                <div className="p-3 bg-gray-50 dark:bg-gray-950/50 border border-gray-200 dark:border-gray-800 rounded-sm">
                   <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
                       type="checkbox"
@@ -206,7 +206,7 @@ const SuspendUserModal = ({
                   access to their account and assigned stores.
                 </p>
                 {user.suspensionReason && (
-                  <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded-sm border border-green-100 dark:border-green-500/10">
+                  <div className="mt-3 p-3 bg-white dark:bg-gray-900 rounded-sm border border-green-100 dark:border-green-500/10">
                     <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                       Original suspension reason:
                     </p>
@@ -220,12 +220,12 @@ const SuspendUserModal = ({
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-2 mt-auto">
+          <div className="px-6 py-4 bg-gray-50 dark:bg-gray-950/50 border-t border-gray-200 dark:border-gray-800 flex justify-end gap-2 mt-auto">
             <button
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-40"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-40"
             >
               Cancel
             </button>

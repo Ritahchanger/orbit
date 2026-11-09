@@ -17,7 +17,7 @@ import { useStoreContext } from "../../../context/store/StoreContext";
 import { useRole } from "../../../context/authentication/RoleContext";
 
 const stripLinkClass =
-  "inline-flex h-9 items-center gap-1.5 rounded-sm px-3 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200/70 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white";
+  "inline-flex h-9 items-center gap-1.5 rounded-sm px-3 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200/70 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white";
 
 // The strip under the admin navbar: the store switcher plus quick links.
 const AdminStoresLoading = ({
@@ -182,14 +182,14 @@ const AdminStoresLoading = ({
 
   if (storesLoading) {
     return (
-      <div className="border-t border-gray-200 dark:border-gray-800 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50">
+      <div className="border-t border-gray-200 dark:border-gray-800 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-950/50 dark:to-gray-900/50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-12">
             <div className="animate-pulse flex items-center gap-2">
-              <div className="h-8 w-40 bg-gray-300 dark:bg-gray-700 rounded-sm"></div>
+              <div className="h-8 w-40 bg-gray-300 dark:bg-gray-800 rounded-sm"></div>
             </div>
             <div className="animate-pulse flex items-center gap-2">
-              <div className="h-8 w-24 bg-gray-300 dark:bg-gray-700 rounded-sm"></div>
+              <div className="h-8 w-24 bg-gray-300 dark:bg-gray-800 rounded-sm"></div>
             </div>
           </div>
         </div>
@@ -200,11 +200,11 @@ const AdminStoresLoading = ({
   // No stores in system
   if (!stores || stores.length === 0) {
     return (
-      <div className="border-t border-gray-200 dark:border-gray-800 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50">
+      <div className="border-t border-gray-200 dark:border-gray-800 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-950/50 dark:to-gray-900/50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-12">
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm shadow-sm">
+              <div className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm shadow-sm">
                 <Store size={14} className="text-gray-500 dark:text-gray-400" />
                 <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                   No stores available
@@ -229,7 +229,7 @@ const AdminStoresLoading = ({
   // User has no access to any stores (not superadmin, not admin, and no assigned store)
   if (!hasStoreAccess) {
     return (
-      <div className="border-t border-gray-200 dark:border-gray-800 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50">
+      <div className="border-t border-gray-200 dark:border-gray-800 bg-linear-to-r from-gray-50 to-gray-100 dark:from-gray-950/50 dark:to-gray-900/50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-12">
             <div className="flex items-center gap-3">
@@ -279,7 +279,7 @@ const AdminStoresLoading = ({
     hasPermission("inventory.view") || hasPermission("products.view");
 
   return (
-    <div className="sticky top-0 z-40 border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
+    <div className="sticky top-0 z-40 border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950">
       <div className="container mx-auto px-4">
         <div className="flex h-12 items-center justify-between gap-3">
           <StoreSwitcher

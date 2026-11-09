@@ -135,12 +135,12 @@ const CategoryManager = () => {
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="h-20 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-700"
+                  className="h-20 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800"
                 />
               ))}
             </div>
           ) : categories.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-gray-300 p-10 text-center dark:border-gray-700">
+            <div className="rounded-lg border border-dashed border-gray-300 p-10 text-center dark:border-gray-800">
               <Package className="mx-auto mb-3 h-10 w-10 text-gray-400 dark:text-gray-500" />
               <h3 className="mb-1 text-base font-semibold text-gray-900 dark:text-white">
                 No categories yet

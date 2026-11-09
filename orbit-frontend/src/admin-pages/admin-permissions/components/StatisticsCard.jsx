@@ -43,18 +43,18 @@ const StatisticsCard = ({
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+      <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
         <div className="flex items-center justify-between mb-3">
-          <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-          <div className="h-6 w-6 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+          <div className="h-4 w-24 bg-gray-200 dark:bg-gray-800 rounded animate-pulse"></div>
+          <div className="h-6 w-6 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse"></div>
         </div>
-        <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+        <div className="h-8 w-16 bg-gray-200 dark:bg-gray-800 rounded animate-pulse"></div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-sm p-4 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
+    <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-sm p-4 hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
           {title}

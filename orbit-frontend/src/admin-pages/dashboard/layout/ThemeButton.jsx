@@ -34,7 +34,7 @@ const ThemeButton = () => {
         className="p-1 rounded-full opacity-50 relative"
         aria-label="Loading theme"
       >
-        <div className="w-12 h-6 bg-gray-300 dark:bg-gray-600 rounded-full" />
+        <div className="w-12 h-6 bg-gray-300 dark:bg-gray-700 rounded-full" />
       </button>
     );
   }
@@ -60,7 +60,7 @@ const ThemeButton = () => {
         onFocus={() => setShowTooltip(true)}
         onBlur={() => setShowTooltip(false)}
         onKeyDown={handleKeyDown}
-        className="relative inline-flex items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 rounded-full"
+        className="relative inline-flex items-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-950 rounded-full"
         aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
         role="switch"
         aria-checked={isDarkMode}
@@ -102,14 +102,14 @@ const ThemeButton = () => {
         <div
           ref={tooltipRef}
           role="tooltip"
-          className="absolute bottom-[-2.4rem] transform -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-gray-900 dark:bg-gray-700 rounded shadow-lg whitespace-nowrap z-50"
+          className="absolute bottom-[-2.4rem] transform -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-gray-900 dark:bg-gray-800 rounded shadow-lg whitespace-nowrap z-50"
           style={{
             animation: "fadeIn 0.2s ease-in-out",
           }}
         >
           {/* Arrow */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -mt-1">
-            <div className="border-4 border-transparent border-t-gray-900 dark:border-t-gray-700" />
+            <div className="border-4 border-transparent border-t-gray-900 dark:border-t-gray-800" />
           </div>
 
           {/* Tooltip text */}

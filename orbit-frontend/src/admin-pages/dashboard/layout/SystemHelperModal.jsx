@@ -371,9 +371,9 @@ const SystemHelperModal = () => {
 
       {/* Modal Content */}
       <div className="modal-content relative min-h-full flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-gray-800 rounded-sm shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-gray-200 dark:border-gray-700 animate-in slide-in-from-bottom-5 duration-300">
+        <div className="bg-white dark:bg-gray-900 rounded-sm shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-gray-200 dark:border-gray-800 animate-in slide-in-from-bottom-5 duration-300">
           {/* Header */}
-          <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+          <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="p-2 rounded-sm bg-gradient-to-r from-purple-500 to-pink-500">
@@ -395,7 +395,7 @@ const SystemHelperModal = () => {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm transition-colors"
                 aria-label="Close help"
               >
                 <X className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 dark:text-gray-400" />
@@ -404,7 +404,7 @@ const SystemHelperModal = () => {
           </div>
 
           {/* Tabs */}
-          <div className="border-b border-gray-200 dark:border-gray-700 px-6">
+          <div className="border-b border-gray-200 dark:border-gray-800 px-6">
             <nav className="flex space-x-4 sm:space-x-6 overflow-x-auto">
               <button
                 onClick={() => setActiveTab("quicktips")}
@@ -450,10 +450,10 @@ const SystemHelperModal = () => {
                       return (
                         <div
                           key={index}
-                          className="bg-gray-50 dark:bg-gray-900 rounded-sm p-3 sm:p-4 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-colors"
+                          className="bg-gray-50 dark:bg-gray-950 rounded-sm p-3 sm:p-4 border border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 transition-colors"
                         >
                           <div className="flex items-start space-x-3">
-                            <div className="p-1.5 sm:p-2 rounded-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                            <div className="p-1.5 sm:p-2 rounded-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
                               <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
                             </div>
                             <div className="flex-1">
@@ -504,7 +504,7 @@ const SystemHelperModal = () => {
                   mainFeatures.map((section, index) => (
                     <div
                       key={index}
-                      className="bg-gray-50 dark:bg-gray-900 rounded-sm p-3 sm:p-4"
+                      className="bg-gray-50 dark:bg-gray-950 rounded-sm p-3 sm:p-4"
                     >
                       <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white mb-3">
                         {section.category}
@@ -515,7 +515,7 @@ const SystemHelperModal = () => {
                           return (
                             <div
                               key={itemIndex}
-                              className="flex items-center justify-between p-2 sm:p-3 bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700"
+                              className="flex items-center justify-between p-2 sm:p-3 bg-white dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-800"
                             >
                               <div className="flex items-center space-x-2 sm:space-x-3">
                                 <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500 dark:text-gray-400" />
@@ -552,7 +552,7 @@ const SystemHelperModal = () => {
                       <a
                         key={index}
                         href={link.url}
-                        className="group flex items-center justify-between p-3 sm:p-4 bg-gray-50 dark:bg-gray-900 rounded-sm border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-colors"
+                        className="group flex items-center justify-between p-3 sm:p-4 bg-gray-50 dark:bg-gray-950 rounded-sm border border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 transition-colors"
                       >
                         <div className="flex items-center space-x-2 sm:space-x-3">
                           <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500 dark:text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400" />
@@ -578,7 +578,7 @@ const SystemHelperModal = () => {
                     <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-green-600 hover:bg-green-700 text-white rounded-sm text-xs sm:text-sm font-medium transition-colors">
                       Live Chat
                     </button>
-                    <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-sm text-xs sm:text-sm font-medium transition-colors">
+                    <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm text-xs sm:text-sm font-medium transition-colors">
                       Email Support
                     </button>
                     <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-sm text-xs sm:text-sm font-medium transition-colors">
@@ -591,11 +591,11 @@ const SystemHelperModal = () => {
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 border-t border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 bg-gray-50 dark:bg-gray-900">
+          <div className="sticky bottom-0 border-t border-gray-200 dark:border-gray-800 px-4 sm:px-6 py-3 sm:py-4 bg-gray-50 dark:bg-gray-950">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs sm:text-sm">
               <div className="text-gray-600 dark:text-gray-400">
                 Press{" "}
-                <kbd className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600 text-xs">
+                <kbd className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 dark:bg-gray-900 rounded border border-gray-300 dark:border-gray-700 text-xs">
                   Esc
                 </kbd>{" "}
                 to close

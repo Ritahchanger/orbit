@@ -120,7 +120,7 @@ const AdminLogs = () => {
       },
       debug: {
         color:
-          "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400",
+          "bg-gray-100 text-gray-800 dark:bg-gray-950/30 dark:text-gray-400",
         icon: Bug,
         label: "Debug",
       },
@@ -278,7 +278,7 @@ const AdminLogs = () => {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors lg:hidden"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors lg:hidden"
             >
               <Filter className="w-4 h-4 mr-2" />
               Filters
@@ -286,7 +286,7 @@ const AdminLogs = () => {
             <button
               onClick={handleRefresh}
               disabled={fetchLogsMutation.isPending}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
             >
               <RefreshCw
                 className={`w-4 h-4 mr-2 ${fetchLogsMutation.isPending ? "animate-spin" : ""}`}
@@ -298,7 +298,7 @@ const AdminLogs = () => {
 
         {/* Filters Section */}
         <div className={`${showFilters ? "block" : "hidden lg:block"} mb-2`}>
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm p-4">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm p-4">
             <div className="flex items-center justify-between mb-4 lg:hidden">
               <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Filters
@@ -320,7 +320,7 @@ const AdminLogs = () => {
                   placeholder="Search logs by message, user, path, error..."
                   value={searchInput}
                   onChange={handleSearchChange}
-                  className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                 />
                 {/* Show typing indicator when debouncing */}
                 {searchInput !== filters.search && searchInput && (
@@ -339,7 +339,7 @@ const AdminLogs = () => {
                     onChange={(e) =>
                       handleFilterChange("level", e.target.value)
                     }
-                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                   >
                     <option value="">All Levels</option>
                     <option value="info">Info</option>
@@ -359,7 +359,7 @@ const AdminLogs = () => {
                     placeholder="/api/endpoint"
                     value={filters.path}
                     onChange={(e) => handleFilterChange("path", e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
 
@@ -375,7 +375,7 @@ const AdminLogs = () => {
                     onChange={(e) =>
                       handleFilterChange("userId", e.target.value)
                     }
-                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
 
@@ -391,7 +391,7 @@ const AdminLogs = () => {
                       onChange={(e) =>
                         handleFilterChange("startDate", e.target.value)
                       }
-                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                     />
                   </div>
                   <div>
@@ -404,7 +404,7 @@ const AdminLogs = () => {
                       onChange={(e) =>
                         handleFilterChange("endDate", e.target.value)
                       }
-                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                     />
                   </div>
                 </div>
@@ -414,7 +414,7 @@ const AdminLogs = () => {
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-sm transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-sm transition-colors"
                 >
                   Clear Filters
                 </button>
@@ -451,7 +451,7 @@ const AdminLogs = () => {
         )}
 
         {/* Logs Table */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden">
           {isLoading || isSearching || (isFetching && filters.search) ? (
             <div className="p-8 text-center">
               <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-600 border-r-transparent"></div>
@@ -493,8 +493,8 @@ const AdminLogs = () => {
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-gray-50 dark:bg-gray-700">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+                  <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-10">
                         <button
@@ -534,7 +534,7 @@ const AdminLogs = () => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                  <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
                     {logsData?.data.map((log) => {
                       const levelBadge = getLevelBadge(log.level);
                       const LevelIcon = levelBadge.icon;
@@ -543,7 +543,7 @@ const AdminLogs = () => {
                       return (
                         <tr
                           key={log._id}
-                          className={`hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors ${
+                          className={`hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${
                             isSelected
                               ? "bg-blue-50/50 dark:bg-blue-900/20"
                               : ""
@@ -591,7 +591,7 @@ const AdminLogs = () => {
                                     ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                                     : log.response?.statusCode >= 500
                                       ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                                      : "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
+                                      : "bg-gray-100 text-gray-800 dark:bg-gray-950/30 dark:text-gray-400"
                               }`}
                             >
                               {log.response?.statusCode || "---"}
@@ -610,7 +610,7 @@ const AdminLogs = () => {
                                   onClick={() =>
                                     handleCopy(log.user.email, "Email")
                                   }
-                                  className="p-0.5 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                                  className="p-0.5 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
                                 >
                                   <Copy className="h-3 w-3" />
                                 </button>
@@ -654,7 +654,7 @@ const AdminLogs = () => {
 
               {/* Pagination */}
               {logsData?.meta?.pages > 1 && (
-                <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="text-xs text-gray-500 dark:text-gray-400">
                       Showing{" "}
@@ -671,7 +671,7 @@ const AdminLogs = () => {
                           handleFilterChange("page", filters.page - 1)
                         }
                         disabled={!logsData.meta.hasPrev}
-                        className="px-3 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-3 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         Previous
                       </button>
@@ -700,7 +700,7 @@ const AdminLogs = () => {
                                 className={`px-3 py-1 text-xs font-medium rounded-sm transition-colors ${
                                   filters.page === pageNum
                                     ? "bg-primary-600 text-white"
-                                    : "text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                    : "text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
                                 }`}
                               >
                                 {pageNum}
@@ -714,7 +714,7 @@ const AdminLogs = () => {
                           handleFilterChange("page", filters.page + 1)
                         }
                         disabled={!logsData.meta.hasNext}
-                        className="px-3 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-3 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         Next
                       </button>
@@ -730,7 +730,7 @@ const AdminLogs = () => {
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Confirm Deletion
             </h3>
@@ -741,7 +741,7 @@ const AdminLogs = () => {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
+                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors"
                 disabled={deleteLogsBatchMutation.isPending}
               >
                 Cancel
