@@ -109,7 +109,8 @@ const AdminLayout = ({ children }) => {
       <SystemHelperModal />
       <AdminNavbar />
       <div className="mx-auto">
-        <main className="pt-27.5 pb-4 container mx-auto">{children}</main>
+        {/* Navbar row (4rem) + store strip (3rem) + their two 1px borders */}
+        <main className="pt-[calc(7rem+2px)] pb-4 container mx-auto">{children}</main>
       </div>
       <StoreSelectionModal />
       {showCalculator && <CalculatorModal onClose={handleCalculatorClose} />}

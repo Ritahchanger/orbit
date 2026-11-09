@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { Search, Menu, X, ChevronDown, Plus, ShoppingBag } from "lucide-react";
 
@@ -75,9 +75,8 @@ const AdminNavbar = () => {
 
   // Handle store switching
   const handleStoreSwitch = (storeId) => {
+    // The store strip itself shows which store is selected; no toast needed
     switchStore(storeId);
-    toast.success("Store switched successfully");
-    // Refresh page data based on new store
   };
 
   const handleLogout = async () => {
@@ -168,9 +167,12 @@ const AdminNavbar = () => {
                   className="flex items-center gap-1 rounded-sm p-1.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-900"
                 >
                   <CustomerAvatar
-                    name={[user?.firstName?.charAt(0), user?.lastName?.charAt(0)]
-    .filter(Boolean)
-    .join(" ")}
+                    name={
+                      [user?.firstName?.charAt(0), user?.lastName?.charAt(0)]
+                        .filter(Boolean)
+                        .join("")
+                        .toUpperCase() || "?"
+                    }
                     size="sm"
                     className="shrink-0"
                   />

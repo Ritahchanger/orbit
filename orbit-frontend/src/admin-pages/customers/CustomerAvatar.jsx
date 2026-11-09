@@ -1,6 +1,11 @@
-const CustomerAvatar = ({ name }) => {
+const SIZES = {
+    sm: "h-8 w-8 text-xs",
+    md: "h-10 w-10 text-sm",
+};
+
+const CustomerAvatar = ({ name, size = "md", className = "" }) => {
     return (
-        <div className="shrink-0 h-10 w-10 bg-linear-to-br from-primary to-[#00D4FF] rounded-full flex items-center justify-center text-white font-bold text-sm">
+        <div className={`shrink-0 ${SIZES[size] || SIZES.md} bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold ${className}`}>
             {name}
         </div>
     )

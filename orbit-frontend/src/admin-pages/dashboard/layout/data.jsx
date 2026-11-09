@@ -22,6 +22,7 @@ import {
   Shield,
   TrendingUp,
   ArrowRightLeft,
+  CalendarClock,
 } from "lucide-react";
 
 // Admin menu. Who sees an item comes from ROUTE_ROLES, the same map the routes
@@ -47,7 +48,7 @@ export const navItems = [
   {
     name: "Consultation",
     path: "/admin/consultation-setup",
-    icon: BarChart3,
+    icon: CalendarClock,
     feature: "consultations",
   },
 ];
