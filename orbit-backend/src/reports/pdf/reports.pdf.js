@@ -121,14 +121,51 @@ function put(doc, text, x, y, opts = {}) {
   });
 }
 
+// Orbit wordmark (matches the app logo: bold "ORBIT" in the blue→cyan
+// gradient), on a white pill so it reads on any business brand colour.
+const LOGO_STOPS = ["#0066FF", "#00D4FF", "#0066FF"];
+const LOGO_SPACING = 0.18; // letter spacing as a fraction of the font size
+
+function logoSize(doc, size) {
+  doc.font("Bold").fontSize(size);
+  const spacing = size * LOGO_SPACING;
+  const textW = doc.widthOfString("ORBIT", { characterSpacing: spacing }) - spacing;
+  const padX = size * 0.9;
+  return { w: textW + padX * 2, h: size * 1.9, textW, padX, spacing };
+}
+
+/** Draws the logo centred on (cx, cy); returns its size. */
+function orbitLogo(doc, cx, cy, size = 14) {
+  const m = logoSize(doc, size);
+  const x = cx - m.w / 2;
+  const y = cy - m.h / 2;
+  doc.roundedRect(x, y, m.w, m.h, m.h / 2).fill("#FFFFFF");
+  const tx = x + m.padX;
+  const grad = doc.linearGradient(tx, 0, tx + m.textW, 0);
+  LOGO_STOPS.forEach((c, i) => grad.stop(i / (LOGO_STOPS.length - 1), c));
+  doc.font("Bold").fontSize(size).fillColor(grad);
+  // PDFKit places text by its top edge; nudge so the caps sit optically centred.
+  doc.text("ORBIT", tx, cy - size * 0.68, {
+    lineBreak: false,
+    characterSpacing: m.spacing,
+  });
+  return m;
+}
+
+/** Width available to left-aligned header text without running into a centred logo. */
+const besideLogo = (doc, logoW) => doc.page.width / 2 - logoW / 2 - MARGIN - 16;
+
 function masthead(doc, ctx, compact = false) {
   const h = compact ? 36 : MASTHEAD_H;
   doc.rect(0, 0, doc.page.width, h).fill(ctx.brand);
+  const logo = orbitLogo(doc, doc.page.width / 2, h / 2, compact ? 10 : 14);
+  const textW = besideLogo(doc, logo.w);
   if (compact) {
     put(doc, `${ctx.businessName} · ${ctx.title}`, MARGIN, 12, {
       font: "Bold",
       size: 10,
       color: "#FFFFFF",
+      width: textW,
     });
     return h + 16;
   }
@@ -136,9 +173,10 @@ function masthead(doc, ctx, compact = false) {
     font: "Bold",
     size: 8,
     color: "#C7D2FE",
+    width: textW,
   });
-  put(doc, ctx.title, MARGIN, 23, { font: "Bold", size: 18, color: "#FFFFFF" });
-  put(doc, ctx.scopeLine, MARGIN, 46, { size: 8.5, color: "#E0E7FF" });
+  put(doc, ctx.title, MARGIN, 23, { font: "Bold", size: 18, color: "#FFFFFF", width: textW });
+  put(doc, ctx.scopeLine, MARGIN, 46, { size: 8.5, color: "#E0E7FF", width: textW });
   return h + 20;
 }
 
@@ -977,14 +1015,16 @@ function renderReceiptPdf(tx, meta = {}) {
   return toBuffer(doc, () => {
     // ── Letterhead
     doc.rect(0, 0, W, 104).fill(ctx.brand);
-    put(doc, ctx.businessName, MARGIN, 22, { font: "Bold", size: 20, color: "#FFFFFF", width: CW - 170 });
+    const logo = orbitLogo(doc, W / 2, 52, 14);
+    const headW = besideLogo(doc, logo.w);
+    put(doc, ctx.businessName, MARGIN, 22, { font: "Bold", size: 20, color: "#FFFFFF", width: headW });
     const contact = [
       [b.businessAddress, b.city, b.country].filter(Boolean).join(", "),
       [b.businessPhone, b.businessEmail, b.website].filter(Boolean).join("  ·  "),
       [b.taxId && `PIN ${b.taxId}`, b.registrationNumber && `Reg. ${b.registrationNumber}`].filter(Boolean).join("  ·  "),
     ].filter(Boolean);
     contact.forEach((line, i) =>
-      put(doc, line, MARGIN, 50 + i * 12, { size: 8, color: "#E0E7FF", width: CW - 170 }),
+      put(doc, line, MARGIN, 50 + i * 12, { size: 8, color: "#E0E7FF", width: headW }),
     );
     put(doc, "RECEIPT", W - MARGIN - 160, 22, { font: "Bold", size: 20, color: "#FFFFFF", width: 160, align: "right" });
     put(doc, `# ${ref}`, W - MARGIN - 160, 50, { font: "Bold", size: 9, color: "#E0E7FF", width: 160, align: "right" });
