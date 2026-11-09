@@ -344,7 +344,7 @@ const AdminProducts = () => {
     if (hasError)
       return (
         <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-sm p-4 mb-4">
-          <p className="text-red-600 dark:text-red-400">
+          <p className="text-sm text-red-600 dark:text-red-400">
             Error loading statistics
           </p>
         </div>
@@ -354,7 +354,7 @@ const AdminProducts = () => {
       return (
         <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
           <Package className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <h3 className="text-base font-medium text-gray-900 dark:text-white mb-2">
             No Statistics Available
           </h3>
         </div>
@@ -374,7 +374,7 @@ const AdminProducts = () => {
               </span>
               <Package className="h-5 w-5 text-green-600 dark:text-green-500" />
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
               {statsData.totalStock}
             </p>
           </div>
@@ -388,7 +388,7 @@ const AdminProducts = () => {
                 KSh
               </span>
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
               {statsData.totalRevenue.toLocaleString()}
             </p>
           </div>
@@ -402,7 +402,7 @@ const AdminProducts = () => {
                 Units
               </span>
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
               {statsData.totalSold}
             </p>
           </div>
@@ -416,7 +416,7 @@ const AdminProducts = () => {
                 KSh
               </span>
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <p className="text-xl font-bold text-gray-900 dark:text-white">
               {statsData.averagePrice.toLocaleString()}
             </p>
           </div>
@@ -425,7 +425,7 @@ const AdminProducts = () => {
         {/* Category Statistics */}
         {statsData.categoryStats && statsData.categoryStats.length > 0 && (
           <div className="mt-8">
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-4">
               Category Statistics
             </h4>
             <div className="overflow-x-auto">
@@ -472,16 +472,16 @@ const AdminProducts = () => {
         {/* Header */}
         <div className="flex items-start flex-col md:flex-row justify-between md:items-center mb-2">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 bg-clip-text text-transparent">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
               Products in main warehouse
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               Manage inventory, track sales, and monitor stock levels
             </p>
           </div>
           <div className="flex items-center space-x-4 mt-2 md:mt-0">
             {/* Global View Badge */}
-            <div className="px-3 py-2 bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 rounded-sm text-sm md:text-lg">
+            <div className="px-3 py-2 bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 rounded-sm text-sm">
               <div className="flex items-center space-x-2">
                 <Globe
                   size={16}
@@ -499,7 +499,7 @@ const AdminProducts = () => {
             <button
               onClick={handleRefresh}
               disabled={isLoading}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-lg"
+              className="flex items-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
             >
               <span>Refresh</span>
             </button>
@@ -542,12 +542,12 @@ const AdminProducts = () => {
         {/* Show error message */}
         {hasError && !isLoading && (
           <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-sm p-4 mb-4">
-            <p className="text-red-600 dark:text-red-400">
+            <p className="text-sm text-red-600 dark:text-red-400">
               Error: {errorMessage}
             </p>
             <button
               onClick={handleRefresh}
-              className="mt-2 px-4 py-2 bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 rounded-sm transition-colors"
+              className="mt-2 px-4 py-2 text-sm font-medium bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 rounded-sm transition-colors"
             >
               Retry
             </button>
@@ -561,10 +561,10 @@ const AdminProducts = () => {
           activeTab !== "stats" && (
             <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
               <Package className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-base font-medium text-gray-900 dark:text-white mb-2">
                 No Products Found
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                 {searchQuery.trim()
                   ? "No products match your search"
                   : "No products available globally"}
@@ -572,14 +572,14 @@ const AdminProducts = () => {
               <div className="flex justify-center space-x-3">
                 <button
                   onClick={() => setShowAddProductModal(true)}
-                  className="px-4 py-2 bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-sm transition-colors"
+                  className="px-4 py-2 text-sm font-medium bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white rounded-sm transition-colors"
                 >
                   Add First Product
                 </button>
                 {searchQuery.trim() && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="px-4 py-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-sm transition-colors"
+                    className="px-4 py-2 text-sm font-medium bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-sm transition-colors"
                   >
                     Clear Search
                   </button>

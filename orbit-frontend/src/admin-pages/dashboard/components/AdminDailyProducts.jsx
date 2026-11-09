@@ -159,7 +159,7 @@ const AdminDailyProducts = ({
                 <p className="text-xs text-gray-600 dark:text-gray-400">
                   Items Sold
                 </p>
-                <p className="text-gray-900 dark:text-white font-bold">
+                <p className="text-base text-gray-900 dark:text-white font-bold">
                   {totalQuantity}
                 </p>
               </div>
@@ -172,7 +172,7 @@ const AdminDailyProducts = ({
                 <p className="text-xs text-gray-600 dark:text-gray-400">
                   Total Revenue
                 </p>
-                <p className="text-gray-900 dark:text-white font-bold">
+                <p className="text-base text-gray-900 dark:text-white font-bold">
                   {formatCurrency(totalRevenue)}
                 </p>
               </div>
@@ -187,7 +187,7 @@ const AdminDailyProducts = ({
                     <p className="text-xs text-gray-600 dark:text-gray-400">
                       Total Profit
                     </p>
-                    <p className="text-green-600 dark:text-green-400 font-bold">
+                    <p className="text-base text-green-600 dark:text-green-400 font-bold">
                       {formatCurrency(totalProfit)}
                     </p>
                   </div>
@@ -201,7 +201,7 @@ const AdminDailyProducts = ({
                       Avg Margin
                     </p>
                     <p
-                      className={`font-bold ${avgProfitMargin > 50 ? "text-green-600 dark:text-green-500" : avgProfitMargin > 20 ? "text-yellow-600 dark:text-yellow-500" : "text-red-600 dark:text-red-500"}`}
+                      className={`text-base font-bold ${avgProfitMargin > 50 ? "text-green-600 dark:text-green-500" : avgProfitMargin > 20 ? "text-yellow-600 dark:text-yellow-500" : "text-red-600 dark:text-red-500"}`}
                     >
                       {avgProfitMargin}%
                     </p>
@@ -215,44 +215,44 @@ const AdminDailyProducts = ({
           <table className="w-full">
             <thead>
               <tr className="bg-gray-100 dark:bg-gray-800/50">
-                <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   #
                 </th>
-                <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Product
                 </th>
-                <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   SKU
                 </th>
-                <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Category
                 </th>
-                <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Quantity
                 </th>
                 {canSeeProfit && (
-                  <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     Cost
                   </th>
                 )}
-                <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Selling Price
                 </th>
-                <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                   Revenue
                 </th>
                 {canSeeProfit && (
-                  <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     Profit
                   </th>
                 )}
                 {canSeeProfit && (
-                  <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     Margin
                   </th>
                 )}
                 {canSeeProfit && (
-                  <th className="p-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="p-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     Actions
                   </th>
                 )}
@@ -265,7 +265,7 @@ const AdminDailyProducts = ({
                   className={`border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors 
                                         ${highlightFirstItem && index === 0 ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}
                 >
-                  <td className="p-4 text-gray-600 dark:text-gray-400">
+                  <td className="p-4 text-sm text-gray-600 dark:text-gray-400">
                     {index + 1}
                   </td>
                   <td className="p-4 max-w-[200px]">
@@ -301,7 +301,7 @@ const AdminDailyProducts = ({
                   </td>
                   <td className="p-4">
                     <div className="flex flex-col">
-                      <p className="text-gray-900 dark:text-white font-medium">
+                      <p className="text-sm text-gray-900 dark:text-white font-medium">
                         {item.totalQuantitySold || 0}
                       </p>
                       <p className="text-xs text-gray-600 dark:text-gray-400">
@@ -313,7 +313,7 @@ const AdminDailyProducts = ({
                   {canSeeProfit && (
                     <td className="p-4">
                       <div className="flex flex-col">
-                        <p className="text-red-600 dark:text-red-400">
+                        <p className="text-sm text-red-600 dark:text-red-400">
                           {formatCurrency(item.buyingPrice)}
                         </p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">
@@ -327,7 +327,7 @@ const AdminDailyProducts = ({
                   )}
                   <td className="p-4">
                     <div className="flex flex-col">
-                      <p className="text-gray-900 dark:text-white">
+                      <p className="text-sm text-gray-900 dark:text-white">
                         {formatCurrency(item.sellingPrice)}
                       </p>
                       {canSeeProfit && item.buyingPrice > 0 && (
@@ -340,7 +340,7 @@ const AdminDailyProducts = ({
                   </td>
                   <td className="p-4">
                     <div className="flex flex-col">
-                      <p className="text-gray-900 dark:text-white font-bold">
+                      <p className="text-sm text-gray-900 dark:text-white font-bold">
                         {formatCurrency(item.totalRevenue)}
                       </p>
                       <p className="text-xs text-gray-600 dark:text-gray-400">
@@ -355,7 +355,7 @@ const AdminDailyProducts = ({
                       <td className="p-4">
                         <div className="flex flex-col">
                           <p
-                            className={`font-bold ${item.totalProfit > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
+                            className={`text-sm font-bold ${item.totalProfit > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
                           >
                             {formatCurrency(item.totalProfit)}
                           </p>
@@ -373,7 +373,7 @@ const AdminDailyProducts = ({
                       <td className="p-4">
                         <div className="flex flex-col">
                           <p
-                            className={`font-bold ${
+                            className={`text-sm font-bold ${
                               parseFloat(item.profitMargin || 0) > 50
                                 ? "text-green-600 dark:text-green-500"
                                 : parseFloat(item.profitMargin || 0) > 20
@@ -437,7 +437,7 @@ const AdminDailyProducts = ({
                     colSpan="4"
                     className="p-4 text-right text-sm font-medium text-gray-600 dark:text-gray-400"
                   >
-                    GRAND TOTALS:
+                    Grand totals
                   </td>
                   <td className="p-4 text-gray-900 dark:text-white font-bold text-sm">
                     {totalQuantity}
@@ -529,10 +529,10 @@ const AdminDailyProducts = ({
           {itemsSold.length === 0 && (
             <div className="p-8 text-center">
               <ShoppingBag className="h-12 w-12 text-gray-400 dark:text-gray-700 mx-auto mb-3" />
-              <h3 className="text-lg font-medium text-gray-600 dark:text-gray-400 mb-1">
+              <h3 className="text-base font-medium text-gray-600 dark:text-gray-400 mb-1">
                 No products sold
               </h3>
-              <p className="text-gray-500 dark:text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-500">
                 No sales data available for the selected date and store
               </p>
             </div>
@@ -578,7 +578,7 @@ const AdminDailyProducts = ({
               <p className="text-xs text-gray-600 dark:text-gray-400">
                 Items Sold
               </p>
-              <p className="text-lg font-bold text-gray-900 dark:text-white">
+              <p className="text-base font-bold text-gray-900 dark:text-white">
                 {totalQuantity}
               </p>
             </div>
@@ -593,7 +593,7 @@ const AdminDailyProducts = ({
               <p className="text-xs text-gray-600 dark:text-gray-400">
                 Revenue
               </p>
-              <p className="text-lg font-bold text-gray-900 dark:text-white">
+              <p className="text-base font-bold text-gray-900 dark:text-white">
                 {formatCurrency(totalRevenue)}
               </p>
             </div>
@@ -610,7 +610,7 @@ const AdminDailyProducts = ({
                   <p className="text-xs text-gray-600 dark:text-gray-400">
                     Profit
                   </p>
-                  <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                  <p className="text-base font-bold text-green-600 dark:text-green-400">
                     {formatCurrency(totalProfit)}
                   </p>
                 </div>
@@ -626,7 +626,7 @@ const AdminDailyProducts = ({
                     Margin
                   </p>
                   <p
-                    className={`text-lg font-bold ${
+                    className={`text-base font-bold ${
                       avgProfitMargin > 50
                         ? "text-green-600"
                         : avgProfitMargin > 20
@@ -690,7 +690,7 @@ const AdminDailyProducts = ({
                       </span>
                     )}
                   </div>
-                  <h3 className="font-medium text-gray-900 dark:text-white text-base mt-2">
+                  <h3 className="font-medium text-gray-900 dark:text-white text-sm mt-2">
                     {item.productName}
                   </h3>
                 </div>
@@ -712,7 +712,7 @@ const AdminDailyProducts = ({
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     Qty
                   </p>
-                  <p className="text-base font-semibold text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
                     {item.totalQuantitySold || 0}
                   </p>
                 </div>
@@ -720,7 +720,7 @@ const AdminDailyProducts = ({
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     Price
                   </p>
-                  <p className="text-base font-semibold text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
                     {formatCurrency(item.sellingPrice)}
                   </p>
                 </div>
@@ -728,7 +728,7 @@ const AdminDailyProducts = ({
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     Revenue
                   </p>
-                  <p className="text-base font-semibold text-green-600 dark:text-green-500">
+                  <p className="text-sm font-semibold text-green-600 dark:text-green-500">
                     {formatCurrency(item.totalRevenue)}
                   </p>
                 </div>
@@ -873,7 +873,7 @@ const AdminDailyProducts = ({
       {itemsSold.length === 0 && (
         <div className="p-8 text-center bg-white dark:bg-gray-800/50 rounded-sm border border-gray-200 dark:border-gray-700">
           <ShoppingBag className="h-12 w-12 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
-          <h3 className="text-lg font-medium text-gray-600 dark:text-gray-400 mb-1">
+          <h3 className="text-base font-medium text-gray-600 dark:text-gray-400 mb-1">
             No products sold
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-500">

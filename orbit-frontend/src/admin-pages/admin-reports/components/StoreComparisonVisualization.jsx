@@ -289,7 +289,7 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
       const data = payload[0].payload;
       return (
         <div className="bg-white dark:bg-gray-800 p-4 rounded-sm shadow-lg border border-gray-200 dark:border-gray-700 min-w-[200px]">
-          <p className="font-medium text-gray-900 dark:text-white mb-2 border-b border-gray-200 dark:border-gray-700 pb-2">
+          <p className="text-sm font-medium text-gray-900 dark:text-white mb-2 border-b border-gray-200 dark:border-gray-700 pb-2">
             {data.fullName || data.name || data.store || label}
           </p>
           <div className="space-y-1">
@@ -339,10 +339,10 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
       <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-12">
         <div className="text-center">
           <Store className="h-12 w-12 mx-auto text-gray-400 mb-3" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <h3 className="text-base font-medium text-gray-900 dark:text-white mb-2">
             No Store Data Available
           </h3>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             There are no stores to display in the comparison.
           </p>
         </div>
@@ -362,7 +362,7 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
               <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                 Store Performance Analytics
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -489,7 +489,7 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
                 .join(" ") || "N/A"}
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(
               processedStores.reduce((sum, s) => sum + s.revenue, 0),
             )}
@@ -512,7 +512,7 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
               )}
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(
               processedStores.reduce((sum, s) => sum + s.profit, 0),
             )}
@@ -532,7 +532,7 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
               items
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(
               processedStores.reduce((sum, s) => sum + s.inventoryValue, 0),
             )}
@@ -844,7 +844,7 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
           <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
             <div className="flex items-center mb-3">
               <Award className="h-5 w-5 text-yellow-500 mr-2" />
-              <h4 className="font-medium text-gray-900 dark:text-white">
+              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                 Top Performers
               </h4>
             </div>
@@ -869,7 +869,7 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
           <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
             <div className="flex items-center mb-3">
               <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />
-              <h4 className="font-medium text-gray-900 dark:text-white">
+              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                 Needs Improvement
               </h4>
             </div>
@@ -895,7 +895,7 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
           <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
             <div className="flex items-center mb-3">
               <Target className="h-5 w-5 text-purple-500 mr-2" />
-              <h4 className="font-medium text-gray-900 dark:text-white">
+              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                 Key Recommendations
               </h4>
             </div>
@@ -921,7 +921,7 @@ const StoreComparisonVisualization = ({ data, onRefresh, isLoading }) => {
       {/* Store Performance Table */}
       <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-          <h4 className="font-medium text-gray-900 dark:text-white">
+          <h4 className="text-sm font-medium text-gray-900 dark:text-white">
             Store Performance Details
           </h4>
           <span className="text-xs text-gray-500 dark:text-gray-400">

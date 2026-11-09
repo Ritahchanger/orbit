@@ -202,7 +202,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-gray-800 p-3 rounded-sm shadow-lg border border-gray-200 dark:border-gray-700">
-          <p className="font-medium text-gray-900 dark:text-white mb-1">
+          <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
             {payload[0]?.payload?.fullName || label}
           </p>
           {payload.map((entry, index) => (
@@ -232,7 +232,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
               <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                 Product Analytics Dashboard
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -539,7 +539,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
               Total
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(summaryMetrics?.totalRevenue || 0)}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -556,7 +556,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
               {summaryMetrics?.avgProfitMargin?.toFixed(1)}% avg
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(summaryMetrics?.totalProfit || 0)}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -573,7 +573,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
               {formatNumber(summaryMetrics?.totalSold || 0)} units
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl font-bold text-gray-900 dark:text-white">
             {formatNumber(summaryMetrics?.totalTransactions || 0)}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -590,7 +590,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
               {formatNumber(summaryMetrics?.currentStock || 0)} total
             </span>
           </div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl font-bold text-gray-900 dark:text-white">
             {products.filter((p) => p.currentStock <= 5).length}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -601,7 +601,7 @@ const ProductVisualization = ({ products, summaryMetrics, onRefresh }) => {
 
       {/* Category Breakdown */}
       <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
-        <h4 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+        <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
           <PieChart className="h-4 w-4 mr-2 text-blue-500" />
           Category Performance Breakdown
         </h4>
@@ -703,7 +703,7 @@ const ScatterTooltip = ({ active, payload }) => {
     const data = payload[0].payload;
     return (
       <div className="bg-white dark:bg-gray-800 p-3 rounded-sm shadow-lg border border-gray-200 dark:border-gray-700">
-        <p className="font-medium text-gray-900 dark:text-white mb-1">
+        <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
           {data.name}
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-300">

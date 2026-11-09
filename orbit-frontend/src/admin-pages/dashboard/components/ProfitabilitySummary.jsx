@@ -13,8 +13,8 @@ const ProfitabilitySummary = ({ isAdmin, isSuperadmin, itemsSold, formatCurrency
                         );
                         return (
                             <>
-                                <p className="font-semibold text-gray-900 dark:text-white">{highestMargin.productName}</p>
-                                <p className="text-green-600 dark:text-green-500 font-medium">{highestMargin.profitMargin || 0}% margin</p>
+                                <p className="text-sm font-semibold text-gray-900 dark:text-white">{highestMargin.productName}</p>
+                                <p className="text-sm text-green-600 dark:text-green-500 font-medium">{highestMargin.profitMargin || 0}% margin</p>
                             </>
                         );
                     })()}
@@ -28,8 +28,8 @@ const ProfitabilitySummary = ({ isAdmin, isSuperadmin, itemsSold, formatCurrency
                         );
                         return (
                             <>
-                                <p className="font-semibold text-gray-900 dark:text-white">{bestSeller.productName}</p>
-                                <p className="text-gray-900 dark:text-white">{(bestSeller.totalQuantitySold || 0)} units</p>
+                                <p className="text-sm font-semibold text-gray-900 dark:text-white">{bestSeller.productName}</p>
+                                <p className="text-sm text-gray-900 dark:text-white">{(bestSeller.totalQuantitySold || 0)} units</p>
                             </>
                         );
                     })()}
@@ -43,8 +43,8 @@ const ProfitabilitySummary = ({ isAdmin, isSuperadmin, itemsSold, formatCurrency
                         );
                         return (
                             <>
-                                <p className="font-semibold text-gray-900 dark:text-white">{highestRevenue.productName}</p>
-                                <p className="text-gray-900 dark:text-white">{formatCurrency(highestRevenue.totalRevenue || 0)}</p>
+                                <p className="text-sm font-semibold text-gray-900 dark:text-white">{highestRevenue.productName}</p>
+                                <p className="text-sm text-gray-900 dark:text-white">{formatCurrency(highestRevenue.totalRevenue || 0)}</p>
                             </>
                         );
                     })()}

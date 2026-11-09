@@ -374,7 +374,7 @@ const AdminReports = () => {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">
+            <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
               Loading reports...
             </p>
           </div>
@@ -390,16 +390,16 @@ const AdminReports = () => {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
           <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-sm shadow-lg max-w-md">
             <Lock className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Access Denied
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               You don't have permission to view this report. Please contact your
               administrator.
             </p>
             <button
               onClick={() => setSelectedReport("dashboard")}
-              className="px-4 py-2 bg-primary-600 text-white rounded-sm hover:bg-primary-700"
+              className="px-4 py-2 text-sm font-medium bg-primary-600 text-white rounded-sm hover:bg-primary-700"
             >
               Go to Dashboard
             </button>
@@ -427,7 +427,7 @@ const AdminReports = () => {
                       key={report.id}
                       onClick={() => handleReportChange(report.id)}
                       className={`
-                                                whitespace-nowrap py-2 px-1 border-b-2 font-medium text-lg flex items-center
+                                                whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center
                                                 ${
                                                   isActive
                                                     ? `${colors.text} ${colors.tab}`
@@ -504,7 +504,7 @@ const AdminReports = () => {
                           <Icon className={`h-4 w-4 ${colors.text}`} />
                         </div>
                       </div>
-                      <h3 className="font-medium text-sm text-gray-900 dark:text-white mb-0.5">
+                      <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-0.5">
                         {action.title}
                       </h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400">

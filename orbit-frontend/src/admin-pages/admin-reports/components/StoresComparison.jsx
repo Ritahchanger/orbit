@@ -185,7 +185,7 @@ const StoresPerformanceComparison = () => {
       <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               Stores Performance Comparison
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -311,7 +311,7 @@ const StoresPerformanceComparison = () => {
                       {getRankBadge(store.rankings?.overall?.rank)}
                     </div>
                     <div>
-                      <h3 className="font-medium text-gray-900 dark:text-white">
+                      <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                         {store.storeInfo.name}
                       </h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -516,7 +516,7 @@ const StoresPerformanceComparison = () => {
           {/* Insights Section */}
           {insights && (
             <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-              <h3 className="font-medium text-gray-900 dark:text-white mb-3">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                 Key Insights
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -524,7 +524,7 @@ const StoresPerformanceComparison = () => {
                 <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
                   <div className="flex items-center mb-3">
                     <Star className="h-5 w-5 text-yellow-500 mr-2" />
-                    <h4 className="font-medium text-gray-900 dark:text-white">
+                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                       Top Performers
                     </h4>
                   </div>
@@ -553,7 +553,7 @@ const StoresPerformanceComparison = () => {
                 <div className="bg-white dark:bg-gray-800 rounded-sm border border-gray-200 dark:border-gray-700 p-4">
                   <div className="flex items-center mb-3">
                     <AlertTriangle className="h-5 w-5 text-amber-500 mr-2" />
-                    <h4 className="font-medium text-gray-900 dark:text-white">
+                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                       Needs Improvement
                     </h4>
                   </div>

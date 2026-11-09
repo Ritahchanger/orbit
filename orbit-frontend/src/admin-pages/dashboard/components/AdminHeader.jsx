@@ -45,11 +45,11 @@ const AdminHeader = ({
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
             <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Daily Product Sales</h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     Track product performance for {format(selectedDate, "MMMM d, yyyy")}
                     <span className="ml-2 text-blue-600 dark:text-blue-400 font-medium">{actualStoreLabel}</span>
                     {!isAdmin && !isSuperadmin && (
-                        <span className="ml-2 text-blue-600 dark:text-blue-400 text-sm">
+                        <span className="ml-2 text-blue-600 dark:text-blue-400">
                             <Store size={12} className="inline mr-1" />
                             {userRole === 'manager' ? 'Manager' : userRole === 'cashier' ? 'Cashier' : 'User'} View
                         </span>
@@ -79,7 +79,7 @@ const AdminHeader = ({
 
                 <button
                     onClick={handleTodayClick}
-                    className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors flex items-center gap-2 text-sm"
+                    className="px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-sm transition-colors flex items-center gap-2 text-sm font-medium"
                 >
                     <RefreshCw className="h-3 w-3" />
                     Today
@@ -89,7 +89,7 @@ const AdminHeader = ({
                 {itemsSold.length > 0 && (isAdmin || isSuperadmin || isManager) && (
                     <button
                         onClick={handleExportCSV}
-                        className="px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 rounded-sm transition-colors flex items-center gap-2 text-sm"
+                        className="px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 rounded-sm transition-colors flex items-center gap-2 text-sm font-medium"
                         title={isAdmin || isSuperadmin ? "Export all data" : "Export my store data"}
                     >
                         <Download className="h-3 w-3" />
@@ -113,11 +113,11 @@ const AdminHeader = ({
                 {(isAdmin || isSuperadmin || isManager) && (
                     <button
                         onClick={navigateToAllProducts}
-                        className="px-4 py-2 rounded-sm bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600 text-white hover:from-green-700 hover:to-green-800 dark:hover:from-green-600 dark:hover:to-green-700 flex items-center space-x-2"
+                        className="px-4 py-2 rounded-sm bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600 text-white hover:from-green-700 hover:to-green-800 dark:hover:from-green-600 dark:hover:to-green-700 flex items-center gap-2 text-sm font-medium"
                         title="View all products"
                     >
                         <Package className="h-4 w-4" />
-                        <span className='text-sm'>ALL PRODUCTS</span>
+                        All Products
                     </button>
                 )}
             </div>

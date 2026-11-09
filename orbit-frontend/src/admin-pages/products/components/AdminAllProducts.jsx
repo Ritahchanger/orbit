@@ -277,10 +277,10 @@ const AdminAllProducts = ({
       <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-sm p-8 text-center">
         <div className="flex flex-col items-center justify-center space-y-4">
           <Package className="h-16 w-16 text-gray-400 dark:text-gray-500" />
-          <h3 className="text-xl font-medium text-gray-700 dark:text-gray-300">
+          <h3 className="text-base font-medium text-gray-700 dark:text-gray-300">
             No Access
           </h3>
-          <p className="text-gray-600 dark:text-gray-500 max-w-md">
+          <p className="text-sm text-gray-600 dark:text-gray-500 max-w-md">
             You don't have permission to view or manage products. Please contact
             your administrator for access.
           </p>
@@ -299,44 +299,44 @@ const AdminAllProducts = ({
           <table className="w-full ">
             <thead>
               <tr className="bg-gray-100 dark:bg-gray-900/50">
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400 w-[60px]">
+                <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[60px]">
                   Image
                 </th>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400 w-[200px]">
+                <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[200px]">
                   Device
                 </th>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400 w-[100px]">
+                <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[100px]">
                   SKU
                 </th>
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400 w-[120px]">
+                <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[120px]">
                   Category
                 </th>
 
                 {/* Buying Price Column - Conditionally rendered */}
                 {canViewCost && (
-                  <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400 w-[100px]">
+                  <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[100px]">
                     Buying Price
                   </th>
                 )}
 
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400 w-[100px]">
+                <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[100px]">
                   Selling Price
                 </th>
 
                 {/* Quantity - Only for users with permission */}
                 {canViewQuantity && (
-                  <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400 w-[100px]">
+                  <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[100px]">
                     Quantity
                   </th>
                 )}
 
-                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400 w-[80px]">
+                <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[80px]">
                   Status
                 </th>
 
                 {/* Actions column - Only for users with any product management permissions */}
                 {canManageProducts && (
-                  <th className="py-3 px-4 text-left text-sm font-medium text-gray-600 dark:text-gray-400 w-[100px]">
+                  <th className="py-3 px-4 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 w-[100px]">
                     Actions
                   </th>
                 )}
@@ -396,7 +396,7 @@ const AdminAllProducts = ({
                           onClick={() => handleViewDetails(product)}
                           className="text-left hover:text-blue-600 dark:hover:text-blue-400 transition-colors w-full"
                         >
-                          <p className="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate">
                             {product.name}
                           </p>
                           {product.brand && (
@@ -407,7 +407,7 @@ const AdminAllProducts = ({
                         </button>
                       ) : (
                         <div>
-                          <p className="font-medium text-gray-600 dark:text-gray-400 truncate">
+                          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 truncate">
                             {product.name}
                           </p>
                           {product.brand && (
@@ -440,7 +440,7 @@ const AdminAllProducts = ({
                     {/* Buying Price Cell - Conditionally rendered */}
                     {canViewCost && (
                       <td className="py-3 px-4 align-middle">
-                        <p className="text-gray-900 dark:text-white font-medium">
+                        <p className="text-sm text-gray-900 dark:text-white font-medium">
                           KSh {product.buyingPrice?.toLocaleString()}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -451,7 +451,7 @@ const AdminAllProducts = ({
 
                     {/* Selling Price */}
                     <td className="py-3 px-4 align-middle">
-                      <p className="text-gray-900 dark:text-white font-medium">
+                      <p className="text-sm text-gray-900 dark:text-white font-medium">
                         KSh {product.sellingPrice?.toLocaleString()}
                       </p>
                       {canViewCost ? (
@@ -476,7 +476,7 @@ const AdminAllProducts = ({
                       <td className="py-3 px-4 align-middle">
                         <div className="flex items-center space-x-2">
                           <div>
-                            <p className="text-gray-900 dark:text-white font-medium">
+                            <p className="text-sm text-gray-900 dark:text-white font-medium">
                               {product.quantity} units
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -685,7 +685,7 @@ const AdminAllProducts = ({
               {/* Header */}
               <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white truncate">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
                     {selectedImage.title}
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
