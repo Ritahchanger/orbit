@@ -166,6 +166,20 @@
 
   /* Gaming colors */
   --color-primary: #0066ff;
+  /* Shade scale so primary-50…950 utilities exist (15 admin files use
+     bg-primary-600 etc.; without these they generated no CSS at all).
+     Mapped to blue, the accent the login screen uses. */
+  --color-primary-50: var(--color-blue-50);
+  --color-primary-100: var(--color-blue-100);
+  --color-primary-200: var(--color-blue-200);
+  --color-primary-300: var(--color-blue-300);
+  --color-primary-400: var(--color-blue-400);
+  --color-primary-500: var(--color-blue-500);
+  --color-primary-600: var(--color-blue-600);
+  --color-primary-700: var(--color-blue-700);
+  --color-primary-800: var(--color-blue-800);
+  --color-primary-900: var(--color-blue-900);
+  --color-primary-950: var(--color-blue-950);
   --color-secondary: #ff6b00;
   --color-accent: #00ff88;
   --color-dark: #121212;
